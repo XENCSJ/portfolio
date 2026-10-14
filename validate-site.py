@@ -61,9 +61,20 @@ expected = json.loads((ROOT / 'video-categories.json').read_text())
 key = lambda row: (row['page'], row['id'])
 assert sorted(videos, key=key) == sorted(expected, key=key)
 assert [v['id'] for v in videos if v['page'] == 'apparel.html'] == [
-    'yBNfm0PbP4Y', 'PQs_Ii2_hI8', 'OvsxT_ngrWg']
+    'OvsxT_ngrWg', 'PQs_Ii2_hI8', 'yBNfm0PbP4Y']
 assert not any(v['page'] == 'cinematic.html' for v in videos)
+# The reference order and official oEmbed titles exposed reversed video mappings.
+approved_order = {
+    'storybooks.html': ['DslArGmxy7A', 'jRWWBQFSa2w', 'i4rhhybpecs'],
+    'animation.html': ['qQzOTZhiruE', '-aHdK3AyMd0', 'N4FiRqQciWE', 'epB9CUXdP_E'],
+    'apparel.html': ['OvsxT_ngrWg', 'PQs_Ii2_hI8', 'yBNfm0PbP4Y'],
+}
+for page, ids in approved_order.items():
+    assert [v['id'] for v in videos if v['page'] == page] == ids, page
+metadata = json.loads((ROOT / 'youtube-metadata-check.json').read_text())['videos']
+assert len(metadata) == 15 and all(v.get('status') == 200 for v in metadata)
 subprocess.run(['node', '--check', str(ROOT / 'xen-video.js')], check=True)
+subprocess.run(['node', '--check', str(ROOT / 'xen-shared.js')], check=True)
 
 assets = json.loads((ROOT / 'asset-provenance.json').read_text())['assets']
 for row in assets:

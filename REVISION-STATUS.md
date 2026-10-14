@@ -1,88 +1,92 @@
-# XEN CSJ revision checkpoint — 2026-10-14
+# XEN CSJ — 全15ページ制作状況
 
-**In progress. Not approved for main or publication.**
+更新日：2026-10-14。**制作中。main反映・一般公開は未承認です。**
 
-Repository: `XENCSJ/portfolio`
-Work branch: `work/xen-csj-latest-20261014`
-Baseline: `592666b7f5fb36fa8c19ddde6570dbd030b92990`
+- 対象：`XENCSJ/portfolio`
+- 作業ブランチ：`work/xen-csj-latest-20261014`
+- 再開地点：`e333cb4`
+- 正式構成：**INDEX 1ページ＋下層14ページ＝全15ページ**。ユーザーが2026-10-14 16:00に確定しました。
+- 画像削除やファイル整理より制作を優先します。今回、画像は削除していません。
+- 全15ページの制作・PC/スマホ表示検証・必須コンテンツ反映・重大不具合の解消後、ユーザーの最終確認と明示的な公開承認を得ます。それまではmainへのマージ、GitHub Pagesの公開設定変更、一般公開を行いません。
 
-The current INDEX links to STUDIO, CREATOR, eleven work categories and PRICE LIST.
-The fourteen supplied completion references depict those fourteen lower pages.
-There are therefore fifteen HTML files including INDEX, following the user's earlier
-“最新構成で” instruction. No page is being deleted to reduce that count.
+## 今回実装した内容
 
-## Preservation and completed foundation
+1. 全15ページで共通JavaScriptを読み込み、メニューの開閉・Escape・外側クリック・フォーカス移動・矢印キー操作を統一しました。
+2. 長いギャラリーが表示面積の8%に届くまで透明のままになる条件を解消しました。下層ページの本文・作品画像はJavaScriptの表示処理に依存しません。
+3. PRICE LISTの汎用`nav`スタイルがSNSフッターを画面上部へ配置する問題を修正しました。下層ページのSNS・著作権・Powered by XENの配置とデザインを統一しました。
+4. 作品画像の拡大表示に前後移動、左右キー、枚数表示、元画像へのリンク、閉じた際のフォーカス復帰を追加しました。拡大表示非対応時も元画像リンクを利用できます。
+5. 料金表に横スクロール領域・列見出し・キーボードフォーカスを追加しました。スマホ向けの文字を13pxにし、入力欄は16pxにして入力時の読みやすさを調整しました。既存料金・説明は変更していません。
+6. 下層ページのタイトルに日本語カテゴリー名を追加し、動画の作品名をプレイヤー上の黒い見出しへ移しました。
+7. YouTube公式oEmbedの実作品名に照合し、STORYBOOKS・ANIMATION・APPARELの作品名と動画URLの取り違えを修正しました。15本すべてを保持し、カテゴリーを移動していません。
+8. SOUNDとSTUDIOには、公式情報で確認できた動画タイトルを表示しました。既存のシリーズ名も保持しました。
 
-- Organized images and the INDEX logo remain unchanged. The later authorized cleanup of eleven restored duplicates is tracked separately in IMAGE-CLEANUP.md.
-- Common header references `xen-logo.png`, the exact current INDEX PNG. The PNG is unchanged.
-- Three-line menu, close state, Escape/outside/focus handling, current-page marker and fifteen navigation links are implemented.
-- Lower pages have the five existing official SNS destinations; INDEX retains all eight existing external links.
-- Existing source copy, price data and fifteen video placements are preserved. APPAREL videos stay in APPAREL. The old ABOUT film now belongs to STUDIO, as shown in the supplied STUDIO reference.
-- 119 original gallery files are reused under their current GitHub filenames, verified by identical Git blob content.
-- Ten original gallery files absent from the current uploads are retained from the previous source checkpoint.
-- SNAP uses optimized preview copies and links to full originals. Original image files are not overwritten.
-- No path containing `不採用` is referenced. The source repository has no such directory.
-- `asset-provenance.json` records original names, current paths, categories and preview paths.
+## 正式ファイル構成とページ別状況
 
-## Page-by-page status
+「実装済み」は公開可能・実表示検証済みを意味しません。PC/スマホ実表示は全15ページとも未検証です。
 
-| Page | Applied in this checkpoint | Remaining before completion |
+| ページ | ファイル | 実装済みの内容 | 残作業・不足資料 |
+|---|---|---|---|
+| INDEX | `index.html` | 既存デザイン・PNG・本文・8外部リンクを保持、共通メニュー | 実表示・操作確認 |
+| STUDIO | `studio.html` | 既存紹介・理念・6工程・正しい紹介動画タイトル | ゴールドのメイン画像、工程・問い合わせ画像、完成見本の追加本文・FAQ、フォーム送信先 |
+| CREATOR | `creator.html` | 既存プロフィール、人物・ロゴ・DAY/NIGHT・ラウンジ・サポート画像 | 完成見本の追加本文原稿、最終見本照合 |
+| STORYBOOKS | `storybooks.html` | 3作品の題名とURLを正しく対応、見本の順序、見出し配置 | 実表示・動画再生確認 |
+| ANIMATION | `animation.html` | 4作品の題名とURLを正しく対応、見本の順序、正式タイトル | 実表示・動画再生確認 |
+| SOUND | `sound.html` | 4作品、正式タイトル、MUSIC/Sleep BGM分類、配信リンク | NOVA PULSE紹介画像・配信サービス画像・VOID TO FORMのSpotifyアルバムURL |
+| CINEMATIC | `cinematic.html` | 共通デザイン・既存導入文 | 完成見本の4作品URL。APPARELの3本は流用しない |
+| SNAP | `snap.html` | 23枚、見本に対応する順序、軽量プレビュー、元画像、拡大操作 | 見本にある追加写真、全体順序の確定、実表示 |
+| DESIGN | `design.html` | 25枚、既存本文、見本のプロジェクト分類、拡大操作 | 見本の追加説明文原稿、最終照合 |
+| APPAREL | `apparel.html` | 11画像、3動画の年次対応、商品・ショップ・MEDIA、拡大操作 | 見本の黒パーカー背面画像、最終照合 |
+| ARCHITECTURE | `architecture.html` | 元の30画像、既存本文、建築プロジェクト分類、拡大操作 | 見本の追加説明文原稿、最終照合 |
+| SPACE | `space.html` | 元の9画像＋回収済み平面図、既存本文、分類、拡大操作 | 椅子図面・商業コンセプト図、見本の追加説明文 |
+| ARTWORKS | `artworks.html` | 24画像、3列配置、見本に対応する順序、拡大操作 | 見本にある追加作品・ロゴ画像、最終照合 |
+| SNS MANAGEMENT | `sns-management.html` | 7画像、既存本文、見本の実績数値と分類、拡大操作 | 紫のメイン画像・サービス画像、追加原稿、フォーム送信先 |
+| PRICE LIST | `price-list.html` | 全料金・説明・フォーム項目保持、表の操作・フッター修正 | フォーム送信先と送信テスト、実表示 |
+
+## 動画の照合結果
+
+参照元：YouTube公式oEmbed。全15本HTTP 200。取得タイトルは`youtube-metadata-check.json`に保存しています。これは動画再生成功の検証ではありません。
+
+| ページ | 完成見本順の作品 | 正しい動画ID |
 |---|---|---|
-| INDEX | Existing layout, logo, copy and eight links retained; common header/menu | Browser and mobile display verification |
-| STUDIO | Common components; existing philosophy/workflow copy; reference film restored | Reference hero/workflow/contact images, additional exact copy, FAQ and working form destination |
-| CREATOR | Existing biography; portrait, logo/facade, day/night/lounge/support images restored | Exact additional biography/lounge copy and full reference comparison |
-| STORYBOOKS | Three original videos, titles, copy and order retained | Reference display comparison and playback verification |
-| ANIMATION | Four original videos, titles, copy and order retained | Reference display comparison and playback verification |
-| SOUND | Four original videos, streaming links and channel categories retained | NOVA PULSE/distribution images and exact Spotify album embed from reference |
-| CINEMATIC | Separate page and shared components | Four correct video URLs are absent from available source; APPAREL URLs must not be substituted |
-| SNAP | All 23 available images retained; optimized previews, full originals and reference subset ordering | Additional photos visible only in reference, full order and browser/mobile verification |
-| DESIGN | All 25 images and existing text retained; reference project grouping applied; organized paths used | Additional exact project descriptions and full reference comparison |
-| APPAREL | All 11 images and three correct videos retained; product/shop/MEDIA sections added | Reference black hoodie image is absent from current assets; remaining reference comparison |
-| ARCHITECTURE | All 30 original images and text retained; reference project groups restored | Additional exact descriptions and full reference comparison |
-| SPACE | All nine images and text retained; reference project grouping applied | Chair drawing/commercial concept source images and additional exact descriptions; floor plan has now been recovered and added |
-| ARTWORKS | All 24 available image files retained; three-column mosaic and reference subset ordering | Additional artwork/logo files visible only in reference; full visual comparison |
-| SNS MANAGEMENT | All seven original image files retained; reference performance figures and groups added | Missing purple hero/service graphics, exact additional service copy and working form destination |
-| PRICE LIST | Existing prices, service text and form fields retained | Reference comparison and working form destination |
+| STORYBOOKS | よつばのしー | `DslArGmxy7A` |
+| STORYBOOKS | ちいさなミラとひろいうみ | `jRWWBQFSa2w` |
+| STORYBOOKS | ちいさくひかるぼく | `i4rhhybpecs` |
+| ANIMATION | ムーボ | `qQzOTZhiruE` |
+| ANIMATION | BROKEN CYCLE | `-aHdK3AyMd0` |
+| ANIMATION | SILENT REBELLION | `N4FiRqQciWE` |
+| ANIMATION | LIFE STAIRS | `epB9CUXdP_E` |
+| APPAREL | COLLECTION 2023 | `OvsxT_ngrWg` |
+| APPAREL | COLLECTION 2024 | `PQs_Ii2_hI8` |
+| APPAREL | SIGNATURE 2025 | `yBNfm0PbP4Y` |
 
-## Verification status
+## 検証済み
 
-Static checks passed for all fifteen HTML files:
+- 全15ページのローカルHTML・CSS・JavaScript・画像参照、ページ内リンク、ID重複、H1、共通メニューと現在ページ表示。
+- インライン・共通・動画JavaScriptの構文検証。
+- `e333cb4`との比較で、既存本文段落・料金表の全セル・ローカル掲載画像・外部リンクの出現数を保持。
+- 129件の元ギャラリー記録と143箇所の画像掲載を保持。整理済み画像・INDEXのPNGは変更していません。
+- 過去の画像整理11件は完了済み。対象と保持先は`IMAGE-CLEANUP.md`に保存済みで、やり直していません。
+- 外部41 URLの前回HTTP確認は37件成功。`@xen_vyx`は404、Xは503、ショップと支援リンクは403。勝手に削除・置換していません。
 
-- Local HTML/CSS/image references resolve, including URL-encoded filenames with leading spaces.
-- One H1, unique element IDs, one fifteen-link menu and one current-page marker per page.
-- Inline JavaScript passes `node --check`.
-- All 143 unique local images currently displayed across the pages decode successfully. The original 129 gallery asset records are retained.
-- All existing YouTube IDs are retained, with category order unchanged. The ABOUT film is now in STUDIO; APPAREL remains separate from CINEMATIC. Players load on request and retain direct YouTube links.
-- INDEX logo is byte-for-byte identical to baseline main.
+## 不足情報の調査結果
 
-**Not yet verified:** browser rendering, real mobile widths, four external link responses,
-video playback, form delivery, complete reference-copy/image parity and published-site pages.
-The current form has no configured destination; it must not claim successful submission.
+`portfolio`の67ソース版、旧`xencsj`の36ソース版を確認しました。実YouTube IDは既存15本のみです。旧CINEMATICのソースには仮ID`XXXXXXXXXXX`があり、完成見本4本の実URLはありません。双方のフォームに`action`はなく、送信先も設定されていません。結果は`source-endpoint-audit.json`に保存しています。
 
-The supplied reference screenshots are only 110–565 pixels wide (PRICE LIST: 860 pixels). Several long project descriptions cannot be transcribed reliably from those images. Exact content or the original site/HTML is needed; it has not been invented. NOVA PULSE/distributor graphics, the STUDIO hero/workflow/contact graphics, the APPAREL black hoodie image, the SPACE chair/commercial diagrams, the SNS hero/service graphics, and additional SNAP/ARTWORKS files are absent from the available source assets.
+完成見本のスクリーンショットは、料金表以外が幅110〜565pxであり、長文を正確に復元できない箇所があります。判読できない原稿や見つからない画像は捏造していません。
 
-## External link checks — 2026-10-14
+必要な追加情報：
 
-- 37 of 41 unique external URLs returned HTTP 2xx to HEAD requests.
-- `https://youtube.com/@xen_vyx`: HTTP 404 to both HEAD and GET; retain the configured URL pending confirmation.
-- `https://x.com/xen_csj`: HTTP 503.
-- `https://xen.official.ec/` and `https://doneru.jp/xen_510/login`: HTTP 403.
-- These responses do not verify playback, authenticated access or form delivery. No configured link was silently removed or replaced.
-- Full results: `external-link-check.json`.
+1. CINEMATICの4 URL（ラグジュアリー/ストリート30秒、ラグジュアリー/キレイ30秒、ラグジュアリー/ストリート90秒、ラグジュアリー/キレイ60秒）。
+2. 上の各ページに記載した不足画像・本文の原本。元サイトURL、元HTMLと画像一式、または原寸資料があれば一括で確認できます。
+3. 問い合わせを受け取るメールアドレスと、既に利用しているフォームがあればその送信先URL。
+4. SOUNDに掲載するVOID TO FORMのSpotifyアルバムURL。
 
-## Saved work
+## 未検証・公開を止める条件
 
-- `4712c9c`: remote foundation checkpoint (shared components, preserved assets, initial static checks).
-- `d83193f`: reference image groups, restored CREATOR assets, organized paths and known video players.
-- `845fb5a` through `5b4bc65`: eleven verified duplicate image deletions saved on GitHub.
-- `5173a43`: final available-source layout pass: ARCHITECTURE/SNAP/ARTWORKS/SNS MANAGEMENT groups, SPACE floor plan and SOUND series. All original works remain available.
-- Main advanced to `70d3128` while work continued. Its deletion of `.nojekyll` and `49AF3C83-6867-404F-93E5-3244AA11B228.JPEG` must remain in the final merge.
+- PC/スマホの実表示、動画実再生、フォームの実送信、完成見本との完全照合。
+- この環境ではSitesスキルが指定する`control-browser`を利用できません。同スキルの指示により、別方式のローカルブラウザー検証やプレビュー公開で代用していません。表示検証の完了とは報告しません。
+- 全15ページの完成、表示検証、必須素材の反映、重大不具合の解消、ユーザーの最終確認・明示的な公開承認が揃うまで、main反映と一般公開は行いません。
 
-## Resume procedure
+## 次回の再開
 
-1. Fetch the work branch and main; inspect new commits before editing.
-2. Continue from the latest saved work-branch commit. Do not regenerate already corrected files from old templates.
-3. Resolve the remaining rows above; preserve all baseline images/copy/links.
-4. Commit each completed unit and update this status file with actual verification evidence.
-5. Present reviewable changes and ask for explicit main approval.
-6. Only after that approval, merge/publish and verify every public page.
+この作業ブランチの最新コミットを取得し、上記の未完了項目から継続してください。完成済みHTMLの再生成や画像整理の再実行は不要です。main側のユーザーによる削除（`.nojekyll`等）は、最終承認後のマージで保持します。
