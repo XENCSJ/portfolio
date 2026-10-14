@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-14",
+  "pages": [
+    {
+      "url": "https://xencsj.github.io/portfolio/studio.html",
+      "h1": "STUDIO | スタジオ",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/creator.html",
+      "h1": "CREATOR | クリエイター",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/storybooks.html",
+      "h1": "STORYBOOKS | 絵本",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/animation.html",
+      "h1": "ANIMATION | アニメーション",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/sound.html",
+      "h1": "SOUND | 音楽",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/cinematic.html",
+      "h1": "CINEMATIC | 映像",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/snap.html",
+      "h1": "SNAP | 写真",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/design.html",
+      "h1": "DESIGN | デザイン",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/apparel.html",
+      "h1": "APPAREL | アパレル",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/architecture.html",
+      "h1": "ARCHITECTURE | 建築",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/space.html",
+      "h1": "SPACE | 空間",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/artworks.html",
+      "h1": "ARTWORKS | 作品集",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/sns-management.html",
+      "h1": "SNS MANAGEMENT | SNS運用",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/price-list.html",
+      "h1": "PRICE LIST | 料金一覧",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    },
+    {
+      "url": "https://xencsj.github.io/portfolio/index.html",
+      "h1": "XEN | CREATIVE STUDIO JAPAN",
+      "menuLinks": 15,
+      "menuOpened": true,
+      "menuClosed": true,
+      "logoLoaded": true,
+      "viewport": 1363,
+      "width": 1348
+    }
+  ],
+  "limitations": [
+    "Desktop-width basic page and menu checks only.",
+    "Mobile/tablet hardware, all below-the-fold visuals, and full video playback are not verified.",
+    "Contact form remains disabled: destination not supplied."
+  ]
+}
