@@ -1,0 +1,2177 @@
+{
+  "note": "Display copies only. Original files, names and gallery hrefs preserved. No cropping or artwork changes.",
+  "pages": {
+    "apparel.html": {
+      "previous_display_bytes": 41480278,
+      "display_bytes": 3106858,
+      "placements": 11
+    },
+    "architecture.html": {
+      "previous_display_bytes": 60165526,
+      "display_bytes": 12042096,
+      "placements": 30
+    },
+    "artworks.html": {
+      "previous_display_bytes": 25216055,
+      "display_bytes": 5352593,
+      "placements": 24
+    },
+    "creator.html": {
+      "previous_display_bytes": 27602553,
+      "display_bytes": 3102392,
+      "placements": 13
+    },
+    "design.html": {
+      "previous_display_bytes": 58641829,
+      "display_bytes": 3840904,
+      "placements": 25
+    },
+    "snap.html": {
+      "previous_display_bytes": 5881310,
+      "display_bytes": 5526200,
+      "placements": 23
+    },
+    "sns-management.html": {
+      "previous_display_bytes": 8498458,
+      "display_bytes": 2057924,
+      "placements": 7
+    },
+    "space.html": {
+      "previous_display_bytes": 30477472,
+      "display_bytes": 2890756,
+      "placements": 10
+    }
+  },
+  "images": [
+    {
+      "original": "APPAREL (4).PNG",
+      "original_sha256": "b7ccdfaef2bba046f26f9ea7438c2cea55edc2a61cfe233ae113005b346230ca",
+      "preview": "xen-preview-b7ccdfaef2bba046.webp",
+      "original_dimensions": [
+        2048,
+        2048
+      ],
+      "dimensions": [
+        1600,
+        1600
+      ],
+      "original_bytes": 9892784,
+      "preview_bytes": 1010748
+    },
+    {
+      "original": "APPAREL (10).PNG",
+      "original_sha256": "93ac40b5e0f8f5dc1b75b8468c147cc9b3c405c7ab897e09553dc7d55050443f",
+      "preview": "xen-preview-93ac40b5e0f8f5dc.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 2355297,
+      "preview_bytes": 351198
+    },
+    {
+      "original": "APPAREL (9).PNG",
+      "original_sha256": "f3ead2e2a716c51f18dfd360cf0eed37346d1d4ca07fa56248e2014e553bc12f",
+      "preview": "xen-preview-f3ead2e2a716c51f.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1576696,
+      "preview_bytes": 114824
+    },
+    {
+      "original": "APPAREL (8).PNG",
+      "original_sha256": "b25e5ab289a7baac643a21f76abe0bf303af7d1731a2378247b822c2c164563f",
+      "preview": "xen-preview-b25e5ab289a7baac.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1721430,
+      "preview_bytes": 164318
+    },
+    {
+      "original": "APPAREL (1).png",
+      "original_sha256": "6e9cfc944d27281a1b968b82e91794692a815d974f0aa98a9581cb3c6d1cbbe4",
+      "preview": "xen-preview-6e9cfc944d27281a.webp",
+      "original_dimensions": [
+        924,
+        1701
+      ],
+      "dimensions": [
+        924,
+        1701
+      ],
+      "original_bytes": 2151298,
+      "preview_bytes": 258722
+    },
+    {
+      "original": "APPAREL (2).png",
+      "original_sha256": "d1bba31395b9b29fea2b15508ae4887b10d339559628711b1704298f78500dbf",
+      "preview": "xen-preview-d1bba31395b9b29f.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1780705,
+      "preview_bytes": 178294
+    },
+    {
+      "original": "APPAREL (3).png",
+      "original_sha256": "bf0903991214160ef4d4eb288c1d6090cc1f044f6eac2a2ce0d7414feb35be43",
+      "preview": "xen-preview-bf0903991214160e.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1114911,
+      "preview_bytes": 38524
+    },
+    {
+      "original": "APPAREL (1).JPG",
+      "original_sha256": "e5f1bbfe9eb464c1a47ea62533a24a42b8e846a556d9785a1ebbb0be6c1e0d61",
+      "preview": "xen-preview-e5f1bbfe9eb464c1.webp",
+      "original_dimensions": [
+        2048,
+        2048
+      ],
+      "dimensions": [
+        1600,
+        1600
+      ],
+      "original_bytes": 857933,
+      "preview_bytes": 201344
+    },
+    {
+      "original": "APPAREL (5).PNG",
+      "original_sha256": "29b418d8f91d3d8eca648d04a5703c889cf592725b3eb7da7b440159693393a3",
+      "preview": "xen-preview-29b418d8f91d3d8e.webp",
+      "original_dimensions": [
+        2048,
+        2048
+      ],
+      "dimensions": [
+        1600,
+        1600
+      ],
+      "original_bytes": 5338903,
+      "preview_bytes": 157274
+    },
+    {
+      "original": "APPAREL (6).PNG",
+      "original_sha256": "0e49f9e9924c089fadf10e435763c233b7a2bd9c3a0db8a45d6a658dd71ecf4f",
+      "preview": "xen-preview-0e49f9e9924c089f.webp",
+      "original_dimensions": [
+        2048,
+        2048
+      ],
+      "dimensions": [
+        1600,
+        1600
+      ],
+      "original_bytes": 5212335,
+      "preview_bytes": 142852
+    },
+    {
+      "original": "APPAREL (7).PNG",
+      "original_sha256": "3479c483f812ae257b7a78ba96e3fa6212a5fe7d70cc2b38989523cf221109b7",
+      "preview": "xen-preview-3479c483f812ae25.webp",
+      "original_dimensions": [
+        2752,
+        1536
+      ],
+      "dimensions": [
+        1600,
+        893
+      ],
+      "original_bytes": 9477986,
+      "preview_bytes": 488760
+    },
+    {
+      "original": "ARCHITECTURE (3).PNG",
+      "original_sha256": "2e434359d95c5f34f96c91ec07bbf04b4f95921fc7207f2c028ff51c256330e6",
+      "preview": "xen-preview-2e434359d95c5f34.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2086779,
+      "preview_bytes": 290804
+    },
+    {
+      "original": "ARCHITECTURE (7).PNG",
+      "original_sha256": "037ce0d518f1845a06e755da99868d165bad2b2a25869241c4643dadf938f9eb",
+      "preview": "xen-preview-037ce0d518f1845a.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2043520,
+      "preview_bytes": 265984
+    },
+    {
+      "original": "ARCHITECTURE (8).PNG",
+      "original_sha256": "af910ba9d31b9b0ec99e4956210fcaa3c6614363c9e97d596317bfd89e99d91c",
+      "preview": "xen-preview-af910ba9d31b9b0e.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1989545,
+      "preview_bytes": 247498
+    },
+    {
+      "original": "ARCHITECTURE (6).PNG",
+      "original_sha256": "672e0557b511f605b72cf062016d40486adb0daab8142c8e3c52d08e3b7183dc",
+      "preview": "xen-preview-672e0557b511f605.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1797482,
+      "preview_bytes": 181696
+    },
+    {
+      "original": "ARCHITECTURE (5).PNG",
+      "original_sha256": "f77333dc61ed2f87d74c66638430603a68e3c37dba7db77acb28bff8772bf9dd",
+      "preview": "xen-preview-f77333dc61ed2f87.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1923428,
+      "preview_bytes": 229796
+    },
+    {
+      "original": "ARCHITECTURE (4).jpg",
+      "original_sha256": "47fd91971437be6944d7bf3d95318f49064ae881fb891ce35003611d091ed6a7",
+      "preview": "xen-preview-47fd91971437be69.webp",
+      "original_dimensions": [
+        4963,
+        3509
+      ],
+      "dimensions": [
+        1600,
+        1131
+      ],
+      "original_bytes": 4368972,
+      "preview_bytes": 229118
+    },
+    {
+      "original": "ARCHITECTURE (5).jpg",
+      "original_sha256": "92008f2425eaed586da4f1770799a9f0a30edc1c4e02901a7bf9153ab2524609",
+      "preview": "xen-preview-92008f2425eaed58.webp",
+      "original_dimensions": [
+        972,
+        665
+      ],
+      "dimensions": [
+        972,
+        665
+      ],
+      "original_bytes": 532300,
+      "preview_bytes": 142818
+    },
+    {
+      "original": "ARCHITECTURE (9).png",
+      "original_sha256": "de18c394273662b2a6674c22ea6e611e60b444bcdfd46f8f1c152f4c607279b5",
+      "preview": "xen-preview-de18c394273662b2.webp",
+      "original_dimensions": [
+        1944,
+        1330
+      ],
+      "dimensions": [
+        1600,
+        1095
+      ],
+      "original_bytes": 3662877,
+      "preview_bytes": 343148
+    },
+    {
+      "original": "ARCHITECTURE (1).jpg",
+      "original_sha256": "5245c11466c25fd4c504e5a721c46a8b4bc607cd2957bb2dbdd2258dc15db627",
+      "preview": "xen-preview-5245c11466c25fd4.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 969597,
+      "preview_bytes": 324054
+    },
+    {
+      "original": "ARCHITECTURE (4).PNG",
+      "original_sha256": "120731584051152af8b3e8f1749e697b877964e7a696a5a9d0bd2660b7782b24",
+      "preview": "xen-preview-120731584051152a.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2290209,
+      "preview_bytes": 356140
+    },
+    {
+      "original": "ARCHITECTURE (1).PNG",
+      "original_sha256": "3be333663adddac1ae55c57bf2d7378796d818f9b2b8c1ba46f763baf456138d",
+      "preview": "xen-preview-3be333663adddac1.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1916729,
+      "preview_bytes": 236692
+    },
+    {
+      "original": "ARCHITECTURE (3).jpg",
+      "original_sha256": "317f870787c07f3241f3244023306cb1c2e325de7a88edbf926fefa2edcf0930",
+      "preview": "xen-preview-317f870787c07f32.webp",
+      "original_dimensions": [
+        1024,
+        724
+      ],
+      "dimensions": [
+        1024,
+        724
+      ],
+      "original_bytes": 604247,
+      "preview_bytes": 183038
+    },
+    {
+      "original": "ARCHITECTURE (6).jpg",
+      "original_sha256": "450130aa0b1ba695fd38d54090c6d94c062e8ca900679f359bb76894d814389c",
+      "preview": "xen-preview-450130aa0b1ba695.webp",
+      "original_dimensions": [
+        4096,
+        2896
+      ],
+      "dimensions": [
+        1600,
+        1131
+      ],
+      "original_bytes": 5536708,
+      "preview_bytes": 433898
+    },
+    {
+      "original": "ARCHITECTURE-S (1).jpg",
+      "original_sha256": "99b2ffd5fd9341f57039d959f814ffd4e0e34322b9214566ad64c3a540f5671b",
+      "preview": "xen-preview-99b2ffd5fd9341f5.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 578717,
+      "preview_bytes": 487212
+    },
+    {
+      "original": "ARCHITECTURE-S (3).jpg",
+      "original_sha256": "7b9c541511702cf277ffee48babbc3fd83c7636a91c50986226573287387826b",
+      "preview": "xen-preview-7b9c541511702cf2.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 638620,
+      "preview_bytes": 405230
+    },
+    {
+      "original": "ARCHITECTURE-S (2).jpg",
+      "original_sha256": "8d235bd5c952128af152dab0e606abaf780122014428ec237e5d940b6885461d",
+      "preview": "xen-preview-8d235bd5c952128a.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 699233,
+      "preview_bytes": 439006
+    },
+    {
+      "original": "ARCHITECTURE (10).PNG",
+      "original_sha256": "4575b1287cca4e7e7c4b7e4b0564e38481c768dcd3b4aa9643a4adb0a20c827b",
+      "preview": "xen-preview-4575b1287cca4e7e.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1898881,
+      "preview_bytes": 224840
+    },
+    {
+      "original": "ARCHITECTURE (11).PNG",
+      "original_sha256": "13caa425cdd86b2b872d363344474d78a3e3ddee07e33d46b94336ebdd2c8a15",
+      "preview": "xen-preview-13caa425cdd86b2b.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2093323,
+      "preview_bytes": 275226
+    },
+    {
+      "original": "ARCHITECTURE-P (5).jpg",
+      "original_sha256": "ca9fa8cb8c98f3a1d825d731a7d51d93d0a3416d132695ef3b1f9601425ad248",
+      "preview": "xen-preview-ca9fa8cb8c98f3a1.webp",
+      "original_dimensions": [
+        1920,
+        1280
+      ],
+      "dimensions": [
+        1600,
+        1067
+      ],
+      "original_bytes": 1678613,
+      "preview_bytes": 621054
+    },
+    {
+      "original": "ARCHITECTURE-P (6).jpg",
+      "original_sha256": "ea7bdd48f556546db8d531c96feb6e0a2e99cc63084be637271b5a3fdedee5c8",
+      "preview": "xen-preview-ea7bdd48f556546d.webp",
+      "original_dimensions": [
+        1920,
+        1080
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1279411,
+      "preview_bytes": 460592
+    },
+    {
+      "original": "ARCHITECTURE-P (7).jpg",
+      "original_sha256": "3fc1a72ea0975a27ce77a98432cee875039348135a1da693edba5f7fb45b5589",
+      "preview": "xen-preview-3fc1a72ea0975a27.webp",
+      "original_dimensions": [
+        1920,
+        1280
+      ],
+      "dimensions": [
+        1600,
+        1067
+      ],
+      "original_bytes": 1988572,
+      "preview_bytes": 802868
+    },
+    {
+      "original": "ARCHITECTURE-P (9).jpg",
+      "original_sha256": "e28b8765221b94ce00263199fee6768325ecb2dff8104fa4b380a175df9d9345",
+      "preview": "xen-preview-e28b8765221b94ce.webp",
+      "original_dimensions": [
+        1920,
+        1280
+      ],
+      "dimensions": [
+        1600,
+        1067
+      ],
+      "original_bytes": 1571608,
+      "preview_bytes": 561212
+    },
+    {
+      "original": "ARCHITECTURE-P (2).jpg",
+      "original_sha256": "f472a80908751de0c806c4a657ab43f3cad1c79b15d62c3f43100c0928ddc761",
+      "preview": "xen-preview-f472a80908751de0.webp",
+      "original_dimensions": [
+        1920,
+        1079
+      ],
+      "dimensions": [
+        1600,
+        899
+      ],
+      "original_bytes": 810612,
+      "preview_bytes": 279324
+    },
+    {
+      "original": "ARCHITECTURE-P (1).jpg",
+      "original_sha256": "e940e7b49125cbe426cdaaa513bea4984d83f01c1ed2b0c722cf8d51591d7dea",
+      "preview": "xen-preview-e940e7b49125cbe4.webp",
+      "original_dimensions": [
+        1920,
+        1280
+      ],
+      "dimensions": [
+        1600,
+        1067
+      ],
+      "original_bytes": 1631146,
+      "preview_bytes": 625822
+    },
+    {
+      "original": "ARCHITECTURE-P (4).jpg",
+      "original_sha256": "9d0ade50d19de5951048757a80e90a1ea6e0ffe38efcc0f6455ad0b91074c955",
+      "preview": "xen-preview-9d0ade50d19de595.webp",
+      "original_dimensions": [
+        1920,
+        1280
+      ],
+      "dimensions": [
+        1600,
+        1067
+      ],
+      "original_bytes": 1141314,
+      "preview_bytes": 393420
+    },
+    {
+      "original": "ARCHITECTURE-P (8).jpg",
+      "original_sha256": "b2f882a64dbc0d908863e49dec647039cb428a2fe39a07d3a965139f384d3c24",
+      "preview": "xen-preview-b2f882a64dbc0d90.webp",
+      "original_dimensions": [
+        1920,
+        1280
+      ],
+      "dimensions": [
+        1600,
+        1067
+      ],
+      "original_bytes": 1893821,
+      "preview_bytes": 765610
+    },
+    {
+      "original": "ARCHITECTURE-P (3).jpg",
+      "original_sha256": "c232ec5dd6cc2474b600ff44c78e6f73f01e79ca933a69639b13b4499f455383",
+      "preview": "xen-preview-c232ec5dd6cc2474.webp",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1600,
+        2400
+      ],
+      "original_bytes": 4304722,
+      "preview_bytes": 1577202
+    },
+    {
+      "original": "IMG_8369.PNG",
+      "original_sha256": "67719606a928b04a681646fc61dec61ef44dadca34c385010e97ba777b37c772",
+      "preview": "xen-preview-67719606a928b04a.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1534396,
+      "preview_bytes": 167744
+    },
+    {
+      "original": "170327-横浜本郷.jpg",
+      "original_sha256": "722236125315a409a50ed5475b37f0bc3234e1936a03fc13de8fe4381e17569d",
+      "preview": "xen-preview-722236125315a409.webp",
+      "original_dimensions": [
+        4980,
+        3521
+      ],
+      "dimensions": [
+        1600,
+        1131
+      ],
+      "original_bytes": 2813506,
+      "preview_bytes": 253932
+    },
+    {
+      "original": "DSC02248-.jpg",
+      "original_sha256": "f148952b08bd8d4bc698cd8e9284b4ebe435a02ce97bed2e1a3973f91aa75c1b",
+      "preview": "xen-preview-f148952b08bd8d4b.webp",
+      "original_dimensions": [
+        4384,
+        2464
+      ],
+      "dimensions": [
+        1600,
+        899
+      ],
+      "original_bytes": 3886638,
+      "preview_bytes": 237118
+    },
+    {
+      "original": "ARTWORKS (10).jpg",
+      "original_sha256": "962cd094511de721ac305b35c42d411d598c1a020434abc65607fafa1d0f3a07",
+      "preview": "xen-preview-962cd094511de721.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 672458,
+      "preview_bytes": 127920
+    },
+    {
+      "original": "ARTWORKS (14).jpg",
+      "original_sha256": "08261b0a34a9c4898da7f398d6da910e05a84db585aaa36e7e5a9841ebc66623",
+      "preview": "xen-preview-08261b0a34a9c489.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 797107,
+      "preview_bytes": 203946
+    },
+    {
+      "original": "ARTWORKS (5).jpg",
+      "original_sha256": "a7a82d06757821ac51a68f1a8f0dde361ef674e6fdb0a7d0f564e5aa75bc083f",
+      "preview": "xen-preview-a7a82d06757821ac.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 519191,
+      "preview_bytes": 75166
+    },
+    {
+      "original": "ARTWORKS (2).jpg",
+      "original_sha256": "d75b9b733240a74d572800030b668c7967f95ca187b0579f40421aab464d01bb",
+      "preview": "xen-preview-d75b9b733240a74d.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 722205,
+      "preview_bytes": 193896
+    },
+    {
+      "original": "ARTWORKS (17).jpg",
+      "original_sha256": "59b870ba189ba2ea8363011608d61f48649521056a865052e8f6ccd795750b8a",
+      "preview": "xen-preview-59b870ba189ba2ea.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 962211,
+      "preview_bytes": 330720
+    },
+    {
+      "original": "ARTWORKS (12).jpg",
+      "original_sha256": "48e17956fe136349469a175406515d463b01186efefae2749e101d8dbc3fa544",
+      "preview": "xen-preview-48e17956fe136349.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 1291529,
+      "preview_bytes": 398940
+    },
+    {
+      "original": "ARTWORKS (9).jpg",
+      "original_sha256": "74adcb22325cbdd569225a505c08f34bfd1302ec39ffccb0d28df923fc70c321",
+      "preview": "xen-preview-74adcb22325cbdd5.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 376815,
+      "preview_bytes": 61336
+    },
+    {
+      "original": "ARTWORKS (8).jpg",
+      "original_sha256": "3152b4dc04ee69b461fe6e437796750e1d065747437b0e3da503d7c919ceea60",
+      "preview": "xen-preview-3152b4dc04ee69b4.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 1133578,
+      "preview_bytes": 275128
+    },
+    {
+      "original": "ARTWORKS (13).jpg",
+      "original_sha256": "7a1a82e179a1d7c01f4be963035320517d08905523edfeae0c75d4ac5f939685",
+      "preview": "xen-preview-7a1a82e179a1d7c0.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 754120,
+      "preview_bytes": 188318
+    },
+    {
+      "original": "ARTWORKS (3).jpg",
+      "original_sha256": "07d5927c19b4f4ce246d6134f6265c745e7e57f9fab4b09bc8ad7c9130456f6b",
+      "preview": "xen-preview-07d5927c19b4f4ce.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 1061611,
+      "preview_bytes": 295080
+    },
+    {
+      "original": "ARTWORKS (7).jpg",
+      "original_sha256": "05402946a99a70dec0411261ab649faae182f819939fecae31777890c7c28483",
+      "preview": "xen-preview-05402946a99a70de.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 836425,
+      "preview_bytes": 193768
+    },
+    {
+      "original": "ARTWORKS (7).png",
+      "original_sha256": "9065877198bcc1007e65e823168a00635e637c7ba53bbe25e371db940422660b",
+      "preview": "xen-preview-9065877198bcc100.webp",
+      "original_dimensions": [
+        1024,
+        1024
+      ],
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_bytes": 1633800,
+      "preview_bytes": 124826
+    },
+    {
+      "original": "ARTWORKS (6).jpg",
+      "original_sha256": "e211b2c379033eada87eb7ca933f6651a3333c76f2cc1fe10ad7a6dc57c366dc",
+      "preview": "xen-preview-e211b2c379033ead.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 1052056,
+      "preview_bytes": 355006
+    },
+    {
+      "original": "ARTWORKS (4).png",
+      "original_sha256": "a6dce27ed795f76ca3434ef622afd8c289c936b9ced171e32dd51b11e5d7e908",
+      "preview": "xen-preview-a6dce27ed795f76c.webp",
+      "original_dimensions": [
+        1024,
+        1024
+      ],
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_bytes": 1563455,
+      "preview_bytes": 106424
+    },
+    {
+      "original": "ARTWORKS (1).jpg",
+      "original_sha256": "3fc31b8970055e6f1b29b5c2211560d5fc18c7a1f5a6611201d574103011c9b0",
+      "preview": "xen-preview-3fc31b8970055e6f.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 760845,
+      "preview_bytes": 186786
+    },
+    {
+      "original": "ARTWORKS (4).jpg",
+      "original_sha256": "57876ccf613faa824e9db34ab260513c792ba3e2258cba47901d72a3889c7bbc",
+      "preview": "xen-preview-57876ccf613faa82.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 639102,
+      "preview_bytes": 164506
+    },
+    {
+      "original": "ARTWORKS (5).png",
+      "original_sha256": "4bef063e3f96f94b101252a85fa7fa890ba65cf48bc2fe4e3bff4ae922189384",
+      "preview": "xen-preview-4bef063e3f96f94b.webp",
+      "original_dimensions": [
+        1024,
+        1024
+      ],
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_bytes": 1773529,
+      "preview_bytes": 171276
+    },
+    {
+      "original": "ARTWORKS (15).jpg",
+      "original_sha256": "a1163de6908bf66f89301a241fb96ea0e59ef2a174775fbc1d17a42d6c3b9b78",
+      "preview": "xen-preview-a1163de6908bf66f.webp",
+      "original_dimensions": [
+        1080,
+        1080
+      ],
+      "dimensions": [
+        1080,
+        1080
+      ],
+      "original_bytes": 1007275,
+      "preview_bytes": 340372
+    },
+    {
+      "original": "ARTWORKS (2).png",
+      "original_sha256": "a51f7b40cd95326a6264e758455dd9fe204d5424e1eb06aeebc99270f1e60d94",
+      "preview": "xen-preview-a51f7b40cd95326a.webp",
+      "original_dimensions": [
+        1024,
+        1024
+      ],
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_bytes": 1788220,
+      "preview_bytes": 172718
+    },
+    {
+      "original": "ARTWORKS (6).png",
+      "original_sha256": "f2dbf83b5ad817cbbdbf67750ad8aa564c671f00ca7d0faca12fd30cce86a2a8",
+      "preview": "xen-preview-f2dbf83b5ad817cb.webp",
+      "original_dimensions": [
+        1024,
+        1024
+      ],
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_bytes": 1637170,
+      "preview_bytes": 133490
+    },
+    {
+      "original": "ARTWORKS (11).jpg",
+      "original_sha256": "765685d099f6766861b060baaa837106f569e1adf1331e2bee4ff58500724bc4",
+      "preview": "xen-preview-765685d099f67668.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 568603,
+      "preview_bytes": 111830
+    },
+    {
+      "original": "ARTWORKS (3).png",
+      "original_sha256": "9e42b3878070125cdfbb17b6943ff6070c08ca1cc8ef5c985d98db1c9313a702",
+      "preview": "xen-preview-9e42b3878070125c.webp",
+      "original_dimensions": [
+        1024,
+        1024
+      ],
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_bytes": 1830615,
+      "preview_bytes": 203366
+    },
+    {
+      "original": "ARTWORKS (1).png",
+      "original_sha256": "85fcf8bca3e2d0ec9dd2b219d251cfee8d508fd00925b2fb87b07260e4b41532",
+      "preview": "ARTWORKS (1).png",
+      "original_dimensions": [
+        1936,
+        1936
+      ],
+      "dimensions": [
+        1936,
+        1936
+      ],
+      "original_bytes": 351853,
+      "preview_bytes": 351853
+    },
+    {
+      "original": "ARTWORKS (16).jpg",
+      "original_sha256": "6d52f4727c9df4ac440a7e079773168b56351aae5e7449c8cbfa9fbbdfc8ea13",
+      "preview": "xen-preview-6d52f4727c9df4ac.webp",
+      "original_dimensions": [
+        1440,
+        1440
+      ],
+      "dimensions": [
+        1440,
+        1440
+      ],
+      "original_bytes": 1482282,
+      "preview_bytes": 585922
+    },
+    {
+      "original": " ABOUT (2).PNG",
+      "original_sha256": "af66c77c480b2311e075bca7a2c5e8b23096507210cdcb9a7807bee5be46a4fb",
+      "preview": "xen-preview-af66c77c480b2311.webp",
+      "original_dimensions": [
+        1792,
+        2400
+      ],
+      "dimensions": [
+        1600,
+        2143
+      ],
+      "original_bytes": 6381432,
+      "preview_bytes": 427708
+    },
+    {
+      "original": " ABOUT (6).PNG",
+      "original_sha256": "6576910765170e01aa1a00866e0db799132f42ea764b5e970d3cc4b21f511ad3",
+      "preview": "xen-preview-6576910765170e01.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2506559,
+      "preview_bytes": 384420
+    },
+    {
+      "original": " ABOUT (13).jpg",
+      "original_sha256": "82b35df26791cf415de8f13073a96ea3ce679f993a37ef8cc5579121e196af60",
+      "preview": "xen-preview-82b35df26791cf41.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1729554,
+      "preview_bytes": 243586
+    },
+    {
+      "original": " ABOUT (9).jpg",
+      "original_sha256": "b7ec2073cf85e5af2a6e63b2b3a8e4d014670998d0d11ac543551602d3311676",
+      "preview": "xen-preview-b7ec2073cf85e5af.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1854006,
+      "preview_bytes": 277590
+    },
+    {
+      "original": " ABOUT (8).jpg",
+      "original_sha256": "d52cfdf56f6e1099a9253c1a7d6112d92681e75a57fa6315a78ba27e6381479e",
+      "preview": "xen-preview-d52cfdf56f6e1099.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1636212,
+      "preview_bytes": 207724
+    },
+    {
+      "original": " ABOUT (3).jpg",
+      "original_sha256": "f047afe4a334ab52dbea8cc3346026b83b98b82bcc9e8d3d20cd295363a5ba98",
+      "preview": "xen-preview-f047afe4a334ab52.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1781376,
+      "preview_bytes": 244114
+    },
+    {
+      "original": " ABOUT (16).jpg",
+      "original_sha256": "4ca1fa69e5cbfe614e1c9dd442b9fee5a9c810791fd58a29fae39cc6ba1cf118",
+      "preview": "xen-preview-4ca1fa69e5cbfe61.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1869440,
+      "preview_bytes": 257522
+    },
+    {
+      "original": " ABOUT (6).jpg",
+      "original_sha256": "58921d530a5f5348306e23209c21d3cc0e643266e663a80ffe63577255e5bb10",
+      "preview": "xen-preview-58921d530a5f5348.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1723722,
+      "preview_bytes": 231760
+    },
+    {
+      "original": " ABOUT (10).jpg",
+      "original_sha256": "fbe59b85f74bb00b4a7ab1561984a1c27b88540e51c25ac3361fe14202bab17c",
+      "preview": "xen-preview-fbe59b85f74bb00b.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1718233,
+      "preview_bytes": 206286
+    },
+    {
+      "original": " ABOUT (5).jpg",
+      "original_sha256": "62156a206cf55ea6a364859c6873805db96b3b500568714b25c73fa0297d7e76",
+      "preview": "xen-preview-62156a206cf55ea6.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1583341,
+      "preview_bytes": 196430
+    },
+    {
+      "original": " ABOUT (3).png",
+      "original_sha256": "b244d23c21bdd412704fb9c9c17a3d82ec5103d36bdf6a3357606d9b821f1db1",
+      "preview": "xen-preview-b244d23c21bdd412.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1732473,
+      "preview_bytes": 155872
+    },
+    {
+      "original": " ABOUT (1).jpg",
+      "original_sha256": "cbb7c3090a79114dfe2435d6db9c94d41548d6785a4d34c2ed072ce8fc016208",
+      "preview": "xen-preview-cbb7c3090a79114d.webp",
+      "original_dimensions": [
+        2560,
+        1440
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1718906,
+      "preview_bytes": 213730
+    },
+    {
+      "original": " ABOUT (1).PNG",
+      "original_sha256": "347d4a8358e0735363df1a360851cb566758477071e6b67d056f667c77d48d98",
+      "preview": "xen-preview-347d4a8358e07353.webp",
+      "original_dimensions": [
+        1677,
+        938
+      ],
+      "dimensions": [
+        1600,
+        895
+      ],
+      "original_bytes": 1367299,
+      "preview_bytes": 55650
+    },
+    {
+      "original": "DESIGN (15).png",
+      "original_sha256": "91cbd7e935cb37bdb15372666cfeb0e3fd516b9dc22a97b6e77a5b0de2ee2ede",
+      "preview": "xen-preview-91cbd7e935cb37bd.webp",
+      "original_dimensions": [
+        3840,
+        2160
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 7778737,
+      "preview_bytes": 161990
+    },
+    {
+      "original": "DESIGN (8).jpg",
+      "original_sha256": "ec00ddaec0397faaf7d88d99f06058cd7442021b0bf1ced68bed504ae3454802",
+      "preview": "xen-preview-ec00ddaec0397faa.webp",
+      "original_dimensions": [
+        3840,
+        2160
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 4018475,
+      "preview_bytes": 322470
+    },
+    {
+      "original": "DESIGN (7).jpg",
+      "original_sha256": "cdd0d89661578102ade81d8a5255da8897b8e459cf30de9a3dc8996e6c0d8d60",
+      "preview": "xen-preview-cdd0d89661578102.webp",
+      "original_dimensions": [
+        2386,
+        1112
+      ],
+      "dimensions": [
+        1600,
+        746
+      ],
+      "original_bytes": 407529,
+      "preview_bytes": 93428
+    },
+    {
+      "original": "DESIGN (14).PNG",
+      "original_sha256": "366d8f23e4a9ddaaa216f710a751ac0d5d9a4b4c8b110372c71b3b66cee6704f",
+      "preview": "xen-preview-366d8f23e4a9ddaa.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1375095,
+      "preview_bytes": 84346
+    },
+    {
+      "original": "DESIGN (1).jpg",
+      "original_sha256": "3dd466ed49d27b1504dceeef01694203e853ef5c927e3a06405b41aa9eeab66e",
+      "preview": "xen-preview-3dd466ed49d27b15.webp",
+      "original_dimensions": [
+        1024,
+        725
+      ],
+      "dimensions": [
+        1024,
+        725
+      ],
+      "original_bytes": 480677,
+      "preview_bytes": 107166
+    },
+    {
+      "original": "DESIGN (4).jpg",
+      "original_sha256": "6f26cf8bfee67f8dab5264495afbb7c0a10e03e19664e24bdebfb0c7cc541779",
+      "preview": "xen-preview-6f26cf8bfee67f8d.webp",
+      "original_dimensions": [
+        1290,
+        726
+      ],
+      "dimensions": [
+        1290,
+        726
+      ],
+      "original_bytes": 233700,
+      "preview_bytes": 131200
+    },
+    {
+      "original": "DESIGN (5).jpg",
+      "original_sha256": "f29c6a75c75ac6adeeb9b77ed18274f559a9e4fec42fb247c3b3e536f9506c79",
+      "preview": "xen-preview-f29c6a75c75ac6ad.webp",
+      "original_dimensions": [
+        1290,
+        860
+      ],
+      "dimensions": [
+        1290,
+        860
+      ],
+      "original_bytes": 179975,
+      "preview_bytes": 99774
+    },
+    {
+      "original": "DESIGN (6).jpg",
+      "original_sha256": "e3ee204249c0382791da67b5edbb962f8587483c043898aeece2bc5622a31ff1",
+      "preview": "xen-preview-e3ee204249c03827.webp",
+      "original_dimensions": [
+        1290,
+        1290
+      ],
+      "dimensions": [
+        1290,
+        1290
+      ],
+      "original_bytes": 158512,
+      "preview_bytes": 53778
+    },
+    {
+      "original": "DESIGN (3).png",
+      "original_sha256": "2ad8900ad430bc045446f94174a5f45fdfef48279c05a47c9dde292e1d960820",
+      "preview": "xen-preview-2ad8900ad430bc04.webp",
+      "original_dimensions": [
+        1672,
+        941
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 891242,
+      "preview_bytes": 43766
+    },
+    {
+      "original": "DESIGN (4).png",
+      "original_sha256": "005050f4c68ecfb4868fb431471da2139ae0d7e40ea017170e842234ee37def3",
+      "preview": "xen-preview-005050f4c68ecfb4.webp",
+      "original_dimensions": [
+        1672,
+        941
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 594333,
+      "preview_bytes": 35126
+    },
+    {
+      "original": "DESIGN (5).png",
+      "original_sha256": "94c97a539963d5e553cd5df7b1168d8970e52b100378b84490fe2574ff1aef59",
+      "preview": "xen-preview-94c97a539963d5e5.webp",
+      "original_dimensions": [
+        1672,
+        941
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1030179,
+      "preview_bytes": 69770
+    },
+    {
+      "original": "DESIGN (2).PNG",
+      "original_sha256": "69d0b35ff09d12442feca85fd9ec09db3d02ec4751e524d638c82f18ffcc2884",
+      "preview": "xen-preview-69d0b35ff09d1244.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1704650,
+      "preview_bytes": 150476
+    },
+    {
+      "original": "DESIGN (10).jpg",
+      "original_sha256": "77a3b2e483766f2582ac2f69880649a7d2868a07a68fbceca6835fac4be47a71",
+      "preview": "xen-preview-77a3b2e483766f25.webp",
+      "original_dimensions": [
+        4610,
+        2593
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 4346242,
+      "preview_bytes": 271212
+    },
+    {
+      "original": "DESIGN (10).PNG",
+      "original_sha256": "9d37397c54462266b82930e1b24a6157611eaa42842bfb1e26f8e61a8cee62fe",
+      "preview": "xen-preview-9d37397c54462266.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1617441,
+      "preview_bytes": 144646
+    },
+    {
+      "original": "DESIGN (3).jpg",
+      "original_sha256": "331b20ee09d8a2c7b5b2d83a0943807360be5886a0291e826d6c34935186fe1a",
+      "preview": "xen-preview-331b20ee09d8a2c7.webp",
+      "original_dimensions": [
+        722,
+        1024
+      ],
+      "dimensions": [
+        722,
+        1024
+      ],
+      "original_bytes": 266361,
+      "preview_bytes": 213976
+    },
+    {
+      "original": "DESIGN (11).PNG",
+      "original_sha256": "830787f26ef4fe7ebc30af49ff6eb369df4e641b9f5b70adae8e22ea18432471",
+      "preview": "xen-preview-830787f26ef4fe7e.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 2136460,
+      "preview_bytes": 271264
+    },
+    {
+      "original": "DESIGN (9).jpg",
+      "original_sha256": "1b8ea771b8ed4a93fa9f23beb8d32d6daf4c5e6d8c92602025df55cffbabb62b",
+      "preview": "xen-preview-1b8ea771b8ed4a93.webp",
+      "original_dimensions": [
+        10653,
+        5992
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 18674445,
+      "preview_bytes": 460876
+    },
+    {
+      "original": "DESIGN (1).png",
+      "original_sha256": "a72f67e01dba78a83e95dc7f17643afb3c371c0a3baef744c00015d231d9602a",
+      "preview": "xen-preview-a72f67e01dba78a8.webp",
+      "original_dimensions": [
+        2000,
+        2222
+      ],
+      "dimensions": [
+        1600,
+        1778
+      ],
+      "original_bytes": 2873676,
+      "preview_bytes": 164066
+    },
+    {
+      "original": "DESIGN (13).PNG",
+      "original_sha256": "57ac6833c008d480d370b1a42402ecd8b551c5588fded1b065a55dbd109ed187",
+      "preview": "xen-preview-57ac6833c008d480.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2034128,
+      "preview_bytes": 229580
+    },
+    {
+      "original": "DESIGN (9).PNG",
+      "original_sha256": "0a74a712fa06488fe52ed659f670796f846ccc4aa4d0abab1edbf7c6dd69855d",
+      "preview": "xen-preview-0a74a712fa06488f.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1596249,
+      "preview_bytes": 132346
+    },
+    {
+      "original": "DESIGN (6).PNG",
+      "original_sha256": "0ce3c51435ce2556582095e7543c2910748ac16da17a5f922f3a31e02923b6d9",
+      "preview": "xen-preview-0ce3c51435ce2556.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1494291,
+      "preview_bytes": 82120
+    },
+    {
+      "original": "DESIGN (7).PNG",
+      "original_sha256": "77a1304f49373c8629bac3d6fddcdd0001d6d99cf79fbf6bd2f4f8a847de7f8f",
+      "preview": "xen-preview-77a1304f49373c86.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 1096862,
+      "preview_bytes": 33876
+    },
+    {
+      "original": "DESIGN (8).PNG",
+      "original_sha256": "9a7b7df18e6355376241cf2608f3c5b55bff0c978c8f7bb50b767938faaf83ca",
+      "preview": "xen-preview-9a7b7df18e635537.webp",
+      "original_dimensions": [
+        896,
+        1200
+      ],
+      "dimensions": [
+        896,
+        1200
+      ],
+      "original_bytes": 950927,
+      "preview_bytes": 18738
+    },
+    {
+      "original": "DESIGN (12).PNG",
+      "original_sha256": "4c717dca619ecdaafe63b970f093ce684f7cff558b20bca1550f42852e1b58eb",
+      "preview": "xen-preview-4c717dca619ecdaa.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2215505,
+      "preview_bytes": 344492
+    },
+    {
+      "original": "DESIGN (2).jpg",
+      "original_sha256": "0ad8fcef223268cd143166efd0e29c2c69175c171c78e0f9ffc9b1f69a896b56",
+      "preview": "xen-preview-0ad8fcef223268cd.webp",
+      "original_dimensions": [
+        1024,
+        725
+      ],
+      "dimensions": [
+        1024,
+        725
+      ],
+      "original_bytes": 486138,
+      "preview_bytes": 120422
+    },
+    {
+      "original": "SNAP (1).JPEG",
+      "original_sha256": "617f589bc2e1924d73f40fd5d5906fddf043cd058885cc74ee206f0ffbb645c8",
+      "preview": "xen-preview-617f589bc2e1924d.webp",
+      "original_dimensions": [
+        1566,
+        1044
+      ],
+      "dimensions": [
+        1566,
+        1044
+      ],
+      "original_bytes": 233782,
+      "preview_bytes": 133350
+    },
+    {
+      "original": "SNAP (1).jpg",
+      "original_sha256": "4b2e4b045e44d3819c2968743ad840dba48141218edc15bc7732dab3d35823f6",
+      "preview": "snap-preview-15.jpg",
+      "original_dimensions": [
+        732,
+        1098
+      ],
+      "dimensions": [
+        732,
+        1098
+      ],
+      "original_bytes": 312261,
+      "preview_bytes": 170436
+    },
+    {
+      "original": "SNAP (9).jpg",
+      "original_sha256": "13a6436bf87dc0213dff81ade2f49d10a21a1414523bb2cfcfdbabfc2eeb8de9",
+      "preview": "snap-preview-16.jpg",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 1806941,
+      "preview_bytes": 217936
+    },
+    {
+      "original": "SNAP (15).jpg",
+      "original_sha256": "c814131bf45b5516c3fba3fc71fcba8d1731b7ce8b9cdb8703992093d85cabd5",
+      "preview": "snap-preview-22.jpg",
+      "original_dimensions": [
+        1920,
+        3416
+      ],
+      "dimensions": [
+        1124,
+        2000
+      ],
+      "original_bytes": 2770708,
+      "preview_bytes": 312306
+    },
+    {
+      "original": "SNAP (2).JPEG",
+      "original_sha256": "50f9141fb5a692d4ad4f8136783f9af065b000c1e018301b18e7446c298f3b55",
+      "preview": "xen-preview-50f9141fb5a692d4.webp",
+      "original_dimensions": [
+        1044,
+        1566
+      ],
+      "dimensions": [
+        1044,
+        1566
+      ],
+      "original_bytes": 440186,
+      "preview_bytes": 272658
+    },
+    {
+      "original": "SNAP (5).jpg",
+      "original_sha256": "778f5de126cff2fd7444df58a78552687c278fc9a64cdf98cf470bce0aa880b5",
+      "preview": "snap-preview-05.jpg",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 2403322,
+      "preview_bytes": 307219
+    },
+    {
+      "original": "SNAP (12).jpg",
+      "original_sha256": "3acf331705e51227d33b1813712c4f28e1d1a2c17f3fb0dc921276c6d5d847ba",
+      "preview": "snap-preview-19.jpg",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 1935820,
+      "preview_bytes": 268758
+    },
+    {
+      "original": "SNAP (3).jpg",
+      "original_sha256": "a62168273d4f2c691992e059e7f84e709c453bdbb4d9a459a977382d0be8889b",
+      "preview": "xen-preview-a62168273d4f2c69.webp",
+      "original_dimensions": [
+        746,
+        1119
+      ],
+      "dimensions": [
+        746,
+        1119
+      ],
+      "original_bytes": 234338,
+      "preview_bytes": 98856
+    },
+    {
+      "original": "SNAP (14).jpg",
+      "original_sha256": "20775555d462d0aec2e3c6c5e009de838b419cf2a29ca6310023b0700cc6896d",
+      "preview": "xen-preview-20775555d462d0ae.webp",
+      "original_dimensions": [
+        1566,
+        1044
+      ],
+      "dimensions": [
+        1566,
+        1044
+      ],
+      "original_bytes": 294762,
+      "preview_bytes": 132222
+    },
+    {
+      "original": "SNAP (6).jpg",
+      "original_sha256": "e2203fba42454b4a24c524980eccd54f1da5afd2b348fd889bff975cec7945f9",
+      "preview": "snap-preview-09.jpg",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 2139030,
+      "preview_bytes": 277421
+    },
+    {
+      "original": "SNAP (16).jpg",
+      "original_sha256": "2320d259600304ddb319c9d56a6340b1151151ef8bb3abe17208a6b40949f2a0",
+      "preview": "xen-preview-2320d259600304dd.webp",
+      "original_dimensions": [
+        1920,
+        2560
+      ],
+      "dimensions": [
+        1600,
+        2133
+      ],
+      "original_bytes": 1728433,
+      "preview_bytes": 321146
+    },
+    {
+      "original": "SNAP (11).jpg",
+      "original_sha256": "f7248297b65f2accec8a5c5955e405d48fc300042462acd0979d51560517edfb",
+      "preview": "snap-preview-17.jpg",
+      "original_dimensions": [
+        1920,
+        3416
+      ],
+      "dimensions": [
+        1124,
+        2000
+      ],
+      "original_bytes": 2518866,
+      "preview_bytes": 224580
+    },
+    {
+      "original": "SNAP (8).jpg",
+      "original_sha256": "d6d4ca2c78437b0e4963675d6aef8c1e5bbd3942f8b58a1ff0c6eb6632b63253",
+      "preview": "snap-preview-07.jpg",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 2739191,
+      "preview_bytes": 527366
+    },
+    {
+      "original": "SNAP (3).JPEG",
+      "original_sha256": "768bb31b1333c1cc84bdff1b5441c70c57e1292263002fabc03a1da2251b4aae",
+      "preview": "xen-preview-768bb31b1333c1cc.webp",
+      "original_dimensions": [
+        1044,
+        1566
+      ],
+      "dimensions": [
+        1044,
+        1566
+      ],
+      "original_bytes": 308139,
+      "preview_bytes": 197946
+    },
+    {
+      "original": "SNAP (18).jpg",
+      "original_sha256": "20e4c10b2d95cfce1f17b0129f88942764aa364450557e6003b95e5a0922b7e1",
+      "preview": "xen-preview-20e4c10b2d95cfce.webp",
+      "original_dimensions": [
+        741,
+        1111
+      ],
+      "dimensions": [
+        741,
+        1111
+      ],
+      "original_bytes": 206976,
+      "preview_bytes": 78726
+    },
+    {
+      "original": "SNAP (17).jpg",
+      "original_sha256": "1e4e8f00069ce546436828c86c29e1b9fc725419fb4b4a4974bf6acd546def30",
+      "preview": "xen-preview-1e4e8f00069ce546.webp",
+      "original_dimensions": [
+        747,
+        1121
+      ],
+      "dimensions": [
+        747,
+        1121
+      ],
+      "original_bytes": 217069,
+      "preview_bytes": 90556
+    },
+    {
+      "original": "SNAP (20).jpg",
+      "original_sha256": "64f148fca315edb1dd90aa51ad534795de458ea058e6d5080fec2b5f5007ec68",
+      "preview": "xen-preview-64f148fca315edb1.webp",
+      "original_dimensions": [
+        735,
+        1103
+      ],
+      "dimensions": [
+        735,
+        1103
+      ],
+      "original_bytes": 326292,
+      "preview_bytes": 168278
+    },
+    {
+      "original": "SNAP (13).jpg",
+      "original_sha256": "13732c6fbda60a976bc03873c77bf356646bf635d8a7b1bc6123ccb097072332",
+      "preview": "snap-preview-20.jpg",
+      "original_dimensions": [
+        1920,
+        2880
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 2636116,
+      "preview_bytes": 392689
+    },
+    {
+      "original": "SNAP (10).jpg",
+      "original_sha256": "3564d0c89bc53b28b994051923ad990e5a99fe3e4701ae8e85ec24d938ae403d",
+      "preview": "snap-preview-18.jpg",
+      "original_dimensions": [
+        1365,
+        2048
+      ],
+      "dimensions": [
+        1333,
+        2000
+      ],
+      "original_bytes": 782291,
+      "preview_bytes": 392224
+    },
+    {
+      "original": "SNAP (7).jpg",
+      "original_sha256": "2230e4b00260a81223ce2d330bf23da6a0a6db4006152b053943fc566d4ff63c",
+      "preview": "xen-preview-2230e4b00260a812.webp",
+      "original_dimensions": [
+        1566,
+        1044
+      ],
+      "dimensions": [
+        1566,
+        1044
+      ],
+      "original_bytes": 342807,
+      "preview_bytes": 174244
+    },
+    {
+      "original": "SNAP (4).jpg",
+      "original_sha256": "0d52cccf5d323741051f739aca798ec9ef1f473bba3836eb8703e6510124e462",
+      "preview": "xen-preview-0d52cccf5d323741.webp",
+      "original_dimensions": [
+        1566,
+        1044
+      ],
+      "dimensions": [
+        1566,
+        1044
+      ],
+      "original_bytes": 443901,
+      "preview_bytes": 294946
+    },
+    {
+      "original": "SNAP (19).jpg",
+      "original_sha256": "37979f40dac372e8d886570eba11d20cfa4164316d6de0d3c81b7c432e52edfc",
+      "preview": "xen-preview-37979f40dac372e8.webp",
+      "original_dimensions": [
+        746,
+        1119
+      ],
+      "dimensions": [
+        746,
+        1119
+      ],
+      "original_bytes": 197425,
+      "preview_bytes": 86646
+    },
+    {
+      "original": "SNAP (2).jpg",
+      "original_sha256": "695a125e773edc9d4086af649b529ea28dabcd5dbd76df29289a4c95ad061ce1",
+      "preview": "snap-preview-06.jpg",
+      "original_dimensions": [
+        1566,
+        1044
+      ],
+      "dimensions": [
+        1566,
+        1044
+      ],
+      "original_bytes": 574940,
+      "preview_bytes": 385691
+    },
+    {
+      "original": "IMG_8560.PNG",
+      "original_sha256": "3824101a316fc1bb22a1df8d2efbebffeebe6847bcb70700f10cd3aae6df68c9",
+      "preview": "xen-preview-3824101a316fc1bb.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1281425,
+      "preview_bytes": 116436
+    },
+    {
+      "original": "IMG_6341.JPG",
+      "original_sha256": "ebbd743e68dac2136afd1a4a841564e2431f55e4cf70ae93426a96cf183ae0da",
+      "preview": "xen-preview-ebbd743e68dac213.webp",
+      "original_dimensions": [
+        1288,
+        1715
+      ],
+      "dimensions": [
+        1288,
+        1715
+      ],
+      "original_bytes": 360341,
+      "preview_bytes": 134448
+    },
+    {
+      "original": "IMG_6339.JPG",
+      "original_sha256": "72f8357bd522e86fbd862b1a8dc1ffbd02a1e15847f7631ddb7be740a088aeb7",
+      "preview": "xen-preview-72f8357bd522e86f.webp",
+      "original_dimensions": [
+        1288,
+        565
+      ],
+      "dimensions": [
+        1288,
+        565
+      ],
+      "original_bytes": 236994,
+      "preview_bytes": 112984
+    },
+    {
+      "original": "IMG_8563.PNG",
+      "original_sha256": "cff749439f5197010bd8654b70a3a9e04aeb8094c9d55c782a7c8bcabd812164",
+      "preview": "xen-preview-cff749439f519701.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1947748,
+      "preview_bytes": 238756
+    },
+    {
+      "original": "IMG_9072.JPG",
+      "original_sha256": "29a3539708cb3a3444513edb52f0f90906a1c91d61ce3ad46a92d4a3723d1c84",
+      "preview": "xen-preview-29a3539708cb3a34.webp",
+      "original_dimensions": [
+        1290,
+        2857
+      ],
+      "dimensions": [
+        1290,
+        2857
+      ],
+      "original_bytes": 1197755,
+      "preview_bytes": 549216
+    },
+    {
+      "original": "IMG_8562.PNG",
+      "original_sha256": "a7a48836d84bf66881a620918b897da48168a1f4d6d45a0726e47a65791c3ddb",
+      "preview": "xen-preview-a7a48836d84bf668.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 1933448,
+      "preview_bytes": 238132
+    },
+    {
+      "original": "IMG_9072 2.JPG",
+      "original_sha256": "cd1719e408d06f166e0881703cbc96a48cb7c4def7e2eb922a85953cf51c1f88",
+      "preview": "xen-preview-cd1719e408d06f16.webp",
+      "original_dimensions": [
+        1290,
+        3993
+      ],
+      "dimensions": [
+        1290,
+        3993
+      ],
+      "original_bytes": 1540747,
+      "preview_bytes": 667952
+    },
+    {
+      "original": "SPACE (5).jpg",
+      "original_sha256": "138cb3415ab8f06f51b42c94668db34c2919503592a8d51520d9167de27a0078",
+      "preview": "xen-preview-138cb3415ab8f06f.webp",
+      "original_dimensions": [
+        1920,
+        1080
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 1194019,
+      "preview_bytes": 239640
+    },
+    {
+      "original": "SPACE (2).jpg",
+      "original_sha256": "e70e24c59601904ac1723d930b619ebbe0e18def025d9854d014c2b11c8d3778",
+      "preview": "xen-preview-e70e24c59601904a.webp",
+      "original_dimensions": [
+        4961,
+        2791
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 5425090,
+      "preview_bytes": 343648
+    },
+    {
+      "original": "SPACE (4).jpg",
+      "original_sha256": "f5626d52eea8ef4d4356e36b832d0638a39611747a3a690322220aafd3efec12",
+      "preview": "xen-preview-f5626d52eea8ef4d.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 653107,
+      "preview_bytes": 395336
+    },
+    {
+      "original": "SPACE (1).jpg",
+      "original_sha256": "e68077eee5863d4cb10eb10b6061da932a01f1679b42f219112f124d437ce439",
+      "preview": "xen-preview-e68077eee5863d4c.webp",
+      "original_dimensions": [
+        1024,
+        725
+      ],
+      "dimensions": [
+        1024,
+        725
+      ],
+      "original_bytes": 699102,
+      "preview_bytes": 287994
+    },
+    {
+      "original": "SPACE (2).PNG",
+      "original_sha256": "60ebc8dd11e3255785b7d7ba2150daef44fc6419b7e916e87dba6ee3a69151fd",
+      "preview": "xen-preview-60ebc8dd11e32557.webp",
+      "original_dimensions": [
+        1376,
+        768
+      ],
+      "dimensions": [
+        1376,
+        768
+      ],
+      "original_bytes": 2463984,
+      "preview_bytes": 410380
+    },
+    {
+      "original": "SPACE (3).png",
+      "original_sha256": "ca99ff2b0ebb2b276d5123fb08badbfa0e6d060aea41ff3c0cdd657568512d5d",
+      "preview": "xen-preview-ca99ff2b0ebb2b27.webp",
+      "original_dimensions": [
+        2048,
+        1422
+      ],
+      "dimensions": [
+        1600,
+        1111
+      ],
+      "original_bytes": 2698962,
+      "preview_bytes": 144508
+    },
+    {
+      "original": "SPACE (3).jpg",
+      "original_sha256": "37f86ff080dac811ae67c9958c2a9e7fec75be0b00d1e9760ddc3dc79fc64db5",
+      "preview": "xen-preview-37f86ff080dac811.webp",
+      "original_dimensions": [
+        723,
+        1024
+      ],
+      "dimensions": [
+        723,
+        1024
+      ],
+      "original_bytes": 512334,
+      "preview_bytes": 201972
+    },
+    {
+      "original": "SPACE (1).png",
+      "original_sha256": "4af5253d96af77982c88568c01352aaebe2c7d431a35a0c5bb308a18aee2efa5",
+      "preview": "xen-preview-4af5253d96af7798.webp",
+      "original_dimensions": [
+        3642,
+        2048
+      ],
+      "dimensions": [
+        1600,
+        900
+      ],
+      "original_bytes": 9077966,
+      "preview_bytes": 328106
+    },
+    {
+      "original": "SPACE (6).jpg",
+      "original_sha256": "9c0493dc436f7beeca0820ae28a7dc033406868a12ad2ea704cdda97b1d2d29f",
+      "preview": "xen-preview-9c0493dc436f7bee.webp",
+      "original_dimensions": [
+        4962,
+        3509
+      ],
+      "dimensions": [
+        1600,
+        1131
+      ],
+      "original_bytes": 6218512,
+      "preview_bytes": 371428
+    }
+  ]
+}

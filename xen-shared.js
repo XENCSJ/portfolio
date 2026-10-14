@@ -47,11 +47,25 @@
     const caption = viewer.querySelector('.viewer-caption');
     const original = viewer.querySelector('.viewer-original');
     const counter = viewer.querySelector('.viewer-counter');
+    const status = document.createElement('p');
+    status.className = 'viewer-status';
+    status.setAttribute('role', 'status');
+    viewer.append(status);
+    preview.addEventListener('load', () => {
+      viewer.setAttribute('aria-busy', 'false');
+      status.textContent = '';
+    });
+    preview.addEventListener('error', () => {
+      viewer.setAttribute('aria-busy', 'false');
+      status.textContent = '画像を読み込めませんでした。元画像のリンクからご確認ください。';
+    });
     let index = 0;
     let opener;
     const show = (next) => {
       index = (next + works.length) % works.length;
       const work = works[index];
+      viewer.setAttribute('aria-busy', 'true');
+      status.textContent = '画像を読み込んでいます…';
       preview.src = work.href;
       preview.alt = work.querySelector('img').alt;
       caption.textContent = preview.alt;
@@ -83,6 +97,14 @@
     });
     viewer.addEventListener('close', () => opener?.focus());
   }
+
+  // Display copies may fail independently of preserved originals.
+  document.querySelectorAll('.gallery-item img').forEach((image) => {
+    image.addEventListener('error', () => {
+      const original = image.closest('a').href;
+      if (image.src !== original) image.src = original;
+    }, {once: true});
+  });
 
   // The existing form has no delivery destination. Never submit to this page.
   const form = document.getElementById('contact');

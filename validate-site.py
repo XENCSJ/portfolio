@@ -3,6 +3,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 import json
+import hashlib
 import re
 import subprocess
 import tempfile
@@ -81,6 +82,28 @@ for row in assets:
     assert (ROOT / row['file']).is_file(), row
     assert (ROOT / row['preview']).is_file(), row
 
+# Display copies must never change a work's original image or target.
+optimized = json.loads((ROOT / 'preview-optimization.json').read_text())
+preview_map = {row['original']: row for row in optimized['images']}
+for row in preview_map.values():
+    assert hashlib.sha256((ROOT / row['original']).read_bytes()).hexdigest() == row['original_sha256'], row['original']
+    assert (ROOT / row['preview']).stat().st_size == row['preview_bytes'], row['preview']
+for name in PAGES:
+    source = (ROOT / (name + '.html')).read_text()
+    for target, image in re.findall(r'<a class="gallery-item" href="([^"]+)"[^>]*><img src="([^"]+)"', source):
+        key = unquote(target).removeprefix('./')
+        assert unquote(image).removeprefix('./') == preview_map[key]['preview'], (name, key)
+
+pending = json.loads((ROOT / 'pending-content.json').read_text())
+cinematic = (ROOT / 'cinematic.html').read_text()
+assert len(pending['cinematic']) == 4
+for work in pending['cinematic']:
+    assert cinematic.count('data-work-key="' + work['key'] + '"') == 1
+    assert work['url'] is None  # Do not replace missing footage with an unrelated work.
+if pending['contact']['endpoint'] is None:
+    price = (ROOT / 'price-list.html').read_text()
+    assert re.search(r'<button[^>]*class="submit"[^>]*\bdisabled', price)
+
 for css in ROOT.glob('*.css'):
     for ref in re.findall(r'url\(["\']?([^\)"\']+)', css.read_text()):
         if not urlsplit(ref).scheme:
@@ -88,4 +111,5 @@ for css in ROOT.glob('*.css'):
 
 print(f'PASS: {len(PAGES)} pages; internal references, IDs, menus, logo references, JS syntax')
 print(f'PASS: {len(videos)} correctly categorized video players; {len(assets)} preserved gallery records; {gallery_count} image placements')
+print(f'PASS: {len(preview_map)} original image hashes and display mappings; pending content isolated')
 print('NOT COVERED: browser/mobile rendering, external responses, playback, form delivery, reference-copy parity.')
