@@ -1,0 +1,102 @@
+{
+  "baseline": "7283d6a",
+  "date": "2026-10-14",
+  "pages": [
+    {
+      "page": "animation.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 4
+    },
+    {
+      "page": "apparel.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 3
+    },
+    {
+      "page": "architecture.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "artworks.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "cinematic.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "creator.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "design.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "index.html",
+      "removed_footer_social_groups": 0,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "price-list.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "snap.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "sns-management.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "sound.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 4
+    },
+    {
+      "page": "space.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 0
+    },
+    {
+      "page": "storybooks.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 3
+    },
+    {
+      "page": "studio.html",
+      "removed_footer_social_groups": 1,
+      "all_other_content_preserved": true,
+      "video_count": 1
+    }
+  ],
+  "index_byte_identical": true,
+  "video_aspect_ratio": "16:9",
+  "thumbnail_fit": "cover; center; no stretching",
+  "browser_rendering": "not_verified",
+  "playback": "not_verified",
+  "main_updated": false
+}

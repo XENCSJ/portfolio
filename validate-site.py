@@ -42,6 +42,8 @@ for name in PAGES:
     assert len(menu) == 1 and menu[0].count('<a ') == len(PAGES), name
     assert source.count('aria-current="page"') == 1, name
     assert 'src="./xen-logo.png"' in source, name
+    if name != 'index':
+        assert '<nav class="shared-social"' not in source, name
     for ref in doc.refs:
         assert '不採用' not in unquote(ref), (name, ref)
         assert 'XENポートフォリオ画像の復元' not in unquote(ref), (name, ref)
@@ -121,6 +123,12 @@ for phrase in ('4,000', '6,000', 'ワンストップでバズを再現', 'SNS運
 reference_css = (ROOT / 'xen-reference.css').read_text()
 assert 'prefers-reduced-motion:reduce' in reference_css
 assert not re.search(r'url\(', reference_css)
+shared_css = (ROOT / 'xen-shared.css').read_text()
+assert '.detail-page .video-container .thumb img' in shared_css
+video_image_rule = re.search(r'\.detail-page \.video-container \.thumb img\s*\{([^}]+)', shared_css)[1]
+assert 'object-fit: cover' in video_image_rule
+assert 'width: 100%' in video_image_rule and 'height: 100%' in video_image_rule
+assert re.search(r'\.video-container\s*\{[^}]*aspect-ratio:\s*16/9', shared_css)
 
 for css in ROOT.glob('*.css'):
     for ref in re.findall(r'url\(["\']?([^\)"\']+)', css.read_text()):
