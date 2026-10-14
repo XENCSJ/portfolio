@@ -4,13 +4,31 @@
   const menu = document.getElementById('xen-menu');
   if (button && menu) {
     const links = Array.from(menu.querySelectorAll('a'));
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let menuAnimation;
     const setOpen = (open, restoreFocus = false) => {
+      const wasOpen = button.getAttribute('aria-expanded') === 'true';
+      if (open === wasOpen) return;
+      menuAnimation?.cancel();
       button.setAttribute('aria-expanded', String(open));
       button.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
-      menu.hidden = !open;
+      menu.inert = !open;
+      if (open) menu.hidden = false;
+      if (!motion.matches && menu.animate) {
+        menuAnimation = menu.animate(open ?
+          [{ opacity: 0, translate: '0 -6px' }, { opacity: 1, translate: '0 0' }] :
+          [{ opacity: 1, translate: '0 0' }, { opacity: 0, translate: '0 -6px' }],
+          { duration: open ? 280 : 160, easing: 'cubic-bezier(.22,.68,0,1)' });
+        menuAnimation.onfinish = () => { menu.hidden = !open; };
+      } else menu.hidden = !open;
       if (restoreFocus) button.focus();
     };
-    button.addEventListener('click', () => setOpen(menu.hidden));
+    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+    motion.addEventListener('change', () => {
+      if (!motion.matches) return;
+      menuAnimation?.cancel();
+      menu.hidden = button.getAttribute('aria-expanded') !== 'true';
+    });
     button.addEventListener('keydown', (event) => {
       if (event.key !== 'ArrowDown') return;
       event.preventDefault();
@@ -114,4 +132,58 @@
       document.getElementById('formnote').textContent = '現在フォームからの送信は受け付けていません。';
     });
   }
+})();
+
+/* Read the unchanged price tables once; never maintain a second set of fees. */
+(() => {
+  if (!document.body.classList.contains('price-list-page')) return;
+  const element = (tag, text, className) => {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  };
+  document.querySelectorAll('.table-scroll').forEach(region => {
+    const table = region.querySelector('table');
+    if (!table || region.querySelector('.price-cards')) return;
+    const headings = Array.from(table.querySelectorAll('thead th'), th => th.textContent.trim());
+    const rows = Array.from(table.querySelectorAll('tbody tr'), tr => Array.from(tr.cells));
+    if (!headings.length || !rows.length || rows.some(row => row.length !== headings.length)) return;
+    const comparison = ['price-section-2','price-section-3'].includes(region.getAttribute('aria-labelledby'));
+    const cards = element('div', undefined, 'price-cards');
+    const makeCard = (name, price, label) => {
+      const card = element('article', undefined, 'price-card');
+      card.append(element('h3', name));
+      const value = element('p', undefined, 'price-value');
+      value.append(element('span', label, 'price-label'), document.createTextNode(price));
+      card.append(value);
+      cards.append(card);
+      return card;
+    };
+    if (comparison) {
+      headings.forEach((name, column) => {
+        rows[0][column].classList.add('price-value');
+        const card = makeCard(name, rows[0][column].textContent.trim(), '料金');
+        const list = element('ul');
+        rows.slice(1).forEach(row => list.append(element('li', row[column].textContent.trim())));
+        card.append(list);
+      });
+    } else {
+      const priceColumn = headings.findIndex(text => /価格|PRICE/.test(text));
+      if (priceColumn < 0) return;
+      rows.forEach(row => {
+        row[priceColumn].classList.add('price-value');
+        const card = makeCard(row[0].textContent.trim(), row[priceColumn].textContent.trim(), headings[priceColumn]);
+        const details = element('dl');
+        row.forEach((cell, column) => {
+          if (column === 0 || column === priceColumn) return;
+          details.append(element('dt', headings[column]), element('dd', cell.textContent.trim()));
+        });
+        card.append(details);
+      });
+    }
+    region.append(cards);
+    region.classList.add('has-price-cards');
+    region.removeAttribute('tabindex');
+  });
 })();
