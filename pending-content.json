@@ -1,0 +1,46 @@
+{
+  "cinematic": [
+    {
+      "key": "street-30",
+      "category": "ラグジュアリー / ストリート系",
+      "duration": "30秒",
+      "url": null,
+      "status": "awaiting_confirmed_url"
+    },
+    {
+      "key": "clean-30",
+      "category": "ラグジュアリー / キレイ系",
+      "duration": "30秒",
+      "url": null,
+      "status": "awaiting_confirmed_url"
+    },
+    {
+      "key": "street-90",
+      "category": "ラグジュアリー / ストリート系",
+      "duration": "90秒",
+      "url": null,
+      "status": "awaiting_confirmed_url"
+    },
+    {
+      "key": "clean-60",
+      "category": "ラグジュアリー / キレイ系",
+      "duration": "60秒",
+      "url": null,
+      "status": "awaiting_confirmed_url"
+    }
+  ],
+  "contact": {
+    "recipient": null,
+    "endpoint": null,
+    "status": "awaiting_delivery_destination"
+  },
+  "sound": {
+    "album": "VOID TO FORM",
+    "spotify_album_url": null,
+    "status": "awaiting_confirmed_album_url"
+  },
+  "reference_materials": {
+    "status": "awaiting_original_sources",
+    "details": "See REVISION-STATUS.md for the page-by-page list. Existing available assets and copy are retained."
+  }
+}

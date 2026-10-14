@@ -1,0 +1,127 @@
+{
+  "checked_at": "2026-10-14",
+  "method": "YouTube official oEmbed metadata GET; one retry for initial timeouts",
+  "playback_verified": false,
+  "videos": [
+    {
+      "page": "animation.html",
+      "id": "epB9CUXdP_E",
+      "id_length": 11,
+      "status": 200,
+      "title": "LIFE STAIRS | Why Falling Shapes Us",
+      "author": "XEN | AMBER TALES"
+    },
+    {
+      "page": "animation.html",
+      "id": "N4FiRqQciWE",
+      "id_length": 11,
+      "status": 200,
+      "title": "SILENT REBELLION | When Stopping Becomes Strength",
+      "author": "XEN | AMBER TALES"
+    },
+    {
+      "page": "animation.html",
+      "id": "-aHdK3AyMd0",
+      "id_length": 11,
+      "status": 200,
+      "title": "BROKEN CYCLE | Why We Don’t Change",
+      "author": "XEN | AMBER TALES"
+    },
+    {
+      "page": "animation.html",
+      "id": "qQzOTZhiruE",
+      "id_length": 11,
+      "status": 200,
+      "title": "ムーボ｜MOO-BO-CHU",
+      "author": "XEN | AMBER TALES"
+    },
+    {
+      "page": "sound.html",
+      "id": "TpUbm4xbmVc",
+      "id_length": 11,
+      "status": 200,
+      "title": "NOVA PULSE  | XEN",
+      "author": "XEN | PURPLE AWAKE"
+    },
+    {
+      "page": "sound.html",
+      "id": "uqQI6369VYg",
+      "id_length": 11,
+      "status": 200,
+      "title": "NIGHT'S AWAKENING - Emotional Future Bass Mix | 1 Hour Music",
+      "author": "XEN | PURPLE AWAKE"
+    },
+    {
+      "page": "sound.html",
+      "id": "-_Z0oOPnfvE",
+      "status": 200,
+      "title": "3 Hours Deep Sleep Music for Insomnia & Anxiety Relief 🌙 Quiet Your Mind, Stop Overthinking",
+      "author": "XEN | BLUE SLEEP",
+      "id_length": 11
+    },
+    {
+      "page": "sound.html",
+      "id": "t2sB0oOTOAA",
+      "status": 200,
+      "title": "Healing Night at Celestial Lake | 3 Hours Deep Sleep Music",
+      "author": "XEN | BLUE SLEEP",
+      "id_length": 11
+    },
+    {
+      "page": "apparel.html",
+      "id": "yBNfm0PbP4Y",
+      "status": 200,
+      "title": "XEN SIGNATURE 2025 - IMAGE FILM",
+      "author": "ゼン | XEN",
+      "id_length": 11
+    },
+    {
+      "page": "apparel.html",
+      "id": "PQs_Ii2_hI8",
+      "status": 200,
+      "title": "XEN COLLECTION 2024 - FASHION FILM",
+      "author": "ゼン | XEN",
+      "id_length": 11
+    },
+    {
+      "page": "apparel.html",
+      "id": "OvsxT_ngrWg",
+      "status": 200,
+      "title": "XEN COLLECTION 2023 - FASHION FILM",
+      "author": "ゼン | XEN",
+      "id_length": 11
+    },
+    {
+      "page": "storybooks.html",
+      "id": "i4rhhybpecs",
+      "status": 200,
+      "title": "ちいさくひかるぼく | パキーが見つけたひかり",
+      "author": "XEN | AMBER TALES",
+      "id_length": 11
+    },
+    {
+      "page": "storybooks.html",
+      "id": "jRWWBQFSa2w",
+      "status": 200,
+      "title": "ちいさなミラとひろいうみ｜こわいけど美しい世界へ",
+      "author": "XEN | AMBER TALES",
+      "id_length": 11
+    },
+    {
+      "page": "storybooks.html",
+      "id": "DslArGmxy7A",
+      "status": 200,
+      "title": "しーの四つ葉が教えてくれた、小さな真実 | よつばのしー",
+      "author": "XEN | AMBER TALES",
+      "id_length": 11
+    },
+    {
+      "page": "studio.html",
+      "id": "4BGaAOZJiKc",
+      "status": 200,
+      "title": "VOID TO FORM INITIATION",
+      "author": "XEN | PURPLE AWAKE",
+      "id_length": 11
+    }
+  ]
+}
