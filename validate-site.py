@@ -122,6 +122,12 @@ for phrase in ('4,000', '6,000', 'ワンストップでバズを再現', 'SNS運
     assert phrase in sns, phrase
 reference_css = (ROOT / 'xen-reference.css').read_text()
 assert 'prefers-reduced-motion:reduce' in reference_css
+assert '.reference-page.detail-page .image-gallery { gap: 1px; }' in reference_css
+gallery_rule = re.search(r'\.reference-page \.image-gallery > \.gallery-item\s*\{([^}]+)', reference_css)[1]
+assert 'aspect-ratio: 1 / 1' in gallery_rule and 'overflow: hidden' in gallery_rule
+gallery_image_rule = re.search(r'\.reference-page \.image-gallery > \.gallery-item > img\s*\{([^}]+)', reference_css)[1]
+assert all(value in gallery_image_rule for value in ('object-fit: cover', 'width: 100%', 'height: 100%'))
+assert re.search(r'\.image-viewer img\s*\{[^}]*object-fit:\s*contain', (ROOT / 'xen-shared.css').read_text())
 assert not re.search(r'url\(', reference_css)
 shared_css = (ROOT / 'xen-shared.css').read_text()
 assert '.detail-page .video-container .thumb img' in shared_css
