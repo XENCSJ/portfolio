@@ -40,7 +40,7 @@
     "status": "awaiting_confirmed_album_url"
   },
   "reference_materials": {
-    "status": "awaiting_original_sources",
-    "details": "See REVISION-STATUS.md for the page-by-page list. Existing available assets and copy are retained."
+    "status": "awaiting_legible_small_copy_and_missing_work_assets",
+    "details": "14 reference screenshots are available. Text graphic slots are implemented in HTML/CSS; see REFERENCE-TYPOGRAPHY.md for unreadable small copy and image-reference-audit.csv for remaining work assets."
   }
 }

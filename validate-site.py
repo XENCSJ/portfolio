@@ -44,6 +44,7 @@ for name in PAGES:
     assert 'src="./xen-logo.png"' in source, name
     for ref in doc.refs:
         assert '不採用' not in unquote(ref), (name, ref)
+        assert 'XENポートフォリオ画像の復元' not in unquote(ref), (name, ref)
         parsed = urlsplit(ref)
         if not parsed.scheme and parsed.path:
             assert (ROOT / unquote(parsed.path)).is_file(), (name, ref)
@@ -76,6 +77,7 @@ metadata = json.loads((ROOT / 'youtube-metadata-check.json').read_text())['video
 assert len(metadata) == 15 and all(v.get('status') == 200 for v in metadata)
 subprocess.run(['node', '--check', str(ROOT / 'xen-video.js')], check=True)
 subprocess.run(['node', '--check', str(ROOT / 'xen-shared.js')], check=True)
+subprocess.run(['node', '--check', str(ROOT / 'xen-motion.js')], check=True)
 
 assets = json.loads((ROOT / 'asset-provenance.json').read_text())['assets']
 for row in assets:
@@ -101,8 +103,24 @@ for work in pending['cinematic']:
     assert cinematic.count('data-work-key="' + work['key'] + '"') == 1
     assert work['url'] is None  # Do not replace missing footage with an unrelated work.
 if pending['contact']['endpoint'] is None:
-    price = (ROOT / 'price-list.html').read_text()
-    assert re.search(r'<button[^>]*class="submit"[^>]*\bdisabled', price)
+    for name in ('price-list', 'studio', 'sns-management'):
+        source = (ROOT / (name + '.html')).read_text()
+        assert re.search(r'<button[^>]*class="submit"[^>]*\bdisabled', source), name
+
+# Opt-in reference typography must not change INDEX. SNS promotional text stays
+# readable without an image, script-generated copy, or an external font request.
+for name in PAGES:
+    source = (ROOT / (name + '.html')).read_text()
+    assert ('xen-reference.css' in source) == (name != 'index'), name
+sns = (ROOT / 'sns-management.html').read_text()
+for cls in ('stats-graphic', 'service-graphic', 'flow-graphic', 'audience-graphic'):
+    panel = re.search(r'<(?:div|section) class="text-graphic[^\"]*' + cls + r'".*?</(?:div|section)>', sns, re.S)
+    assert panel and not re.search(r'<(?:img|video|canvas|iframe)\b', panel[0]), cls
+for phrase in ('4,000', '6,000', 'ワンストップでバズを再現', 'SNS運用を丸ごと任せたい'):
+    assert phrase in sns, phrase
+reference_css = (ROOT / 'xen-reference.css').read_text()
+assert 'prefers-reduced-motion:reduce' in reference_css
+assert not re.search(r'url\(', reference_css)
 
 for css in ROOT.glob('*.css'):
     for ref in re.findall(r'url\(["\']?([^\)"\']+)', css.read_text()):

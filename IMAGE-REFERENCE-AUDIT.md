@@ -2,6 +2,10 @@
 
 全15ページ／下層14見本。対応表は `image-reference-audit.csv`（UTF-8 BOM）と `image-reference-audit.json`。
 
+## 文字化の追加指示を反映
+
+14枚の再添付見本とSNSの文字化指示を受け、9枠をHTMLテキストとして記録。小文字本文の未確定箇所は`REFERENCE-TYPOGRAPHY.md`に分離。以前の画像付きHTML報告書は8c08683時点の記録であり、この追加修正を含まない。
+
 ## 確定した修正
 
 - SNAP：見本で確定した画像の相対順を修正。23枚と元リンクを保持。
@@ -12,9 +16,9 @@
 
 | ページ | 未特定の見本素材枠 | 既存画像の見本位置未確定 |
 |---|---:|---:|
-| STUDIO | 3 | 0 |
+| STUDIO | 0（3枠を文字化） | 0 |
 | CREATOR | 0 | 1 |
-| SOUND | 3 | 0 |
+| SOUND | 2（1枠を文字化） | 0 |
 | CINEMATIC | 4 | 0 |
 | SNAP | 29 | 2 |
 | DESIGN | 1 | 7 |
@@ -22,7 +26,7 @@
 | ARCHITECTURE | 0 | 3 |
 | SPACE | 2 | 1 |
 | ARTWORKS | 24 | 0 |
-| SNS-MANAGEMENT | 4 | 3 |
+| SNS-MANAGEMENT | 0（4枠を文字化） | 3 |
 
 - IMG_8369.PNG：ARCHITECTUREとSPACEで同一ファイルを重複使用。SPACE見本には一致、ARCHITECTURE側は位置未確定のため保持。
 - SNAP (3).jpg / SNAP (19).jpg：同構図の色調違い。見本での採用版は未確定。

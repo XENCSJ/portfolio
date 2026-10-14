@@ -52,6 +52,24 @@ seq('sound',[(None,'冒頭／NOVA PULSE紹介画像・右側の説明'),(None,'S
 seq('cinematic',[(None,'ストリート30秒／屋上の人物・SAMPLE'),(None,'キレイ30秒／青い背景の人物・SAMPLE'),(None,'ストリート90秒／紫の手すりと人物・SAMPLE'),(None,'キレイ60秒／街の光と人物・SAMPLE')])
 REF['price-list']=[];REF['index']=[]
 FILES={'studio':'IMG_8766(1).jpeg','creator':'IMG_8768.jpeg','storybooks':'IMG_8777.jpeg','animation':'IMG_8779.jpeg','sound':'IMG_8781.jpeg','cinematic':'IMG_8783.jpeg','snap':'IMG_8785.jpeg','design':'IMG_8788.jpeg','apparel':'IMG_8790.jpeg','architecture':'IMG_8792.jpeg','space':'IMG_8794.jpeg','artworks':'IMG_8796.jpeg','sns-management':'IMG_8798.jpeg','price-list':'IMG_8759(1).png'}
+# The 17:56 instruction explicitly replaces promotional text images with real text.
+TEXT_REPLACEMENTS = {
+ ('sns-management','1'): ('.stats-graphic','文字化済み／実績の文言一致'),
+ ('sns-management','2'): ('.service-graphic','文字化済み／サービスの文言一致'),
+ ('sns-management','3'): ('.flow-graphic','文字化済み／5工程の文言一致'),
+ ('sns-management','8'): ('.audience-graphic','文字化済み／対象者の文言一致'),
+ ('studio','1'): ('.gold-graphic','文字化済み／MISSION等の小文字本文は未確定'),
+ ('studio','3'): ('.workflow-graphic','文字化済み／6工程と説明を反映'),
+ ('studio','4'): ('.contact-graphic','文字化済み／追加本文は未確定'),
+ ('sound','1'): ('.nova-graphic','文字化済み／NOVA PULSE紹介本文は未確定'),
+ ('creator','12'): ('.support-graphic','文字化済み／元画像と支援URL保持'),
+}
+FILES={page: 'IMG_'+number+suffix for page,number,suffix in [
+ ('studio','8766','(2).jpeg'),('creator','8768','(1).jpeg'),('storybooks','8777','(1).jpeg'),
+ ('animation','8779','(1).jpeg'),('sound','8781','(1).jpeg'),('cinematic','8783','(1).jpeg'),
+ ('snap','8785','(1).jpeg'),('design','8788','(1).jpeg'),('apparel','8790','(1).jpeg'),
+ ('architecture','8792','(1).jpeg'),('space','8794','(1).jpeg'),('artworks','8796','(1).jpeg'),
+ ('sns-management','8798','(1).jpeg'),('price-list','8759','(2).png')]}
 rows=[];used=set();counts={}
 for page in PAGES:
  doc=Doc();doc.feed((ROOT/(page+'.html')).read_text());taken=set()
@@ -77,6 +95,12 @@ for page in PAGES:
   rows.append(row)
  for i,ref in enumerate(REF[page]):
   if i in taken:continue
+  replacement=TEXT_REPLACEMENTS.get((page,ref['position']))
+  if replacement:
+   selector,status=replacement
+   if ref['key']: used.add(ref['key'])
+   rows.append({'ページ名':page.upper(),'掲載順':'文字ブロック','正式ファイル名':ref['key'] or 'HTMLテキスト（画像なし）','GitHub保存パス':('/'+ref['key'] if ref['key'] else '/'+page+'.html + /xen-reference.css'),'HTML参照先':page+'.html :: '+selector,'元画像リンク':'./%20ABOUT%20%281%29.PNG' if page=='creator' else '', '見本位置':ref['position'],'内容・判定根拠':ref['description']+'。2026-10-14追加指示により文字とCSSへ置換。画像ファイルを推測で代用しない。','照合結果':status,'旧記録名':'','完成見本':FILES[page],'元画像SHA256':hashlib.sha256((ROOT/ref['key']).read_bytes()).hexdigest() if ref['key'] else ''})
+   continue
   repeat=ref['key'] is not None
   rows.append({'ページ名':page.upper(),'掲載順':'未配置','正式ファイル名':ref['key'] or '未特定','GitHub保存パス':('/'+ref['key'] if repeat else '未特定'),'HTML参照先':'該当参照なし','元画像リンク':'','見本位置':ref['position'],'内容・判定根拠':ref['description'],'照合結果':'見本内の重複・追加掲載の意図未確定' if repeat else '対応素材未特定・推測配置なし','旧記録名':'','完成見本':FILES[page],'元画像SHA256':''})
  counts[page]={'html_images':len(doc.images),'reference_content_slots':len(REF[page])}

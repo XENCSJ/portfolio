@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-14",
+  "baseline": "8c08683",
+  "implementation_local_commit": "5beffdb",
+  "index_unchanged": true,
+  "original_image_files_unchanged": true,
+  "pages": [
+    {
+      "page": "artworks.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "cinematic.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "animation.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "index.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "sns-management.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "creator.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 1
+    },
+    {
+      "page": "sound.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "space.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "design.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "apparel.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "storybooks.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "price-list.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "studio.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "architecture.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    },
+    {
+      "page": "snap.html",
+      "previous_links_preserved": true,
+      "replaced_graphic_images": 0
+    }
+  ],
+  "static_checks": "15 HTML documents, local references, 15 video categories, 142 source hashes, no prohibited assets, JavaScript syntax, endpoint-less forms disabled",
+  "browser_rendering": "not_verified_for_this_revision",
+  "mobile_rendering": "not_verified_for_this_revision",
+  "motion_behavior": "implemented; runtime browser check pending",
+  "form_delivery": "unconfigured; not_tested"
+}
