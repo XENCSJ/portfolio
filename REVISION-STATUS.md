@@ -51,22 +51,31 @@ Static checks passed for all fifteen HTML files:
 - Local HTML/CSS/image references resolve, including URL-encoded filenames with leading spaces.
 - One H1, unique element IDs, one fifteen-link menu and one current-page marker per page.
 - Inline JavaScript passes `node --check`.
-- All 129 gallery image placements decode successfully.
+- All 143 unique local images currently displayed across the pages decode successfully. The original 129 gallery asset records are retained.
 - All existing YouTube IDs are retained, with category order unchanged. The ABOUT film is now in STUDIO; APPAREL remains separate from CINEMATIC. Players load on request and retain direct YouTube links.
 - INDEX logo is byte-for-byte identical to baseline main.
 
-**Not yet verified:** browser rendering, real mobile widths, external link responses,
+**Not yet verified:** browser rendering, real mobile widths, four external link responses,
 video playback, form delivery, complete reference-copy/image parity and published-site pages.
 The current form has no configured destination; it must not claim successful submission.
 
 The supplied reference screenshots are only 110–565 pixels wide (PRICE LIST: 860 pixels). Several long project descriptions cannot be transcribed reliably from those images. Exact content or the original site/HTML is needed; it has not been invented. NOVA PULSE/distributor graphics, the STUDIO hero/workflow/contact graphics, the APPAREL black hoodie image, the SPACE chair/commercial diagrams, the SNS hero/service graphics, and additional SNAP/ARTWORKS files are absent from the available source assets.
+
+## External link checks — 2026-10-14
+
+- 37 of 41 unique external URLs returned HTTP 2xx to HEAD requests.
+- `https://youtube.com/@xen_vyx`: HTTP 404 to both HEAD and GET; retain the configured URL pending confirmation.
+- `https://x.com/xen_csj`: HTTP 503.
+- `https://xen.official.ec/` and `https://doneru.jp/xen_510/login`: HTTP 403.
+- These responses do not verify playback, authenticated access or form delivery. No configured link was silently removed or replaced.
+- Full results: `external-link-check.json`.
 
 ## Saved work
 
 - `4712c9c`: remote foundation checkpoint (shared components, preserved assets, initial static checks).
 - `d83193f`: reference image groups, restored CREATOR assets, organized paths and known video players.
 - `845fb5a` through `5b4bc65`: eleven verified duplicate image deletions saved on GitHub.
-- Final available-source layout pass: ARCHITECTURE/SNAP/ARTWORKS/SNS MANAGEMENT groups, SPACE floor plan and SOUND series. All original works remain available.
+- `5173a43`: final available-source layout pass: ARCHITECTURE/SNAP/ARTWORKS/SNS MANAGEMENT groups, SPACE floor plan and SOUND series. All original works remain available.
 - Main advanced to `70d3128` while work continued. Its deletion of `.nojekyll` and `49AF3C83-6867-404F-93E5-3244AA11B228.JPEG` must remain in the final merge.
 
 ## Resume procedure
