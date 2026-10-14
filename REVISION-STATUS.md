@@ -35,13 +35,13 @@ There are therefore fifteen HTML files including INDEX, following the user's ear
 | ANIMATION | Four original videos, titles, copy and order retained | Reference display comparison and playback verification |
 | SOUND | Four original videos, streaming links and channel categories retained | NOVA PULSE/distribution images and exact Spotify album embed from reference |
 | CINEMATIC | Separate page and shared components | Four correct video URLs are absent from available source; APPAREL URLs must not be substituted |
-| SNAP | 23 images retained; optimized previews and original enlargement links | Exact reference order and browser/mobile verification |
+| SNAP | All 23 available images retained; optimized previews, full originals and reference subset ordering | Additional photos visible only in reference, full order and browser/mobile verification |
 | DESIGN | All 25 images and existing text retained; reference project grouping applied; organized paths used | Additional exact project descriptions and full reference comparison |
 | APPAREL | All 11 images and three correct videos retained; product/shop/MEDIA sections added | Reference black hoodie image is absent from current assets; remaining reference comparison |
-| ARCHITECTURE | 30 original images and text retained | Reference grouping/order and additional exact descriptions |
-| SPACE | All nine images and text retained; reference project grouping applied | Chair drawing/floor-plan source images and additional exact descriptions |
-| ARTWORKS | 24 original image files and text retained | Reference mosaic/order and browser/mobile verification |
-| SNS MANAGEMENT | Seven original image files and text retained | Reference order, exact service copy and working form destination |
+| ARCHITECTURE | All 30 original images and text retained; reference project groups restored | Additional exact descriptions and full reference comparison |
+| SPACE | All nine images and text retained; reference project grouping applied | Chair drawing/commercial concept source images and additional exact descriptions; floor plan has now been recovered and added |
+| ARTWORKS | All 24 available image files retained; three-column mosaic and reference subset ordering | Additional artwork/logo files visible only in reference; full visual comparison |
+| SNS MANAGEMENT | All seven original image files retained; reference performance figures and groups added | Missing purple hero/service graphics, exact additional service copy and working form destination |
 | PRICE LIST | Existing prices, service text and form fields retained | Reference comparison and working form destination |
 
 ## Verification status
@@ -59,10 +59,14 @@ Static checks passed for all fifteen HTML files:
 video playback, form delivery, complete reference-copy/image parity and published-site pages.
 The current form has no configured destination; it must not claim successful submission.
 
+The supplied reference screenshots are only 110–565 pixels wide (PRICE LIST: 860 pixels). Several long project descriptions cannot be transcribed reliably from those images. Exact content or the original site/HTML is needed; it has not been invented. NOVA PULSE/distributor graphics, the STUDIO hero/workflow/contact graphics, the APPAREL black hoodie image, the SPACE chair/commercial diagrams, the SNS hero/service graphics, and additional SNAP/ARTWORKS files are absent from the available source assets.
+
 ## Saved work
 
 - `4712c9c`: remote foundation checkpoint (shared components, preserved assets, initial static checks).
-- Next unit: reference image grouping, known video players and the additional authorized duplicate cleanup.
+- `d83193f`: reference image groups, restored CREATOR assets, organized paths and known video players.
+- `845fb5a` through `5b4bc65`: eleven verified duplicate image deletions saved on GitHub.
+- Final available-source layout pass: ARCHITECTURE/SNAP/ARTWORKS/SNS MANAGEMENT groups, SPACE floor plan and SOUND series. All original works remain available.
 - Main advanced to `70d3128` while work continued. Its deletion of `.nojekyll` and `49AF3C83-6867-404F-93E5-3244AA11B228.JPEG` must remain in the final merge.
 
 ## Resume procedure
