@@ -189,16 +189,18 @@ body.home-page#top{min-height:100vh;min-height:100svh;display:flex;flex-directio
 .home-page#top .orbit-pause[hidden]{display:none}
 .home-page#top .home-caption{text-align:center;max-width:100%;padding:0!important}
 .home-page#top .home-caption h1{margin:12px 0 0;font-size:clamp(12px,3.4vw,18px);line-height:1.5;letter-spacing:.08em;color:#555;font-weight:600;overflow-wrap:anywhere}
-.home-page#top .home-info{display:flex;flex-wrap:wrap;justify-content:center;gap:0 20px;margin-top:4px}
-.home-page#top .home-info a{display:inline-flex;align-items:center;min-height:44px;font-size:11px;line-height:1.5;letter-spacing:.09em;color:#777;transition:color .35s}
-.home-page#top .home-info a:hover{color:#9b8258}
+.home-page#top .home-categories{display:flex;flex-direction:column;align-items:stretch;width:min(100%,520px);margin:18px auto 28px;gap:0}
+.home-page#top .home-categories a{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 6px;min-height:44px;max-width:100%;padding:8px 4px;border:0;background:none;box-shadow:none;font-size:clamp(12px,1.3vw,14px);line-height:1.8;letter-spacing:.035em;color:#383838;transition:color .3s}
+.home-page#top .home-category-en{font-weight:600;white-space:nowrap}
+.home-page#top .home-category-ja{font-size:.9em;font-weight:400;letter-spacing:.025em;overflow-wrap:anywhere}
+.home-page#top .home-categories a:hover{color:#9b8258}
 .home-page#top .xen-footer{flex:none;width:100%;padding:10px 16px max(10px,env(safe-area-inset-bottom))!important;background:linear-gradient(180deg,#fff,#faf9f6)}
 .home-page#top .xen-footer-title{margin:0 0 8px;font-size:9px;line-height:13px;letter-spacing:.23em}
 .home-page#top .xen-social{grid-template-columns:repeat(8,minmax(0,1fr))!important;max-width:680px!important;width:100%!important;gap:6px!important;margin:0 auto 8px!important}
 .home-page#top .xen-social a{height:48px!important;min-height:48px!important;gap:4px!important;padding:4px 0!important;justify-content:center!important}
 .home-page#top .xen-social a svg{width:20px!important;height:20px!important}
 .home-page#top .xen-icon-label{font-size:9px!important;line-height:12px!important;color:#666!important;white-space:normal!important}
-.home-page#top .xen-back-top{display:none}
+.home-page#top .xen-back-top{display:table;margin:4px auto 8px}
 .home-page#top .xen-powered,.home-page#top .xen-copyright{display:inline-block;margin:0 6px!important;font-size:9px;line-height:14px;letter-spacing:.04em}
 @keyframes letterGlow{0%,100%{fill:#171717;opacity:.92}50%{fill:#a58b5e;opacity:1}}
 @keyframes wheelEntrance{from{opacity:0;transform:scale(.9) rotate(-8deg);filter:blur(8px)}to{opacity:1;transform:scale(1) rotate(0);filter:blur(0)}}
@@ -209,7 +211,7 @@ body.home-page#top{min-height:100vh;min-height:100svh;display:flex;flex-directio
  .home-page#top .center-logo{width:57%;height:57%}
  .home-page#top .xen-social{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-width:390px!important}
 }
-@media(max-height:500px) and (min-width:651px){.home-page#top .hero{flex-direction:row;gap:28px}.home-page#top .wheel{--ring-size:min(42vw,calc(100svh - 190px))}.home-page#top .home-caption{max-width:46vw}}
+@media(max-height:500px) and (min-width:651px){.home-page#top .wheel{--ring-size:min(42vw,calc(100svh - 190px))}}
 @media(prefers-reduced-motion:reduce){.home-page#top.ring-ready .orbit,.home-page#top .orbit text,.home-page#top .wheel,.home-page#top .hero::before{animation:none!important}.home-page#top .orbit-pause{display:none}}
 </style>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
@@ -223,10 +225,21 @@ body.home-page#top{min-height:100vh;min-height:100svh;display:flex;flex-directio
 </div>
 <div class="home-caption" id="creative-index">
 <h1>XEN | CREATIVE STUDIO JAPAN</h1>
-<nav class="home-info" aria-label="スタジオ・プロフィール・料金">
-<a href="./studio.html" aria-label="STUDIO｜スタジオ紹介・制作のご依頼">STUDIO</a>
-<a href="./creator.html" aria-label="CREATOR｜クリエイター紹介・プロフィール">CREATOR</a>
-<a href="./price-list.html" aria-label="PRICE LIST｜料金一覧">PRICE LIST</a>
+<nav class="home-categories" aria-label="カテゴリー一覧">
+<a href="./studio.html"><span class="home-category-en">STUDIO</span><span aria-hidden="true">｜</span><span class="home-category-ja">スタジオ紹介・制作のご依頼</span></a>
+<a href="./creator.html"><span class="home-category-en">CREATOR</span><span aria-hidden="true">｜</span><span class="home-category-ja">クリエイター紹介・プロフィール</span></a>
+<a href="./storybooks.html"><span class="home-category-en">STORYBOOKS</span><span aria-hidden="true">｜</span><span class="home-category-ja">絵本</span></a>
+<a href="./animation.html"><span class="home-category-en">ANIMATION</span><span aria-hidden="true">｜</span><span class="home-category-ja">アニメーション</span></a>
+<a href="./sound.html"><span class="home-category-en">SOUND</span><span aria-hidden="true">｜</span><span class="home-category-ja">音楽</span></a>
+<a href="./cinematic.html"><span class="home-category-en">CINEMATIC</span><span aria-hidden="true">｜</span><span class="home-category-ja">映像</span></a>
+<a href="./snap.html"><span class="home-category-en">SNAP</span><span aria-hidden="true">｜</span><span class="home-category-ja">写真</span></a>
+<a href="./design.html"><span class="home-category-en">DESIGN</span><span aria-hidden="true">｜</span><span class="home-category-ja">デザイン</span></a>
+<a href="./apparel.html"><span class="home-category-en">APPAREL</span><span aria-hidden="true">｜</span><span class="home-category-ja">アパレル</span></a>
+<a href="./architecture.html"><span class="home-category-en">ARCHITECTURE</span><span aria-hidden="true">｜</span><span class="home-category-ja">建築</span></a>
+<a href="./space.html"><span class="home-category-en">SPACE</span><span aria-hidden="true">｜</span><span class="home-category-ja">空間</span></a>
+<a href="./artworks.html"><span class="home-category-en">ARTWORKS</span><span aria-hidden="true">｜</span><span class="home-category-ja">作品集</span></a>
+<a href="./sns-management.html"><span class="home-category-en">SNS MANAGEMENT</span><span aria-hidden="true">｜</span><span class="home-category-ja">SNS運用</span></a>
+<a href="./price-list.html"><span class="home-category-en">PRICE LIST</span><span aria-hidden="true">｜</span><span class="home-category-ja">料金一覧</span></a>
 </nav>
 </div>
 </section>
