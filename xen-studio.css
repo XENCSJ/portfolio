@@ -1,0 +1,84 @@
+/* STUDIO only: live typography replaces the reference's explanatory graphics. */
+.studio-page { --studio-accent: #8c7854; --studio-line: #e7e3dc; }
+.studio-page .studio-section,
+.studio-page .studio-manifesto { width: 100%; max-width: 760px; margin-inline: auto; }
+.studio-page .studio-manifesto { margin-top: 48px; padding: clamp(28px,5vw,52px) clamp(20px,4vw,40px) 16px; background: #f8f7f4; border-top: 1px solid #b6a383; }
+.studio-page .studio-manifesto-intro { text-align: center; padding-bottom: 28px; }
+.studio-page .studio-kicker { margin: 0 0 26px; font-size: 12px; letter-spacing: .3em; color: #756342; }
+.studio-page .studio-kicker span { display: block; margin-top: 9px; font-size: 8px; line-height: 1.8; letter-spacing: .18em; }
+.studio-page .studio-manifesto h2 { margin: 0; font-size: clamp(36px,6vw,66px); font-weight: 400; letter-spacing: -.035em; line-height: 1.1; }
+.studio-page .studio-manifesto h2 span { display: inline-block; }
+.studio-page .studio-manifesto-ja { margin: 18px 0 0; font-size: 14px; letter-spacing: .2em; }
+.studio-page .studio-principles { margin: 0; }
+.studio-page .studio-principles > div { display: grid; grid-template-columns: 98px minmax(0,1fr); gap: 14px; align-items: baseline; padding: 20px 0; border-top: 1px solid var(--studio-line); }
+.studio-page .studio-principles dt { font-size: 10px; letter-spacing: .14em; color: #756342; }
+.studio-page .studio-principles dd { margin: 0; font-size: 13px; line-height: 2; }
+.studio-page .studio-principles dd span { display: inline-block; }
+.studio-page .studio-principles dd span + span::before { content: '・'; }
+.studio-page .studio-section { margin-top: clamp(56px,8vw,86px); }
+.studio-page .studio-heading { margin: 0 0 34px; text-align: center; font-weight: 500; }
+.studio-page .studio-heading > span { display: inline-block; max-width: 100%; padding: 8px 22px; border-radius: 40px; background: #171717; color: #fff; font-size: 10px; line-height: 1.8; letter-spacing: .1em; }
+.studio-page .studio-heading > small { display: block; margin-top: 10px; color: #777; font-size: 11px; font-weight: 400; letter-spacing: .1em; }
+.studio-page .studio-prose { font-size: 14px; line-height: 2.2; color: #555; }
+.studio-page .studio-prose p { margin: 0 0 22px; }
+.studio-page .studio-prose .studio-opening { font-size: clamp(18px,2.5vw,23px); line-height: 1.9; letter-spacing: .025em; color: #242424; margin-bottom: 26px; }
+.studio-page .studio-context { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--studio-line); font-size: 12px; color: #737373; }
+.studio-page .studio-context p:last-child { margin-bottom: 0; }
+.studio-page .work .studio-film-caption { margin-top: 22px; line-height: 2.2; font-size: 13px; color: #666; }
+.studio-page .studio-workflow { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px 28px; padding: 0; margin: 0; list-style: none; }
+.studio-page .studio-workflow li { position: relative; min-width: 0; padding-top: 22px; border-top: 1px solid var(--studio-line); }
+.studio-page .studio-workflow li::before { content: ''; position: absolute; top: -1px; left: 0; width: 28px; height: 1px; background: var(--studio-accent); }
+.studio-page .studio-step-number { display: block; font-size: 30px; font-weight: 400; line-height: 1; color: var(--studio-accent); font-variant-numeric: tabular-nums; }
+.studio-page .studio-workflow h3 { margin: 18px 0 12px; font-size: 16px; font-weight: 500; letter-spacing: .02em; }
+.studio-page .studio-workflow h3 small { display: block; margin-top: 7px; color: #777; font-size: 11px; font-weight: 400; }
+.studio-page .studio-workflow p { margin: 0; font-size: 12px; line-height: 2; color: #666; }
+.studio-page .studio-faq { margin: 0; border-bottom: 1px solid var(--studio-line); }
+.studio-page .studio-faq > div { padding: 27px 0; border-top: 1px solid var(--studio-line); }
+.studio-page .studio-faq dt,
+.studio-page .studio-faq dd { display: grid; grid-template-columns: 30px minmax(0,1fr); gap: 8px; margin: 0; font-size: 14px; line-height: 2; }
+.studio-page .studio-faq dt { font-weight: 600; }
+.studio-page .studio-faq dd { margin-top: 12px; font-size: 13px; color: #666; }
+.studio-page .studio-faq :is(dt,dd) > span { color: var(--studio-accent); font-weight: 400; }
+.studio-page .studio-faq p { margin: 0; }
+.studio-page .studio-faq ul { list-style: none; padding: 0; margin: 9px 0; }
+.studio-page .studio-faq a { text-decoration: underline; text-underline-offset: .3em; text-decoration-thickness: 1px; }
+.studio-page .studio-brief { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 28px; list-style: none; margin: 30px 0; padding: 0; }
+.studio-page .studio-brief li { min-width: 0; display: flex; gap: 14px; align-items: baseline; padding: 22px 0; border-top: 1px solid var(--studio-line); }
+.studio-page .studio-brief-number { flex: 0 0 20px; font-size: 11px; letter-spacing: .05em; color: var(--studio-accent); font-variant-numeric: tabular-nums; }
+.studio-page .studio-brief h3 { margin: 0; font-size: 13px; font-weight: 500; line-height: 1.8; }
+.studio-page .studio-brief h3 small { font-size: 11px; font-weight: 400; color: #777; }
+.studio-page .studio-brief p { margin: 8px 0 0; font-size: 12px; line-height: 1.9; color: #777; }
+.studio-page .studio-closing { font-size: 14px; line-height: 2; text-align: center; margin: 40px 0 0; }
+.studio-page .studio-closing p { margin: 5px 0; }
+.studio-page .contact-actions { margin-bottom: 12px; }
+.studio-page .contact-actions .studio-contact-primary { background: #171717; color: #fff; border-color: #171717; gap: 18px; }
+.studio-page .studio-contact-note { margin: 0; text-align: center; font-size: 11px; }
+.studio-page .contact-actions a { transition: background .3s, color .3s, border-color .3s; }
+.studio-page [data-studio-reveal] { opacity: 1; transform: none; }
+@media (hover:hover) and (pointer:fine) {
+  .studio-page .contact-actions .studio-contact-primary:hover { background: #66563c; border-color: #66563c; }
+  .studio-page .studio-faq a:hover { color: #756342; }
+}
+@media (max-width: 700px) {
+  .studio-page .studio-workflow { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 500px) {
+  .studio-page .studio-manifesto { margin-top: 36px; padding-inline: 20px; }
+  .studio-page .studio-principles > div { grid-template-columns: minmax(0,1fr); gap: 6px; padding-block: 17px; }
+  .studio-page .studio-principles dd { font-size: 12px; }
+  .studio-page .studio-prose { font-size: 13px; }
+  .studio-page .studio-heading { margin-bottom: 28px; }
+  .studio-page .studio-workflow { grid-template-columns: minmax(0,1fr); gap: 24px; }
+  .studio-page .studio-workflow li { display: grid; grid-template-columns: 42px minmax(0,1fr); gap: 8px 16px; padding-top: 20px; }
+  .studio-page .studio-step-number { grid-row: 1 / 3; font-size: 26px; }
+  .studio-page .studio-workflow h3 { margin: 0; }
+  .studio-page .studio-workflow p { grid-column: 2; }
+  .studio-page .studio-brief { grid-template-columns: minmax(0,1fr); }
+  .studio-page .studio-faq dt { font-size: 13px; }
+  .studio-page .studio-faq :is(dt,dd) { grid-template-columns: 22px minmax(0,1fr); }
+  .studio-page .studio-closing { text-align: left; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio-page [data-studio-reveal] { opacity: 1; transform: none; }
+  .studio-page .contact-actions a { transition: none; }
+}
