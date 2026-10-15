@@ -1,5 +1,5 @@
 /* Opt in only the three photographic/artwork galleries. */
-body.xen-gallery-page.detail-page .image-gallery.xen-square-gallery {
+body.xen-gallery-page.detail-page .image-gallery.xen-tile-gallery {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
@@ -8,11 +8,11 @@ body.xen-gallery-page.detail-page .image-gallery.xen-square-gallery {
   border: 0;
   background: transparent;
 }
-body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item {
+body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item {
   position: relative;
   display: block;
   min-width: 0;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -23,7 +23,7 @@ body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item {
   box-shadow: none;
   isolation: isolate;
 }
-body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item > img {
+body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item > img {
   position: absolute;
   inset: 0;
   display: block;
@@ -35,10 +35,7 @@ body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item > img {
   transform: none;
   transition: filter 200ms ease;
 }
-body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item[data-fit="contain"] > img {
-  object-fit: contain;
-}
-body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item:focus-visible {
+body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item:focus-visible {
   outline: 2px solid #897348;
   outline-offset: -3px;
   z-index: 1;
@@ -48,19 +45,98 @@ body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item:focus-visi
   user-select: none;
   -webkit-user-select: none;
 }
-@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
-  body.xen-gallery-page.detail-page .image-gallery.xen-square-gallery {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+/* The viewer fills the viewport; original images keep their full composition. */
+.image-viewer.is-fullscreen-gallery {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: max(52px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  border: 0;
+  border-radius: 0;
+  background: #111;
+  color: #fff;
+}
+.image-viewer.is-fullscreen-gallery[open] {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 44px;
+  gap: 8px;
+}
+.image-viewer.is-fullscreen-gallery > img {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  object-fit: contain;
+  object-position: center;
+}
+.is-fullscreen-gallery .viewer-close {
+  top: max(4px, env(safe-area-inset-top));
+  right: max(8px, env(safe-area-inset-right));
+  background: transparent;
+  color: #fff;
+}
+.is-fullscreen-gallery .viewer-caption {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: center;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ccc;
+  font-size: 11px;
+  text-align: left;
+}
+.is-fullscreen-gallery .viewer-controls {
+  grid-column: 2;
+  grid-row: 2;
+  gap: 8px;
+}
+.is-fullscreen-gallery .viewer-controls button {
+  border-color: #555;
+  background: transparent;
+  color: #fff;
+}
+.is-fullscreen-gallery .viewer-counter { min-width: 42px; }
+.is-fullscreen-gallery .viewer-original {
+  grid-column: 3;
+  grid-row: 2;
+  align-self: center;
+  justify-self: end;
+  max-width: 100%;
+  padding: 8px 0;
+  color: #ddd;
+  font-size: 11px;
+}
+.is-fullscreen-gallery .viewer-status {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: min(80%, 400px);
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: #fff;
+  pointer-events: none;
+}
+.is-fullscreen-gallery .viewer-status:empty { display: none; }
+.is-fullscreen-gallery button:focus-visible,
+.is-fullscreen-gallery .viewer-original:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 @media (hover: hover) and (pointer: fine) {
-  body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item:hover > img {
+  body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item:hover > img {
     filter: brightness(.96);
     transform: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.xen-gallery-page.detail-page .xen-square-gallery > .gallery-item > img {
+  body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item > img {
     transition: none;
   }
 }

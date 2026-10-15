@@ -73,6 +73,7 @@
     let imageAnimation;
     let closing = false;
     let gesture;
+    let ignoreSwipeClick = false;
     const status = document.createElement('p');
     status.className = 'viewer-status';
     status.setAttribute('role', 'status');
@@ -121,8 +122,9 @@
         if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         opener = work;
-        const gallery = enhanced && work.closest('.xen-square-gallery');
+        const gallery = enhanced && work.closest('.xen-tile-gallery');
         animateGallery = Boolean(gallery);
+        viewer.classList.toggle('is-fullscreen-gallery', animateGallery);
         activeWorks = gallery ? Array.from(gallery.querySelectorAll('.gallery-item')) : works;
         show(gallery ? activeWorks.indexOf(work) : position);
         viewer.showModal();
@@ -143,6 +145,22 @@
       show(index + (event.key === 'ArrowLeft' ? -1 : 1));
     });
     viewer.addEventListener('click', (event) => {
+      if (animateGallery && (event.target === viewer || event.target === preview)) {
+        if (ignoreSwipeClick) { ignoreSwipeClick = false; return; }
+        if (event.target === viewer) { close(); return; }
+        // The image element also covers the letterboxed background. Only taps
+        // outside the painted image close the fullscreen viewer.
+        if (!preview.naturalWidth || !preview.naturalHeight) return;
+        const rect = preview.getBoundingClientRect();
+        const scale = Math.min(rect.width / preview.naturalWidth, rect.height / preview.naturalHeight);
+        const width = preview.naturalWidth * scale;
+        const height = preview.naturalHeight * scale;
+        const left = rect.left + (rect.width - width) / 2;
+        const top = rect.top + (rect.height - height) / 2;
+        if (event.clientX < left || event.clientX > left + width ||
+            event.clientY < top || event.clientY > top + height) close();
+        return;
+      }
       if (event.target !== viewer) return;
       const rect = viewer.getBoundingClientRect();
       if (event.clientX < rect.left || event.clientX > rect.right ||
@@ -151,6 +169,8 @@
     viewer.addEventListener('close', () => {
       closing = false;
       gesture = undefined;
+      ignoreSwipeClick = false;
+      viewer.classList.remove('is-fullscreen-gallery');
       viewerAnimation?.cancel();
       imageAnimation?.cancel();
       opener?.focus();
@@ -170,6 +190,7 @@
       // Only a deliberate one-finger horizontal gesture on the image navigates.
       // Vertical scrolling, multi-touch and pinch zoom keep their native behavior.
       viewer.addEventListener('pointerdown', (event) => {
+        ignoreSwipeClick = false;
         if (!event.isPrimary) { gesture = undefined; return; }
         if (!animateGallery || closing || event.pointerType !== 'touch' || event.target !== preview ||
             (window.visualViewport?.scale || 1) > 1) return;
@@ -185,6 +206,7 @@
         const threshold = Math.max(40, Math.min(80, preview.clientWidth * .12));
         if (Math.abs(dx) < threshold || Math.abs(dy) > Math.abs(dx) * .65 ||
             event.timeStamp - start.time > 800 || (window.visualViewport?.scale || 1) > 1) return;
+        ignoreSwipeClick = true;
         show(index + (dx < 0 ? 1 : -1));
       });
     }
