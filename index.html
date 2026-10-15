@@ -167,16 +167,14 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <style id="xen-index-restoration">
 /* Historical INDEX: fbebd60d3a. Original bilingual labels, equal-gap SVG
    placement and 65s spin are retained above. Only current links, the fixed
-   logo, SNS layout and the existing pause control are carried forward. */
+   logo and SNS layout are carried forward. */
 .home-page#top .orbit{pointer-events:auto}
 /* Keep the historical hover underline at 0 x 1px on touch screens too.
    xen-refinements.css defines this size only inside its hover media query. */
 .home-page#top .index-link{background-size:0 1px;background-repeat:no-repeat}
 @media(hover:hover) and (pointer:fine){.home-page#top .index-link:hover{background-size:100% 1px}}
 .home-page#top .center-logo{animation:none!important;transform:none!important;transition:none!important;filter:none!important;pointer-events:none}
-.home-page#top .orbit:focus-within,.home-page#top[data-orbit-paused="true"] .orbit{animation-play-state:paused!important}
-.home-page#top .orbit-pause{position:absolute;right:0;bottom:0;width:44px;height:44px;padding:0;border:0;background:transparent;color:#777;font-size:16px;cursor:pointer}
-.home-page#top .orbit-pause[hidden]{display:none}
+.home-page#top .orbit:focus-within{animation-play-state:paused!important}
 .home-page#top .xen-footer{flex:none;width:100%;padding:10px 16px max(10px,env(safe-area-inset-bottom))!important;background:linear-gradient(180deg,#fff,#faf9f6)}
 .home-page#top .xen-footer-title{margin:0 0 8px;font-size:9px;line-height:13px;letter-spacing:.23em}
 .home-page#top .xen-social{grid-template-columns:repeat(8,minmax(0,1fr))!important;max-width:680px!important;width:100%!important;gap:6px!important;margin:0 auto 8px!important}
@@ -187,11 +185,38 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 .home-page#top .xen-powered,.home-page#top .xen-copyright{display:inline-block;margin:0 6px!important;font-size:9px;line-height:14px;letter-spacing:.04em}
 @media(hover:hover) and (pointer:fine){.home-page#top .wheel:hover .orbit{animation-play-state:paused!important}}
 @media(max-width:650px){.home-page#top .xen-social{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-width:390px!important}}
-@media(prefers-reduced-motion:reduce){.home-page#top .orbit-pause{display:none}}
+</style>
+<style id="xen-index-gold-feedback">
+/* Restore the gold interaction palette and sheen from df9800e/index.html.
+   Menu gold: fbebd60/index.html; circle gold: a31c38e/index.html.
+   INDEX-only scope keeps other pages intact.
+   Focus/press states use the same feedback as hover for keyboard/touch use. */
+.home-page#top .index-link{background-image:linear-gradient(#a9916d,#a9916d);transition:color .4s,transform .5s,letter-spacing .5s,background-size .5s}
+.home-page#top .index-link .index-ja{transition:color .4s}
+.home-page#top .index-link::before{background:linear-gradient(90deg,transparent,rgba(190,163,114,.11),transparent);transition:transform .8s ease}
+.home-page#top .index-link:is(:hover,:focus-visible,:active),.home-page#top .index-link:is(:hover,:focus-visible,:active) .index-ja{color:#9b8056}
+.home-page#top .index-link:is(:hover,:focus-visible,:active){background-size:100% 1px}
+.home-page#top .index-link:is(:hover,:focus-visible,:active)::before{transform:translateX(120%) skewX(-22deg)}
+.home-page#top .orbit text{transition:fill .4s}
+.home-page#top .orbit a:is(:hover,:focus-visible,:active) text{fill:#9b8258}
+.home-page#top .xen-menu a:is(:hover,:focus-visible,:active){color:#b5a17b;background:transparent;padding-left:10px}
+.home-page#top .xen-menu a[aria-current=page]{color:#897348}
+.home-page#top .xen-menu a::after{background:#a9916d}
+.home-page#top .xen-social a{transition:transform .5s cubic-bezier(.2,.8,.2,1),color .4s,filter .4s!important}
+.home-page#top .xen-social a::after{background:#a9916d}
+.home-page#top .xen-social a:is(:hover,:focus-visible,:active){color:#9d835b!important;filter:drop-shadow(0 3px 7px #c6b59655)!important}
+.home-page#top .xen-social a:is(:hover,:focus-visible,:active) .xen-icon-label{color:#9d835b!important}
+.home-page#top .xen-social a:is(:hover,:focus-visible,:active)::after{width:55%}
+.home-page#top .xen-back-top:is(:hover,:focus-visible,:active){color:#9b8056}
+.home-page#top :is(a,button):focus-visible{outline-color:#897348}
+@media(prefers-reduced-motion:no-preference){
+ .home-page#top .index-link:is(:hover,:focus-visible){transform:translateY(-2px)}
+ .home-page#top .xen-social a:is(:hover,:focus-visible){transform:translateY(-4px)!important}
+}
 </style>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
 <header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html" aria-current="page">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header>
-<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path d="M300,300 m-265,0 a265,265 0 1,1 530,0 a265,265 0 1,1 -530,0" id="circle"></path></defs><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="0.000000%">STORYBOOKS</textpath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="9.090909%">ANIMATION</textpath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="18.181818%">SOUND</textpath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="27.272727%">CINEMATIC</textpath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="36.363636%">SNAP</textpath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="45.454545%">DESIGN</textpath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="54.545455%">APPAREL</textpath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="63.636364%">ARCHITECTURE</textpath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="72.727273%">SPACE</textpath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="81.818182%">ARTWORKS</textpath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="90.909091%">SNS MANAGEMENT</textpath></text></a></svg><img alt="XEN symbol logo" class="center-logo" src="./xen-logo.png" width="2232" height="2293"><button class="orbit-pause" type="button" aria-label="円形メニューの回転を停止" aria-pressed="false" hidden>Ⅱ</button></div></section>
+<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path d="M300,300 m-265,0 a265,265 0 1,1 530,0 a265,265 0 1,1 -530,0" id="circle"></path></defs><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="0.000000%">STORYBOOKS</textpath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="9.090909%">ANIMATION</textpath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="18.181818%">SOUND</textpath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="27.272727%">CINEMATIC</textpath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="36.363636%">SNAP</textpath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="45.454545%">DESIGN</textpath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="54.545455%">APPAREL</textpath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="63.636364%">ARCHITECTURE</textpath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="72.727273%">SPACE</textpath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="81.818182%">ARTWORKS</textpath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><text text-anchor="start"><textpath href="#circle" startoffset="90.909091%">SNS MANAGEMENT</textpath></text></a></svg><img alt="XEN symbol logo" class="center-logo" src="./xen-logo.png" width="2232" height="2293"></div></section>
 <section class="index" id="creative-index"><h1 class="section-label studio-heading"><span class="title-en">XEN | CREATIVE STUDIO JAPAN</span></h1><span class="home-ja">ホーム・作品一覧</span><a class="index-link" href="./studio.html" style="border-top:1px solid #f0f0f0"><span class="index-en">STUDIO</span><span class="index-ja">スタジオ紹介・制作のご依頼</span><span class="arrow">↗</span></a><a class="index-link" href="./creator.html"><span class="index-en">CREATOR</span><span class="index-ja">クリエイター紹介・プロフィール</span><span class="arrow">↗</span></a><a class="index-link" href="./storybooks.html"><span class="index-en">STORYBOOKS</span><span class="index-ja">絵本</span><span class="arrow">↗</span></a>
 <a class="index-link" href="./animation.html"><span class="index-en">ANIMATION</span><span class="index-ja">アニメーション</span><span class="arrow">↗</span></a>
 <a class="index-link" href="./sound.html"><span class="index-en">SOUND</span><span class="index-ja">音楽</span><span class="arrow">↗</span></a>
@@ -242,21 +267,5 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
   arrange();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(arrange);
   window.addEventListener('resize', arrange, {passive:true});
-})();
-</script><script>
-/* Preserve the published pause/resume control independently of placement. */
-(() => {
-  const button = document.querySelector('.orbit-pause');
-  const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  const sync = () => { button.hidden = motion.matches; };
-  button.addEventListener('click', () => {
-    const paused = button.getAttribute('aria-pressed') !== 'true';
-    document.body.dataset.orbitPaused = String(paused);
-    button.setAttribute('aria-pressed', String(paused));
-    button.setAttribute('aria-label', paused ? '円形メニューの回転を再開' : '円形メニューの回転を停止');
-    button.textContent = paused ? '▶' : 'Ⅱ';
-  });
-  sync();
-  motion.addEventListener('change', sync);
 })();
 </script><script src="./xen-shared.js?v=20261015-luxury" defer></script><script src="./xen-motion.js?v=20261015-luxury" defer></script></body></html>
