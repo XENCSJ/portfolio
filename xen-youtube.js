@@ -1,33 +1,6 @@
-/* Shared STORYBOOKS player and motion for every YouTube work.
-   Prepare the native player before interaction: one click goes directly to
-   YouTube's play control, without a facade click or unmuted autoplay request. */
-document.querySelectorAll('.video-launch').forEach((link) => {
-  const id = link.dataset.videoId;
-  if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return;
-  const container = link.closest('.video-container');
-  if (!container) return;
-
-  // Preserve the original per-video parameters, including cinematic links.
-  const original = container.querySelector('template.cinematic-player')?.content.querySelector('iframe');
-  const url = new URL('https://www.youtube-nocookie.com/embed/' + id);
-  if (original) url.search = new URL(original.src).search;
-  url.searchParams.set('autoplay', '0');
-  url.searchParams.set('playsinline', '1');
-  url.searchParams.set('controls', '1');
-
-  const frame = document.createElement('iframe');
-  frame.src = url.href;
-  frame.title = link.closest('.work')?.querySelector('h3')?.textContent.trim() || 'XEN YouTube作品';
-  frame.width = '560';
-  frame.height = '315';
-  frame.loading = 'lazy';
-  frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-  frame.allowFullscreen = true;
-  frame.referrerPolicy = 'strict-origin-when-cross-origin';
-  container.replaceChildren(frame);
-});
-
-
+/* Shared YouTube motion for all video pages.
+   Native iframe players are in the HTML from the first render.
+   No click-to-load cover or JavaScript player replacement sits above Play. */
 (() => {
   const init = () => {
     if (!document.body.matches('body.xen-youtube-unified')) return;
