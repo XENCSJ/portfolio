@@ -1,0 +1,106 @@
+/* YouTube presentation extracted from STORYBOOKS fc4c804.
+   All six video pages share these dimensions, controls and motion timings. */
+body.xen-youtube-unified.xen-detail-unified.xen-polished main .work:has(.video-container) h3 {
+  display:table;max-width:100%;margin:0 auto 16px;padding:0;background:transparent;
+  color:var(--xen-ink,#171719);border-radius:0;text-align:center;
+  font-size:clamp(18px,2.2vw,22px);font-weight:500;line-height:1.65;letter-spacing:.025em;
+}
+body.xen-youtube-unified main .video-container {
+  position:relative;width:100%;min-width:0;aspect-ratio:auto;overflow:hidden;background:#f5f5f5;
+}
+body.xen-youtube-unified main .video-container::before {
+  content:'';display:block;width:100%;height:0;padding-top:56.25%;
+}
+body.xen-youtube-unified main .video-container > :is(.thumb,iframe) {
+  position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;border:0;
+}
+body.xen-youtube-unified main .video-container .thumb img {
+  display:block;width:100%;height:100%;object-fit:cover;object-position:center;
+}
+body.xen-youtube-unified main .video-container .play {
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  display:grid;place-items:center;width:54px;height:54px;border-radius:50%;
+  background:#ffffffdf;color:#171719;border:1px solid #ffffffa8;font-size:17px;
+}
+
+/* Page-owned motion; media dimensions, copy and shared controls stay intact. */
+body.xen-youtube-unified { --collection-duration: 1000ms; --collection-pulse: 4.6s; --collection-rise: 12px; }
+@media (prefers-reduced-motion: no-preference) {
+
+  body.xen-youtube-unified main [data-collection-entry].collection-entered {
+    animation: collection-rise var(--collection-duration) var(--xen-ease) var(--collection-delay, 0ms) backwards;
+  }
+  body.xen-youtube-unified main .work:has(.video-container) h3 { position: relative; }
+  body.xen-youtube-unified main .work:has(.video-container) h3.collection-entered::after {
+    content: ''; position: absolute; left: calc(50% - 20px); bottom: -8px;
+    width: 40px; height: 1px; background: currentColor; opacity: .22;
+    pointer-events: none; transform-origin: center;
+    animation: collection-line 950ms var(--xen-ease) 160ms backwards;
+  }
+  body.xen-youtube-unified main .video-container.collection-entered {
+    animation-name: collection-frame; animation-duration: 1050ms;
+  }
+  body.xen-youtube-unified main .video-container.collection-entered .thumb img {
+    animation: collection-image 1300ms var(--xen-ease) 80ms backwards;
+  }
+  body.xen-youtube-unified main .thumb::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 25%, #ffffff28 48%, transparent 70%);
+    transform: translateX(-120%); opacity: 0;
+  }
+  body.xen-youtube-unified main .collection-entered .thumb::after {
+    animation: collection-sheen 1400ms ease-out 180ms backwards;
+  }
+  body.xen-youtube-unified main .play {
+    transition: transform 400ms var(--xen-ease), background 280ms, box-shadow 400ms;
+  }
+  body.xen-youtube-unified main .play::before,
+  body.xen-youtube-unified main .play::after {
+    content: ''; position: absolute; inset: -1px; border: 1px solid #ffffffb3;
+    border-radius: 50%; pointer-events: none; opacity: 0;
+    animation: collection-pulse var(--collection-pulse) ease-out infinite;
+    animation-play-state: paused;
+  }
+  body.xen-youtube-unified main .play::after { animation-delay: calc(var(--collection-pulse) / 2); }
+  body.xen-youtube-unified main .collection-on-screen .play::before,
+  body.xen-youtube-unified main .collection-on-screen .play::after { animation-play-state: running; }
+  body.xen-youtube-unified.collection-paused main .play::before,
+  body.xen-youtube-unified.collection-paused main .play::after { animation-play-state: paused; }
+  body.xen-youtube-unified main [data-collection-entry]:focus-within,
+  body.xen-youtube-unified main .video-container:focus-within .thumb img,
+  body.xen-youtube-unified main .video-container:focus-within .thumb::after,
+  body.xen-youtube-unified.collection-motion-rest main [data-collection-entry],
+  body.xen-youtube-unified.collection-motion-rest main .thumb img,
+  body.xen-youtube-unified.collection-motion-rest main .thumb::after,
+  body.xen-youtube-unified.collection-motion-rest main h3::after,
+  body.xen-youtube-unified.collection-motion-rest main .play::before,
+  body.xen-youtube-unified.collection-motion-rest main .play::after { animation: none; }
+  body.xen-youtube-unified main .thumb:focus-visible .play { transform: translate(-50%, -50%) scale(1.08); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body.xen-youtube-unified main .thumb:hover .play { transform: translate(-50%, -50%) scale(1.08); }
+}
+@media (max-width: 650px) { body.xen-youtube-unified { --collection-rise: 8px; } }
+@keyframes collection-letter {
+  from { opacity: 0; transform: translateY(22px) rotate(-4deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes collection-rise {
+  from { opacity: 0; transform: translateY(var(--collection-rise)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes collection-frame {
+  from { opacity: .15; clip-path: inset(8% 0 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+@keyframes collection-image { from { transform: scale(1.04); } to { transform: scale(1); } }
+@keyframes collection-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes collection-sheen {
+  from { transform: translateX(-120%); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: translateX(120%); opacity: 0; }
+}
+@keyframes collection-pulse {
+  0% { transform: scale(1); opacity: .5; }
+  65%, 100% { transform: scale(1.65); opacity: 0; }
+}

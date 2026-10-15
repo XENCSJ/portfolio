@@ -37,9 +37,7 @@ body.animation-page main .work .animation-subtitle{margin:0 0 8px;font-size:15px
 body.animation-page main .work .animation-description{margin:0;font-size:14px;line-height:2;letter-spacing:.015em;color:#55555b;overflow-wrap:anywhere}
 </style>
 
-<style id="collection-motion-style">
-/* Page-owned motion; media dimensions, copy and shared controls stay intact. */
-body.animation-page { --collection-duration: 850ms; --collection-pulse: 3.8s; --collection-rise: 12px; }
+<style id="collection-heading-motion">
 @media (prefers-reduced-motion: no-preference) {
   body.animation-page main .hero .title-en.detail-in-view .detail-glyph {
     animation-name: collection-letter; animation-duration: 950ms;
@@ -47,133 +45,14 @@ body.animation-page { --collection-duration: 850ms; --collection-pulse: 3.8s; --
   }
   body.animation-page main .rule.detail-in-view,
   body.animation-page main .pill.detail-in-view::after { animation-duration: 1100ms; }
-  body.animation-page main [data-collection-entry].collection-entered {
-    animation: collection-rise var(--collection-duration) var(--xen-ease) var(--collection-delay, 0ms) backwards;
-  }
-  body.animation-page main .work h3 { position: relative; }
-  body.animation-page main .work h3.collection-entered::after {
-    content: ''; position: absolute; left: calc(50% - 20px); bottom: -8px;
-    width: 40px; height: 1px; background: currentColor; opacity: .22;
-    pointer-events: none; transform-origin: center;
-    animation: collection-line 950ms var(--xen-ease) 160ms backwards;
-  }
-  body.animation-page main .video-container.collection-entered {
-    animation-name: collection-frame; animation-duration: 1050ms;
-  }
-  body.animation-page main .video-container.collection-entered .thumb img {
-    animation: collection-image 1300ms var(--xen-ease) 80ms backwards;
-  }
-  body.animation-page main .thumb::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(110deg, transparent 25%, #ffffff28 48%, transparent 70%);
-    transform: translateX(-120%); opacity: 0;
-  }
-  body.animation-page main .collection-entered .thumb::after {
-    animation: collection-sheen 1400ms ease-out 180ms backwards;
-  }
-  body.animation-page main .play {
-    transition: transform 400ms var(--xen-ease), background 280ms, box-shadow 400ms;
-  }
-  body.animation-page main .play::before,
-  body.animation-page main .play::after {
-    content: ''; position: absolute; inset: -1px; border: 1px solid #ffffffb3;
-    border-radius: 50%; pointer-events: none; opacity: 0;
-    animation: collection-pulse var(--collection-pulse) ease-out infinite;
-    animation-play-state: paused;
-  }
-  body.animation-page main .play::after { animation-delay: calc(var(--collection-pulse) / 2); }
-  body.animation-page main .collection-on-screen .play::before,
-  body.animation-page main .collection-on-screen .play::after { animation-play-state: running; }
-  body.animation-page.collection-paused main .play::before,
-  body.animation-page.collection-paused main .play::after { animation-play-state: paused; }
-  body.animation-page main [data-collection-entry]:focus-within,
-  body.animation-page main .video-container:focus-within .thumb img,
-  body.animation-page main .video-container:focus-within .thumb::after,
-  body.animation-page.collection-motion-rest main [data-collection-entry],
-  body.animation-page.collection-motion-rest main .thumb img,
-  body.animation-page.collection-motion-rest main .thumb::after,
-  body.animation-page.collection-motion-rest main h3::after,
-  body.animation-page.collection-motion-rest main .play::before,
-  body.animation-page.collection-motion-rest main .play::after { animation: none; }
-  body.animation-page main .thumb:focus-visible .play { transform: translate(-50%, -50%) scale(1.08); }
 }
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  body.animation-page main .thumb:hover .play { transform: translate(-50%, -50%) scale(1.08); }
-}
-@media (max-width: 650px) { body.animation-page { --collection-rise: 8px; } }
 @keyframes collection-letter {
   from { opacity: 0; transform: translateY(22px) rotate(-4deg); }
   to { opacity: 1; transform: none; }
 }
-@keyframes collection-rise {
-  from { opacity: 0; transform: translateY(var(--collection-rise)); }
-  to { opacity: 1; transform: none; }
-}
-@keyframes collection-frame {
-  from { opacity: .15; clip-path: inset(8% 0 0); }
-  to { opacity: 1; clip-path: inset(0); }
-}
-@keyframes collection-image { from { transform: scale(1.04); } to { transform: scale(1); } }
-@keyframes collection-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@keyframes collection-sheen {
-  from { transform: translateX(-120%); opacity: 0; }
-  30% { opacity: 1; }
-  to { transform: translateX(120%); opacity: 0; }
-}
-@keyframes collection-pulse {
-  0% { transform: scale(1); opacity: .5; }
-  65%, 100% { transform: scale(1.65); opacity: 0; }
-}
 </style>
-</head><body id="top" class="detail-page video-page xen-polished animation-page xen-detail-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html" aria-current="page">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content"><section class="hero reveal"><div class="eyebrow">XEN | CREATIVE STUDIO JAPAN</div><h1><span class="title-en">ANIMATION</span><span class="page-title-ja" lang="ja">アニメーション</span></h1><p class="lead">スタイルにも技法にも縛られず、XENの感性であなたの心に触れる。そんな新しい表現に挑み続けるシリーズ。</p></section><div class="rule"></div><section class="reveal"><span class="pill">SELECTED WORKS</span><div class="grid"><article class="work"><h3>ムーボ｜MOO-BO-CHU</h3><div class="video-container"><a class="thumb video-launch" data-video-id="qQzOTZhiruE" href="https://youtu.be/qQzOTZhiruE" rel="noopener noreferrer" target="_blank" aria-label="ムーボ｜MOO-BO-CHUを再生"><img alt="ムーボ｜MOO-BO-CHU" loading="lazy" src="https://img.youtube.com/vi/qQzOTZhiruE/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">かわいさとカオスが渦巻く、ピンクの世界</p><p class="animation-description">ピンクの渦の中で自由気ままに動き回る「ムーボ」たち。浮かんで、回って、走り出す。予測不能な動きと独特のリズムが織りなす、かわいさとカオスに満ちた中毒性のあるアニメーション。</p></div><a class="video-source" href="https://youtu.be/qQzOTZhiruE" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article><article class="work"><h3>BROKEN CYCLE</h3><div class="video-container"><a class="thumb video-launch" data-video-id="-aHdK3AyMd0" href="https://youtu.be/-aHdK3AyMd0" rel="noopener noreferrer" target="_blank" aria-label="BROKEN CYCLE | Why We Don’t Changeを再生"><img alt="BROKEN CYCLE | Why We Don’t Change" loading="lazy" src="https://img.youtube.com/vi/-aHdK3AyMd0/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">壊れた循環｜なぜ私たちは変われないのか</p><p class="animation-description">安心できる世界に閉じこもっていた一人の青年。恐れや葛藤を抱えながらも、未知の世界へ踏み出していく。変化への不安と、その先に広がる可能性を通して、コンフォートゾーンを越える勇気を描いた物語。</p></div><a class="video-source" href="https://youtu.be/-aHdK3AyMd0" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article><article class="work"><h3>SILENT REBELLION</h3><div class="video-container"><a class="thumb video-launch" data-video-id="N4FiRqQciWE" href="https://youtu.be/N4FiRqQciWE" rel="noopener noreferrer" target="_blank" aria-label="SILENT REBELLION | When Stopping Becomes Strengthを再生"><img alt="SILENT REBELLION | When Stopping Becomes Strength" loading="lazy" src="https://img.youtube.com/vi/N4FiRqQciWE/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">静かな反逆｜立ち止まることが強さになるとき</p><p class="animation-description">流行や他人の評価を追い続け、自分らしさを見失っていく現代社会。立ち止まることで生まれる「自分は何のために生きるのか」という問いを通して、周囲に流されず、自分自身を取り戻す大切さを描いた物語。</p></div><a class="video-source" href="https://youtu.be/N4FiRqQciWE" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article><article class="work"><h3>LIFE STAIRS</h3><div class="video-container"><a class="thumb video-launch" data-video-id="epB9CUXdP_E" href="https://youtu.be/epB9CUXdP_E" rel="noopener noreferrer" target="_blank" aria-label="LIFE STAIRS | Why Falling Shapes Usを再生"><img alt="LIFE STAIRS | Why Falling Shapes Us" loading="lazy" src="https://img.youtube.com/vi/epB9CUXdP_E/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">人生の階段｜なぜ“落ちる経験”が人を形づくるのか</p><p class="animation-description">何度登っても落ちてしまう、終わりの見えない人生の階段。それでも諦めず、一歩ずつ前へ進んでいく。失敗や挫折を次の力に変え、再び立ち上がる強さと希望を描いた物語。</p></div><a class="video-source" href="https://youtu.be/epB9CUXdP_E" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article></div></section></main><footer><a class="xen-back-top" href="#top">Back to Top</a><nav class="shared-social" aria-label="公式SNS"><a aria-label="Instagram" href="https://www.instagram.com/xen_csj/" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r=".8" stroke="none"></circle></svg><span class="xen-icon-label">Instagram</span></a><a aria-label="X" href="https://x.com/xen_csj" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3L20 21M20 3L4 21M4 3h4l12 18h-4M20 3h-4L4 21h4"></path></svg><span class="xen-icon-label">X</span></a><a aria-label="YouTube" href="https://youtube.com/@xen_csj" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="4" width="20" x="2" y="5"></rect><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"></path></svg><span class="xen-icon-label">YouTube</span></a><a aria-label="TikTok" href="https://www.tiktok.com/@xen_jns" rel="noopener noreferrer" target="_blank" title="TikTok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v11.5a4.5 4.5 0 1 1-4.5-4.5M14 3c.5 3.4 2.5 5 6 5v3c-2.5 0-4.5-.8-6-2.3"></path></svg><span class="xen-icon-label">TikTok</span></a><a aria-label="SPOTIFY" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS?si=uso7JeRLSwG5z5L08eD5Dg" rel="noopener noreferrer" target="_blank" title="SPOTIFY"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M6.8 9.2c4.5-1.1 8.1-.5 11.1 1.3M7.4 12.2c3.6-.8 7-.3 9.6 1.2M8 15.1c3-.5 5.5-.1 7.7 1.1"></path></svg><span class="xen-icon-label">Spotify</span></a></nav><p class="footer-text">© XEN CREATIVE STUDIO JAPAN</p><p class="xen-powered">Powered by XEN</p></footer><script src="./xen-shared.js?v=20261015-luxury" defer></script><script src="./xen-video.js?v=20261015-video" defer></script><script src="./xen-detail-motion.js?v=20261015-review1" defer></script>
-<script id="collection-motion-script">
-(() => {
-  const init = () => {
-    if (!document.body.matches('body.animation-page')) return;
-    const preference = matchMedia('(prefers-reduced-motion: reduce)');
-    if (preference.matches || !('IntersectionObserver' in window)) return;
-    const entries = [];
-    document.querySelectorAll('main .work').forEach(work => {
-      [
-        ['h3', 0], ['.video-container', 80],
-        ['.animation-subtitle', 100], ['.animation-description', 180], ['.video-source', 240]
-      ].forEach(([selector, delay]) => {
-        const node = work.querySelector(selector);
-        if (!node) return;
-        node.dataset.collectionEntry = '';
-        node.style.setProperty('--collection-delay', `${delay}ms`);
-        entries.push(node);
-      });
-    });
-    const entrance = new IntersectionObserver(records => {
-      records.forEach(({target, isIntersecting}) => {
-        if (!isIntersecting) return;
-        if (!preference.matches) target.classList.add('collection-entered');
-        entrance.unobserve(target);
-      });
-    }, {threshold: .08, rootMargin: '0px 0px -24px 0px'});
-    entries.forEach(node => entrance.observe(node));
-    const videos = document.querySelectorAll('main .video-container');
-    const visibility = new IntersectionObserver(records => {
-      records.forEach(({target, isIntersecting}) => {
-        target.classList.toggle('collection-on-screen', isIntersecting && !preference.matches);
-      });
-    }, {threshold: 0});
-    videos.forEach(node => visibility.observe(node));
-    const pause = () => document.body.classList.toggle('collection-paused', document.hidden);
-    document.addEventListener('visibilitychange', pause);
-    pause();
-    const stop = () => {
-      entrance.disconnect(); visibility.disconnect();
-      document.body.classList.add('collection-motion-rest');
-      videos.forEach(node => node.classList.remove('collection-on-screen'));
-      document.removeEventListener('visibilitychange', pause);
-    };
-    preference.addEventListener('change', event => { if (event.matches) stop(); });
-    window.addEventListener('pageshow', event => { if (event.persisted) stop(); });
-  };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once: true});
-  else init();
-})();
-</script>
+<link rel="stylesheet" href="./xen-youtube.css?v=20261016-storybooks1">
+</head><body id="top" class="detail-page video-page xen-polished animation-page xen-detail-unified xen-youtube-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html" aria-current="page">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content"><section class="hero reveal"><div class="eyebrow">XEN | CREATIVE STUDIO JAPAN</div><h1><span class="title-en">ANIMATION</span><span class="page-title-ja" lang="ja">アニメーション</span></h1><p class="lead">スタイルにも技法にも縛られず、XENの感性であなたの心に触れる。そんな新しい表現に挑み続けるシリーズ。</p></section><div class="rule"></div><section class="reveal"><span class="pill">SELECTED WORKS</span><div class="grid"><article class="work"><h3>ムーボ｜MOO-BO-CHU</h3><div class="video-container"><a class="thumb video-launch" data-video-id="qQzOTZhiruE" href="https://youtu.be/qQzOTZhiruE" rel="noopener noreferrer" target="_blank" aria-label="ムーボ｜MOO-BO-CHUを再生"><img alt="ムーボ｜MOO-BO-CHU" loading="lazy" src="https://img.youtube.com/vi/qQzOTZhiruE/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">かわいさとカオスが渦巻く、ピンクの世界</p><p class="animation-description">ピンクの渦の中で自由気ままに動き回る「ムーボ」たち。浮かんで、回って、走り出す。予測不能な動きと独特のリズムが織りなす、かわいさとカオスに満ちた中毒性のあるアニメーション。</p></div><a class="video-source" href="https://youtu.be/qQzOTZhiruE" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article><article class="work"><h3>BROKEN CYCLE</h3><div class="video-container"><a class="thumb video-launch" data-video-id="-aHdK3AyMd0" href="https://youtu.be/-aHdK3AyMd0" rel="noopener noreferrer" target="_blank" aria-label="BROKEN CYCLE | Why We Don’t Changeを再生"><img alt="BROKEN CYCLE | Why We Don’t Change" loading="lazy" src="https://img.youtube.com/vi/-aHdK3AyMd0/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">壊れた循環｜なぜ私たちは変われないのか</p><p class="animation-description">安心できる世界に閉じこもっていた一人の青年。恐れや葛藤を抱えながらも、未知の世界へ踏み出していく。変化への不安と、その先に広がる可能性を通して、コンフォートゾーンを越える勇気を描いた物語。</p></div><a class="video-source" href="https://youtu.be/-aHdK3AyMd0" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article><article class="work"><h3>SILENT REBELLION</h3><div class="video-container"><a class="thumb video-launch" data-video-id="N4FiRqQciWE" href="https://youtu.be/N4FiRqQciWE" rel="noopener noreferrer" target="_blank" aria-label="SILENT REBELLION | When Stopping Becomes Strengthを再生"><img alt="SILENT REBELLION | When Stopping Becomes Strength" loading="lazy" src="https://img.youtube.com/vi/N4FiRqQciWE/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">静かな反逆｜立ち止まることが強さになるとき</p><p class="animation-description">流行や他人の評価を追い続け、自分らしさを見失っていく現代社会。立ち止まることで生まれる「自分は何のために生きるのか」という問いを通して、周囲に流されず、自分自身を取り戻す大切さを描いた物語。</p></div><a class="video-source" href="https://youtu.be/N4FiRqQciWE" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article><article class="work"><h3>LIFE STAIRS</h3><div class="video-container"><a class="thumb video-launch" data-video-id="epB9CUXdP_E" href="https://youtu.be/epB9CUXdP_E" rel="noopener noreferrer" target="_blank" aria-label="LIFE STAIRS | Why Falling Shapes Usを再生"><img alt="LIFE STAIRS | Why Falling Shapes Us" loading="lazy" src="https://img.youtube.com/vi/epB9CUXdP_E/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><div class="animation-copy"><p class="animation-subtitle">人生の階段｜なぜ“落ちる経験”が人を形づくるのか</p><p class="animation-description">何度登っても落ちてしまう、終わりの見えない人生の階段。それでも諦めず、一歩ずつ前へ進んでいく。失敗や挫折を次の力に変え、再び立ち上がる強さと希望を描いた物語。</p></div><a class="video-source" href="https://youtu.be/epB9CUXdP_E" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a></article></div></section></main><footer><a class="xen-back-top" href="#top">Back to Top</a><nav class="shared-social" aria-label="公式SNS"><a aria-label="Instagram" href="https://www.instagram.com/xen_csj/" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r=".8" stroke="none"></circle></svg><span class="xen-icon-label">Instagram</span></a><a aria-label="X" href="https://x.com/xen_csj" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3L20 21M20 3L4 21M4 3h4l12 18h-4M20 3h-4L4 21h4"></path></svg><span class="xen-icon-label">X</span></a><a aria-label="YouTube" href="https://youtube.com/@xen_csj" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="4" width="20" x="2" y="5"></rect><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"></path></svg><span class="xen-icon-label">YouTube</span></a><a aria-label="TikTok" href="https://www.tiktok.com/@xen_jns" rel="noopener noreferrer" target="_blank" title="TikTok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v11.5a4.5 4.5 0 1 1-4.5-4.5M14 3c.5 3.4 2.5 5 6 5v3c-2.5 0-4.5-.8-6-2.3"></path></svg><span class="xen-icon-label">TikTok</span></a><a aria-label="SPOTIFY" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS?si=uso7JeRLSwG5z5L08eD5Dg" rel="noopener noreferrer" target="_blank" title="SPOTIFY"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M6.8 9.2c4.5-1.1 8.1-.5 11.1 1.3M7.4 12.2c3.6-.8 7-.3 9.6 1.2M8 15.1c3-.5 5.5-.1 7.7 1.1"></path></svg><span class="xen-icon-label">Spotify</span></a></nav><p class="footer-text">© XEN CREATIVE STUDIO JAPAN</p><p class="xen-powered">Powered by XEN</p></footer><script src="./xen-shared.js?v=20261015-luxury" defer></script><script src="./xen-detail-motion.js?v=20261015-review1" defer></script>
+
+<script src="./xen-youtube.js?v=20261016-storybooks1" defer></script>
 </body></html>
