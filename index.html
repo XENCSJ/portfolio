@@ -170,8 +170,8 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 html:has(body.home-page#top){scrollbar-gutter:auto;scroll-padding-top:0}
 body.home-page#top{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
 .home-page#top #home{flex:1;display:flex;flex-direction:column;min-width:0}
-.home-page#top .hero{flex:1;min-height:0;flex-direction:column;padding:12px!important;overflow:hidden;contain:layout paint}
-.home-page#top .wheel{--ring-size:min(86vw,590px,max(220px,calc(100svh - 312px)));width:var(--ring-size);height:var(--ring-size);min-height:0;flex:none;overflow:hidden;animation:wheelEntrance 1.5s cubic-bezier(.2,.8,.2,1) both}
+.home-page#top .hero{flex:1;min-height:0;flex-direction:column;padding:12px!important;overflow:clip;contain:layout paint}
+.home-page#top .wheel{--ring-size:min(86vw,590px,max(220px,calc(100svh - 312px)));width:var(--ring-size);height:var(--ring-size);min-height:0;flex:none;overflow:clip;animation:wheelEntrance 1.5s cubic-bezier(.2,.8,.2,1) both}
 .home-page#top .orbit{pointer-events:auto;overflow:visible;animation:none!important;transform-origin:center;filter:drop-shadow(0 0 10px rgba(174,143,86,.12))}
 .home-page#top.ring-ready .orbit{animation:spin 48s linear infinite!important}
 .home-page#top .orbit text{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:0!important;font-size:14px!important;fill:#171717;stroke:none;animation:letterGlow 6s ease-in-out infinite alternate}
