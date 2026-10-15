@@ -1,0 +1,24 @@
+/* CREATOR's support invitation uses real text and the existing reveal observer. */
+.creation-support { max-width: 760px; margin-inline: auto; }
+.creation-support .support-copy { padding: clamp(32px,6vw,60px) 16px; text-align: center; border-block: 1px solid #e7e3dc; }
+.creation-support .support-eyebrow { margin: 0 0 22px; font-size: 11px; line-height: 1.8; color: #777; letter-spacing: .1em; }
+.creation-support .support-title { position: relative; display: table; margin: 0 auto; padding-bottom: 24px; font-size: clamp(25px,4vw,40px); font-weight: 400; line-height: 1.6; letter-spacing: .025em; }
+.creation-support .support-title::after { content: ''; position: absolute; bottom: 0; left: calc(50% - 24px); width: 48px; height: 1px; background: #a48b60; transform-origin: center; }
+.creation-support .support-providers { display: flex; justify-content: center; flex-wrap: wrap; margin: 24px 0 30px; padding: 0; list-style: none; gap: 10px 22px; }
+.creation-support .support-providers li { font-size: 12px; letter-spacing: .06em; color: #666; }
+.creation-support .support-link { display: inline-flex; justify-content: center; align-items: center; gap: 26px; max-width: 100%; min-height: 48px; padding: 12px 28px; border-radius: 30px; background: #171717; color: #fff; font-size: 12px; letter-spacing: .08em; line-height: 1.7; transition: background .35s; }
+.creation-support .support-link > span { transition: transform .35s; }
+@media (prefers-reduced-motion: no-preference) {
+  .creation-support .is-in-view .support-title::after { animation: xen-support-line 1.1s cubic-bezier(.22,.68,0,1) .12s both; }
+  @keyframes xen-support-line { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+}
+@media (hover:hover) and (pointer:fine) {
+  .creation-support .support-link:hover { background: #66563c; }
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .creation-support .support-link:hover > span { transform: translate(2px,-2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .creation-support .support-link,
+  .creation-support .support-link > span { transition: none; }
+}
