@@ -29,30 +29,207 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <link rel="stylesheet" href="./xen-experience.css?v=20261015-luxury">
 <noscript><style>body.xen-polished .xen-header{height:auto;min-height:80px;flex-wrap:wrap;padding-block:18px}body.xen-polished .xen-menu-button{display:none}body.xen-polished .xen-menu[hidden]{display:grid!important;position:static;width:100%;max-height:none;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;box-shadow:none;padding:8px;gap:0 8px}body.xen-polished .xen-menu a{font-size:10px;overflow-wrap:anywhere}body.xen-polished .reveal,body.xen-polished .xen-reveal{opacity:1!important;transform:none!important}</style></noscript>
 
-<style id="xen-sound-spotify-styles">
-/* SOUND-only Spotify players; independent of the 16:9 YouTube containers. */
-.sound-page .xen-streaming-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:32px;max-width:760px;margin:30px auto 48px}
-.sound-page .xen-streaming-grid .work{min-width:0}
-.sound-page .xen-spotify-player{display:block;position:static;width:100%;height:152px;min-height:152px;aspect-ratio:auto;border:0;border-radius:12px}
-.sound-page .xen-spotify-link{display:table;max-width:100%;min-height:44px;margin:8px 0 0 auto;padding:12px 0;font-size:12px;line-height:1.7;color:#5e5e63;text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere}
-.sound-page .xen-spotify-link:hover{color:#171719}
-</style>
+
 <link rel="stylesheet" href="./xen-detail-refined.css?v=20261015-review1">
-</head><body id="top" class="detail-page video-page xen-polished sound-page xen-detail-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html" aria-current="page">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content"><section class="hero reveal"><div class="eyebrow">XEN | CREATIVE STUDIO JAPAN</div><h1><span class="title-en">SOUND</span><span class="page-title-ja" lang="ja">音楽</span></h1><p class="lead">スタイルに縛られず、XENの感性のままに。ときに優しく、ときに鋭く、あなたの一瞬に触れる音を。耳ではなく、心で聴く音楽シリーズ。</p></section><div class="rule"></div>
-<section class="reveal" id="spotify-releases" aria-labelledby="spotify-releases-title">
-<h2 class="series-title" id="spotify-releases-title">SPOTIFY / 楽曲を聴く</h2>
-<div class="xen-streaming-grid">
-<article class="work" aria-labelledby="spotify-nova-pulse-title">
-<h3 id="spotify-nova-pulse-title">NOVA PULSE</h3>
-<iframe class="xen-spotify-player" data-testid="embed-iframe" title="Spotify：NOVA PULSE" src="https://open.spotify.com/embed/track/4pap9lJFtpMjsHxisvBisk?utm_source=generator&amp;theme=0&amp;si=17a563b7a6b64699" width="100%" height="152" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-<a class="xen-spotify-link" href="https://open.spotify.com/track/4pap9lJFtpMjsHxisvBisk" target="_blank" rel="noopener noreferrer" aria-label="NOVA PULSEをSpotifyで聴く（新しいタブ）">Spotifyで聴く ↗</a>
-</article>
-<article class="work" aria-labelledby="spotify-void-to-form-title">
-<h3 id="spotify-void-to-form-title">VOID TO FORM</h3>
-<iframe class="xen-spotify-player" data-testid="embed-iframe" title="Spotify：VOID TO FORM" src="https://open.spotify.com/embed/track/7D0YOLpun9FrCRa4lmo8fz?utm_source=generator&amp;si=db08ce78fbd04e48" width="100%" height="152" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-<a class="xen-spotify-link" href="https://open.spotify.com/track/7D0YOLpun9FrCRa4lmo8fz" target="_blank" rel="noopener noreferrer" aria-label="VOID TO FORMをSpotifyで聴く（新しいタブ）">Spotifyで聴く ↗</a>
-</article>
-</div>
+<style id="xen-sound-layout">
+/* SOUND owns only its catalogue layout. Video geometry and playback use
+   xen-shared.css, xen-experience.css and xen-video.js, as on ANIMATION. */
+body.sound-page main .sound-category-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:760px;margin:24px auto 0;text-align:left}
+body.sound-page main .sound-category-nav a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;min-height:64px;padding:12px 14px;border:1px solid #e4e4e6;background:#fff;color:#171719}
+.sound-category-en,.sound-category-ja{display:block;overflow-wrap:anywhere}
+.sound-category-en{font-size:10px;line-height:1.5;letter-spacing:.08em}
+.sound-category-ja{margin-top:4px;font-size:11px;line-height:1.5;color:#727277}
+.sound-category-nav a>span:last-child{color:#897348;font-size:14px}
+body.sound-page.xen-detail-unified main .sound-section{max-width:760px;margin:40px auto 0;scroll-margin-top:16px}
+body.sound-page.xen-detail-unified main .sound-section>.series-title{display:block;margin:0 0 24px;padding:0 0 14px;text-align:left;font-size:12px;line-height:1.8;letter-spacing:.12em}
+.sound-section-ja{display:block;margin-top:4px;color:#727277;font-size:11px;font-weight:400;letter-spacing:.04em}
+body.sound-page.xen-detail-unified.xen-polished main .work h3{margin:0 auto 16px;padding:0;font-size:clamp(18px,2.2vw,22px);font-weight:500;line-height:1.65;letter-spacing:.025em}
+.sound-page .xen-spotify-player{display:block;position:static;width:100%;height:152px;min-height:152px;aspect-ratio:auto;border:0;border-radius:12px}
+.sound-page .video-container+.xen-spotify-player{margin-top:16px}
+.sound-page .sound-work-links{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:4px 20px}
+body.sound-page main .sound-work-links a{display:inline-flex;align-items:center;min-height:44px;margin:0;padding:12px 0;color:#626269;font-size:11px;line-height:1.7;overflow-wrap:anywhere;text-decoration:none}
+body.sound-page main .sound-platforms{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px 24px;margin:16px 0 0}
+body.sound-page main .sound-platforms .text-link{margin:0;font-size:12px}
+body.sound-page main .sound-channel{margin:12px auto 0;font-size:12px;text-align:center;overflow-wrap:anywhere}
+.sound-page .xen-spotify-link{background-image:linear-gradient(currentColor,currentColor);background-position:left calc(100% - 7px);background-size:0 1px;background-repeat:no-repeat}
+.sound-page .xen-spotify-link:focus-visible{background-size:100% 1px}
+@media(hover:hover) and (pointer:fine){
+ body.sound-page main .sound-category-nav a:hover{background:#fafafa;border-color:#b5a17b;transform:translateY(-2px)}
+ .sound-page .xen-spotify-link:hover{color:#171719;background-size:100% 1px}
+}
+@media(max-width:650px){
+ body.sound-page main .sound-category-nav{grid-template-columns:minmax(0,1fr);gap:6px;margin-top:22px}
+ body.sound-page main .sound-category-nav a{min-height:52px;padding:10px 14px}
+ body.sound-page main .sound-category-nav a>span:first-child{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+ .sound-category-ja{margin-top:0}
+ body.sound-page.xen-detail-unified main .sound-section{margin-top:32px}
+}
+@media(prefers-reduced-motion:reduce){body.sound-page main .sound-category-nav a:hover{transform:none}}
+</style>
+<style id="collection-motion-style">
+/* Page-owned motion; media dimensions, copy and shared controls stay intact. */
+body.sound-page { --collection-duration: 850ms; --collection-pulse: 3.8s; --collection-rise: 12px; }
+@media (prefers-reduced-motion: no-preference) {
+  body.sound-page main .hero .title-en.detail-in-view .detail-glyph {
+    animation-name: collection-letter; animation-duration: 950ms;
+    transform-origin: 50% 100%;
+  }
+  body.sound-page main .rule.detail-in-view,
+  body.sound-page main .pill.detail-in-view::after { animation-duration: 1100ms; }
+  body.sound-page main [data-collection-entry].collection-entered {
+    animation: collection-rise var(--collection-duration) var(--xen-ease) var(--collection-delay, 0ms) backwards;
+  }
+  body.sound-page main .work h3 { position: relative; }
+  body.sound-page main .work h3.collection-entered::after {
+    content: ''; position: absolute; left: calc(50% - 20px); bottom: -8px;
+    width: 40px; height: 1px; background: currentColor; opacity: .22;
+    pointer-events: none; transform-origin: center;
+    animation: collection-line 950ms var(--xen-ease) 160ms backwards;
+  }
+  body.sound-page main .video-container.collection-entered {
+    animation-name: collection-frame; animation-duration: 1050ms;
+  }
+  body.sound-page main .video-container.collection-entered .thumb img {
+    animation: collection-image 1300ms var(--xen-ease) 80ms backwards;
+  }
+  body.sound-page main .thumb::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 25%, #ffffff28 48%, transparent 70%);
+    transform: translateX(-120%); opacity: 0;
+  }
+  body.sound-page main .collection-entered .thumb::after {
+    animation: collection-sheen 1400ms ease-out 180ms backwards;
+  }
+  body.sound-page main .play {
+    transition: transform 400ms var(--xen-ease), background 280ms, box-shadow 400ms;
+  }
+  body.sound-page main .play::before,
+  body.sound-page main .play::after {
+    content: ''; position: absolute; inset: -1px; border: 1px solid #ffffffb3;
+    border-radius: 50%; pointer-events: none; opacity: 0;
+    animation: collection-pulse var(--collection-pulse) ease-out infinite;
+    animation-play-state: paused;
+  }
+  body.sound-page main .play::after { animation-delay: calc(var(--collection-pulse) / 2); }
+  body.sound-page main .collection-on-screen .play::before,
+  body.sound-page main .collection-on-screen .play::after { animation-play-state: running; }
+  body.sound-page.collection-paused main .play::before,
+  body.sound-page.collection-paused main .play::after { animation-play-state: paused; }
+  body.sound-page main [data-collection-entry]:focus-within,
+  body.sound-page main .video-container:focus-within .thumb img,
+  body.sound-page main .video-container:focus-within .thumb::after,
+  body.sound-page.collection-motion-rest main [data-collection-entry],
+  body.sound-page.collection-motion-rest main .thumb img,
+  body.sound-page.collection-motion-rest main .thumb::after,
+  body.sound-page.collection-motion-rest main h3::after,
+  body.sound-page.collection-motion-rest main .play::before,
+  body.sound-page.collection-motion-rest main .play::after { animation: none; }
+  body.sound-page main .thumb:focus-visible .play { transform: translate(-50%, -50%) scale(1.08); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body.sound-page main .thumb:hover .play { transform: translate(-50%, -50%) scale(1.08); }
+}
+@media (max-width: 650px) { body.sound-page { --collection-rise: 8px; } }
+@keyframes collection-letter {
+  from { opacity: 0; transform: translateY(22px) rotate(-4deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes collection-rise {
+  from { opacity: 0; transform: translateY(var(--collection-rise)); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes collection-frame {
+  from { opacity: .15; clip-path: inset(8% 0 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+@keyframes collection-image { from { transform: scale(1.04); } to { transform: scale(1); } }
+@keyframes collection-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes collection-sheen {
+  from { transform: translateX(-120%); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: translateX(120%); opacity: 0; }
+}
+@keyframes collection-pulse {
+  0% { transform: scale(1); opacity: .5; }
+  65%, 100% { transform: scale(1.65); opacity: 0; }
+}
+</style>
+</head><body id="top" class="detail-page video-page xen-polished sound-page xen-detail-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html" aria-current="page">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content">
+<section class="hero reveal"><h1><span class="title-en">SOUND</span><span class="page-title-ja" lang="ja">音楽制作</span></h1><nav class="sound-category-nav design-category-nav" aria-label="音楽カテゴリー"><a href="#original-music"><span><span class="sound-category-en">ORIGINAL MUSIC</span><span class="sound-category-ja" lang="ja">オリジナル楽曲</span></span><span aria-hidden="true">↓</span></a><a href="#electronic"><span><span class="sound-category-en">ELECTRONIC</span><span class="sound-category-ja" lang="ja">エレクトロニック</span></span><span aria-hidden="true">↓</span></a><a href="#sleep-ambient"><span><span class="sound-category-en">SLEEP &amp; AMBIENT</span><span class="sound-category-ja" lang="ja">睡眠・環境音楽</span></span><span aria-hidden="true">↓</span></a></nav></section>
+<section class="sound-section reveal" id="original-music" aria-labelledby="original-music-title">
+<h2 class="series-title" id="original-music-title"><span>ORIGINAL MUSIC</span><span class="sound-section-ja" lang="ja">オリジナル楽曲</span></h2>
+<div class="grid"><article class="work" aria-labelledby="nova-pulse-title"><h3 id="nova-pulse-title">NOVA PULSE</h3>
+<div class="video-container"><a aria-label="NOVA PULSEを再生" class="thumb video-launch" data-video-id="TpUbm4xbmVc" href="https://youtu.be/TpUbm4xbmVc" rel="noopener noreferrer" target="_blank"><img alt="NOVA PULSE" loading="lazy" src="https://img.youtube.com/vi/TpUbm4xbmVc/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div>
+<iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen="" class="xen-spotify-player" data-testid="embed-iframe" height="152" loading="lazy" src="https://open.spotify.com/embed/track/4pap9lJFtpMjsHxisvBisk?utm_source=generator&amp;theme=0&amp;si=17a563b7a6b64699" title="Spotify：NOVA PULSE" width="100%"></iframe>
+<div class="sound-work-links"><a class="video-source" href="https://youtu.be/TpUbm4xbmVc" target="_blank" rel="noopener noreferrer">YouTubeで視聴 ↗</a><a class="xen-spotify-link" href="https://open.spotify.com/track/4pap9lJFtpMjsHxisvBisk" target="_blank" rel="noopener noreferrer">Spotifyで聴く ↗</a></div></article>
+<article class="work" aria-labelledby="void-to-form-title"><h3 id="void-to-form-title">VOID TO FORM</h3>
+<iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen="" class="xen-spotify-player" data-testid="embed-iframe" height="152" loading="lazy" src="https://open.spotify.com/embed/track/7D0YOLpun9FrCRa4lmo8fz?utm_source=generator&amp;si=db08ce78fbd04e48" title="Spotify：VOID TO FORM" width="100%"></iframe>
+<div class="sound-work-links"><a class="xen-spotify-link" href="https://open.spotify.com/track/7D0YOLpun9FrCRa4lmo8fz" target="_blank" rel="noopener noreferrer">Spotifyで聴く ↗</a></div></article></div><nav class="sound-platforms" aria-label="音楽配信サービス"><a class="text-link" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS" target="_blank" rel="noopener noreferrer">Spotify ↗</a><a class="text-link" href="https://music.apple.com/us/artist/xen/1856436159" target="_blank" rel="noopener noreferrer">Apple Music ↗</a></nav>
 </section>
-<div class="rule"></div>
-<section class="reveal"><span class="pill">SELECTED WORKS</span><h2 class="series-title">MUSIC / PURPLE AWAKE</h2><div class="grid"><article class="work"><h3>NOVA PULSE  | XEN</h3><div class="video-container"><a class="thumb video-launch" data-video-id="TpUbm4xbmVc" href="https://youtu.be/TpUbm4xbmVc" rel="noopener noreferrer" target="_blank" aria-label="NOVA PULSE  | XENを再生"><img alt="NOVA PULSE  | XEN" loading="lazy" src="https://img.youtube.com/vi/TpUbm4xbmVc/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><a class="video-source" href="https://youtu.be/TpUbm4xbmVc" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a><p class="work-collection">PURPLE AWAKE 01</p></article><article class="work"><h3>NIGHT&#x27;S AWAKENING - Emotional Future Bass Mix | 1 Hour Music</h3><div class="video-container"><a class="thumb video-launch" data-video-id="uqQI6369VYg" href="https://youtu.be/uqQI6369VYg" rel="noopener noreferrer" target="_blank" aria-label="NIGHT&#x27;S AWAKENING - Emotional Future Bass Mix | 1 Hour Musicを再生"><img alt="NIGHT&#x27;S AWAKENING - Emotional Future Bass Mix | 1 Hour Music" loading="lazy" src="https://img.youtube.com/vi/uqQI6369VYg/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><a class="video-source" href="https://youtu.be/uqQI6369VYg" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a><p class="work-collection">PURPLE AWAKE 02</p></article></div><h2 class="series-title">Sleep BGM / BLUE SLEEP</h2><div class="grid"><article class="work"><h3>3 Hours Deep Sleep Music for Insomnia &amp; Anxiety Relief 🌙 Quiet Your Mind, Stop Overthinking</h3><div class="video-container"><a class="thumb video-launch" data-video-id="-_Z0oOPnfvE" href="https://youtu.be/-_Z0oOPnfvE" rel="noopener noreferrer" target="_blank" aria-label="3 Hours Deep Sleep Music for Insomnia &amp; Anxiety Relief 🌙 Quiet Your Mind, Stop Overthinkingを再生"><img alt="3 Hours Deep Sleep Music for Insomnia &amp; Anxiety Relief 🌙 Quiet Your Mind, Stop Overthinking" loading="lazy" src="https://img.youtube.com/vi/-_Z0oOPnfvE/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><a class="video-source" href="https://youtu.be/-_Z0oOPnfvE" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a><p class="work-collection">BLUE SLEEP 01</p></article><article class="work"><h3>Healing Night at Celestial Lake | 3 Hours Deep Sleep Music</h3><div class="video-container"><a class="thumb video-launch" data-video-id="t2sB0oOTOAA" href="https://youtu.be/t2sB0oOTOAA" rel="noopener noreferrer" target="_blank" aria-label="Healing Night at Celestial Lake | 3 Hours Deep Sleep Musicを再生"><img alt="Healing Night at Celestial Lake | 3 Hours Deep Sleep Music" loading="lazy" src="https://img.youtube.com/vi/t2sB0oOTOAA/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div><a class="video-source" href="https://youtu.be/t2sB0oOTOAA" target="_blank" rel="noopener noreferrer">YouTubeで視聴</a><p class="work-collection">BLUE SLEEP 02</p></article></div></section><p class="note">配信：<a href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS" rel="noopener noreferrer" target="_blank"><u>Spotify</u></a> ／ <a href="https://music.apple.com/us/artist/xen/1856436159" rel="noopener noreferrer" target="_blank"><u>Apple Music</u></a></p><p class="note"><a href="https://youtube.com/@xen_vyx" target="_blank" rel="noopener noreferrer">PURPLE AWAKE</a> ／ <a href="https://www.youtube.com/@XEN_BLU" target="_blank" rel="noopener noreferrer">BLUE SLEEP</a></p></main><footer><a class="xen-back-top" href="#top">Back to Top</a><nav class="shared-social" aria-label="公式SNS"><a aria-label="Instagram" href="https://www.instagram.com/xen_csj/" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r=".8" stroke="none"></circle></svg><span class="xen-icon-label">Instagram</span></a><a aria-label="X" href="https://x.com/xen_csj" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3L20 21M20 3L4 21M4 3h4l12 18h-4M20 3h-4L4 21h4"></path></svg><span class="xen-icon-label">X</span></a><a aria-label="YouTube" href="https://youtube.com/@xen_csj" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="4" width="20" x="2" y="5"></rect><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"></path></svg><span class="xen-icon-label">YouTube</span></a><a aria-label="TikTok" href="https://www.tiktok.com/@xen_jns" rel="noopener noreferrer" target="_blank" title="TikTok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v11.5a4.5 4.5 0 1 1-4.5-4.5M14 3c.5 3.4 2.5 5 6 5v3c-2.5 0-4.5-.8-6-2.3"></path></svg><span class="xen-icon-label">TikTok</span></a><a aria-label="SPOTIFY" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS?si=uso7JeRLSwG5z5L08eD5Dg" rel="noopener noreferrer" target="_blank" title="SPOTIFY"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M6.8 9.2c4.5-1.1 8.1-.5 11.1 1.3M7.4 12.2c3.6-.8 7-.3 9.6 1.2M8 15.1c3-.5 5.5-.1 7.7 1.1"></path></svg><span class="xen-icon-label">Spotify</span></a></nav><p class="footer-text">© XEN CREATIVE STUDIO JAPAN</p><p class="xen-powered">Powered by XEN</p></footer><script src="./xen-shared.js?v=20261015-luxury" defer></script><script src="./xen-video.js?v=20261015-video" defer></script><script src="./xen-detail-motion.js?v=20261015-review1" defer></script></body></html>
+<section class="sound-section reveal" id="electronic" aria-labelledby="electronic-title">
+<h2 class="series-title" id="electronic-title"><span>ELECTRONIC</span><span class="sound-section-ja" lang="ja">エレクトロニック</span></h2>
+<div class="grid"><article class="work" aria-labelledby="nights-awakening-title"><h3 id="nights-awakening-title">NIGHT&#x27;S AWAKENING</h3>
+<div class="video-container"><a aria-label="NIGHT'S AWAKENINGを再生" class="thumb video-launch" data-video-id="uqQI6369VYg" href="https://youtu.be/uqQI6369VYg" rel="noopener noreferrer" target="_blank"><img alt="NIGHT'S AWAKENING" loading="lazy" src="https://img.youtube.com/vi/uqQI6369VYg/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div>
+<div class="sound-work-links"><a class="video-source" href="https://youtu.be/uqQI6369VYg" target="_blank" rel="noopener noreferrer">YouTubeで視聴 ↗</a></div></article></div><a class="text-link sound-channel" href="https://youtube.com/@xen_vyx" target="_blank" rel="noopener noreferrer">エレクトロニックのYouTubeチャンネル ↗</a>
+</section>
+<section class="sound-section reveal" id="sleep-ambient" aria-labelledby="sleep-ambient-title">
+<h2 class="series-title" id="sleep-ambient-title"><span>SLEEP &amp; AMBIENT</span><span class="sound-section-ja" lang="ja">睡眠・環境音楽</span></h2>
+<div class="grid"><article class="work" aria-labelledby="deep-sleep-title"><h3 id="deep-sleep-title">Deep Sleep</h3>
+<div class="video-container"><a aria-label="Deep Sleepを再生" class="thumb video-launch" data-video-id="-_Z0oOPnfvE" href="https://youtu.be/-_Z0oOPnfvE" rel="noopener noreferrer" target="_blank"><img alt="Deep Sleep" loading="lazy" src="https://img.youtube.com/vi/-_Z0oOPnfvE/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div>
+<div class="sound-work-links"><a class="video-source" href="https://youtu.be/-_Z0oOPnfvE" target="_blank" rel="noopener noreferrer">YouTubeで視聴 ↗</a></div></article>
+<article class="work" aria-labelledby="celestial-lake-title"><h3 id="celestial-lake-title">Celestial Lake</h3>
+<div class="video-container"><a aria-label="Celestial Lakeを再生" class="thumb video-launch" data-video-id="t2sB0oOTOAA" href="https://youtu.be/t2sB0oOTOAA" rel="noopener noreferrer" target="_blank"><img alt="Celestial Lake" loading="lazy" src="https://img.youtube.com/vi/t2sB0oOTOAA/maxresdefault.jpg"/><span aria-hidden="true" class="play">▶</span></a></div>
+<div class="sound-work-links"><a class="video-source" href="https://youtu.be/t2sB0oOTOAA" target="_blank" rel="noopener noreferrer">YouTubeで視聴 ↗</a></div></article></div><a class="text-link sound-channel" href="https://www.youtube.com/@XEN_BLU" target="_blank" rel="noopener noreferrer">睡眠・環境音楽のYouTubeチャンネル ↗</a>
+</section>
+</main><footer><a class="xen-back-top" href="#top">Back to Top</a><nav class="shared-social" aria-label="公式SNS"><a aria-label="Instagram" href="https://www.instagram.com/xen_csj/" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r=".8" stroke="none"></circle></svg><span class="xen-icon-label">Instagram</span></a><a aria-label="X" href="https://x.com/xen_csj" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3L20 21M20 3L4 21M4 3h4l12 18h-4M20 3h-4L4 21h4"></path></svg><span class="xen-icon-label">X</span></a><a aria-label="YouTube" href="https://youtube.com/@xen_csj" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="4" width="20" x="2" y="5"></rect><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"></path></svg><span class="xen-icon-label">YouTube</span></a><a aria-label="TikTok" href="https://www.tiktok.com/@xen_jns" rel="noopener noreferrer" target="_blank" title="TikTok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v11.5a4.5 4.5 0 1 1-4.5-4.5M14 3c.5 3.4 2.5 5 6 5v3c-2.5 0-4.5-.8-6-2.3"></path></svg><span class="xen-icon-label">TikTok</span></a><a aria-label="SPOTIFY" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS?si=uso7JeRLSwG5z5L08eD5Dg" rel="noopener noreferrer" target="_blank" title="SPOTIFY"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M6.8 9.2c4.5-1.1 8.1-.5 11.1 1.3M7.4 12.2c3.6-.8 7-.3 9.6 1.2M8 15.1c3-.5 5.5-.1 7.7 1.1"></path></svg><span class="xen-icon-label">Spotify</span></a></nav><p class="footer-text">© XEN CREATIVE STUDIO JAPAN</p><p class="xen-powered">Powered by XEN</p></footer><script src="./xen-shared.js?v=20261015-luxury" defer></script><script src="./xen-video.js?v=20261015-video" defer></script><script src="./xen-detail-motion.js?v=20261015-review1" defer></script>
+<script id="collection-motion-script">
+(() => {
+  const init = () => {
+    if (!document.body.matches('body.sound-page')) return;
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    if (preference.matches || !('IntersectionObserver' in window)) return;
+    const entries = [];
+    document.querySelectorAll('main .work').forEach(work => {
+      [
+        ['h3', 0], ['.video-container', 80],
+        ['.animation-subtitle', 100], ['.animation-description', 180], ['.video-source', 240]
+      ].forEach(([selector, delay]) => {
+        const node = work.querySelector(selector);
+        if (!node) return;
+        node.dataset.collectionEntry = '';
+        node.style.setProperty('--collection-delay', `${delay}ms`);
+        entries.push(node);
+      });
+    });
+    const entrance = new IntersectionObserver(records => {
+      records.forEach(({target, isIntersecting}) => {
+        if (!isIntersecting) return;
+        if (!preference.matches) target.classList.add('collection-entered');
+        entrance.unobserve(target);
+      });
+    }, {threshold: .08, rootMargin: '0px 0px -24px 0px'});
+    entries.forEach(node => entrance.observe(node));
+    const videos = document.querySelectorAll('main .video-container');
+    const visibility = new IntersectionObserver(records => {
+      records.forEach(({target, isIntersecting}) => {
+        target.classList.toggle('collection-on-screen', isIntersecting && !preference.matches);
+      });
+    }, {threshold: 0});
+    videos.forEach(node => visibility.observe(node));
+    const pause = () => document.body.classList.toggle('collection-paused', document.hidden);
+    document.addEventListener('visibilitychange', pause);
+    pause();
+    const stop = () => {
+      entrance.disconnect(); visibility.disconnect();
+      document.body.classList.add('collection-motion-rest');
+      videos.forEach(node => node.classList.remove('collection-on-screen'));
+      document.removeEventListener('visibilitychange', pause);
+    };
+    preference.addEventListener('change', event => { if (event.matches) stop(); });
+    window.addEventListener('pageshow', event => { if (event.persisted) stop(); });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once: true});
+  else init();
+})();
+</script>
+</body></html>
