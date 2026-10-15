@@ -222,13 +222,26 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 .home-page#top .orbit a{cursor:pointer}
 .home-page#top .orbit a text{pointer-events:all}
 .home-page#top .orbit a:is(.is-selected,:hover,:focus-visible,:active) text{fill:#a58a5d}
-.home-page#top .center-logo{position:relative;z-index:1;mix-blend-mode:normal;object-fit:contain}
+/* Independent layers keep centering, floating, selection scale and sheen apart. */
+.home-page#top .logo-stage{position:relative;width:59%;height:59%;z-index:1;pointer-events:none}
+.home-page#top .logo-float,.home-page#top .logo-scale{position:relative;width:100%;height:100%;transform-origin:50% 50%}
+.home-page#top .logo-float{animation:xen-logo-float 5s ease-in-out infinite}
+.home-page#top .logo-scale{isolation:isolate}
+.home-page#top .logo-stage .center-logo{position:relative;width:100%;height:100%;z-index:0;mix-blend-mode:normal;object-fit:contain}
+.home-page#top .logo-sheen{position:absolute;inset:0;overflow:hidden;pointer-events:none;-webkit-mask:url('./XEN_logo_fixed_black.svg') center/contain no-repeat;mask:url('./XEN_logo_fixed_black.svg') center/contain no-repeat;mask-mode:alpha}
+.home-page#top .logo-sheen::before{content:"";position:absolute;inset:-100%;background:linear-gradient(135deg,transparent 47.8%,rgba(238,222,184,.12) 49%,rgba(255,253,246,.34) 50%,rgba(234,218,181,.14) 51%,transparent 52.2%);opacity:0;transform:translate(-36%,-36%);animation:xen-logo-sweep 8s ease-in-out infinite}
+@keyframes xen-logo-float{0%,100%{transform:translateY(-2.5px)}50%{transform:translateY(2.5px)}}
+@keyframes xen-logo-sweep{0%,4%{opacity:0;transform:translate(-36%,-36%)}8%{opacity:1}30%{opacity:1}34%,100%{opacity:0;transform:translate(36%,36%)}}
+.home-page#top .logo-stage.is-motion-paused .logo-float,.home-page#top .logo-stage.is-motion-paused .logo-sheen::before{animation-play-state:paused}
+@supports not ((mask-image:url('')) or (-webkit-mask-image:url(''))){.home-page#top .logo-sheen{display:none}}
+@media(max-width:600px){.home-page#top .logo-stage{width:57%;height:57%}}
+@media(prefers-reduced-motion:reduce){.home-page#top .logo-float,.home-page#top .logo-scale{animation:none!important;transform:none!important}.home-page#top .logo-sheen{display:none}}
 .home-page#top .logo-ripple{position:absolute;left:50%;top:50%;width:62%;aspect-ratio:1;border:1px solid #bda77e;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.55);box-shadow:0 0 7px #bda77e25,inset 0 0 5px #bda77e15;pointer-events:none;z-index:0}
 @media(prefers-reduced-motion:reduce){.home-page#top .logo-ripple{display:none}.home-page#top .orbit{animation:none!important}.home-page#top .orbit text{transition:none}}
 </style>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
 <header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html" aria-current="page">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header>
-<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path id="circle" d="M300 300 m-265 0 a265 265 0 1 1 530 0 a265 265 0 1 1 -530 0"/><path id="circle-ja" d="M300 300 m-246 0 a246 246 0 1 1 492 0 a246 246 0 1 1 -492 0"/></defs><a href="./index.html" aria-label="INDEX｜ホーム" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="3.3333333333333335%">INDEX</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="3.3333333333333335%">ホーム</textPath></text></a><a href="./studio.html" aria-label="STUDIO｜スタジオ" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="10%">STUDIO</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="10%">スタジオ</textPath></text></a><a href="./creator.html" aria-label="CREATOR｜クリエイター" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="16.666666666666664%">CREATOR</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="16.666666666666664%">クリエイター</textPath></text></a><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="23.333333333333332%">STORYBOOKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="23.333333333333332%">絵本</textPath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="30%">ANIMATION</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="30%">アニメーション</textPath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="36.666666666666664%">SOUND</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="36.666666666666664%">音楽</textPath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="43.333333333333336%">CINEMATIC</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="43.333333333333336%">映像</textPath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="50%">SNAP</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="50%">写真</textPath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="56.666666666666664%">DESIGN</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="56.666666666666664%">デザイン</textPath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="63.33333333333333%">APPAREL</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="63.33333333333333%">アパレル</textPath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="70%">ARCHITECTURE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="70%">建築</textPath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="76.66666666666667%">SPACE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="76.66666666666667%">空間</textPath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="83.33333333333334%">ARTWORKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="83.33333333333334%">作品集</textPath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="90%">SNS MANAGEMENT</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="90%">SNS運用</textPath></text></a><a href="./price-list.html" aria-label="PRICE LIST｜料金一覧" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="96.66666666666667%">PRICE LIST</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="96.66666666666667%">料金一覧</textPath></text></a></svg><span class="logo-ripple" aria-hidden="true"></span><img alt="XEN symbol logo" class="center-logo" src="./XEN_logo_fixed_black.svg" width="2232" height="2293"></div></section>
+<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path id="circle" d="M300 300 m-265 0 a265 265 0 1 1 530 0 a265 265 0 1 1 -530 0"/><path id="circle-ja" d="M300 300 m-246 0 a246 246 0 1 1 492 0 a246 246 0 1 1 -492 0"/></defs><a href="./index.html" aria-label="INDEX｜ホーム" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="3.3333333333333335%">INDEX</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="3.3333333333333335%">ホーム</textPath></text></a><a href="./studio.html" aria-label="STUDIO｜スタジオ" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="10%">STUDIO</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="10%">スタジオ</textPath></text></a><a href="./creator.html" aria-label="CREATOR｜クリエイター" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="16.666666666666664%">CREATOR</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="16.666666666666664%">クリエイター</textPath></text></a><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="23.333333333333332%">STORYBOOKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="23.333333333333332%">絵本</textPath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="30%">ANIMATION</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="30%">アニメーション</textPath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="36.666666666666664%">SOUND</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="36.666666666666664%">音楽</textPath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="43.333333333333336%">CINEMATIC</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="43.333333333333336%">映像</textPath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="50%">SNAP</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="50%">写真</textPath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="56.666666666666664%">DESIGN</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="56.666666666666664%">デザイン</textPath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="63.33333333333333%">APPAREL</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="63.33333333333333%">アパレル</textPath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="70%">ARCHITECTURE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="70%">建築</textPath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="76.66666666666667%">SPACE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="76.66666666666667%">空間</textPath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="83.33333333333334%">ARTWORKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="83.33333333333334%">作品集</textPath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="90%">SNS MANAGEMENT</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="90%">SNS運用</textPath></text></a><a href="./price-list.html" aria-label="PRICE LIST｜料金一覧" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="96.66666666666667%">PRICE LIST</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="96.66666666666667%">料金一覧</textPath></text></a></svg><span class="logo-ripple" aria-hidden="true"></span><div class="logo-stage"><div class="logo-float"><div class="logo-scale"><img alt="XEN symbol logo" class="center-logo" src="./XEN_logo_fixed_black.svg" width="2232" height="2293"><span class="logo-sheen" aria-hidden="true"></span></div></div></div></div></section>
 <section class="index" id="creative-index"><h1 class="section-label studio-heading"><span class="title-en">XEN | CREATIVE STUDIO JAPAN</span></h1><span class="home-ja">ホーム・作品一覧</span><a class="index-link" href="./studio.html" style="border-top:1px solid #f0f0f0"><span class="index-en">STUDIO</span><span class="index-ja">スタジオ紹介・制作のご依頼</span><span class="arrow">↗</span></a><a class="index-link" href="./creator.html"><span class="index-en">CREATOR</span><span class="index-ja">クリエイター紹介・プロフィール</span><span class="arrow">↗</span></a><a class="index-link" href="./storybooks.html"><span class="index-en">STORYBOOKS</span><span class="index-ja">絵本</span><span class="arrow">↗</span></a>
 <a class="index-link" href="./animation.html"><span class="index-en">ANIMATION</span><span class="index-ja">アニメーション</span><span class="arrow">↗</span></a>
 <a class="index-link" href="./sound.html"><span class="index-en">SOUND</span><span class="index-ja">音楽</span><span class="arrow">↗</span></a>
@@ -252,11 +265,13 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
  const orbit = document.querySelector('svg.orbit');
  const links = [...orbit.querySelectorAll('a')];
  const ripple = document.querySelector('.logo-ripple');
+ const logoStage = document.querySelector('.logo-stage');
+ const logoScale = document.querySelector('.logo-scale');
  const motion = matchMedia('(prefers-reduced-motion: reduce)');
  const outerLength = orbit.querySelector('#circle').getTotalLength();
  const innerLength = orbit.querySelector('#circle-ja').getTotalLength();
  let centers = [], selected = null, hovered = null, focused = null;
- let pulse, frame = 0, lastTick = 0, pendingNavigation = 0, visible = true;
+ let pulse, scalePulse, frame = 0, lastTick = 0, visible = true;
  function arrange() {
   const en = links.map(a => a.querySelector('.orbit-en'));
   const ja = links.map(a => a.querySelector('.orbit-ja'));
@@ -277,24 +292,35 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
    return center;
   });
  }
+ function stopFeedback(){
+  pulse?.cancel();
+  scalePulse?.cancel();
+ }
  function wave(){
   if(motion.matches || document.hidden || !visible || !ripple.animate) return;
-  pulse?.cancel();
+  // Restart from the current scale so rapid selections never stack or snap.
+  const currentScale = getComputedStyle(logoScale).transform;
+  stopFeedback();
+  scalePulse = logoScale.animate([
+   {transform:currentScale==='none'?'scale(1)':currentScale},
+   {transform:'scale(1.04)',offset:3/7},
+   {transform:'scale(1)'}
+  ],{duration:700,easing:'ease-in-out'});
   pulse = ripple.animate([
    {opacity:0,transform:'translate(-50%,-50%) scale(.55)'},
-   {opacity:.55,transform:'translate(-50%,-50%) scale(.74)',offset:.22},
+   {opacity:.45,transform:'translate(-50%,-50%) scale(.74)',offset:.22},
    {opacity:0,transform:'translate(-50%,-50%) scale(1.25)'}
-  ],{duration:600,easing:'cubic-bezier(.2,.65,.35,1)'});
+  ],{duration:850,easing:'cubic-bezier(.2,.65,.35,1)'});
  }
- function select(link,animate=true){
-  if(selected===link) return;
+ function select(link,animate=true,replay=false){
+  if(selected===link){if(animate && replay) wave();return;}
   selected?.classList.remove('is-selected');
   selected=link;
   selected?.classList.add('is-selected');
   if(animate) wave();
  }
  function rotationSelection(){
-  if(hovered || focused || pendingNavigation) return;
+  if(hovered || focused) return;
   const matrix = new DOMMatrix(getComputedStyle(orbit).transform);
   const turn = Math.atan2(matrix.b,matrix.a)/(Math.PI*2);
   let nearest=0, distance=Infinity;
@@ -312,30 +338,32 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
  function resume(){
   cancelAnimationFrame(frame);
   frame=0;
-  if(!motion.matches && !document.hidden && visible) frame=requestAnimationFrame(tick);
+  const paused = motion.matches || document.hidden || !visible;
+  logoStage.classList.toggle('is-motion-paused',paused);
+  if(paused) stopFeedback();
+  else frame=requestAnimationFrame(tick);
  }
  links.forEach(link=>{
   link.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=link;select(link);}});
   link.addEventListener('pointerleave',()=>{if(hovered===link) hovered=null;});
   link.addEventListener('focus',()=>{focused=link;select(link);});
   link.addEventListener('blur',()=>{if(focused===link) focused=null;});
+  link.addEventListener('pointerdown',event=>{
+   if(event.button===0) select(link,true,true);
+  },{passive:true});
   link.addEventListener('click',event=>{
    if(event.defaultPrevented || event.button!==0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.hasAttribute('download') || (link.getAttribute('target') && link.getAttribute('target')!=='_self')) return;
-   if(motion.matches) {select(link,false);return;}
-   event.preventDefault();
-   if(pendingNavigation) return;
-   if(selected===link) { if(pulse?.playState!=='running') wave(); } else select(link);
-   const destination=new URL(link.getAttribute('href'),document.baseURI).href;
-   pendingNavigation=setTimeout(()=>location.assign(destination),140);
+   select(link,true,event.detail===0 || pulse?.playState!=='running');
+   // Native anchor navigation remains immediate, including keyboard activation.
   });
  });
  arrange();
  document.fonts?.ready.then(arrange);
  window.addEventListener('resize',arrange,{passive:true});
- motion.addEventListener('change',()=>{pulse?.cancel();resume();});
+ motion.addEventListener('change',()=>{stopFeedback();resume();});
  document.addEventListener('visibilitychange',resume);
- window.addEventListener('pagehide',()=>{clearTimeout(pendingNavigation);pendingNavigation=0;cancelAnimationFrame(frame);pulse?.cancel();});
- window.addEventListener('pageshow',()=>{pendingNavigation=0;hovered=null;focused=links.includes(document.activeElement)?document.activeElement:null;resume();});
+ window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);stopFeedback();});
+ window.addEventListener('pageshow',()=>{hovered=null;focused=links.includes(document.activeElement)?document.activeElement:null;resume();});
  if('IntersectionObserver' in window) new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;resume();},{threshold:0}).observe(orbit);
  rotationSelection();
  resume();
