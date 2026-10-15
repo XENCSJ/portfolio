@@ -163,21 +163,73 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <noscript><style>.reveal,.xen-reveal{opacity:1!important;transform:none!important}</style></noscript><link rel="stylesheet" href="./xen-refinements.css?v=20261014-1">
 <link rel="stylesheet" href="./xen-experience.css?v=20261015-luxury">
 <noscript><style>body.xen-polished .xen-header{height:auto;min-height:80px;flex-wrap:wrap;padding-block:18px}body.xen-polished .xen-menu-button{display:none}body.xen-polished .xen-menu[hidden]{display:grid!important;position:static;width:100%;max-height:none;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;box-shadow:none;padding:8px;gap:0 8px}body.xen-polished .xen-menu a{font-size:10px;overflow-wrap:anywhere}body.xen-polished .reveal,body.xen-polished .xen-reveal{opacity:1!important;transform:none!important}</style></noscript>
+<style id="xen-index-ring-v2">
+/* Restoration: XEN_CSJ_RING_TEXT_MOTION_V2.html (2026-10-13).
+   Original radius, centered 11-label slots, 14px type, 48s rotation and fixed PNG.
+   INDEX-only adaptation: native links, viewport sizing and visible social links. */
+html:has(body.home-page#top){scrollbar-gutter:auto;scroll-padding-top:0}
+body.home-page#top{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+.home-page#top #home{flex:1;display:flex;flex-direction:column;min-width:0}
+.home-page#top .hero{flex:1;min-height:0;flex-direction:column;padding:12px!important;overflow:hidden;contain:layout paint}
+.home-page#top .wheel{--ring-size:min(86vw,590px,max(220px,calc(100svh - 312px)));width:var(--ring-size);height:var(--ring-size);min-height:0;flex:none;overflow:hidden;animation:wheelEntrance 1.5s cubic-bezier(.2,.8,.2,1) both}
+.home-page#top .orbit{pointer-events:auto;overflow:visible;animation:none!important;transform-origin:center;filter:drop-shadow(0 0 10px rgba(174,143,86,.12))}
+.home-page#top.ring-ready .orbit{animation:spin 48s linear infinite!important}
+.home-page#top .orbit text{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:0!important;font-size:14px!important;fill:#171717;stroke:none;animation:letterGlow 6s ease-in-out infinite alternate}
+.home-page#top .orbit a:nth-of-type(3n) text{animation-delay:-2s}
+.home-page#top .orbit a:nth-of-type(3n+1) text{animation-delay:-4s}
+.home-page#top .orbit-hit{fill:none;stroke:transparent;stroke-width:88;pointer-events:stroke}
+.home-page#top .orbit a{cursor:pointer}
+.home-page#top .orbit a:focus-visible{outline:none}
+.home-page#top .orbit a:focus-visible .orbit-hit{stroke:#a58b5e22}
+.home-page#top .orbit a:focus-visible text{fill:#715b38;animation:none}
+.home-page#top .orbit:focus-within,.home-page#top[data-orbit-paused="true"] .orbit{animation-play-state:paused!important}
+.home-page#top .center-logo{width:59%;height:59%;animation:none!important;transform:none!important;transition:none!important;filter:none!important;pointer-events:none}
+.home-page#top .hero::before{inset:8% 0;background:radial-gradient(ellipse at 50% 50%,rgba(190,162,112,.095),transparent 60%);animation:ambientGlow 7s ease-in-out infinite alternate}
+.home-page#top .orbit-pause{position:absolute;right:0;bottom:0;width:44px;height:44px;padding:0;border:0;background:transparent;color:#777;font-size:16px;cursor:pointer}
+.home-page#top .orbit-pause[hidden]{display:none}
+.home-page#top .home-caption{text-align:center;max-width:100%;padding:0!important}
+.home-page#top .home-caption h1{margin:12px 0 0;font-size:clamp(12px,3.4vw,18px);line-height:1.5;letter-spacing:.08em;color:#555;font-weight:600;overflow-wrap:anywhere}
+.home-page#top .home-info{display:flex;flex-wrap:wrap;justify-content:center;gap:0 20px;margin-top:4px}
+.home-page#top .home-info a{display:inline-flex;align-items:center;min-height:44px;font-size:11px;line-height:1.5;letter-spacing:.09em;color:#777;transition:color .35s}
+.home-page#top .home-info a:hover{color:#9b8258}
+.home-page#top .xen-footer{flex:none;width:100%;padding:10px 16px max(10px,env(safe-area-inset-bottom))!important;background:linear-gradient(180deg,#fff,#faf9f6)}
+.home-page#top .xen-footer-title{margin:0 0 8px;font-size:9px;line-height:13px;letter-spacing:.23em}
+.home-page#top .xen-social{grid-template-columns:repeat(8,minmax(0,1fr))!important;max-width:680px!important;width:100%!important;gap:6px!important;margin:0 auto 8px!important}
+.home-page#top .xen-social a{height:48px!important;min-height:48px!important;gap:4px!important;padding:4px 0!important;justify-content:center!important}
+.home-page#top .xen-social a svg{width:20px!important;height:20px!important}
+.home-page#top .xen-icon-label{font-size:9px!important;line-height:12px!important;color:#666!important;white-space:normal!important}
+.home-page#top .xen-back-top{display:none}
+.home-page#top .xen-powered,.home-page#top .xen-copyright{display:inline-block;margin:0 6px!important;font-size:9px;line-height:14px;letter-spacing:.04em}
+@keyframes letterGlow{0%,100%{fill:#171717;opacity:.92}50%{fill:#a58b5e;opacity:1}}
+@keyframes wheelEntrance{from{opacity:0;transform:scale(.9) rotate(-8deg);filter:blur(8px)}to{opacity:1;transform:scale(1) rotate(0);filter:blur(0)}}
+@keyframes ambientGlow{from{opacity:.25;transform:scale(.92)}to{opacity:.9;transform:scale(1.05)}}
+@media(hover:hover) and (pointer:fine){.home-page#top .wheel:hover .orbit{animation-play-state:paused!important}.home-page#top .orbit a:hover text{fill:#9b8258;animation:none}}
+@media(max-width:650px){
+ .home-page#top .wheel{--ring-size:min(94vw,calc(100vw - 24px),440px,max(220px,calc(100svh - 340px)))}
+ .home-page#top .center-logo{width:57%;height:57%}
+ .home-page#top .xen-social{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-width:390px!important}
+}
+@media(max-height:500px) and (min-width:651px){.home-page#top .hero{flex-direction:row;gap:28px}.home-page#top .wheel{--ring-size:min(42vw,calc(100svh - 190px))}.home-page#top .home-caption{max-width:46vw}}
+@media(prefers-reduced-motion:reduce){.home-page#top.ring-ready .orbit,.home-page#top .orbit text,.home-page#top .wheel,.home-page#top .hero::before{animation:none!important}.home-page#top .orbit-pause{display:none}}
+</style>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
 <header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html" aria-current="page">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header>
-<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="XEN creative categories" class="orbit" role="img" viewBox="0 0 600 600"><defs><path d="M300,300 m-265,0 a265,265 0 1,1 530,0 a265,265 0 1,1 -530,0" id="circle"></path></defs><text text-anchor="start"><textpath href="#circle" startoffset="0.000000%">STORYBOOKS</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="9.090909%">ANIMATION</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="18.181818%">SOUND</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="27.272727%">CINEMATIC</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="36.363636%">SNAP</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="45.454545%">DESIGN</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="54.545455%">APPAREL</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="63.636364%">ARCHITECTURE</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="72.727273%">SPACE</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="81.818182%">ARTWORKS</textpath></text><text text-anchor="start"><textpath href="#circle" startoffset="90.909091%">SNS MANAGEMENT</textpath></text></svg><img alt="XEN symbol logo" class="center-logo" src="./xen-logo.png"/ width="2232" height="2293"></div></section>
-<section class="index" id="creative-index"><h1 class="section-label studio-heading"><span class="title-en">XEN | CREATIVE STUDIO JAPAN</span></h1><span class="home-ja">ホーム・作品一覧</span><a class="index-link" href="./studio.html" style="border-top:1px solid #f0f0f0"><span class="index-en">STUDIO</span><span class="index-ja">スタジオ紹介・制作のご依頼</span><span class="arrow">↗</span></a><a class="index-link" href="./creator.html"><span class="index-en">CREATOR</span><span class="index-ja">クリエイター紹介・プロフィール</span><span class="arrow">↗</span></a><a class="index-link" href="./storybooks.html"><span class="index-en">STORYBOOKS</span><span class="index-ja">絵本</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./animation.html"><span class="index-en">ANIMATION</span><span class="index-ja">アニメーション</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./sound.html"><span class="index-en">SOUND</span><span class="index-ja">音楽</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./cinematic.html"><span class="index-en">CINEMATIC</span><span class="index-ja">映像</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./snap.html"><span class="index-en">SNAP</span><span class="index-ja">写真</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./design.html"><span class="index-en">DESIGN</span><span class="index-ja">デザイン</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./apparel.html"><span class="index-en">APPAREL</span><span class="index-ja">アパレル</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./architecture.html"><span class="index-en">ARCHITECTURE</span><span class="index-ja">建築</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./space.html"><span class="index-en">SPACE</span><span class="index-ja">空間</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./artworks.html"><span class="index-en">ARTWORKS</span><span class="index-ja">作品集</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./sns-management.html"><span class="index-en">SNS MANAGEMENT</span><span class="index-ja">SNS運用</span><span class="arrow">↗</span></a>
-<a class="index-link" href="./price-list.html"><span class="index-en">PRICE LIST</span><span class="index-ja">料金一覧</span><span class="arrow">↗</span></a></section>
+<main id="home">
+<section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero">
+<div class="wheel">
+<svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path d="M300,300 m-265,0 a265,265 0 1,1 530,0 a265,265 0 1,1 -530,0" id="circle"></path></defs><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><path class="orbit-hit" d="M48.124 292.084 A252 252 0 0 1 83.829 170.485" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="4.545455%" text-anchor="middle">STORYBOOKS</textPath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><path class="orbit-hit" d="M92.388 157.167 A252 252 0 0 1 188.167 74.174" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="13.636364%" text-anchor="middle">ANIMATION</textPath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><path class="orbit-hit" d="M202.567 67.598 A252 252 0 0 1 328.011 49.562" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="22.727273%" text-anchor="middle">SOUND</textPath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><path class="orbit-hit" d="M343.681 51.815 A252 252 0 0 1 458.961 104.462" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="31.818182%" text-anchor="middle">CINEMATIC</textPath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><path class="orbit-hit" d="M470.926 114.829 A252 252 0 0 1 539.443 221.444" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="40.909091%" text-anchor="middle">SNAP</textPath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><path class="orbit-hit" d="M543.903 236.633 A252 252 0 0 1 543.903 363.367" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="50.000000%" text-anchor="middle">DESIGN</textPath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><path class="orbit-hit" d="M539.443 378.556 A252 252 0 0 1 470.926 485.171" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="59.090909%" text-anchor="middle">APPAREL</textPath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><path class="orbit-hit" d="M458.961 495.538 A252 252 0 0 1 343.681 548.185" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="68.181818%" text-anchor="middle">ARCHITECTURE</textPath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><path class="orbit-hit" d="M328.011 550.438 A252 252 0 0 1 202.567 532.402" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="77.272727%" text-anchor="middle">SPACE</textPath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><path class="orbit-hit" d="M188.167 525.826 A252 252 0 0 1 92.388 442.833" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="86.363636%" text-anchor="middle">ARTWORKS</textPath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><path class="orbit-hit" d="M83.829 429.515 A252 252 0 0 1 48.124 307.916" aria-hidden="true"/><text text-anchor="middle"><textPath href="#circle" startOffset="95.454545%" text-anchor="middle">SNS MANAGEMENT</textPath></text></a></svg>
+<img alt="XEN symbol logo" class="center-logo" src="./xen-logo.png" width="2232" height="2293">
+<button class="orbit-pause" type="button" aria-label="円形メニューの回転を停止" aria-pressed="false" hidden>Ⅱ</button>
+</div>
+<div class="home-caption" id="creative-index">
+<h1>XEN | CREATIVE STUDIO JAPAN</h1>
+<nav class="home-info" aria-label="スタジオ・プロフィール・料金">
+<a href="./studio.html" aria-label="STUDIO｜スタジオ紹介・制作のご依頼">STUDIO</a>
+<a href="./creator.html" aria-label="CREATOR｜クリエイター紹介・プロフィール">CREATOR</a>
+<a href="./price-list.html" aria-label="PRICE LIST｜料金一覧">PRICE LIST</a>
+</nav>
+</div>
+</section>
 </main>
 <footer class="xen-footer" id="xen-footer">
 <p class="xen-footer-title">CONNECT WITH XEN</p>
@@ -185,36 +237,22 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <a class="xen-back-top" href="#top">Back to Top</a><p class="xen-powered">Powered by XEN</p><div class="xen-copyright">© XEN CREATIVE STUDIO JAPAN</div>
 </footer>
 <script>
-/* Equalize the visible arc gap between neighboring category labels. */
-(function () {
-  const svg = document.querySelector('svg.orbit');
-  if (!svg) return;
-  const path = svg.querySelector('#circle');
-  const labels = Array.from(svg.querySelectorAll('textPath'));
-  function arrange() {
-    const circumference = path.getTotalLength();
-    const texts = labels.map(node => node.parentElement);
-    texts.forEach(node => node.style.removeProperty('font-size'));
-    // Measure real glyph widths in the browser, including letter spacing.
-    let widths = texts.map(node => node.getComputedTextLength());
-    const maxOccupancy = circumference * 0.81;
-    const total = widths.reduce((a,b) => a+b, 0);
-    if (total > maxOccupancy) {
-      const base = parseFloat(getComputedStyle(texts[0]).fontSize);
-      svg.style.setProperty('--orbit-font', (base * maxOccupancy / total) + 'px');
-      texts.forEach(node => node.style.fontSize = 'var(--orbit-font)');
-      widths = texts.map(node => node.getComputedTextLength());
-    }
-    const occupied = widths.reduce((a,b) => a+b, 0);
-    const gap = (circumference - occupied) / labels.length;
-    let offset = gap / 2;
-    labels.forEach((node,i) => {
-      node.setAttribute('startOffset', (offset / circumference * 100).toFixed(6) + '%');
-      offset += widths[i] + gap;
-    });
-  }
-  arrange();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(arrange);
-  window.addEventListener('resize', arrange, {passive:true});
+/* V2 has centered fixed slots; do not apply the newer equal-gap arrangement. */
+(() => {
+  const body = document.body;
+  const button = document.querySelector('.orbit-pause');
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  if (!button) return;
+  body.classList.add('ring-ready');
+  button.addEventListener('click', () => {
+    const paused = button.getAttribute('aria-pressed') !== 'true';
+    body.dataset.orbitPaused = String(paused);
+    button.setAttribute('aria-pressed', String(paused));
+    button.setAttribute('aria-label', paused ? '円形メニューの回転を再開' : '円形メニューの回転を停止');
+    button.textContent = paused ? '▷' : 'Ⅱ';
+  });
+  const syncMotion = () => { button.hidden = motion.matches; };
+  syncMotion();
+  motion.addEventListener('change', syncMotion);
 })();
 </script><script src="./xen-shared.js?v=20261015-luxury" defer></script><script src="./xen-motion.js?v=20261015-luxury" defer></script></body></html>
