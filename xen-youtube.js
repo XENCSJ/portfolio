@@ -1,43 +1,30 @@
-/* Shared STORYBOOKS player and motion for every YouTube work. */
-/* Keep a direct YouTube link and an image fallback. Load the player only on request. */
+/* Shared STORYBOOKS player and motion for every YouTube work.
+   Prepare the native player before interaction: one click goes directly to
+   YouTube's play control, without a facade click or unmuted autoplay request. */
 document.querySelectorAll('.video-launch').forEach((link) => {
-  const thumbnail = link.querySelector('img');
   const id = link.dataset.videoId;
   if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return;
+  const container = link.closest('.video-container');
+  if (!container) return;
 
-  // Both sources are 16:9. hqdefault embeds black bars in a 4:3 image.
-  // Some videos return a small placeholder instead of a max-resolution image.
-  if (thumbnail) {
-    const fallback = 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg';
-    const checkThumbnail = () => {
-      if (thumbnail.src !== fallback &&
-          (!thumbnail.naturalWidth || thumbnail.naturalWidth <= 120 ||
-           Math.abs(thumbnail.naturalWidth / thumbnail.naturalHeight - 16 / 9) > 0.02)) {
-        thumbnail.src = fallback;
-      }
-    };
-    thumbnail.addEventListener('load', checkThumbnail);
-    thumbnail.addEventListener('error', checkThumbnail);
-    if (thumbnail.complete) checkThumbnail();
-  }
+  // Preserve the original per-video parameters, including cinematic links.
+  const original = container.querySelector('template.cinematic-player')?.content.querySelector('iframe');
+  const url = new URL('https://www.youtube-nocookie.com/embed/' + id);
+  if (original) url.search = new URL(original.src).search;
+  url.searchParams.set('autoplay', '0');
+  url.searchParams.set('playsinline', '1');
+  url.searchParams.set('controls', '1');
 
-  link.addEventListener('click', (event) => {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    const frame = document.createElement('iframe');
-    // Retain per-video URL parameters supplied with a cinematic template.
-    const original = link.parentElement.querySelector('template.cinematic-player')?.content.querySelector('iframe');
-    const url = new URL('https://www.youtube-nocookie.com/embed/' + id);
-    if (original) url.search = new URL(original.src).search;
-    url.searchParams.set('autoplay', '1');
-    frame.src = url.href;
-    frame.title = link.closest('.work')?.querySelector('h3')?.textContent || 'XEN YouTube作品';
-    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    frame.allowFullscreen = true;
-    frame.referrerPolicy = 'strict-origin-when-cross-origin';
-    link.parentElement.replaceChildren(frame);
-    frame.focus();
-  });
+  const frame = document.createElement('iframe');
+  frame.src = url.href;
+  frame.title = link.closest('.work')?.querySelector('h3')?.textContent.trim() || 'XEN YouTube作品';
+  frame.width = '560';
+  frame.height = '315';
+  frame.loading = 'lazy';
+  frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  frame.allowFullscreen = true;
+  frame.referrerPolicy = 'strict-origin-when-cross-origin';
+  container.replaceChildren(frame);
 });
 
 
