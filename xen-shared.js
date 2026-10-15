@@ -65,6 +65,14 @@
     const caption = viewer.querySelector('.viewer-caption');
     const original = viewer.querySelector('.viewer-original');
     const counter = viewer.querySelector('.viewer-counter');
+    const enhanced = viewer.hasAttribute('data-gallery-enhanced');
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let activeWorks = works;
+    let animateGallery = false;
+    let viewerAnimation;
+    let imageAnimation;
+    let closing = false;
+    let gesture;
     const status = document.createElement('p');
     status.className = 'viewer-status';
     status.setAttribute('role', 'status');
@@ -72,6 +80,10 @@
     preview.addEventListener('load', () => {
       viewer.setAttribute('aria-busy', 'false');
       status.textContent = '';
+      if (animateGallery && viewer.open && !motion.matches && preview.animate) {
+        imageAnimation?.cancel();
+        imageAnimation = preview.animate([{opacity: .35}, {opacity: 1}], {duration: 180});
+      }
     });
     preview.addEventListener('error', () => {
       viewer.setAttribute('aria-busy', 'false');
@@ -79,27 +91,50 @@
     });
     let index = 0;
     let opener;
+    const close = () => {
+      if (closing || !viewer.open) return;
+      gesture = undefined;
+      if (!animateGallery || motion.matches || !viewer.animate) {
+        viewer.close();
+        return;
+      }
+      closing = true;
+      viewerAnimation?.cancel();
+      viewerAnimation = viewer.animate([{opacity: 1}, {opacity: 0}], {duration: 140, easing: 'ease-out'});
+      viewerAnimation.onfinish = () => viewer.close();
+    };
     const show = (next) => {
-      index = (next + works.length) % works.length;
-      const work = works[index];
+      if (closing || !activeWorks.length) return;
+      index = (next + activeWorks.length) % activeWorks.length;
+      const work = activeWorks[index];
+      imageAnimation?.cancel();
       viewer.setAttribute('aria-busy', 'true');
       status.textContent = '画像を読み込んでいます…';
       preview.src = work.href;
       preview.alt = work.querySelector('img').alt;
       caption.textContent = preview.alt;
       original.href = work.href;
-      counter.textContent = `${index + 1} / ${works.length}`;
+      counter.textContent = `${index + 1} / ${activeWorks.length}`;
     };
     works.forEach((work, position) => {
       work.addEventListener('click', (event) => {
         if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         opener = work;
-        show(position);
+        const gallery = enhanced && work.closest('.xen-square-gallery');
+        animateGallery = Boolean(gallery);
+        activeWorks = gallery ? Array.from(gallery.querySelectorAll('.gallery-item')) : works;
+        show(gallery ? activeWorks.indexOf(work) : position);
         viewer.showModal();
+        if (animateGallery && !motion.matches && viewer.animate) {
+          viewerAnimation?.cancel();
+          viewerAnimation = viewer.animate(
+            [{opacity: 0, transform: 'scale(.985)'}, {opacity: 1, transform: 'scale(1)'}],
+            {duration: 200, easing: 'cubic-bezier(.22,.68,0,1)'});
+        }
       });
     });
-    viewer.querySelector('.viewer-close').addEventListener('click', () => viewer.close());
+    viewer.querySelector('.viewer-close').addEventListener('click', close);
     viewer.querySelector('.viewer-prev').addEventListener('click', () => show(index - 1));
     viewer.querySelector('.viewer-next').addEventListener('click', () => show(index + 1));
     viewer.addEventListener('keydown', (event) => {
@@ -111,9 +146,48 @@
       if (event.target !== viewer) return;
       const rect = viewer.getBoundingClientRect();
       if (event.clientX < rect.left || event.clientX > rect.right ||
-          event.clientY < rect.top || event.clientY > rect.bottom) viewer.close();
+          event.clientY < rect.top || event.clientY > rect.bottom) close();
     });
-    viewer.addEventListener('close', () => opener?.focus());
+    viewer.addEventListener('close', () => {
+      closing = false;
+      gesture = undefined;
+      viewerAnimation?.cancel();
+      imageAnimation?.cancel();
+      opener?.focus();
+    });
+    if (enhanced) {
+      viewer.addEventListener('cancel', (event) => {
+        if (!animateGallery) return;
+        event.preventDefault();
+        close();
+      });
+      motion.addEventListener('change', () => {
+        if (!motion.matches) return;
+        viewerAnimation?.cancel();
+        imageAnimation?.cancel();
+        if (closing) viewer.close();
+      });
+      // Only a deliberate one-finger horizontal gesture on the image navigates.
+      // Vertical scrolling, multi-touch and pinch zoom keep their native behavior.
+      viewer.addEventListener('pointerdown', (event) => {
+        if (!event.isPrimary) { gesture = undefined; return; }
+        if (!animateGallery || closing || event.pointerType !== 'touch' || event.target !== preview ||
+            (window.visualViewport?.scale || 1) > 1) return;
+        gesture = {id: event.pointerId, x: event.clientX, y: event.clientY, time: event.timeStamp};
+      });
+      viewer.addEventListener('pointercancel', () => { gesture = undefined; });
+      viewer.addEventListener('pointerup', (event) => {
+        const start = gesture;
+        gesture = undefined;
+        if (!start || start.id !== event.pointerId || closing || !viewer.open) return;
+        const dx = event.clientX - start.x;
+        const dy = event.clientY - start.y;
+        const threshold = Math.max(40, Math.min(80, preview.clientWidth * .12));
+        if (Math.abs(dx) < threshold || Math.abs(dy) > Math.abs(dx) * .65 ||
+            event.timeStamp - start.time > 800 || (window.visualViewport?.scale || 1) > 1) return;
+        show(index + (dx < 0 ? 1 : -1));
+      });
+    }
   }
 
   // Display copies may fail independently of preserved originals.
