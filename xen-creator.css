@@ -1,0 +1,19 @@
+/* Reference copy belongs beside its work; shared navigation stays unchanged. */
+.creator-page .creator-identity { text-align: center; margin: -14px auto 48px; }
+.creator-page .creator-identity h2 { margin: 0 0 10px; font-size: 18px; line-height: 1.6; font-weight: 500; letter-spacing: .04em; }
+.creator-page .creator-identity p { margin: 0; font-size: 12px; line-height: 1.8; color: #777; }
+.creator-page .creator-copy,
+.creator-page .creator-fields { width: 100%; max-width: 760px; margin: 28px auto 0; color: #606060; font-size: 14px; line-height: 2.2; overflow-wrap: anywhere; }
+.creator-page .creator-copy p { margin: 0; }
+.creator-page .creator-fields { list-style: none; padding: 0; }
+.creator-page .creator-fields li { display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 16px; padding: 13px 0; border-bottom: 1px solid #eee; }
+.creator-page .creator-fields li:first-child { border-top: 1px solid #eee; }
+.creator-page .creator-fields span { color: #292929; font-size: 13px; letter-spacing: .04em; }
+.creator-page .creator-bio { margin-block: 48px; }
+@media (max-width:650px) {
+  .creator-page .creator-copy,
+  .creator-page .creator-fields { font-size: 13px; line-height: 2.1; margin-top: 24px; }
+  .creator-page .creator-fields li { grid-template-columns: 100px minmax(0,1fr); gap: 12px; }
+  .creator-page .creator-fields span { font-size: 12px; }
+  .creator-page .creator-bio { margin-block: 38px; }
+}
