@@ -12,7 +12,9 @@ body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item {
   position: relative;
   display: block;
   min-width: 0;
-  aspect-ratio: 3 / 4;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -22,6 +24,15 @@ body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item {
   background: #fff;
   box-shadow: none;
   isolation: isolate;
+}
+/* Reserve 3:4 in normal flow, including before lazy images load.
+   An absolutely positioned image must not be the tile's only child box. */
+body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-top: 133.3333333333%;
 }
 body.xen-gallery-page.detail-page .xen-tile-gallery > .gallery-item > img {
   position: absolute;
