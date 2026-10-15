@@ -1,0 +1,125 @@
+/* Editorial exhibition, scoped to DESIGN. Original compositions remain intact. */
+body.design-page.detail-page main {
+  max-width:1320px;
+  padding-inline:clamp(20px,5.5vw,84px);
+  padding-bottom:clamp(80px,10vw,150px);
+}
+body.design-page.detail-page main .hero { text-align:left;max-width:100%; }
+body.design-page.detail-page main .hero h1 {
+  font-size:clamp(54px,10vw,128px);font-weight:400;letter-spacing:-.035em;
+  line-height:1.05;margin:30px 0 34px;overflow-wrap:normal;
+}
+body.design-page.detail-page main h1 .page-title-ja {
+  font-size:14px;letter-spacing:.22em;line-height:1.8;margin-top:20px;color:#606064;
+}
+.design-page .hero .lead {
+  max-width:680px;margin:0;font-size:16px;line-height:1.85;color:#4d4d52;
+}
+.design-page .design-category-nav {
+  display:flex;flex-wrap:wrap;gap:4px 28px;margin-top:44px;
+  padding:14px 0;border-block:1px solid #dedee1;
+}
+.design-page .design-category-nav a {
+  position:relative;display:inline-flex;align-items:center;min-height:44px;
+  padding:8px 0;font-size:11px;letter-spacing:.12em;color:#3a3a3e;
+  transition:color 280ms ease;
+}
+.design-page .design-category-nav a::after {
+  content:'';position:absolute;inset:auto 0 6px;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:left;transition:transform 300ms ease-out;
+}
+.design-page .design-category-nav a:focus-visible::after { transform:scaleX(1); }
+.design-page .design-view-hint {
+  margin:18px 0 0;text-align:right;font-size:12px;line-height:1.8;color:#68686d;
+}
+.design-page .design-view-hint span { margin-left:8px; }
+.design-page .design-project {
+  margin-top:clamp(72px,10vw,138px);scroll-margin-top:30px;min-width:0;
+}
+.design-page .design-project:first-of-type { margin-top:64px; }
+.design-page .design-project-line {
+  height:1px;width:100%;background:linear-gradient(90deg,#d4d4d8,#efeff1);
+  transform-origin:left;
+}
+.design-page .design-project-heading { margin:26px 0 34px; }
+.design-page .design-index {
+  display:flex;align-items:baseline;gap:13px;margin:0 0 22px;font-size:10px;
+  line-height:1.8;letter-spacing:.15em;font-weight:500;color:#66666b;
+}
+.design-page .design-index span { font-variant-numeric:tabular-nums;color:#202024; }
+.design-page .design-project h2 {
+  margin:0;font-size:clamp(27px,4.7vw,58px);font-weight:400;letter-spacing:-.025em;
+  line-height:1.14;overflow-wrap:anywhere;text-wrap:balance;
+}
+.design-page .design-subtitle { font-size:14px;line-height:1.8;color:#626267;margin:16px 0 0; }
+.design-page .design-visuals {
+  display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(12px,1.8vw,24px);
+  align-items:center;min-width:0;
+}
+.design-page .design-visuals .gallery-item {
+  display:block;position:relative;min-width:0;width:100%;height:auto;
+  aspect-ratio:auto;overflow:visible;background:transparent;isolation:isolate;
+  transition:transform 650ms var(--xen-ease),filter 280ms ease;
+}
+.design-page .design-visuals .gallery-item img {
+  display:block;width:100%;height:auto;max-width:100%;object-fit:contain;
+  transform:none;filter:none;
+}
+.design-page .design-visuals .gallery-item::after {
+  content:attr(data-gallery-label);position:absolute;inset:auto 14px 14px auto;
+  max-width:calc(100% - 28px);padding:9px 12px;background:#fffffff0;color:#242428;
+  font-size:11px;line-height:1.6;opacity:0;pointer-events:none;
+  transition:opacity 280ms ease,transform 280ms ease;transform:translateY(4px);
+}
+.design-page .design-visuals .gallery-item:focus-visible::after { opacity:1;transform:none; }
+.design-page .design-clinic,.design-page .design-character-board { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.design-page .design-wide { grid-column:1/-1; }
+.design-page .design-character { max-width:1040px;margin-inline:auto; }
+.design-page .design-dark { background:#000; }
+.design-page .design-poster { max-width:560px;margin:12px auto 0; }
+.design-page .design-kabukicho { grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:clamp(24px,4vw,54px); }
+.design-page .design-uniform { grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,54px); }
+.design-page .design-jewelry { grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:transparent; }
+.design-page .design-collection { border:0; }
+.design-page .design-description { max-width:760px;margin:30px 0 0 auto; }
+.design-page .design-description p {
+  margin:0 0 18px;font-size:16px;line-height:1.85;color:#49494e;
+  overflow-wrap:anywhere;line-break:strict;
+}
+.design-page .design-description h3 { font-size:16px;font-weight:500;line-height:1.8;margin:0 0 30px; }
+.design-page .design-description h4 { font-size:14px;font-weight:500;line-height:1.8;margin:28px 0 14px; }
+@media(hover:hover) and (pointer:fine) {
+  .design-page .design-category-nav a:hover { color:#000; }
+  .design-page .design-category-nav a:hover::after { transform:scaleX(1); }
+  .design-page .design-visuals .gallery-item:hover::after { opacity:1;transform:none; }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  /* Scale the entire composition, rather than cropping its edges. */
+  .design-page .design-visuals .gallery-item:hover { transform:scale(1.02);z-index:2; }
+}
+@media(prefers-reduced-motion:no-preference) {
+  .design-page h1.xen-in-view .title-en { animation:design-title-spacing 750ms var(--xen-ease) both; }
+}
+@keyframes design-title-spacing { from{letter-spacing:.015em}to{letter-spacing:-.035em} }
+@media(max-width:800px) {
+  .design-page .design-jewelry { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .design-page .design-uniform { grid-template-columns:minmax(0,1fr); }
+  .design-page .design-spec { max-width:760px;margin-inline:auto; }
+}
+@media(max-width:600px) {
+  body.design-page.detail-page main { padding-inline:20px; }
+  body.design-page.detail-page main .hero h1 { font-size:clamp(54px,16vw,88px);margin:26px 0; }
+  body.design-page.detail-page main h1 .page-title-ja { font-size:14px;margin-top:18px; }
+  .design-page .hero .lead,.design-page .design-description p { font-size:15px;line-height:1.85; }
+  .design-page .design-category-nav { gap:0;justify-content:space-between;margin-top:32px; }
+  .design-page .design-category-nav a { font-size:10px;letter-spacing:.04em;padding-inline:3px; }
+  .design-page .design-project-heading { margin:22px 0 26px; }
+  .design-page .design-index { font-size:9px;gap:10px;margin-bottom:18px; }
+  .design-page .design-project h2 { font-size:clamp(27px,7.4vw,40px); }
+  .design-page .design-description { margin-top:24px; }
+  .design-page .design-clinic,.design-page .design-kabukicho { grid-template-columns:minmax(0,1fr); }
+  .design-page .design-character-board { gap:12px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .design-page .design-visuals .gallery-item:hover { transform:none; }
+}

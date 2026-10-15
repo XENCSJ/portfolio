@@ -1,0 +1,113 @@
+/* Shared finish; layouts, artwork and content remain page-owned. */
+:root { --xen-ink:#171719; --xen-silver:#aaaeb5; --xen-line:#e4e4e6; --xen-ease:cubic-bezier(.22,.68,0,1); --xen-hover:280ms; }
+html { scrollbar-gutter:stable; }
+body.xen-polished { color:var(--xen-ink); }
+body.xen-polished .reveal,body.xen-polished .xen-reveal { opacity:1;transform:none; }
+body.xen-polished.detail-page main { padding-top:clamp(38px,6vw,78px); }
+body.xen-polished.detail-page main .hero h1 { font-size:clamp(32px,5vw,64px);font-weight:500;letter-spacing:.025em;line-height:1.18;margin:20px 0 38px; }
+body.xen-polished.detail-page main h1 .page-title-ja { font-size:12px;font-weight:400;letter-spacing:.18em;line-height:1.8;margin-top:18px;color:#727277;white-space:normal; }
+.xen-polished .title-en { display:block; }
+.xen-polished .title-word { display:inline-block;white-space:nowrap; }
+.xen-polished .title-char { display:inline-block; }
+.xen-polished .eyebrow { color:#74747a;letter-spacing:.17em;line-height:1.8; }
+.xen-polished .lead,.xen-polished .content { color:#5e5e63; }
+.xen-polished .rule { background:linear-gradient(90deg,#d7d7db,#ececee);transform-origin:left; }
+.xen-polished.detail-page main :is(.pill,.series-title,.project-group > h2) { background:transparent;color:var(--xen-ink);border:0;border-bottom:1px solid #d5d5d9;border-radius:0;padding:10px 0 14px;font-size:12px;font-weight:500;letter-spacing:.12em;line-height:1.8;max-width:100%; }
+.xen-polished .project-group { margin-block:clamp(42px,7vw,78px); }
+.xen-polished .project-group > p { max-width:760px;margin-inline:auto;line-height:2.15; }
+.xen-polished.video-page .work h3 { background:transparent;color:var(--xen-ink);border-radius:0;padding:0 0 15px;line-height:1.9;letter-spacing:.045em;font-weight:500;font-size:13px; }
+.xen-polished .work { transform:none; }
+.xen-polished .video-container .thumb img { transition:transform 700ms var(--xen-ease),filter var(--xen-hover); }
+/* The same in-flow reservation also prevents empty video frames collapsing. */
+.xen-polished .video-container { aspect-ratio:auto; }
+.xen-polished .video-container::before { content:'';display:block;width:100%;height:0;padding-top:56.25%; }
+.xen-polished .video-container .play { border:1px solid #ffffffa8;transition:background var(--xen-hover),color var(--xen-hover),box-shadow var(--xen-hover); }
+.xen-polished :is(.text-link,.video-source,.xen-back-top) { text-decoration:none;background-image:linear-gradient(currentColor,currentColor);background-position:left calc(100% - 7px);background-size:0 1px;background-repeat:no-repeat;transition:color var(--xen-hover),background-size 400ms var(--xen-ease); }
+.xen-polished :is(.text-link,.video-source,.xen-back-top):focus-visible { background-size:100% 1px; }
+.xen-polished .xen-header { border-bottom-color:var(--xen-line); }
+.xen-polished .xen-menu { border-color:var(--xen-line);box-shadow:0 18px 40px #15151b08;animation:none; }
+.xen-polished .xen-menu a { position:relative;min-height:44px;border-bottom-color:#efeff1;transition:background var(--xen-hover),color var(--xen-hover),padding var(--xen-hover); }
+.xen-polished .xen-menu a[aria-current=page] { color:#171719;font-weight:700; }
+.xen-polished .xen-menu a::after { content:'';position:absolute;inset:auto 5px -1px;height:1px;background:#8c8d92;transform:scaleX(0);transform-origin:left;transition:transform var(--xen-hover); }
+.xen-polished :is(a,button,summary):focus-visible { outline:2px solid #777a83;outline-offset:4px; }
+.xen-polished footer { background:linear-gradient(180deg,#fff,#f7f7f8);border-top-color:var(--xen-line); }
+.xen-polished .xen-footer::before { background:linear-gradient(90deg,transparent,#b2b4bb,transparent); }
+.xen-polished :is(.shared-social,.xen-social) a { transition:color var(--xen-hover),transform var(--xen-hover) var(--xen-ease)!important;filter:none!important; }
+.xen-polished .xen-social a::after { background:#a6a8af; }
+.xen-polished :is(.shared-social,.xen-social) a svg { width:22px!important;height:22px!important; }
+.xen-polished .xen-social a:hover .xen-icon-label { color:#333!important; }
+.xen-polished .contact-actions a { border-radius:0;border-color:#bbbcc2;transition:color var(--xen-hover),background var(--xen-hover),border-color var(--xen-hover); }
+.xen-polished .image-viewer { box-shadow:0 18px 80px #0002; }
+.xen-polished .viewer-controls button { transition:background var(--xen-hover),border-color var(--xen-hover); }
+.xen-viewer-open,.xen-viewer-open body { overflow:hidden; }
+/* Preserve the in-flow 3:4 spacer from xen-gallery.css, including during motion. */
+body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item > img { transition:transform 700ms var(--xen-ease),filter var(--xen-hover); }
+body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item::after { content:attr(data-gallery-label);position:absolute;inset:auto 0 0;z-index:1;padding:28px 12px 12px;background:linear-gradient(transparent,#0008);color:#fff;font-size:10px;line-height:1.5;letter-spacing:.05em;opacity:0;pointer-events:none;transition:opacity var(--xen-hover); }
+.xen-polished.architecture-page .image-gallery:not(.xen-tile-gallery) { align-items:center; }
+.xen-polished.architecture-page .image-gallery:not(.xen-tile-gallery) img { object-fit:contain;transform:none; }
+.xen-polished.apparel-page main { max-width:1120px; }
+.xen-polished.apparel-page .image-gallery:not(.xen-tile-gallery) { align-items:center;gap:clamp(12px,2.5vw,28px); }
+.xen-polished.apparel-page .gallery-item { background:transparent;transition:transform 500ms var(--xen-ease); }
+.xen-polished.apparel-page .gallery-item img { object-fit:contain;transform:none; }
+.xen-polished.price-list-page :is(.price-card,.table-scroll th,.table-scroll td) { border-color:var(--xen-line); }
+.xen-polished.price-list-page .table-scroll th { background:#f6f6f7; }
+.xen-polished.price-list-page .price-value { font-variant-numeric:tabular-nums;letter-spacing:.015em; }
+.xen-polished.price-list-page .price-card { transition:border-color var(--xen-hover),transform var(--xen-hover) var(--xen-ease); }
+/* Keep INDEX's original wheel, equal-gap algorithm and responsive proportions. */
+.xen-polished.home-page .orbit { animation-duration:65s;transform-origin:center; }
+.xen-polished.home-page .orbit text { font-size:18.4px;letter-spacing:.65px; }
+.xen-polished.home-page .hero::before { background:radial-gradient(ellipse at 50% 50%,#d8d9de33,transparent 62%);animation:none; }
+.xen-polished.home-page .wheel { animation:xen-wheel-entry 700ms var(--xen-ease) both; }
+.xen-polished.home-page .center-logo { animation:none;filter:drop-shadow(0 8px 20px #25252c06); }
+.xen-polished.home-page .index-link { transition:color var(--xen-hover),background-size 450ms var(--xen-ease),transform var(--xen-hover);background-image:linear-gradient(#acaeb5,#acaeb5); }
+.xen-polished.home-page .index-link::before { background:linear-gradient(90deg,transparent,#babcc315,transparent); }
+.xen-polished.home-page .index-link:hover,.xen-polished.home-page .index-link:hover .index-ja { color:#55565c;letter-spacing:inherit; }
+/* Content is visible by default; only observed elements animate. */
+@media(prefers-reduced-motion:no-preference) {
+ .xen-polished main { animation:xen-page-entry 500ms ease-out; }
+ .xen-polished [data-xen-motion].xen-in-view { animation:xen-fade-up 650ms var(--xen-ease) var(--xen-delay,0ms) backwards; }
+ .xen-polished [data-xen-motion=image].xen-in-view { animation-name:xen-image-entry;animation-duration:800ms; }
+ .xen-polished [data-xen-motion=line].xen-in-view { animation-name:xen-line-entry;animation-duration:700ms; }
+ .xen-polished [data-xen-motion=title].xen-in-view { animation:none; }
+ .xen-polished [data-xen-motion=title].xen-in-view .title-char { animation:xen-letter-entry 650ms var(--xen-ease) var(--char-delay,0ms) backwards; }
+ .xen-polished [data-xen-motion=title].xen-in-view .page-title-ja { animation:xen-fade-up 650ms var(--xen-ease) 180ms backwards; }
+ .xen-polished .xen-menu:not([hidden]) > a { animation:xen-nav-entry 350ms var(--xen-ease) var(--nav-delay,0ms) backwards; }
+ .xen-polished .xen-menu a:focus { animation:none; }
+}
+@keyframes xen-page-entry { from{opacity:.35}to{opacity:1} }
+@keyframes xen-wheel-entry { from{opacity:.1;transform:scale(.985)}to{opacity:1;transform:none} }
+@keyframes xen-fade-up { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none} }
+@keyframes xen-image-entry { from{opacity:.15;clip-path:inset(4% 0 0);transform:translateY(10px)}to{opacity:1;clip-path:inset(0);transform:none} }
+@keyframes xen-letter-entry { from{opacity:0;transform:translateY(.3em)}to{opacity:1;transform:none} }
+@keyframes xen-line-entry { from{opacity:0;transform:scaleX(.05)}to{opacity:1;transform:scaleX(1)} }
+@keyframes xen-nav-entry { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none} }
+@media(hover:hover) and (pointer:fine) {
+ .xen-polished :is(.text-link,.video-source,.xen-back-top):hover { color:#171719;background-size:100% 1px; }
+ .xen-polished .xen-menu a:hover { color:#171719;background:#f7f7f8; }
+ .xen-polished .xen-menu a:hover::after { transform:scaleX(1); }
+ .xen-polished :is(.shared-social,.xen-social) a:hover { color:#202024!important; }
+ .xen-polished .contact-actions a:hover { background:#171719;color:#fff;border-color:#171719; }
+ .xen-polished .video-container .play:hover,.xen-polished .video-container .thumb:hover .play { background:#fff;box-shadow:0 0 0 7px #ffffff20; }
+ .xen-polished .work:hover { transform:none; }
+ .xen-polished .gallery-item:hover img { transform:none;filter:brightness(.98); }
+ body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item:hover::after { opacity:1; }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+ body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item:hover > img { transform:scale(1.025); }
+ .xen-polished .video-container .thumb:hover img { transform:scale(1.02); }
+ .xen-polished.apparel-page .gallery-item:hover { transform:translateY(-3px); }
+ .xen-polished.price-list-page .price-card:hover { transform:translateY(-2px);border-color:#a8aab0; }
+}
+@media(max-width:650px) {
+ body.xen-polished.detail-page main { padding-top:38px; }
+ body.xen-polished.detail-page main .hero h1 { font-size:clamp(30px,8.4vw,44px);margin-bottom:30px; }
+ body.xen-polished.detail-page main h1 .page-title-ja { margin-top:14px;font-size:11px; }
+ .xen-polished .eyebrow { letter-spacing:.1em; }
+ .xen-polished.home-page .orbit text { font-size:16.2px;letter-spacing:.45px; }
+ .xen-polished.detail-page .project-group > h2 { font-size:11px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .xen-polished *,.xen-polished *::before,.xen-polished *::after { animation:none!important;transition:none!important;scroll-behavior:auto!important; }
+ .xen-polished :is(.index-link,.shared-social a,.xen-social a,.gallery-item,.work,.price-card):hover { transform:none!important; }
+ .xen-polished .gallery-item img,.xen-polished .video-container img { transform:none!important; }
+}

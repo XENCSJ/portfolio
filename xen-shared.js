@@ -83,7 +83,8 @@
       status.textContent = '';
       if (animateGallery && viewer.open && !motion.matches && preview.animate) {
         imageAnimation?.cancel();
-        imageAnimation = preview.animate([{opacity: .35}, {opacity: 1}], {duration: 180});
+        imageAnimation = preview.animate([{opacity: .35}, {opacity: 1}],
+          {duration: 280, easing: 'cubic-bezier(.22,.68,0,1)'});
       }
     });
     preview.addEventListener('error', () => {
@@ -101,7 +102,9 @@
       }
       closing = true;
       viewerAnimation?.cancel();
-      viewerAnimation = viewer.animate([{opacity: 1}, {opacity: 0}], {duration: 140, easing: 'ease-out'});
+      viewerAnimation = viewer.animate(
+        [{opacity: 1, transform: 'scale(1)'}, {opacity: 0, transform: 'scale(.985)'}],
+        {duration: 280, easing: 'cubic-bezier(.22,.68,0,1)'});
       viewerAnimation.onfinish = () => viewer.close();
     };
     const show = (next) => {
@@ -122,17 +125,18 @@
         if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         opener = work;
-        const gallery = enhanced && work.closest('.xen-tile-gallery');
+        const gallery = enhanced && work.closest('.xen-tile-gallery, [data-gallery-group]');
         animateGallery = Boolean(gallery);
         viewer.classList.toggle('is-fullscreen-gallery', animateGallery);
         activeWorks = gallery ? Array.from(gallery.querySelectorAll('.gallery-item')) : works;
         show(gallery ? activeWorks.indexOf(work) : position);
         viewer.showModal();
+        document.documentElement.classList.add('xen-viewer-open');
         if (animateGallery && !motion.matches && viewer.animate) {
           viewerAnimation?.cancel();
           viewerAnimation = viewer.animate(
             [{opacity: 0, transform: 'scale(.985)'}, {opacity: 1, transform: 'scale(1)'}],
-            {duration: 200, easing: 'cubic-bezier(.22,.68,0,1)'});
+            {duration: 320, easing: 'cubic-bezier(.22,.68,0,1)'});
         }
       });
     });
@@ -167,6 +171,7 @@
           event.clientY < rect.top || event.clientY > rect.bottom) close();
     });
     viewer.addEventListener('close', () => {
+      document.documentElement.classList.remove('xen-viewer-open');
       closing = false;
       gesture = undefined;
       ignoreSwipeClick = false;
