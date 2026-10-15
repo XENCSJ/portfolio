@@ -1,0 +1,88 @@
+/* SNS-only presentation. Content remains visible without JavaScript or motion. */
+body.sns-management-page main { max-width:1120px;padding-inline:clamp(20px,5vw,64px); }
+.sns-management-page :is(.sns-results,.sns-statement,.sns-process,.sns-case,.sns-services,.sns-strengths,.sns-fit,.sns-contact) { margin-block:clamp(64px,9vw,112px);min-width:0; }
+.sns-management-page .hero .lead { text-align:center;font-size:15px;line-height:1.85; }
+.sns-management-page .sns-section-heading { margin-bottom:28px; }
+.sns-management-page .sns-kicker { margin:0 0 12px;font-size:10px;letter-spacing:.2em;font-weight:500;line-height:1.8;color:#73737a; }
+.sns-management-page .sns-section-heading h2 { margin:0;font-size:clamp(22px,3vw,32px);font-weight:500;line-height:1.6;letter-spacing:.035em;overflow-wrap:anywhere; }
+.sns-management-page .sns-metrics { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:0;background:#dfdfe2; }
+.sns-management-page .sns-metric { position:relative;overflow:hidden;min-width:0;padding:clamp(24px,4vw,48px);background:#f6f6f7; }
+.sns-management-page .sns-metric dt { font-size:clamp(12px,1.3vw,15px);line-height:1.8;color:#55555c; }
+.sns-management-page .sns-metric dd { display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin:20px 0 0;line-height:1.1; }
+.sns-management-page .sns-number { font-size:clamp(42px,7.6vw,92px);font-weight:400;letter-spacing:-.055em;font-variant-numeric:tabular-nums; }
+.sns-management-page .sns-unit { font-size:clamp(14px,2.2vw,25px);font-weight:400;white-space:nowrap;letter-spacing:.03em; }
+.sns-management-page .sns-metric-total { grid-column:1/-1;background:linear-gradient(120deg,#171719,#29292e);color:#fff; }
+.sns-management-page .sns-metric-total dt { color:#d7d7db; }
+.sns-management-page .sns-metric-total dd { margin-top:12px; }
+.sns-management-page .sns-metric-total .sns-number { font-size:clamp(90px,14vw,166px); }
+.sns-management-page .sns-metric-total .sns-unit { font-size:clamp(26px,5vw,48px); }
+.sns-management-page .sns-metric-total p { position:relative;margin:22px 0 0;color:#d7d7db;font-size:14px;line-height:1.85; }
+.sns-management-page .sns-metric-total::after { content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 25%,#ffffff07 45%,#ffffff13 50%,transparent 70%);transform:translateX(-110%);pointer-events:none; }
+.sns-management-page .sns-statement { padding-block:clamp(34px,6vw,72px);border-block:1px solid #dedee1; }
+.sns-management-page .sns-statement h2 { margin:26px 0;font-size:clamp(16px,2.3vw,24px);font-weight:400;line-height:1.8; }
+.sns-management-page .sns-statement h2 > span { display:block; }
+.sns-management-page .sns-statement h2 strong { display:block;margin-top:18px;font-size:clamp(29px,5.5vw,58px);font-weight:500;letter-spacing:-.035em;line-height:1.55; }
+.sns-management-page .sns-music-mark { font-size:.5em;vertical-align:top;margin-left:.15em; }
+.sns-management-page .sns-statement-copy { margin:28px 0 0;font-size:clamp(15px,1.8vw,18px);line-height:1.9;color:#56565c; }
+.sns-management-page .sns-mobile-break { display:none; }
+.sns-management-page .sns-process-list { display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:36px 0 0;padding:0;list-style:none; }
+.sns-management-page .sns-process-list li { position:relative;min-width:0;border-top:1px solid #b9b9c0;padding:20px 10px 0 0;font-size:clamp(16px,2.2vw,24px);line-height:1.6; }
+.sns-management-page .sns-step-index { display:block;margin-bottom:14px;color:#7a7a82;font-size:10px;letter-spacing:.12em; }
+.sns-management-page .sns-step-arrow { position:absolute;right:20%;bottom:3px;color:#8a8a92;font-size:18px; }
+.sns-management-page .sns-evidence { display:grid;grid-template-columns:minmax(0,1fr);gap:24px;margin-top:0; }
+.sns-management-page .sns-evidence .gallery-item { background:transparent; }
+.sns-management-page .sns-evidence .gallery-item img { width:100%;height:auto;object-fit:contain; }
+.sns-management-page .sns-evidence .gallery-item + .gallery-item { width:min(100%,560px);margin-inline:auto; }
+.sns-management-page :is(.sns-service-list,.sns-strength-list,.sns-fit-list) { padding:0;margin:0;list-style:none; }
+.sns-management-page :is(.sns-service-list,.sns-strength-list,.sns-fit-list) li { display:grid;grid-template-columns:32px minmax(0,1fr);align-items:baseline;gap:18px;position:relative;min-width:0;border-top:1px solid #dedee1;padding:24px 0; }
+.sns-management-page :is(.sns-service-list,.sns-strength-list,.sns-fit-list) p { margin:0;font-size:clamp(15px,1.8vw,18px);line-height:1.85;overflow-wrap:anywhere; }
+.sns-management-page .sns-list-index { font-size:10px;color:#7a7a82;letter-spacing:.12em;font-variant-numeric:tabular-nums; }
+.sns-management-page .sns-body { font-size:15px;line-height:1.9;color:#56565c;max-width:760px; }
+.sns-management-page .sns-disclaimer { margin:22px 0 0; }
+.sns-management-page .sns-strength-list { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px; }
+.sns-management-page .sns-strength-list p { font-size:clamp(18px,2.4vw,25px); }
+.sns-management-page .sns-fit { background:linear-gradient(130deg,#171719,#27272c);color:#fff;padding:clamp(26px,5vw,64px); }
+.sns-management-page .sns-fit .sns-kicker,.sns-management-page .sns-fit .sns-list-index { color:#b5b5bd; }
+.sns-management-page .sns-fit-list li { grid-template-columns:24px minmax(0,1fr) 18px;border-color:#ffffff30;gap:14px; }
+.sns-management-page .sns-fit-arrow { color:#bdbdc5;font-size:20px;transition:transform 280ms ease-out; }
+.sns-management-page .sns-contact { padding-top:40px;border-top:1px solid #dedee1; }
+.sns-management-page .contact-actions { display:flex;flex-wrap:wrap;gap:12px;margin:30px 0 0; }
+.sns-management-page .contact-actions a { display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:14px 24px;border:1px solid #bcbcc3;font-size:14px;line-height:1.6; }
+.sns-management-page .contact-actions a:first-child { background:#171719;color:#fff;border-color:#171719; }
+@media(prefers-reduced-motion:no-preference) {
+ .sns-management-page .sns-metric-total.xen-in-view::after { animation:sns-silver-pass 1800ms ease-out 300ms both; }
+ .sns-management-page .sns-process.xen-in-view .sns-process-list li { animation:sns-step-entry 700ms var(--xen-ease) backwards; }
+ .sns-management-page .sns-process-list li:nth-child(2) { animation-delay:70ms; }
+ .sns-management-page .sns-process-list li:nth-child(3) { animation-delay:140ms; }
+ .sns-management-page .sns-process-list li:nth-child(4) { animation-delay:210ms; }
+ .sns-management-page .sns-process-list li:nth-child(5) { animation-delay:280ms; }
+}
+@keyframes sns-silver-pass { from{transform:translateX(-110%)}to{transform:translateX(110%)} }
+@keyframes sns-step-entry { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none} }
+@media(hover:hover) and (pointer:fine) {
+ .sns-management-page .contact-actions a:first-child:hover { background:#fff;color:#171719; }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+ .sns-management-page .sns-fit-list li:hover .sns-fit-arrow { transform:translate(2px,-2px); }
+}
+@media(max-width:650px) {
+ .sns-management-page .sns-metric { padding:24px 18px; }
+ .sns-management-page .sns-metric dd { margin-top:18px;gap:8px; }
+ .sns-management-page .sns-metric:not(.sns-metric-total) .sns-number { font-size:clamp(35px,9.6vw,58px); }
+ .sns-management-page .sns-metric:not(.sns-metric-total) .sns-unit { width:100%;font-size:14px; }
+ .sns-management-page .sns-metric-total { padding:32px 24px; }
+ .sns-management-page .sns-mobile-break { display:block; }
+ .sns-management-page .sns-process-list { grid-template-columns:minmax(0,1fr); }
+ .sns-management-page .sns-process-list li { display:flex;align-items:center;gap:26px;min-height:64px;padding:15px 12px;font-size:20px; }
+ .sns-management-page .sns-step-index { margin:0; }
+ .sns-management-page .sns-step-arrow { position:static;transform:rotate(90deg);margin-left:auto; }
+ .sns-management-page .sns-strength-list { grid-template-columns:minmax(0,1fr);gap:0; }
+ .sns-management-page :is(.sns-service-list,.sns-strength-list) li { grid-template-columns:24px minmax(0,1fr);gap:12px; }
+ .sns-management-page .sns-fit-list li { grid-template-columns:20px minmax(0,1fr) 14px;gap:10px; }
+ .sns-management-page .sns-fit-list p { font-size:15px; }
+ .sns-management-page .contact-actions { flex-direction:column; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .sns-management-page .sns-metric-total::after { display:none; }
+ .sns-management-page .sns-process-list li,.sns-management-page .sns-fit-arrow { animation:none!important;transition:none!important; }
+}
