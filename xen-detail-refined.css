@@ -1,0 +1,211 @@
+/* Non-INDEX pages only. CREATOR keeps the separately approved v2 files.
+   Existing image grids, crops, media ratios and common controls stay page-owned. */
+body.xen-detail-unified.xen-polished.detail-page main {
+  padding-top: clamp(32px, 4vw, 54px);
+  padding-bottom: clamp(52px, 6vw, 72px);
+  --detail-section-gap: clamp(36px, 5vw, 56px);
+}
+body.xen-detail-unified.xen-polished.detail-page main .hero { text-align: center; }
+body.xen-detail-unified.xen-polished.detail-page main .hero h1 {
+  margin: 14px 0 0;
+  font-size: clamp(36px, 4.2vw, 52px);
+  font-weight: 500;
+  letter-spacing: .035em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+  letter-spacing: .15em;
+  color: #727277;
+}
+.xen-detail-unified .hero .eyebrow { font-size: 10px; line-height: 1.8; }
+.xen-detail-unified.detail-page main .hero .lead {
+  max-width: 760px; margin: 26px auto 0;
+  font-size: 14px; line-height: 2; color: #55555b;
+}
+.xen-detail-unified.detail-page main .rule { margin: 28px 0 36px; }
+.xen-detail-unified.detail-page main > section + section { margin-top: var(--detail-section-gap); }
+.xen-detail-unified.detail-page main .project-group { margin-block: var(--detail-section-gap); }
+.xen-detail-unified.detail-page main > .rule + section > .project-group:first-child { margin-top: 0; }
+.xen-detail-unified.detail-page main :is(.pill, .series-title, .project-group > h2) {
+  position: relative; border-bottom: 0;
+  padding: 8px 0 12px; margin-bottom: 20px;
+  font-size: 12px; font-weight: 500; line-height: 1.8;
+  letter-spacing: .12em; overflow-wrap: anywhere;
+}
+.xen-detail-unified.detail-page main :is(.pill, .series-title, .project-group > h2)::after,
+.xen-detail-unified .studio-heading::after,
+.xen-detail-unified .sns-section-heading::after {
+  content: ''; position: absolute; inset: auto 0 0; height: 1px;
+  background: #d5d5d9; transform-origin: left; pointer-events: none;
+}
+.xen-detail-unified.detail-page main .grid { margin-block: 24px 0; }
+.xen-detail-unified.detail-page main .series-title { margin-top: var(--detail-section-gap); }
+.xen-detail-unified.detail-page main section > .series-title:first-child { margin-top: 0; }
+.xen-detail-unified.detail-page main .work h3 {
+  font-size: 14px; font-weight: 500; line-height: 1.8; letter-spacing: .025em;
+  overflow-wrap: anywhere;
+}
+.xen-detail-unified.detail-page main .content { font-size: 14px; line-height: 2; }
+.xen-detail-unified .detail-word { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
+.xen-detail-unified .detail-glyph { display: inline-block; }
+.xen-detail-unified .gallery-item { position: relative; }
+.xen-detail-unified .gallery-item img { transition: transform 650ms var(--xen-ease); }
+/* A separate decoration avoids the photographic grid's ::before ratio spacer. */
+.xen-detail-unified .detail-frame { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.xen-detail-unified .detail-frame::before,
+.xen-detail-unified .detail-frame::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  border: 0 solid #96969e30; transform-origin: left top;
+}
+.xen-detail-unified .detail-frame::before { border-block-width: 1px; }
+.xen-detail-unified .detail-frame::after { border-inline-width: 1px; }
+.xen-detail-unified .detail-action {
+  position: relative; isolation: isolate; overflow: hidden;
+  transition: border-color 280ms, background-color 280ms, color 280ms, transform 280ms var(--xen-ease);
+}
+.xen-detail-unified .detail-action::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+  background: linear-gradient(110deg, transparent 25%, #8d8d980e 48%, transparent 70%);
+  transform: translateX(-120%);
+}
+.xen-detail-unified .contact-actions a:first-child::before {
+  background: linear-gradient(110deg, transparent 25%, #ffffff22 48%, transparent 70%);
+}
+.xen-detail-unified .detail-arrow { display: inline-block; transition: transform 280ms var(--xen-ease); }
+.xen-detail-unified :is(.text-link, .video-source, .xen-spotify-link) { min-height: 44px; }
+.xen-detail-unified .text-link { padding-block: 12px; font-size: 14px; line-height: 1.5; }
+.xen-detail-unified .video-source { padding-block: 14px; }
+.xen-detail-unified :is(.contact-actions a, .design-category-nav a) { min-height: 48px; }
+.xen-detail-unified :is(a, button, input, textarea):focus-visible { outline: 2px solid #777a83; outline-offset: 4px; }
+.xen-detail-unified .contact-actions a:focus-visible { border-color: #666670; }
+.xen-detail-unified .detail-list-line { position: relative; border-top-color: transparent; }
+.xen-detail-unified .detail-list-line::after {
+  content: ''; position: absolute; inset: -1px 0 auto; height: 1px;
+  background: #dedee1; transform-origin: left; pointer-events: none;
+}
+
+/* STUDIO's prose and lists retain their own columns and reading order. */
+.xen-detail-unified.studio-page { --studio-accent: #73737b; --studio-line: #e4e4e7; }
+.xen-detail-unified.studio-page .studio-manifesto { background: #f7f7f8; border-color: #aaaab2; }
+.xen-detail-unified.studio-page .studio-manifesto h2 { font-size: clamp(36px, 4.2vw, 52px); }
+.xen-detail-unified.studio-page .studio-section { margin-top: var(--detail-section-gap); }
+.xen-detail-unified.studio-page .studio-heading { position: relative; padding-bottom: 14px; margin-bottom: 24px; }
+.xen-detail-unified.studio-page .studio-heading > span { padding: 0; background: none; border-radius: 0; color: #171719; font-size: 12px; }
+.xen-detail-unified.studio-page .studio-heading > small { font-size: 12px; margin-top: 10px; }
+.xen-detail-unified.studio-page :is(.studio-kicker, .studio-principles dt) { color: #73737b; }
+.xen-detail-unified.studio-page :is(.studio-prose, .studio-context, .studio-workflow p, .studio-principles dd, .studio-faq dt, .studio-faq dd, .studio-brief p, .studio-film-caption, .studio-closing) { font-size: 14px; line-height: 2; }
+.xen-detail-unified.studio-page .studio-prose p { margin-bottom: 20px; }
+.xen-detail-unified.studio-page .studio-context { margin-top: 24px; padding-top: 20px; }
+.xen-detail-unified.studio-page .contact-actions .studio-contact-primary:hover { background: #29292e; border-color: #bdbdc9; }
+
+/* DESIGN: only typography and vertical rhythm; every artwork grid is untouched. */
+.xen-detail-unified.design-page .design-category-nav { margin-top: 30px; }
+.xen-detail-unified.design-page .design-project { margin-top: var(--detail-section-gap); }
+.xen-detail-unified.design-page .design-project-heading { margin-block: 22px 26px; }
+.xen-detail-unified.design-page .design-index { margin-bottom: 14px; }
+.xen-detail-unified.design-page .design-project h2 { font-size: clamp(26px, 3.6vw, 44px); line-height: 1.2; }
+.xen-detail-unified.design-page .design-subtitle { margin-top: 12px; font-size: 12px; }
+.xen-detail-unified.design-page .design-description { margin-top: 24px; }
+.xen-detail-unified.design-page .design-description p { font-size: 15px; line-height: 2; }
+
+/* SNS: keep emphasis on results, with a restrained light pass on dark surfaces. */
+.xen-detail-unified.sns-management-page :is(.sns-results, .sns-statement, .sns-process, .sns-case, .sns-services, .sns-strengths, .sns-fit, .sns-contact) { margin-block: var(--detail-section-gap); }
+.xen-detail-unified.sns-management-page .sns-section-heading { position: relative; padding-bottom: 16px; margin-bottom: 24px; }
+.xen-detail-unified.sns-management-page .sns-section-heading h2 { font-size: clamp(20px, 2.5vw, 28px); }
+.xen-detail-unified.sns-management-page .sns-fit .sns-section-heading::after,
+.xen-detail-unified.sns-management-page .sns-fit .detail-list-line::after { background: #ffffff30; }
+.xen-detail-unified.sns-management-page .sns-statement { padding-block: 28px; }
+.xen-detail-unified.sns-management-page .sns-statement h2 strong { font-size: clamp(28px, 4vw, 46px); }
+.xen-detail-unified.sns-management-page .sns-statement-copy { font-size: 15px; }
+.xen-detail-unified.sns-management-page .sns-metric-total .sns-number { font-size: clamp(72px, 10vw, 112px); }
+.xen-detail-unified.sns-management-page :is(.sns-service-list, .sns-strength-list, .sns-fit-list) li { padding-block: 20px; }
+.xen-detail-unified.sns-management-page .sns-fit { position: relative; overflow: hidden; isolation: isolate; }
+.xen-detail-unified.sns-management-page .sns-fit::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, #ffffff09 48%, transparent 66%);
+  transform: translateX(120%);
+}
+
+/* SPACE captions are transcribed from the supplied screenshots. */
+.xen-detail-unified.space-page .space-caption {
+  margin: 0 0 8px; max-width: 760px; width: 100%; justify-self: center;
+  font-size: 14px; line-height: 2; color: #55555b; overflow-wrap: anywhere;
+}
+.xen-detail-unified.space-page .project-group > .space-caption { margin: 16px auto 0; }
+.xen-detail-unified.price-list-page main .section { margin-bottom: var(--detail-section-gap); }
+.xen-detail-unified.price-list-page main .sub { font-size: 14px; font-weight: 400; line-height: 1.9; color: #626269; }
+.xen-detail-unified.price-list-page form { margin-top: 24px; }
+.xen-detail-unified.price-list-page :is(input, textarea) { font-size: 16px; }
+.xen-detail-unified.price-list-page .submit:disabled { cursor: not-allowed; opacity: .55; }
+
+/* Content is visible with no script/observer. Entry runs only on intersection. */
+@media (prefers-reduced-motion: no-preference) {
+  body.xen-detail-unified.xen-polished main { animation: none; }
+  .xen-detail-unified [data-detail-motion].detail-in-view {
+    animation: detail-rise 650ms var(--xen-ease) var(--detail-delay, 0ms) backwards;
+  }
+  .xen-detail-unified [data-detail-motion="fade"].detail-in-view { animation-name: detail-fade; }
+  .xen-detail-unified [data-detail-motion="line"].detail-in-view { animation-name: detail-line; transform-origin: left; }
+  .xen-detail-unified :is([data-detail-motion="title"], [data-detail-motion="surface"]).detail-in-view { animation: none; }
+  .xen-detail-unified [data-detail-motion="title"].detail-in-view .detail-glyph {
+    animation: detail-letter 700ms var(--xen-ease) calc(var(--detail-delay, 0ms) + var(--glyph-delay, 0ms)) backwards;
+  }
+  .xen-detail-unified [data-detail-motion="image"].detail-in-view { animation-duration: 800ms; }
+  .xen-detail-unified [data-detail-motion="image"].detail-in-view > img {
+    animation: detail-image 800ms var(--xen-ease) var(--detail-delay, 0ms) backwards;
+  }
+  .xen-detail-unified .detail-in-view > .detail-frame::before {
+    animation: detail-line 800ms var(--xen-ease) calc(var(--detail-delay, 0ms) + 100ms) backwards;
+  }
+  .xen-detail-unified .detail-in-view > .detail-frame::after {
+    animation: detail-line-y 800ms var(--xen-ease) calc(var(--detail-delay, 0ms) + 100ms) backwards;
+  }
+  .xen-detail-unified :is(.pill, .series-title, .project-group > h2, .studio-heading, .sns-section-heading, .detail-list-line).detail-in-view::after {
+    animation: detail-line 750ms var(--xen-ease) var(--detail-delay, 0ms) backwards;
+  }
+  .xen-detail-unified .detail-action.detail-in-view::before {
+    animation: detail-sweep 900ms var(--xen-ease) calc(var(--detail-delay, 0ms) + 180ms) backwards;
+  }
+  .xen-detail-unified .sns-metric-total.detail-in-view::after { animation: detail-sweep 1400ms ease-out 350ms backwards; }
+  .xen-detail-unified .sns-fit.detail-in-view::before { animation: detail-sweep 1400ms ease-out 350ms backwards; }
+  .xen-detail-unified .xen-menu:not([hidden]) > a { animation-duration: 450ms; }
+  .xen-detail-unified .xen-brand { animation: detail-fade 800ms ease-out; }
+  .xen-detail-unified .image-viewer[open]:not(.is-fullscreen-gallery) { animation: detail-dialog 400ms var(--xen-ease); }
+  .xen-detail-unified .image-viewer[open]::backdrop { animation: detail-fade 350ms ease-out; }
+  .xen-detail-unified .detail-action:active { transform: scale(.985); }
+  .xen-detail-unified [data-detail-motion]:focus-within { animation: none; }
+}
+@keyframes detail-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes detail-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes detail-letter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+/* Scale complete compositions without altering their crop or reserved layout. */
+@keyframes detail-image { from { transform: scale(1.02); } to { transform: scale(1); } }
+@keyframes detail-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes detail-line-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes detail-sweep { from { transform: translateX(-120%); opacity: 0; } 25% { opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+@keyframes detail-dialog { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .xen-detail-unified .detail-action:hover::before { transform: translateX(120%); transition: transform 700ms ease-out; }
+  .xen-detail-unified .detail-action:hover .detail-arrow,
+  .xen-detail-unified .sns-fit-list li:hover .sns-fit-arrow { transform: translateX(4px); }
+  .xen-detail-unified .contact-actions a:hover { border-color: #bdbdc9; }
+  .xen-detail-unified.xen-polished .gallery-item:hover img { transform: scale(1.02); filter: none; }
+  /* DESIGN and APPAREL already move the full composition; avoid double scaling. */
+  .xen-detail-unified:is(.design-page, .apparel-page) .gallery-item:hover img { transform: none; }
+  .xen-detail-unified .detail-action:active { transform: scale(.985); }
+}
+@media (max-width: 650px) {
+  body.xen-detail-unified.xen-polished.detail-page main .hero h1 { font-size: 36px; }
+  body.xen-detail-unified.xen-polished.detail-page:is(.architecture-page, .sns-management-page) main .hero h1 { font-size: clamp(28px, 8vw, 36px); letter-spacing: .02em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xen-detail-unified [data-detail-motion], .xen-detail-unified .detail-glyph,
+  .xen-detail-unified [data-detail-motion] img, .xen-detail-unified .detail-action:active {
+    opacity: 1; transform: none !important; animation: none !important;
+  }
+}
