@@ -60,12 +60,12 @@ body.sns-management-page main .hero .eyebrow { color:#8a6629; }
 body.sns-management-page main .hero h1 { position:relative;padding-bottom:18px; }
 body.sns-management-page main .hero h1::after { content:'';position:absolute;bottom:0;left:calc(50% - 32px);width:64px;height:2px;background:linear-gradient(90deg,#9b6b20,#eed39a,#9b6b20); }
 body.sns-management-page.xen-detail-unified .sns-statement {
- position:relative;isolation:isolate;overflow:hidden;padding:clamp(28px,5vw,56px);border:1px solid #bb934a70;
+ position:relative;isolation:isolate;overflow:clip;padding:clamp(28px,5vw,56px);border:1px solid #bb934a70;
  background:radial-gradient(ellipse at 90% 12%,#62491d70,transparent 53%),linear-gradient(125deg,#10100f,#211c13 65%,#12110f);
  color:#fff5df;box-shadow:0 22px 60px #32240a15;
 }
 body.sns-management-page .sns-statement::before { content:'';position:absolute;z-index:-1;width:430px;height:430px;right:-190px;top:-160px;border:1px solid #e9bb5e48;border-radius:50%;box-shadow:0 0 0 36px #d1a64d08,0 0 0 37px #d1a64d20,0 0 0 85px #d1a64d05,0 0 0 86px #d1a64d12;pointer-events:none; }
-body.sns-management-page .sns-statement::after { content:'';position:absolute;inset:-50% -30%;z-index:-1;background:linear-gradient(110deg,transparent 35%,#edc87518 46%,#ffe6a849 50%,#edc8750c 55%,transparent 64%);transform:translateX(-110%);pointer-events:none; }
+body.sns-management-page .sns-statement::after { content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 35%,#edc87518 46%,#ffe6a849 50%,#edc8750c 55%,transparent 64%);transform:translateX(-110%);pointer-events:none; }
 body.sns-management-page .sns-statement .sns-kicker { position:relative;z-index:1;color:#d9bd80;font-size:10px;letter-spacing:.18em; }
 body.sns-management-page.xen-detail-unified .sns-statement h2 { position:relative;z-index:1;margin:22px 0; }
 body.sns-management-page.xen-detail-unified .sns-statement h2 strong { font-size:clamp(32px,4.8vw,58px);font-weight:650;line-height:1.5;letter-spacing:-.035em; }
