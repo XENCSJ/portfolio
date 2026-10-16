@@ -19,7 +19,7 @@
     plans.forEach(plan => {
       setOpen(plan, false);
       plan.button.disabled = false;
-      plan.button.addEventListener('click', () => {
+      plan.row.addEventListener('click', () => {
         setOpen(plan, plan.button.getAttribute('aria-expanded') !== 'true');
       });
     });

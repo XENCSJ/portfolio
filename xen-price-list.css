@@ -18,11 +18,11 @@ body.price-list-page main .price-category { margin: 0 0 36px; }
 .price-list-page .price-table thead th { padding: 10px 12px; border-block: 1px solid #dedede; background: #fff; color: #777; font-size: 12px; font-weight: 400; }
 .price-list-page .price-table thead th:nth-child(2) { text-align: center; }
 .price-list-page .price-table thead th:last-child { text-align: right; }
-.price-list-page .price-summary-row { position: relative; border-bottom: 1px solid #e5e5e5; transition: background-color 240ms ease; }
+.price-list-page .price-summary-row { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; border-bottom: 1px solid #e5e5e5; transition: background-color 240ms ease; }
 .price-list-page .price-summary-row.is-open { background: #f4f4f4; }
 .price-list-page .price-toggle { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 60px; padding: 16px 12px; margin: 0; border: 0; border-radius: 0; background: transparent; color: #222; font: inherit; font-weight: 400; line-height: 1.65; text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-/* The native button owns the entire row hit area without changing table semantics. */
-.price-list-page .price-toggle::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+/* The row handles pointer clicks; the native button provides keyboard activation. */
+.price-list-page .price-toggle::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .price-list-page .price-toggle > span:last-child { min-width: 0; overflow-wrap: anywhere; }
 .price-list-page .price-toggle:focus-visible { outline: none !important; }
 .price-list-page .price-toggle:focus-visible::after { outline: 2px solid #333; outline-offset: -2px; }
