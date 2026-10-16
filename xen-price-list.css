@@ -74,3 +74,10 @@ body.price-list-page .contents-return { display: table; margin: 20px 0 0 auto; p
  .price-list-page .price-toggle::after { display: none; }
  .price-list-page .price-toggle-icon { display: none; }
 }
+
+/* Status words preserve the source service level, including the distinct ◎ mark. */
+.price-list-page .price-status{display:inline-flex;align-items:baseline;gap:.25em;font-size:14px;line-height:1.8;color:#333;white-space:nowrap}
+.price-list-page .price-status>span{font-size:14px}
+.price-list-page .price-status-no{color:#777}
+.price-list-page .price-status-note{display:block;font-size:13px;line-height:1.8;color:#666;margin-top:3px}
+@media(max-width:600px){.price-list-page .price-detail-content dl>div{grid-template-columns:82px minmax(0,1fr);gap:12px}}

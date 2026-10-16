@@ -81,3 +81,15 @@
   .studio-page [data-studio-reveal] { opacity: 1; transform: none; }
   .studio-page .contact-actions a { transition: none; }
 }
+
+/* Native BRAND FILM replaces the retired animated sign. */
+body.studio-page{--studio-accent:#555;--studio-line:#e1e1e1}
+body.studio-page main .studio-brand-film{width:100%;max-width:960px;margin:32px auto 56px}
+body.studio-page main .studio-brand-film h2{font-size:12px;letter-spacing:.16em;font-weight:500;margin:0 0 18px;padding:0;border:0;background:none;color:#222}
+body.studio-page main .studio-brand-film .video-container{width:100%;aspect-ratio:16/9;padding:0;margin:0;background:#111;border:0;border-radius:0;box-shadow:none;overflow:hidden}
+body.studio-page main .studio-brand-film iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+body.studio-page main .studio-brand-film .video-container::before,body.studio-page main .studio-brand-film .video-container::after{display:none}
+body.studio-page main .studio-brand-film .video-source{display:table;margin:10px 0 0 auto;font-size:11px;color:#666;min-height:44px;padding:12px 0}
+body.studio-page .studio-manifesto{background:#f7f7f7;border-top-color:#ccc}
+body.studio-page .studio-kicker,body.studio-page .studio-principles dt{color:#666}
+body.studio-page main,body.studio-page main *,body.studio-page main *::before,body.studio-page main *::after{animation:none!important}

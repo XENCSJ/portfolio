@@ -1,0 +1,18 @@
+/* APPAREL only: preserve image assets and the existing page gutters. */
+body.xen-curated.apparel-page .image-gallery:is(.trio,.apparel-media){gap:0;border:0;background:transparent;box-shadow:none}
+body.xen-curated.apparel-page .image-gallery:is(.trio,.apparel-media)>.gallery-item{padding:0;border:0;border-radius:0;box-shadow:none;background:transparent;overflow:hidden;animation:none!important}
+body.xen-curated.apparel-page .image-gallery.trio{grid-template-columns:repeat(3,minmax(0,1fr))}
+body.xen-curated.apparel-page .image-gallery.trio .gallery-visual{aspect-ratio:1;overflow:hidden;background:transparent;box-shadow:none}
+body.xen-curated.apparel-page .image-gallery.trio .gallery-visual img{object-fit:cover;object-position:50% 50%;opacity:1;transition:transform .65s cubic-bezier(.22,.68,0,1)}
+body.xen-curated.apparel-page .image-gallery.trio>.gallery-item:nth-child(2) img{object-position:50% 70%}
+body.xen-curated.apparel-page .product-caption{position:absolute;inset:auto 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:30px clamp(8px,1.6vw,22px) clamp(9px,1.8vw,24px);color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.48));pointer-events:none;text-align:left;font-family:Arial,'Helvetica Neue',sans-serif;font-size:clamp(10px,1.05vw,13px);letter-spacing:.05em;line-height:1.4}
+body.xen-curated.apparel-page .product-caption strong{font-size:inherit;font-weight:500;letter-spacing:.01em}
+body.xen-curated.apparel-page .image-gallery.apparel-media{grid-template-columns:minmax(0,.54321fr) minmax(0,.746667fr);align-items:stretch}
+body.xen-curated.apparel-page .image-gallery.apparel-media .gallery-visual{aspect-ratio:auto;height:100%;background:transparent;box-shadow:none}
+body.xen-curated.apparel-page .image-gallery.apparel-media .gallery-visual img{position:static;width:100%;height:auto;object-fit:contain;transform:none!important;opacity:1!important}
+body.xen-curated.apparel-page .apparel-media-caption{margin:-2px 0 22px;font-size:13px;line-height:1.9;color:#444}
+body.xen-curated.apparel-page .apparel-media-caption strong{display:block;font-weight:500;color:#222}
+body.xen-curated.apparel-page .apparel-media-caption span{display:block;font-size:12px;margin-top:5px}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){body.xen-curated.apparel-page .image-gallery.trio>.gallery-item:hover img{transform:scale(1.025)}}
+@media(max-width:360px){body.xen-curated.apparel-page .product-caption{padding-inline:6px;font-size:9px;letter-spacing:0}}
+@media(prefers-reduced-motion:reduce){body.xen-curated.apparel-page .image-gallery.trio .gallery-visual img{transition:none;transform:none!important}}
