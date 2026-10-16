@@ -24,7 +24,6 @@
 .studio-page .studio-prose .studio-opening { font-size: clamp(18px,2.5vw,23px); line-height: 1.9; letter-spacing: .025em; color: #242424; margin-bottom: 26px; }
 .studio-page .studio-context { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--studio-line); font-size: 12px; color: #737373; }
 .studio-page .studio-context p:last-child { margin-bottom: 0; }
-.studio-page .work .studio-film-caption { margin-top: 22px; line-height: 2.2; font-size: 13px; color: #666; }
 .studio-page .studio-workflow { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px 28px; padding: 0; margin: 0; list-style: none; }
 .studio-page .studio-workflow li { position: relative; min-width: 0; padding-top: 22px; border-top: 1px solid var(--studio-line); }
 .studio-page .studio-workflow li::before { content: ''; position: absolute; top: -1px; left: 0; width: 28px; height: 1px; background: var(--studio-accent); }
