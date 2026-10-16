@@ -43,11 +43,12 @@ body.creator-page.xen-polished.detail-page main .cp-identity h1 { font-size:clam
 .creator-page .cp-field-map { position:relative; width:min(100%,660px); aspect-ratio:1; margin:8px auto 16px; isolation:isolate; }
 .creator-page .cp-orbit { position:absolute; inset:0; width:100%; height:100%; overflow:visible; fill:none; stroke:#dededb; stroke-width:1; }
 .creator-page .cp-orbit * { vector-effect:non-scaling-stroke; }
-.creator-page .cp-orbit .cp-circle { stroke:#999a96; stroke-dasharray:1; stroke-dashoffset:0; transform:rotate(-90deg); transform-origin:center; }
+.creator-page .cp-orbit .cp-circle { vector-effect:none; stroke-width:.15; stroke:#999a96; stroke-dasharray:none; stroke-dashoffset:0; transform:rotate(-90deg); transform-origin:center; }
 .creator-page .cp-orbit g circle { fill:#999a96; stroke:#fff; }
 .creator-page .cp-orbit g.is-active { stroke:#41433e; }
 .creator-page .cp-orbit g.is-active circle { fill:#171717; }
 .creator-page .cp-orbit-mobile { display:none; }
+.creator-page .cp-orbit-mobile .cp-circle { stroke-width:.9; }
 .creator-page .cp-map-logo { position:absolute; left:50%; top:50%; width:20%; transform:translate(-50%,-50%); text-align:center; background:#fff; padding:10px; }
 .creator-page .cp-map-logo img { width:100%; height:auto; display:block; }
 .creator-page .cp-map-logo > span { display:block; font-size:8px; letter-spacing:.14em; color:var(--cp-muted); white-space:nowrap; margin-top:12px; }
@@ -118,7 +119,7 @@ body.creator-page.xen-polished.detail-page .creation-support > h2 { font-size:11
 }
 @keyframes cp-rise { from {opacity:0;translate:0 12px} to {opacity:1;translate:0 0} }
 @keyframes cp-fade { from {opacity:0} to {opacity:1} }
-@keyframes cp-draw { from {stroke-dashoffset:1} to {stroke-dashoffset:0} }
+@keyframes cp-draw { from {stroke-dasharray:1;stroke-dashoffset:1} to {stroke-dasharray:1;stroke-dashoffset:0} }
 @media(max-width:760px) {
  .creator-page .cp-profile-layout { grid-template-columns:190px minmax(0,1fr); gap:32px; }
  .creator-page .cp-about-layout { grid-template-columns:1fr; gap:28px; }
