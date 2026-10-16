@@ -1,0 +1,69 @@
+/* SOUND-only catalogue and service directory. Shared header/footer stay intact. */
+body.sound-page main .sound-category-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:960px;margin:30px auto 0;text-align:left}
+body.sound-page main .sound-category-nav a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;min-height:74px;padding:14px 16px;border:1px solid #e4e4e6;background:#fff;color:#171719;transition:border-color .25s,background-color .25s}
+.sound-category-en,.sound-category-ja{display:block;overflow-wrap:anywhere}
+.sound-category-en{font-size:10px;line-height:1.6;letter-spacing:.055em}
+.sound-category-ja{margin-top:5px;font-size:11px;line-height:1.6;color:#727277}
+.sound-category-nav a>span:last-child{color:#727277;font-size:14px}
+body.sound-page.xen-detail-unified main .sound-section{max-width:960px;margin:56px auto 0;scroll-margin-top:24px}
+body.sound-page.xen-detail-unified main .sound-section>.series-title{display:block;margin:0 0 28px;padding:0 0 18px;text-align:left;font-size:13px;line-height:1.8;letter-spacing:.1em}
+.sound-section-ja{display:block;margin-top:5px;color:#727277;font-size:11px;font-weight:400;letter-spacing:.05em}
+.sound-number{display:inline-block;margin-right:12px;color:#858589;font-size:11px;font-variant-numeric:tabular-nums}
+body.sound-page.xen-detail-unified main .sound-section .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:28px;margin:24px 0 0;align-items:start}
+body.sound-page.xen-detail-unified.xen-polished main .work h3{display:block;margin:0 0 16px;padding:0;font-size:clamp(16px,2vw,20px);font-weight:500;line-height:1.65;letter-spacing:.025em;text-align:left}
+.sound-page .xen-spotify-player{display:block;position:static;width:100%;height:152px;min-height:152px;aspect-ratio:auto;border:0;border-radius:12px}
+.sound-page .sound-album-player{height:352px;min-height:352px}
+.sound-page .sound-work-links{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:4px 18px}
+body.sound-page main .sound-work-links a{display:inline-flex;align-items:center;min-height:44px;margin:0;padding:12px 0;color:#626269;font-size:11px;line-height:1.7;text-decoration:none;overflow-wrap:anywhere}
+.sound-page .sound-editions{border-top:1px solid #e4e4e6;margin-top:14px;min-width:0}
+.sound-page .sound-editions summary{min-height:48px;padding:15px 3px;color:#626269;font-size:11px;line-height:1.7;cursor:pointer}
+.sound-page .sound-editions .xen-spotify-player{margin-bottom:12px}
+.sound-page .sound-video-version{margin-top:22px}
+.sound-page .sound-video-label{display:block;margin:0 0 12px;font-size:10px;letter-spacing:.12em;color:#727277}
+.sound-page .sound-empty{margin:0;padding:16px 0 2px;font-size:12px;line-height:1.8;color:#777}
+body.sound-page main .sound-channel{display:table;margin:14px 0 0 auto;font-size:11px;overflow-wrap:anywhere}
+body.sound-page main .sound-platform-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;text-align:center}
+.sound-platform-group{min-width:0}
+.sound-platform-group+.sound-platform-group{border-left:1px solid #e4e4e6;padding-left:32px}
+body.sound-page main .sound-platform-group h3{margin:0 0 24px;font-size:12px;line-height:1.8;letter-spacing:.1em;font-weight:500;text-align:left}
+.sound-platform-group h3 span{display:block;font-size:11px;letter-spacing:.04em;color:#727277;margin-top:5px}
+body.sound-page main .sound-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 10px;list-style:none;padding:0;margin:0}
+.sound-service-grid li{min-width:0;margin:0;padding:0}
+.sound-service{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:130px;padding:8px 3px;border:1px solid transparent;background:#fff;border-radius:4px;line-height:1.5;transition:border-color .2s}
+.sound-service-logo{display:flex;align-items:center;justify-content:center;width:100%;height:72px;margin-bottom:10px;padding:10px 4px}
+.sound-service-logo img{display:block;width:auto;height:auto;max-width:100%;max-height:52px;object-fit:contain}
+.sound-service-logo img[hidden]{display:none}
+.sound-service-logo[hidden]{display:none}
+.sound-service-logo .sound-logo-wide{width:90px;max-height:42px}
+.sound-service-logo .sound-logo-square{width:48px;max-height:48px}
+.sound-service-name{display:block;max-width:100%;font-size:11px;line-height:1.6;overflow-wrap:anywhere;word-break:normal;letter-spacing:0}
+.sound-service-status{display:block;margin-top:5px;font-size:9px;line-height:1.5;color:#767676;letter-spacing:0}
+/* A plain name is the explicit fallback when no licensed brand asset is available. */
+.sound-service-text{justify-content:center}
+.sound-service-text .sound-service-name{font-size:12px}
+.sound-service-text .sound-service-status{margin-top:10px}
+body.sound-page main .sound-platform-note{margin:26px 0 0;text-align:left;font-size:10px;line-height:1.9;color:#727277}
+body.sound-page main .sound-social-use{border-top:1px solid #e4e4e6;margin-top:28px;padding-top:20px}
+body.sound-page main .sound-social-use h4{font-size:10px;font-weight:400;letter-spacing:.06em;text-align:left;margin:0 0 8px;color:#727277}
+.sound-social-use .sound-service{min-height:60px;align-items:flex-start;text-align:left}
+.sound-page .sound-anchor-alias{display:block;position:relative;scroll-margin-top:24px}
+body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
+.sound-service[href]:active{border-color:#777}
+@media(hover:hover) and (pointer:fine){body.sound-page main .sound-category-nav a:hover{background:#fafafa;border-color:#a2a2a2}.sound-service[href]:hover{border-color:#d5d5d5}.sound-service[href]:not(.sound-no-logo-motion):hover img{transform:scale(1.035)}.sound-service:not(.sound-no-logo-motion) img{transition:transform .25s}}
+@media(min-width:1100px){body.sound-page main .sound-service-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:700px){
+ body.sound-page main .sound-category-nav{grid-template-columns:1fr;gap:6px;margin-top:26px}
+ body.sound-page main .sound-category-nav a{min-height:56px;padding:10px 14px}
+ body.sound-page main .sound-category-nav a>span:first-child{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+ .sound-category-ja{margin-top:0}
+ body.sound-page.xen-detail-unified main .sound-section{margin-top:40px}
+ body.sound-page.xen-detail-unified main .sound-section .grid{grid-template-columns:1fr;gap:28px}
+ body.sound-page main .sound-platform-columns{grid-template-columns:1fr;gap:32px}
+ .sound-platform-group+.sound-platform-group{border-left:0;padding-left:0;border-top:1px solid #e4e4e6;padding-top:28px}
+ body.sound-page main .sound-service-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}
+ .sound-service{min-height:125px}
+ .sound-page .sound-album-player{height:352px;min-height:352px}
+}
+@media(min-width:440px) and (max-width:700px){body.sound-page main .sound-service-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(prefers-reduced-motion:no-preference){.sound-revealed{animation:sound-rise .6s ease-out backwards}@keyframes sound-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sound-page .sound-service,.sound-page .sound-service img{animation:none!important;transition:none!important;transform:none!important}}
