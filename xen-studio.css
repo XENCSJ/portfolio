@@ -200,3 +200,22 @@ body#top.studio-page .studio-service:active { border-color:var(--studio-accent);
  body#top.studio-page { --bg:#fff; --ink:#111; --muted:#444; --studio-surface:#fff; color-scheme:light; }
  body#top.studio-page .studio-faq-answer { display:block!important; }
 }
+/* The existing service, MVV and workflow content leads to the canonical price list. */
+body#top.studio-page .studio-next {
+  display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 24px;
+}
+body#top.studio-page .studio-next a {
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 20px;
+  min-height: 48px; padding: 12px 0; border-bottom: 1px solid #6a6a72;
+  color: var(--ink); font-size: 12px; line-height: 1.8;
+}
+body#top.studio-page .studio-next a:is(:hover, :active) { color: #c5aa7a; border-color: currentColor; }
+body#top.studio-page .studio-index { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) {
+  body#top.studio-page .studio-index { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  body#top.studio-page .studio-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body#top.studio-page .studio-next { gap: 4px 20px; }
+  body#top.studio-page .studio-next a { font-size: 11px; }
+}
