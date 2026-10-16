@@ -3,6 +3,7 @@
   --xen-header-surface: #fff;
   --xen-header-ink: #171717;
   --xen-header-logo-filter: none;
+  --xen-header-logo-width: 110px;
   --xen-header-bar: 64px;
   --xen-header-safe-top: env(safe-area-inset-top, 0px);
   --xen-header-height: calc(var(--xen-header-bar) + var(--xen-header-safe-top));
@@ -42,7 +43,7 @@ body#top #xen-site-header .xen-header-home {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  min-width: 96px;
+  min-width: var(--xen-header-logo-width);
   height: 44px;
   margin: 0 auto 0 0;
   padding: 0;
@@ -53,7 +54,7 @@ body#top #xen-site-header .xen-header-home {
 }
 body#top #xen-site-header .xen-header-logo {
   display: block;
-  width: 96px;
+  width: var(--xen-header-logo-width);
   height: auto;
   max-width: none;
   object-fit: contain;
@@ -162,3 +163,8 @@ body#top #xen-site-header .xen-header-home::after { content: none; }
 body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78; }
 /* scroll-padding accounts for the fixed bar; margin gives the heading breathing room. */
 body#top #studio-contact { scroll-margin-top: 16px; }
+
+/* Scale the existing, complete logo without changing the artwork or controls. */
+@media (max-width: 767px) {
+  :root { --xen-header-logo-width: 90px; }
+}

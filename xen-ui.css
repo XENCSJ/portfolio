@@ -130,22 +130,44 @@ body#top .xen-contact .contact-actions a:active { transform: scale(.985); }
   body#top .xen-contact-arrow { transition: none; transform: none; }
 }
 
-/* INDEX directory is generated from the same data as the header menu. */
-body#top.home-page #creative-index .index-directory { width: 100%; margin-top: 32px; }
-body#top.home-page #creative-index .index-category { margin: 28px 0 0; padding: 20px 0 0; border-top: 1px solid #303035; }
-body#top.home-page #creative-index .index-heading { margin: 0 0 8px; padding: 0; text-align: left; }
+/* INDEX typography only; preserve the rotating mark and shared menu styling. */
+body#top.home-page #home,
+body#top.home-page .xen-footer { text-align: center; }
+body#top.home-page #creative-index {
+  width: 100%; max-width: 680px; margin-inline: auto;
+  padding-inline: 20px; text-align: center;
+}
+body#top.home-page #creative-index .studio-heading {
+  max-width: 100%; margin: 0 auto 8px!important;
+  font-size: 12px!important; line-height: 1.7!important;
+  letter-spacing: .1em!important; white-space: normal; text-wrap: balance;
+}
+body#top.home-page #creative-index .home-ja {
+  max-width: 40em; margin: 0 auto!important;
+  font-size: 12px; line-height: 1.8; letter-spacing: .06em;
+}
+body#top.home-page #creative-index .index-directory { width: 100%; margin: 24px auto 0; }
+body#top.home-page #creative-index .index-category { margin: 24px 0 0; padding: 20px 0 0; border-top: 1px solid #303035; }
+body#top.home-page #creative-index .index-category:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+body#top.home-page #creative-index .index-heading { margin: 0 0 8px; padding: 0; text-align: center; }
 body#top.home-page #creative-index .index-heading > span { display: block; }
 body#top.home-page #creative-index .index-heading .index-en,
 body#top.home-page #creative-index .index-heading .index-ja { color: #c9aa78; }
-body#top.home-page #creative-index .index-heading .index-en { font-size: 16px; line-height: 1.6; font-weight: 600; letter-spacing: .12em; }
-body#top.home-page #creative-index .index-heading .index-ja { font-size: 11px; line-height: 1.7; font-weight: 400; margin-top: 4px; }
 body#top.home-page #creative-index .index-items { list-style: none; margin: 0; padding: 0; }
 body#top.home-page #creative-index .index-items li { margin: 0; padding: 0; }
-body#top.home-page #creative-index .index-link { display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; gap: 5px 16px; min-height: 60px; padding: 14px 28px 14px 0; text-align: left; opacity: 1; visibility: visible; }
-body#top.home-page #creative-index .index-link .index-en { font-size: 14px; letter-spacing: .08em; }
-body#top.home-page #creative-index .index-link .index-ja { font-size: 11px; }
+body#top.home-page #creative-index .index-link {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-wrap: nowrap; gap: 3px!important; min-height: 60px!important;
+  padding: 10px 24px!important; text-align: center; opacity: 1; visibility: visible;
+}
+body#top.home-page #creative-index .index-link .index-en { font-size: 17px; line-height: 1.4; letter-spacing: .08em; }
+body#top.home-page #creative-index .index-link .index-ja { font-size: 12px; line-height: 1.7; }
+body#top.home-page #creative-index .index-heading .index-en { font-size: 17px; line-height: 1.6; font-weight: 600; letter-spacing: .12em; }
+body#top.home-page #creative-index .index-heading .index-ja { font-size: 12px; line-height: 1.7; font-weight: 400; margin-top: 3px; }
+body#top.home-page #creative-index :is(.index-en, .index-ja, .home-ja) { max-width: 100%; word-break: keep-all; overflow-wrap: anywhere; text-align: center; }
 body#top.home-page #creative-index .index-category-link { border: 0; }
 body#top.home-page #creative-index .index-link::before { pointer-events: none; }
-@media (max-width: 560px) {
-  body#top.home-page #creative-index .index-link { flex-direction: column; align-items: flex-start; gap: 4px; }
+@media (min-width: 768px) {
+  body#top.home-page #creative-index { padding-inline: 24px; }
+  body#top.home-page #creative-index .studio-heading { font-size: 13px!important; }
 }
