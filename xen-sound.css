@@ -67,3 +67,8 @@ body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
 @media(min-width:440px) and (max-width:700px){body.sound-page main .sound-service-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(prefers-reduced-motion:no-preference){.sound-revealed{animation:sound-rise .6s ease-out backwards}@keyframes sound-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sound-page .sound-service,.sound-page .sound-service img{animation:none!important;transition:none!important;transform:none!important}}
+
+/* Preserve supplied service marks and keep unverified destinations non-interactive. */
+.sound-service-unverified { opacity: .72; }
+.sound-service-unverified .sound-service-status { color: #6b6b6b; }
+.sound-service-logo img { max-width: 100%; object-fit: contain; }

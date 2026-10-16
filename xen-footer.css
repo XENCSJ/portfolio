@@ -35,16 +35,17 @@ body#top .xen-common-footer .xen-footer-action {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 16px;
   width: 100%;
   min-width: 0;
   min-height: 56px;
   margin: 0;
   padding: 16px 12px;
-  border: 1px solid var(--footer-line);
+  border: 1px solid var(--footer-gold);
   border-radius: 3px;
-  background: transparent;
-  color: var(--footer-ink);
+  background: #080808;
+  color: #f4ead8;
   font-size: clamp(11px, 2.9vw, 13px);
   font-weight: 400;
   line-height: 1.7;
@@ -56,11 +57,12 @@ body#top .xen-common-footer .xen-footer-action {
 }
 body#top .xen-common-footer .xen-footer-inquiry {
   border-color: var(--footer-gold);
-  background: #171717;
+  background: #080808;
   color: #f4ead8;
 }
 body#top .xen-common-footer .xen-footer-action::before,
 body#top .xen-common-footer .xen-footer-action::after { content: none; }
+body#top .xen-common-footer .xen-footer-action::after { content: "↗"; position: static; width: auto; height: auto; background: none; color: #c9aa78; font-size: 17px; flex: 0 0 auto; transform: none; opacity: 1; transition: transform .2s ease; }
 body#top .xen-common-footer .xen-footer-top {
   display: flex;
   align-items: center;
@@ -91,7 +93,8 @@ body#top .xen-common-footer a:focus-visible {
 }
 @media (hover: hover) {
   body#top .xen-common-footer .xen-footer-action:hover {
-    border-color: var(--footer-gold);
+    border-color: #dcc49a;
+    background: #29251e;
     transform: translateY(-2px);
   }
   body#top .xen-common-footer .xen-footer-inquiry:hover { background: #29251e; }

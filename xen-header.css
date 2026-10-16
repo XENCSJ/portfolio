@@ -1,10 +1,13 @@
 /* One official header on every public page. Load after page styles. */
 :root {
+  --xen-header-surface: #fff;
+  --xen-header-ink: #171717;
+  --xen-header-logo-filter: none;
   --xen-header-bar: 64px;
   --xen-header-safe-top: env(safe-area-inset-top, 0px);
   --xen-header-height: calc(var(--xen-header-bar) + var(--xen-header-safe-top));
   --xen-header-left: max(clamp(20px, 4.65vw, 64px), env(safe-area-inset-left, 0px));
-  --xen-header-right: max(clamp(3px, calc(4vw - 14px), 51px), env(safe-area-inset-right, 0px));
+  --xen-header-right: max(clamp(20px, 4.65vw, 64px), env(safe-area-inset-right, 0px));
 }
 html { scroll-padding-top: calc(var(--xen-header-height) + 16px); }
 body#top { padding-top: var(--xen-header-height); }
@@ -23,9 +26,8 @@ body#top #xen-site-header {
   align-items: center;
   justify-content: flex-start;
   gap: 2px;
-  background: #fff;
-  color: #000;
-  color-scheme: light;
+  background: var(--xen-header-surface);
+  color: var(--xen-header-ink);
   border: 0;
   box-shadow: none;
   backdrop-filter: none;
@@ -40,7 +42,7 @@ body#top #xen-site-header .xen-header-home {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  min-width: 48px;
+  min-width: 96px;
   height: 44px;
   margin: 0 auto 0 0;
   padding: 0;
@@ -51,11 +53,11 @@ body#top #xen-site-header .xen-header-home {
 }
 body#top #xen-site-header .xen-header-logo {
   display: block;
-  width: 48px;
+  width: 96px;
   height: auto;
   max-width: none;
   object-fit: contain;
-  filter: none;
+  filter: var(--xen-header-logo-filter);
   opacity: 1;
   mix-blend-mode: normal;
   transform: none;
@@ -76,7 +78,7 @@ body#top #xen-site-header :is(.xen-header-cart, .xen-header-toggle) {
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: #000;
+  color: var(--xen-header-ink);
   box-shadow: none;
   transform: none;
   cursor: pointer;
@@ -87,7 +89,7 @@ body#top #xen-site-header .xen-header-cart img {
   display: block;
   width: 19px;
   height: auto;
-  filter: none;
+  filter: var(--xen-header-logo-filter);
   object-fit: contain;
 }
 body#top #xen-site-header .xen-header-toggle { flex-direction: column; gap: 3px; }
@@ -97,7 +99,7 @@ body#top #xen-site-header .xen-header-toggle span {
   height: 3px;
   flex: 0 0 3px;
   border-radius: .3px;
-  background: #000;
+  background: var(--xen-header-ink);
   opacity: 1;
   transform: none;
 }
@@ -117,7 +119,7 @@ body#top #xen-site-header .xen-menu {
   padding: 12px 20px;
   border: 1px solid #eee;
   background: #fff;
-  color: #000;
+  color: var(--xen-header-ink);
   box-shadow: none;
   animation: none;
   transform: none;
@@ -143,3 +145,20 @@ body#top #xen-site-header .xen-menu a[aria-current="page"] { color: #000; font-w
 body#top #xen-site-header .xen-menu a:hover { background: #f5f5f5; }
 body#top #xen-site-header .xen-menu .xen-menu-group { color: #666; }
 body#top #xen-site-header :is(a, button):focus-visible { outline: 2px solid #000; outline-offset: 3px; }
+
+/* Match the actual page surface; transparent official artwork keeps its geometry. */
+body#top:is(.home-page, .xen-noir) {
+  --xen-header-surface: #000;
+  --xen-header-ink: #fff;
+  --xen-header-logo-filter: brightness(0) invert(1);
+}
+body#top #xen-site-header .xen-header-home,
+body#top #xen-site-header .xen-header-home:is(:visited, :active, :focus),
+body#top #xen-site-header .xen-header-logo {
+  opacity: 1; visibility: visible; transform: none; animation: none; transition: none;
+}
+body#top #xen-site-header .xen-header-home::before,
+body#top #xen-site-header .xen-header-home::after { content: none; }
+body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78; }
+/* scroll-padding accounts for the fixed bar; margin gives the heading breathing room. */
+body#top #studio-contact { scroll-margin-top: 16px; }
