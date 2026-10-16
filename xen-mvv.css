@@ -1,0 +1,56 @@
+/* MVV typography is isolated from the rest of STUDIO and all other pages. */
+body.studio-page .studio-manifesto.studio-mvv {
+  margin-top: 48px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #171717;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.studio-page .studio-mvv .studio-mvv-brand {
+  padding-block: 20px;
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #e5e5e5;
+}
+.studio-page .studio-mvv .studio-mvv-brand p { margin: 0; font-size: 11px; letter-spacing: .16em; line-height: 1.8; }
+.studio-page .studio-mvv .studio-mvv-brand span { display: inline-block; margin-left: 18px; color: #666; letter-spacing: .08em; }
+.studio-page .studio-mvv .studio-mvv-core { padding-block: clamp(40px,6vw,68px); }
+.studio-page .studio-mvv .studio-mvv-label { margin: 0; font-size: 11px; font-weight: 500; letter-spacing: .14em; line-height: 1.8; color: #4e4e4e; }
+.studio-page .studio-mvv .studio-mvv-label span { display: block; margin-top: 7px; font-size: 12px; font-weight: 400; letter-spacing: .06em; color: #666; }
+body.studio-page .studio-manifesto.studio-mvv h2 {
+  margin: 26px 0 28px;
+  font-family: inherit;
+  font-size: clamp(28px,4.2vw,44px);
+  font-weight: 400;
+  letter-spacing: .025em;
+  line-height: 1.65;
+}
+body.studio-page .studio-manifesto.studio-mvv h2 span { display: block; }
+.studio-page .studio-mvv .studio-mvv-copy { max-width: 660px; font-size: 14px; line-height: 2.1; letter-spacing: .025em; color: #555; }
+.studio-page .studio-mvv .studio-mvv-copy p { margin: 0; }
+.studio-page .studio-mvv .studio-mvv-copy p + p { margin-top: 12px; }
+.studio-page .studio-mvv .studio-mvv-purpose { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 40px; }
+.studio-page .studio-mvv .studio-mvv-purpose > section { min-width: 0; border-top: 1px solid #d9d9d9; padding-top: 26px; }
+.studio-page .studio-mvv .studio-mvv-statement { margin: 22px 0 20px; font-size: 22px; font-weight: 400; line-height: 1.85; letter-spacing: .025em; text-wrap: pretty; }
+.studio-page .studio-mvv .studio-mvv-values { margin-top: clamp(52px,7vw,76px); }
+.studio-page .studio-mvv .studio-mvv-list { margin: 26px 0 0; padding: 0; list-style: none; border-bottom: 1px solid #d9d9d9; }
+.studio-page .studio-mvv .studio-mvv-list > li { display: grid; grid-template-columns: minmax(0,220px) minmax(0,1fr); gap: 32px; padding-block: 32px; border-top: 1px solid #d9d9d9; }
+.studio-page .studio-mvv .studio-mvv-value-label { display: flex; gap: 16px; align-items: baseline; min-width: 0; }
+.studio-page .studio-mvv .studio-mvv-number { flex-shrink: 0; color: #777; font-size: 11px; line-height: 1.8; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.studio-page .studio-mvv .studio-mvv-value-label h4 { margin: 0; font-size: 11px; font-weight: 500; line-height: 1.8; letter-spacing: .1em; }
+.studio-page .studio-mvv .studio-mvv-value-label h4 span { display: block; margin-top: 8px; color: #666; font-size: 13px; font-weight: 400; letter-spacing: .08em; }
+.studio-page .studio-mvv .studio-mvv-value-body { min-width: 0; }
+.studio-page .studio-mvv .studio-mvv-value-body .studio-mvv-statement { margin-top: 0; margin-bottom: 14px; font-size: 21px; }
+@media (max-width: 700px) {
+  .studio-page .studio-mvv .studio-mvv-purpose { grid-template-columns: minmax(0,1fr); gap: 36px; }
+  .studio-page .studio-mvv .studio-mvv-list > li { grid-template-columns: minmax(0,1fr); gap: 20px; padding-block: 28px; }
+  .studio-page .studio-mvv .studio-mvv-value-label h4 span { display: inline-block; margin: 0 0 0 14px; }
+  .studio-page .studio-mvv .studio-mvv-statement { font-size: 21px; }
+}
+@media (max-width: 380px) {
+  body.studio-page .studio-manifesto.studio-mvv h2 { font-size: 26px; letter-spacing: .01em; }
+  .studio-page .studio-mvv .studio-mvv-brand span { margin-left: 10px; }
+  .studio-page .studio-mvv .studio-mvv-value-label { gap: 10px; }
+  .studio-page .studio-mvv .studio-mvv-value-label h4 { letter-spacing: .06em; }
+}
