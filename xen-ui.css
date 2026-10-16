@@ -1,4 +1,21 @@
 /* Shared interaction and contact design, loaded after page-specific styles. */
+/* Shared navigation refinements; the official fixed-header geometry is retained. */
+body#top .xen-menu-group {
+  display: block; padding: 19px 5px 8px; color: #888;
+  font-size: 10px; line-height: 1.6; letter-spacing: .12em;
+}
+body#top .xen-menu a { min-height: 44px; overflow-wrap: anywhere; }
+body#top .xen-menu .xen-menu-contact { margin-top: 10px; border-bottom: 0; }
+body#top .xen-menu { overscroll-behavior: contain; }
+body#top .xen-menu:focus-within { animation: none; }
+body#top.xen-noir .xen-menu-group,
+body#top.home-page .xen-menu-group { color: #b8b8be; }
+html:has(.xen-menu-noscript) body#top .xen-menu-group { grid-column: 1 / -1; }
+body#top :is(main, footer) :is(a, button, summary) { touch-action: manipulation; }
+body#top .sns-results-note {
+  margin: 20px 0 0; font-size: 12px; line-height: 1.9; color: var(--muted, #777);
+}
+body#top.sns-management-page .sns-growth figcaption { flex-wrap: wrap; }
 html {
   -webkit-tap-highlight-color: transparent;
   accent-color: #171717;

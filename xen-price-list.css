@@ -1,4 +1,19 @@
 /* PRICE LIST only: one semantic table per category, with inline plan details. */
+body#top.price-list-page .price-category-nav {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 20px;
+  margin: 0 0 36px; border-top: 1px solid #dedede;
+}
+body#top.price-list-page .price-category-nav a {
+  display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 54px;
+  padding: 12px 4px; border-bottom: 1px solid #dedede;
+  font-size: 12px; line-height: 1.7; overflow-wrap: anywhere;
+}
+body#top.price-list-page .price-category-nav a > span:first-child { color: #777; font-size: 10px; }
+body#top.price-list-page .price-category-nav a:is(:hover, :active) { background: #f5f5f5; }
+@media (max-width: 600px) {
+  body#top.price-list-page .price-category-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; margin-bottom: 28px; }
+  body#top.price-list-page .price-category-nav a { font-size: 11px; gap: 8px; }
+}
 body.price-list-page main { max-width: 920px; }
 body.price-list-page main .price-overview { margin: 28px 0 30px; padding-top: 20px; border-top: 1px solid #dedede; scroll-margin-top: 96px; }
 .price-list-page .price-overview p { margin: 0; }
