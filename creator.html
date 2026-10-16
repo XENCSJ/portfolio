@@ -33,20 +33,72 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <link rel="stylesheet" href="./xen-creator.css?v=20261016-compact-fields1">
 <link rel="stylesheet" href="./xen-noir.css?v=20261016-noir1">
 <style id="xen-creator-compact-portrait">
-/* A compact profile portrait, with the original image and zoom link intact. */
+/* Keep the original portrait beside the profile at every viewport width. */
 body#top.creator-page .cp-profile-layout {
-  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 64px);
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: center;
   max-width: 860px;
   margin-inline: auto;
 }
-body#top.creator-page .profile-portrait { width: 100%; max-width: 280px; margin: 0; }
+body#top.creator-page .profile-portrait { width: 100%; max-width: 260px; margin: 0; }
+body#top.creator-page .cp-identity { min-width: 0; width: 100%; max-width: none; margin: 0; }
+body#top.creator-page .cp-kicker {
+  margin: 0 0 10px;
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: .06em;
+}
+body#top.creator-page .cp-role {
+  margin: 0 0 24px;
+  color: #fff;
+  font-size: clamp(16px, 1.8vw, 21px);
+  line-height: 1.5;
+}
+body#top.creator-page .cp-facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+  padding: 0;
+  margin: 0;
+  border-color: var(--cp-line);
+}
+body#top.creator-page .cp-facts > div { min-width: 0; padding: 16px 0; }
+body#top.creator-page .cp-facts > div:nth-child(n+3) { border-top: 1px solid var(--cp-line); }
+body#top.creator-page .cp-facts dt {
+  color: var(--cp-muted);
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+body#top.creator-page .cp-facts dd {
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+body#top.creator-page .cp-facts dd span { font-size: .85em; }
 @media (min-width: 601px) and (max-width: 800px) {
-  body#top.creator-page .cp-profile-layout { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 32px; }
+  body#top.creator-page .cp-profile-layout { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); }
 }
 @media (max-width: 600px) {
-  body#top.creator-page .cp-profile-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
-  body#top.creator-page .profile-portrait { width: min(58vw, 200px); max-width: 100%; margin-inline: auto; }
+  body#top.creator-page .cp-profile-layout {
+    grid-template-columns: minmax(0, .34fr) minmax(0, .66fr);
+    gap: clamp(12px, 3.6vw, 20px);
+  }
+  body#top.creator-page .cp-kicker {
+    margin-bottom: 8px;
+    font-size: clamp(8px, 2.05vw, 10px);
+    letter-spacing: .025em;
+    text-wrap: balance;
+  }
+  body#top.creator-page .cp-role { margin-bottom: 14px; font-size: clamp(11px, 3.15vw, 16px); }
+  body#top.creator-page .cp-facts { column-gap: clamp(10px, 3vw, 18px); }
+  body#top.creator-page .cp-facts > div { padding: 9px 0; }
+  body#top.creator-page .cp-facts dt { font-size: clamp(8px, 2.1vw, 10px); letter-spacing: .04em; }
+  body#top.creator-page .cp-facts dd { margin-top: 4px; font-size: clamp(11px, 3vw, 15px); }
 }
 </style>
 </head><body id="top" class="xen-noir detail-page creator-page xen-polished"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html" aria-current="page">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content">
@@ -55,7 +107,12 @@ body#top.creator-page .profile-portrait { width: 100%; max-width: 280px; margin:
  <div class="cp-profile-layout"><div class="profile-portrait" data-cp-reveal><div class="image-gallery "><a class="gallery-item" href="./%20ABOUT%20%282%29.PNG" aria-label="ABOUT (2)を拡大"><img src="./xen-preview-af66c77c480b2311.webp" alt="クリエイターのプロフィール写真" width="1600" height="2143" loading="eager" fetchpriority="high" decoding="async"></a></div></div><div class="cp-identity" data-cp-reveal>
  <p class="cp-kicker">XEN | CREATIVE STUDIO JAPAN</p>
  <p class="cp-role">Creative Director &amp; Designer</p>
- <dl class="cp-facts"><div><dt>HEIGHT</dt><dd>180 <span>cm</span></dd></div><div><dt>FROM</dt><dd>CHIBA</dd></div><div><dt>BASED IN</dt><dd>TOKYO</dd></div></dl>
+ <dl class="cp-facts">
+  <div><dt>HEIGHT</dt><dd>180 <span>cm</span></dd></div>
+  <div><dt>BIRTHDAY</dt><dd>MAY 10</dd></div>
+  <div><dt>BASED IN</dt><dd>TOKYO</dd></div>
+  <div><dt>FROM</dt><dd>CHIBA</dd></div>
+ </dl>
  </div></div>
  <nav class="cp-jump" aria-label="プロフィール内の目次"><a href="#about">ABOUT</a><a href="#creative-fields">CREATIVE FIELDS</a><a href="#background">BACKGROUND</a><a href="#contact">CONTACT</a></nav>
 </section>
