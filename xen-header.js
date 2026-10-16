@@ -87,7 +87,7 @@
     const scrollbar = innerWidth - document.documentElement.clientWidth;
     const paddingRight = parseFloat(getComputedStyle(document.body).paddingRight) || 0;
     Object.assign(document.body.style, { position: 'fixed', top: `-${saved.y}px`, left: '0', right: '0', width: '100%', overflow: 'hidden' });
-    if (scrollbar > 0) document.body.style.paddingRight = `${paddingRight + scrollbar}px`;
+    if (scrollbar > 0 && !getComputedStyle(document.documentElement).scrollbarGutter.includes('stable')) document.body.style.paddingRight = `${paddingRight + scrollbar}px`;
     document.documentElement.style.overflow = 'hidden';
     drawer.showModal();
     menu.scrollTop = 0;

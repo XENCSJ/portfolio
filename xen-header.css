@@ -257,7 +257,7 @@ body#top #xen-site-header .xen-menu .xen-menu-items {
   padding: 0;
 }
 body#top #xen-site-header .xen-menu .xen-menu-items > li { margin: 0; padding: 0; }
-body#top #xen-site-header .xen-menu a.xen-menu-link {
+body#top #xen-site-header #xen-drawer .xen-menu a.xen-menu-link {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -298,16 +298,16 @@ body#top #xen-site-header .xen-menu .xen-menu-heading .xen-menu-en {
   font-weight: 600;
 }
 body#top #xen-site-header .xen-menu .xen-menu-heading .xen-menu-ja { color: var(--xen-brand-gold); }
-body#top #xen-site-header .xen-menu a::before,
-body#top #xen-site-header .xen-menu a::after { content: none; }
-body#top #xen-site-header .xen-menu a[aria-current="page"] .xen-menu-en { font-weight: 700; }
-body#top #xen-site-header .xen-menu a.xen-menu-link:is(:hover, :focus-visible) { background: #181818; }
+body#top #xen-site-header #xen-drawer .xen-menu a::before,
+body#top #xen-site-header #xen-drawer .xen-menu a::after { content: none; }
+body#top #xen-site-header #xen-drawer .xen-menu a[aria-current="page"] .xen-menu-en { font-weight: 700; }
+body#top #xen-site-header #xen-drawer .xen-menu a.xen-menu-link:is(:hover, :focus-visible) { background: #181818; }
 body#top #xen-site-header :is(a, button):focus-visible { outline: 2px solid var(--xen-brand-gold); outline-offset: -2px; }
 @media (min-width: 651px) {
   body#top #xen-site-header .xen-menu { padding-inline: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body#top #xen-site-header .xen-menu a.xen-menu-link { transition: none; }
+  body#top #xen-site-header #xen-drawer .xen-menu a.xen-menu-link { transition: none; }
 }
 
 /* Match the actual page surface; transparent official artwork keeps its geometry. */
