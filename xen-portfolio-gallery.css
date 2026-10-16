@@ -96,7 +96,7 @@ body.xen-curated .gallery-item:focus-visible {
 }
 body.xen-curated.apparel-page .brand-visual {
   display: block;
-  width: min(64%, 280px);
+  width: 100%;
   margin: 0 auto clamp(28px, 4vw, 40px);
 }
 body.xen-curated.apparel-page .image-gallery:not(.brand-visual) {
@@ -125,7 +125,7 @@ body.xen-curated.apparel-page .image-gallery:not(.brand-visual) .gallery-visual 
 }
 body.xen-curated.apparel-page .image-gallery.pair {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: 66.666667%;
+  width: 100%;
   margin-inline: auto;
 }
 body.xen-curated.apparel-page .text-link { display: table; margin: 22px auto 0; }
@@ -176,7 +176,7 @@ body.xen-curated .is-fullscreen-gallery :is(button,a):focus-visible { outline-co
   body.xen-curated.apparel-page main .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 @media (max-width: 650px) {
-  body.xen-curated.apparel-page .brand-visual { width: min(60%, 220px); }
+  body.xen-curated.apparel-page .brand-visual { width: 100%; }
   body.xen-curated.apparel-page main .grid { grid-template-columns: 1fr; gap: 22px; }
   body.xen-curated .is-fullscreen-gallery .viewer-caption { font-size: 10px; }
   body.xen-curated .is-fullscreen-gallery .viewer-original { font-size: 10px; }
@@ -196,4 +196,16 @@ body.xen-curated .is-fullscreen-gallery :is(button,a):focus-visible { outline-co
 @media (prefers-reduced-motion:reduce) {
   body.xen-curated .gallery-item,
   body.xen-curated .gallery-item .gallery-visual > img { animation: none!important; transition: none!important; transform: none!important; }
+}
+
+/* APPAREL: full-width hero, three products, and equal media frames at every width. */
+body.xen-curated.apparel-page .image-gallery.trio { grid-template-columns:repeat(3,minmax(0,1fr)); }
+body.xen-curated.apparel-page .image-gallery.apparel-media .gallery-visual { aspect-ratio:3 / 4; }
+body.xen-curated.apparel-page .image-gallery.apparel-media { align-items:stretch; }
+body.xen-curated.apparel-page main .work h3 { margin-bottom:14px; }
+body.xen-curated.apparel-page main .work .video-source { margin-block:0; }
+@media(max-width:650px) {
+ body.xen-curated.apparel-page .image-gallery.trio { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ body.xen-curated.apparel-page .image-gallery:not(.brand-visual) > .gallery-item { padding:5px; }
+ body.xen-curated.apparel-page .image-gallery.apparel-media { width:100%; }
 }
