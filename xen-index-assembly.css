@@ -27,7 +27,6 @@
 
 /* INDEX only: compact categories; retain the original full-size rotating artwork. */
 body#top.home-page {
-  --xen-header-logo-width: 45px;
   --index-room: calc(100vh - var(--xen-header-height) - env(safe-area-inset-bottom, 0px));
   --index-en-size: clamp(12px, calc(var(--index-room) * .019), 15px);
   --index-ja-size: clamp(10px, calc(var(--index-room) * .014), 11px);
@@ -92,3 +91,22 @@ body#top.home-page #home #creative-index :is(.index-link, .index-heading) .index
   letter-spacing: .04em;
 }
 body#top.home-page #xen-site-header .xen-header-center { display: none; }
+
+/* Colour only: each bilingual label catches a soft gold wave every eight
+   seconds. SVG paths, type sizes, rotation and layout are unchanged. */
+body#top.home-page .orbit text {
+  --orbit-rest: #eee;
+  animation: xen-orbit-gold-wave 8s ease-in-out infinite;
+  animation-delay: var(--orbit-glint-delay, 0s);
+}
+body#top.home-page .orbit .orbit-ja { --orbit-rest: #b8b8be; }
+body#top.home-page .orbit a:is(:hover, :focus-visible, :active) text {
+  fill: var(--xen-brand-gold, #c9aa78)!important;
+}
+@keyframes xen-orbit-gold-wave {
+  0%, 30%, 70%, 100% { fill: var(--orbit-rest); filter: drop-shadow(0 0 0 transparent); }
+  50% { fill: var(--xen-brand-gold, #c9aa78); filter: drop-shadow(0 0 1.6px rgb(201 170 120 / 20%)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body#top.home-page .orbit text { animation: none!important; filter: none; }
+}
