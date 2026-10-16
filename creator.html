@@ -32,6 +32,23 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <link rel="stylesheet" href="./xen-ui.css?v=20261016-white1">
 <link rel="stylesheet" href="./xen-creator.css?v=20261016-compact-fields1">
 <link rel="stylesheet" href="./xen-noir.css?v=20261016-noir1">
+<style id="xen-creator-compact-portrait">
+/* A compact profile portrait, with the original image and zoom link intact. */
+body#top.creator-page .cp-profile-layout {
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 64px);
+  max-width: 860px;
+  margin-inline: auto;
+}
+body#top.creator-page .profile-portrait { width: 100%; max-width: 280px; margin: 0; }
+@media (min-width: 601px) and (max-width: 800px) {
+  body#top.creator-page .cp-profile-layout { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 32px; }
+}
+@media (max-width: 600px) {
+  body#top.creator-page .cp-profile-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  body#top.creator-page .profile-portrait { width: min(58vw, 200px); max-width: 100%; margin-inline: auto; }
+}
+</style>
 </head><body id="top" class="xen-noir detail-page creator-page xen-polished"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html" aria-current="page">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content">
 <section class="cp-profile" id="profile" aria-labelledby="creator-name">
  <div class="cp-page-label"><span>CREATOR</span><span>PROFILE / プロフィール</span></div>

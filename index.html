@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="#ffffff" name="theme-color"/><meta content="XEN CREATIVE STUDIO JAPAN — creative works across sound, film, photography and design." name="description"/><title>XEN | CREATIVE STUDIO JAPAN</title>
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="#000000" name="theme-color"/><meta content="XEN CREATIVE STUDIO JAPAN — creative works across sound, film, photography and design." name="description"/><title>XEN | CREATIVE STUDIO JAPAN</title>
 <style>
 :root{color-scheme:light;--ink:#151515;--gray:#777}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font-family:Arial,'Helvetica Neue','Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button{font:inherit}header{height:62px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,4vw,55px);position:sticky;top:0;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);z-index:10}header a{font-size:13px;font-weight:750;letter-spacing:.04em}header .right{font-size:11px;letter-spacing:.14em}.hero{min-height:680px;display:flex;align-items:center;justify-content:center;padding:54px 18px 60px}.wheel{width:min(80vw,590px);aspect-ratio:1;position:relative;display:grid;place-items:center}.orbit{position:absolute;inset:0;width:100%;height:100%;animation:spin 65s linear infinite}.orbit text{font-size:20px;letter-spacing:1.6px;font-family:Arial,sans-serif;fill:#151515}.center-logo{width:59%;height:59%;object-fit:contain;mix-blend-mode:multiply}.scroll{position:absolute;bottom:-43px;font-size:10px;letter-spacing:.24em;color:#888}.section-label{text-align:center;font-size:12px;letter-spacing:.2em;margin:0 0 45px}.index{max-width:850px;margin:auto;padding:75px 24px 130px}.index-link{min-height:77px;display:flex;align-items:center;justify-content:center;position:relative;text-align:center;font-size:clamp(17px,2.4vw,24px);font-weight:750;letter-spacing:-.02em;border-bottom:1px solid #f0f0f0;transition:color .25s,letter-spacing .25s}.index-link:hover{color:#888;letter-spacing:.035em}.jp{white-space:nowrap}.arrow{position:absolute;right:4px;font-weight:400;font-size:18px;opacity:0;transition:opacity .2s}.index-link:hover .arrow{opacity:1}.about{max-width:700px;margin:0 auto;padding:90px 24px 125px;text-align:center}.about h2{font-size:clamp(24px,5vw,44px);letter-spacing:-.035em}.about p{font-size:13px;line-height:2.2;color:#666}footer{border-top:1px solid #e9e9e9;padding:35px 24px;text-align:center;font-size:11px;letter-spacing:.12em;color:#777}.detail{min-height:65vh;max-width:850px;margin:auto;padding:100px 24px}.detail .eyebrow{font-size:11px;letter-spacing:.25em;color:#888}.detail h1{font-size:clamp(42px,9vw,100px);letter-spacing:-.055em;margin:24px 0 10px;overflow-wrap:anywhere}.detail .ja{font-size:17px;color:#777}.detail .placeholder{margin-top:90px;border-top:1px solid #ddd;padding-top:30px;font-size:13px;color:#888;line-height:2}.back{display:inline-block;margin-top:70px;font-size:12px;border-bottom:1px solid #111;padding-bottom:7px}.hidden{display:none!important}@keyframes spin{to{transform:rotate(360deg)}}@media(max-width:600px){header{height:54px}.hero{min-height:490px;padding:40px 12px 80px}.wheel{width:min(96vw,460px)}.orbit text{font-size:19px}.center-logo{width:57%;height:57%}.index{padding:40px 19px 100px}.index-link{min-height:65px;font-size:clamp(15px,4.1vw,20px)}.arrow{display:none}.detail{padding-top:65px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.orbit{animation:none}*{transition:none!important}}
 
@@ -312,6 +312,39 @@ body#top.home-page .xen-footer .xen-contact-note { margin-top: 14px; }
   .home-page#top .index-connect-links a { transition: none; }
 }
 @keyframes xen-connect-fade { from { opacity: 0; } to { opacity: 1; } }
+</style>
+<style id="xen-index-black-theme">
+/* INDEX palette only; retain the ring geometry, links and existing motion. */
+:root { color-scheme: dark; background: #000; --ink: #f2f2f2; --gray: #b8b8be; --xen-ink: #f2f2f2; --xen-line: #303035; }
+body#top.home-page { background: #000; color: #f2f2f2; }
+body#top.home-page :is(.xen-header, .xen-menu, .index-connect, .xen-footer) { background: #000; border-color: #303035; }
+body#top.home-page .hero::before { background: none; }
+body#top.home-page .xen-menu a { color: #eee; border-color: #303035; }
+body#top.home-page .xen-menu-button span { background: #eee; }
+body#top.home-page .shared-xen-logo,
+body#top.home-page .logo-stage .center-logo { filter: brightness(0) invert(1)!important; mix-blend-mode: normal; }
+body#top.home-page .orbit text { fill: #eee; }
+body#top.home-page .orbit .orbit-ja { fill: #b8b8be; }
+body#top.home-page #creative-index .studio-heading { color: #eee; }
+body#top.home-page .index-link { border-color: #303035!important; }
+body#top.home-page :is(.home-ja, .index-ja, .index-connect-heading, .xen-back-top, .xen-powered, .xen-copyright) { color: #b8b8be; }
+body#top.home-page .index-connect-links a { color: #ddd; }
+body#top.home-page .xen-contact { color: #eee; }
+body#top.home-page .xen-contact .xen-contact-note { color: #b8b8be; }
+body#top.home-page .xen-contact .contact-actions .xen-contact-primary { background: #eee; color: #000; border-color: #eee; }
+body#top.home-page .skip-link { background: #eee; color: #000; }
+/* Keep gold feedback readable on black for pointer, touch and keyboard. */
+body#top.home-page .orbit a:is(:hover, :focus-visible, :active) text { fill: #cbb387; }
+body#top.home-page .index-link:is(:hover, :focus-visible, :active),
+body#top.home-page .index-link:is(:hover, :focus-visible, :active) .index-ja,
+body#top.home-page .xen-menu a:is(:hover, :focus-visible, :active),
+body#top.home-page .xen-menu a[aria-current=page],
+body#top.home-page .index-connect-links a:is(:hover, :focus-visible, :active),
+body#top.home-page .xen-back-top:is(:hover, :focus-visible, :active) { color: #cbb387; }
+body#top.home-page :is(a, button):focus-visible { outline-color: #cbb387; }
+@media (hover: hover) {
+  body#top.home-page .xen-contact .contact-actions .xen-contact-primary:hover { background: #fff; color: #000; border-color: #fff; }
+}
 </style>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
 <header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html" aria-current="page">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header>
