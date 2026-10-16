@@ -1,26 +1,57 @@
-/* PRICE LIST only: one semantic table per category, with inline plan details. */
+/* PRICE LIST only: compact, always-visible category index. */
 body#top.price-list-page .price-category-nav {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 20px;
-  margin: 0 0 36px; border-top: 1px solid #dedede;
+  position: static; inset: auto; z-index: auto;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: row; grid-auto-rows: 1fr; gap: 0 20px;
+  width: 100%; max-width: 100%; max-height: none;
+  margin: 12px 0 0; padding: 0; overflow: visible;
+  background: transparent; border: 0; box-shadow: none;
 }
 body#top.price-list-page .price-category-nav a {
-  display: flex; align-items: center; gap: 10px; min-width: 0; min-height: 54px;
-  padding: 12px 4px; border-bottom: 1px solid #dedede;
-  font-size: 12px; line-height: 1.7; overflow-wrap: anywhere;
+  display: grid; grid-template-columns: 2ch minmax(0, 1fr) 12px;
+  align-items: center; gap: 8px; min-width: 0; min-height: 40px;
+  margin: 0; padding: 5px 0; border: 0; border-bottom: 1px solid #ffffff1f;
+  background: transparent; color: #f2f2f2;
+  font-size: 14px; font-weight: 400; line-height: 1.5; letter-spacing: normal;
+  text-decoration: none; white-space: normal; word-break: normal; overflow-wrap: normal;
+  touch-action: manipulation;
 }
-body#top.price-list-page .price-category-nav a > span:first-child { color: #777; font-size: 10px; }
-body#top.price-list-page .price-category-nav a:is(:hover, :active) { background: #f5f5f5; }
+body#top.price-list-page .price-category-nav .price-nav-number {
+  color: #a0a0a0; font-size: 12px; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+body#top.price-list-page .price-category-nav .price-nav-label {
+  min-width: 0; line-break: strict;
+}
+body#top.price-list-page .price-category-nav .price-nav-phrase {
+  display: inline-block; max-width: 100%;
+}
+body#top.price-list-page .price-category-nav .price-nav-arrow {
+  color: #a0a0a0; font-size: 12px; text-align: right; white-space: nowrap;
+}
+body#top.price-list-page .price-category-nav a:is(:hover, :active) { background: #ffffff0a; }
+body#top.price-list-page .price-category-nav a:focus-visible {
+  outline: 1px solid #c9aa78; outline-offset: 2px;
+}
+@media (max-width: 1023px) {
+  body#top.price-list-page .price-category-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 600px) {
-  body#top.price-list-page .price-category-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; margin-bottom: 28px; }
-  body#top.price-list-page .price-category-nav a { font-size: 11px; gap: 8px; }
+  body#top.price-list-page .price-category-nav {
+    grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 0;
+  }
 }
+/* Existing native hash links use the shared header's scroll-padding-top.
+   Avoid adding another full header offset via scroll-margin-top. */
+body#top.price-list-page main :is(#price-contents, .price-category h2[id]) { scroll-margin-top: 8px; }
+/* One semantic table per category, with inline plan details. */
 body.price-list-page main { max-width: 920px; }
-body.price-list-page main .price-overview { margin: 28px 0 30px; padding-top: 20px; border-top: 1px solid #dedede; scroll-margin-top: 96px; }
+body.price-list-page main .price-overview { margin: 20px 0 24px; padding: 14px 16px 10px; border: 0; background: #080808; color: #f2f2f2; }
 .price-list-page .price-overview p { margin: 0; }
-.price-list-page .price-overview-label { color: #666; font-size: 10px; line-height: 1.8; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+.price-list-page .price-overview-label { color: #c9aa78; font-size: 11px; line-height: 1.8; letter-spacing: .12em; font-variant-numeric: tabular-nums; }
 .price-list-page .price-overview-label span { padding-inline: 8px; color: #bbb; }
-.price-list-page .price-overview-help { padding-top: 8px; font-size: 14px; line-height: 1.8; color: #303030; }
-.price-list-page .price-overview-note { padding-top: 5px; font-size: 12px; line-height: 1.8; color: #707070; }
+.price-list-page .price-overview-help { padding-top: 6px; font-size: 12px; line-height: 1.6; color: #d0d0d0; }
+.price-list-page .price-overview-note { padding-top: 4px; font-size: 11px; line-height: 1.6; color: #aaa; }
 body.price-list-page main .price-category { margin: 0 0 36px; }
 .price-list-page .price-category-heading { display: flex; align-items: baseline; gap: 12px; margin: 0 0 10px; }
 .price-list-page .price-category-number { color: #888; font-size: 11px; letter-spacing: .06em; font-variant-numeric: tabular-nums; }
@@ -62,7 +93,7 @@ body.price-list-page .contents-return { display: table; margin: 20px 0 0 auto; p
 @media (hover:hover) { .price-list-page .price-summary-row:hover { background: #f7f7f7; } }
 @media (max-width:600px) {
  body.price-list-page main { padding-inline: 16px; }
- body.price-list-page main .price-overview { margin: 22px 0 28px; padding-top: 16px; }
+ body.price-list-page main .price-overview { margin: 16px 0 24px; padding: 12px 12px 8px; }
  body.price-list-page main .price-category { margin-bottom: 30px; }
  .price-list-page .price-category h2 { font-size: 16px; }
  .price-list-page .price-category-heading { gap: 8px; }
