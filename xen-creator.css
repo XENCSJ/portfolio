@@ -20,18 +20,18 @@ body#top.creator-page .creator-connect-links a {
   gap: 8px; min-width: 0; min-height: 64px; padding: 8px 2px;
   color: #ddd; border: 1px solid transparent; border-radius: 2px;
   text-align: center; text-decoration: none;
-  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+  -webkit-tap-highlight-color: rgba(245,245,245,.12);
+  transition: border-color .2s ease, background-color .2s ease;
 }
 body#top.creator-page .creator-connect-links svg {
   display: block; flex: none; width: 22px; height: 22px;
-  fill: none; stroke: currentColor; stroke-width: 1.6;
+  color: #f5f5f5; fill: none; stroke: currentColor; stroke-width: 1.6;
   stroke-linecap: round; stroke-linejoin: round;
 }
 body#top.creator-page .creator-connect-links .creator-brand-icon { fill: currentColor; stroke: none; }
 body#top.creator-page .creator-connect-label { font-size: 10px; line-height: 1.4; letter-spacing: .01em; white-space: nowrap; }
-body#top.creator-page .creator-connect-links a[aria-label="TikTok"] { color: #c5aa7a; }
 body#top.creator-page .creator-connect-links a:is(:hover, :focus-visible, :active) {
-  color: #f5f5f5; background: #141416; border-color: #555;
+  color: #ddd; background: #141416; border-color: #555;
 }
 body#top.creator-page .cp-related-link { margin: 0 0 20px; font-size: 12px; line-height: 1.8; }
 body#top.creator-page .cp-related-link a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; text-decoration: underline; text-underline-offset: 5px; }
