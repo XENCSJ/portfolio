@@ -130,7 +130,7 @@ body#top .xen-contact .contact-actions a:active { transform: scale(.985); }
   body#top .xen-contact-arrow { transition: none; transform: none; }
 }
 
-/* INDEX directory: natural vertical flow, clear hierarchy and generous targets.
+/* INDEX directory: one separator owner (adjacent list items), natural flow.
    This scope never changes the hero, rotating ring or other page content. */
 body#top.home-page #home,
 body#top.home-page .xen-footer { text-align: center; }
@@ -162,16 +162,16 @@ body#top.home-page #creative-index .home-ja {
 }
 body#top.home-page #creative-index .index-directory {
   width: 100%;
-  margin: 48px auto 0;
+  margin: 32px auto 0;
 }
 body#top.home-page #creative-index .index-category {
-  margin: 56px 0 0;
+  margin: 32px 0 0;
   padding: 0;
   border: 0;
 }
 body#top.home-page #creative-index .index-category:first-child { margin-top: 0; }
 body#top.home-page #creative-index .index-heading {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   padding: 0;
   text-align: center;
   line-height: 1.3;
@@ -181,12 +181,15 @@ body#top.home-page #creative-index .index-heading > span { display: block; }
 body#top.home-page #creative-index .index-items {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
+  gap: 0;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-body#top.home-page #creative-index .index-items li { min-width: 0; margin: 0; padding: 0; }
+body#top.home-page #creative-index .index-items li { min-width: 0; margin: 0; padding: 0; border: 0; }
+/* No trailing item rule or section rule: group boundaries use gold + space.
+   Keeping the line on li prevents hover/focus styles from drawing it twice. */
+body#top.home-page #creative-index .index-items > li + li { border-top: 1px solid #303035; }
 body#top.home-page #creative-index .index-link {
   display: flex;
   flex-direction: column;
@@ -255,16 +258,22 @@ body#top.home-page #creative-index .index-link:focus-visible {
   outline-offset: 2px;
 }
 body#top.home-page #creative-index .index-link:active { background: rgb(201 170 120 / 10%); }
-body#top.home-page #creative-index .index-category:has(.index-category-link) { margin-top: 40px; }
 body#top.home-page #creative-index .index-category-link { min-height: 80px!important; }
 body#top.home-page #xen-footer {
-  padding: 16px 20px max(32px, env(safe-area-inset-bottom, 0px))!important;
+  padding: 16px 20px calc(40px + env(safe-area-inset-bottom, 0px))!important;
   border: 0;
+}
+body#top.home-page #xen-footer .xen-back-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0 auto 16px;
 }
 body#top.home-page #xen-footer::before { content: none; }
 @media (min-width: 768px) {
-  body#top.home-page #creative-index .index-directory { margin-top: 56px; }
-  body#top.home-page #creative-index .index-category { margin-top: 64px; }
+  body#top.home-page #creative-index .index-directory { margin-top: 40px; }
+  body#top.home-page #creative-index .index-category { margin-top: 40px; }
   body#top.home-page #creative-index .index-link { min-height: 72px!important; }
   body#top.home-page #creative-index .index-category-link { min-height: 84px!important; }
 }
