@@ -61,6 +61,10 @@ def render(path):
     page_links.feed(source)
     contacts = [attrs for attrs, _ in page_links.links
                 if "xen-contact-primary" in attrs.get("class", "").split()]
+    if not contacts:
+        # INDEX keeps consultation in the menu after its duplicate footer is removed.
+        contacts = [attrs for attrs, text in parser.links
+                    if text.strip().startswith("CONTACT")]
     if not contacts or len({a.get("href") for a in contacts}) != 1:
         raise ValueError(f"Missing or ambiguous consultation target: {path.name}")
 
