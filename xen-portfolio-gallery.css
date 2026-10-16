@@ -112,12 +112,15 @@ body.xen-curated.apparel-page .image-gallery:not(.brand-visual) > .gallery-item 
 body.xen-curated.apparel-page .image-gallery:not(.brand-visual) .gallery-visual {
   aspect-ratio: 3 / 4;
   background: #fff;
-  display: grid;
-  place-items: center;
+  display: block;
 }
 body.xen-curated.apparel-page .image-gallery:not(.brand-visual) .gallery-visual img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
   object-fit: contain;
 }
 body.xen-curated.apparel-page .image-gallery.pair {
