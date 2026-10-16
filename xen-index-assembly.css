@@ -17,80 +17,12 @@
 .home-page#top .index-social a{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;margin:0;padding:0;border:0;background:transparent;color:#252525;touch-action:manipulation;transition:color .2s ease}
 .home-page#top .index-social svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .home-page#top .index-social a:is(:hover,:focus-visible,:active){color:#666}
-.home-page#top #creative-index{padding-top:16px!important}
 @media(max-width:600px){.home-page#top .hero{padding-top:24px}.home-page#top .index-social{gap:12px}}
 @media(prefers-reduced-motion:reduce){
  .home-page#top .orbit{animation:none!important}
  .home-page#top .logo-final{animation:none!important;opacity:1;transform:none}
  .home-page#top .index-social a{transition:none}
 }
-
-/* INDEX only: compact categories; retain the original full-size rotating artwork. */
-body#top.home-page {
-  --index-room: calc(100vh - var(--xen-header-height) - env(safe-area-inset-bottom, 0px));
-  --index-en-size: clamp(12px, calc(var(--index-room) * .019), 15px);
-  --index-ja-size: clamp(10px, calc(var(--index-room) * .014), 11px);
-  --index-row: clamp(28px, calc(var(--index-room) * .045), 36px);
-  --index-gap: clamp(2px, calc(var(--index-room) * .004), 5px);
-}
-@supports (height: 100dvh) {
-  body#top.home-page {
-    --index-room: calc(100dvh - var(--xen-header-height) - env(safe-area-inset-bottom, 0px));
-  }
-}
-body#top.home-page #home #creative-index {
-  flex: none;
-  width: min(100%, 540px);
-  margin: 0 auto;
-  padding: 0 max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px)) 4px!important;
-}
-body#top.home-page #home #creative-index .studio-heading {
-  margin: 0 auto 2px!important;
-  font-size: clamp(10px, calc(var(--index-room) * .014), 12px)!important;
-  line-height: 1.2!important;
-  letter-spacing: .06em!important;
-}
-body#top.home-page #home #creative-index .home-ja {
-  margin: 0 auto!important;
-  font-size: var(--index-ja-size);
-  line-height: 1.2!important;
-}
-body#top.home-page #home #creative-index .index-directory {
-  margin: var(--index-gap) auto 0;
-}
-body#top.home-page #home #creative-index .index-category {
-  margin: var(--index-gap) 0 0;
-  padding: var(--index-gap) 0 0;
-}
-body#top.home-page #home #creative-index .index-category:first-child {
-  margin: 0;
-  padding: 0;
-}
-body#top.home-page #home #creative-index .index-heading {
-  margin: 0 0 2px;
-  line-height: 1.2;
-}
-body#top.home-page #home #creative-index .index-heading:has(> .index-category-link) {
-  margin-bottom: 0;
-}
-body#top.home-page #home #creative-index .index-link {
-  min-height: var(--index-row)!important;
-  height: auto;
-  padding: 1px 16px!important;
-  gap: 0!important;
-}
-body#top.home-page #home #creative-index :is(.index-link, .index-heading) .index-en {
-  font-size: var(--index-en-size);
-  line-height: 1.15;
-  letter-spacing: .06em;
-}
-body#top.home-page #home #creative-index :is(.index-link, .index-heading) .index-ja {
-  font-size: var(--index-ja-size);
-  line-height: 1.2;
-  margin-top: 0;
-  letter-spacing: .04em;
-}
-body#top.home-page #xen-site-header .xen-header-center { display: none; }
 
 /* Colour only: each bilingual label catches a soft gold wave every eight
    seconds. SVG paths, type sizes, rotation and layout are unchanged. */

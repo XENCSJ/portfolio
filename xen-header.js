@@ -2,25 +2,8 @@
 (() => {
   const header = document.getElementById('xen-site-header');
   if (!header) return;
-  const home = header.querySelector('.xen-header-home');
-  // Keep the existing centre mark on detail pages only. INDEX has its own wheel.
-  if (document.body.classList.contains('home-page')) {
-    header.querySelector('.xen-header-center')?.remove();
-  } else if (home && !header.querySelector('.xen-header-center')) {
-    const center = document.createElement('a');
-    center.className = 'xen-header-center';
-    center.href = home.href;
-    center.setAttribute('aria-label', 'XEN INDEXへ（中央ロゴ）');
-    const symbol = document.createElement('img');
-    symbol.className = 'xen-header-symbol';
-    symbol.src = new URL('./XEN_logo_fixed_black.svg', document.currentScript?.src || document.baseURI).href;
-    symbol.alt = '';
-    symbol.width = 2232;
-    symbol.height = 2293;
-    symbol.decoding = 'async';
-    center.append(symbol);
-    home.after(center);
-  }
+  // One shared header: wordmark, cart and menu. The INDEX hero stays untouched.
+  header.querySelector('.xen-header-center')?.remove();
   const button = header.querySelector('.xen-header-toggle');
   const menu = header.querySelector('#xen-menu');
   if (!button || !menu) return;

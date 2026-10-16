@@ -6,7 +6,8 @@
   --xen-brand-gold: #c9aa78;
   --xen-header-line: 3px;
   --xen-header-line-gap: 3px;
-  --xen-header-icon-height: calc(3 * var(--xen-header-line) + 2 * var(--xen-header-line-gap));
+  /* Reference screenshot: compact 44px-wide official wordmark. */
+  --xen-header-logo-height: 10px;
   --xen-header-bar: 56px;
   --xen-header-safe-top: env(safe-area-inset-top, 0px);
   --xen-header-height: calc(var(--xen-header-bar) + var(--xen-header-safe-top));
@@ -58,7 +59,7 @@ body#top #xen-site-header .xen-header-home {
 body#top #xen-site-header .xen-header-logo {
   display: block;
   width: auto;
-  height: var(--xen-header-icon-height);
+  height: var(--xen-header-logo-height);
   max-width: none;
   object-fit: contain;
   filter: var(--xen-header-logo-filter);
@@ -66,46 +67,6 @@ body#top #xen-site-header .xen-header-logo {
   mix-blend-mode: normal;
   transform: none;
   animation: none;
-}
-/* Reuse the INDEX artwork; absolute positioning keeps its centre independent
-   of the different widths of the wordmark and the existing right controls. */
-body#top #xen-site-header .xen-header-center {
-  position: absolute;
-  left: 50%;
-  top: calc(var(--xen-header-safe-top) + var(--xen-header-bar) / 2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 44px;
-  height: 44px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  text-decoration: none;
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, -50%);
-  animation: none;
-  transition: none;
-}
-body#top #xen-site-header .xen-header-center::before,
-body#top #xen-site-header .xen-header-center::after { content: none; }
-body#top #xen-site-header .xen-header-symbol {
-  display: block;
-  width: auto;
-  height: 36px;
-  max-width: none;
-  max-height: none;
-  object-fit: contain;
-  filter: var(--xen-header-logo-filter);
-  opacity: 1;
-  visibility: visible;
-  mix-blend-mode: normal;
-  transform: none;
-  animation: none;
-  transition: none;
 }
 body#top #xen-site-header :is(.xen-header-cart, .xen-header-toggle) {
   box-sizing: border-box;
