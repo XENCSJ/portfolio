@@ -1,10 +1,10 @@
 /* One official header on every public page. Load after page styles. */
 :root {
-  --xen-header-surface: #fff;
-  --xen-header-ink: #171717;
-  --xen-header-logo-filter: none;
-  --xen-header-logo-width: 110px;
-  --xen-header-bar: 64px;
+  --xen-header-surface: #000;
+  --xen-header-ink: #fff;
+  --xen-header-logo-filter: brightness(0) invert(1);
+  --xen-header-logo-width: 90px;
+  --xen-header-bar: 56px;
   --xen-header-safe-top: env(safe-area-inset-top, 0px);
   --xen-header-height: calc(var(--xen-header-bar) + var(--xen-header-safe-top));
   --xen-header-left: max(clamp(20px, 4.65vw, 64px), env(safe-area-inset-left, 0px));
@@ -63,6 +63,46 @@ body#top #xen-site-header .xen-header-logo {
   mix-blend-mode: normal;
   transform: none;
   animation: none;
+}
+/* Reuse the INDEX artwork; absolute positioning keeps its centre independent
+   of the different widths of the wordmark and the existing right controls. */
+body#top #xen-site-header .xen-header-center {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--xen-header-safe-top) + var(--xen-header-bar) / 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-decoration: none;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%);
+  animation: none;
+  transition: none;
+}
+body#top #xen-site-header .xen-header-center::before,
+body#top #xen-site-header .xen-header-center::after { content: none; }
+body#top #xen-site-header .xen-header-symbol {
+  display: block;
+  width: auto;
+  height: 36px;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  filter: var(--xen-header-logo-filter);
+  opacity: 1;
+  visibility: visible;
+  mix-blend-mode: normal;
+  transform: none;
+  animation: none;
+  transition: none;
 }
 body#top #xen-site-header :is(.xen-header-cart, .xen-header-toggle) {
   box-sizing: border-box;
@@ -163,8 +203,3 @@ body#top #xen-site-header .xen-header-home::after { content: none; }
 body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78; }
 /* scroll-padding accounts for the fixed bar; margin gives the heading breathing room. */
 body#top #studio-contact { scroll-margin-top: 16px; }
-
-/* Scale the existing, complete logo without changing the artwork or controls. */
-@media (max-width: 767px) {
-  :root { --xen-header-logo-width: 90px; }
-}

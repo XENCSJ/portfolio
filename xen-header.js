@@ -2,6 +2,23 @@
 (() => {
   const header = document.getElementById('xen-site-header');
   if (!header) return;
+  // The same complete SVG used in the INDEX wheel, inserted once on every page.
+  const home = header.querySelector('.xen-header-home');
+  if (home && !header.querySelector('.xen-header-center')) {
+    const center = document.createElement('a');
+    center.className = 'xen-header-center';
+    center.href = home.href;
+    center.setAttribute('aria-label', 'XEN INDEXへ（中央ロゴ）');
+    const symbol = document.createElement('img');
+    symbol.className = 'xen-header-symbol';
+    symbol.src = new URL('./XEN_logo_fixed_black.svg', document.currentScript?.src || document.baseURI).href;
+    symbol.alt = '';
+    symbol.width = 2232;
+    symbol.height = 2293;
+    symbol.decoding = 'async';
+    center.append(symbol);
+    home.after(center);
+  }
   const button = header.querySelector('.xen-header-toggle');
   const menu = header.querySelector('#xen-menu');
   const links = Array.from(menu.querySelectorAll('a'));
