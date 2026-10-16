@@ -1,4 +1,5 @@
 /* SOUND-only catalogue and service directory. Shared header/footer stay intact. */
+body.sound-page{--sound-player-gap:20px;--sound-work-gap:clamp(48px,5vw,64px)}
 body.sound-page main .sound-category-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:960px;margin:30px auto 0;text-align:left}
 body.sound-page main .sound-category-nav a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;min-height:74px;padding:14px 16px;border:1px solid #e4e4e6;background:#fff;color:#171719;transition:border-color .25s,background-color .25s}
 .sound-category-en,.sound-category-ja{display:block;overflow-wrap:anywhere}
@@ -9,17 +10,16 @@ body.sound-page.xen-detail-unified main .sound-section{max-width:960px;margin:56
 body.sound-page.xen-detail-unified main .sound-section>.series-title{display:block;margin:0 0 28px;padding:0 0 18px;text-align:left;font-size:13px;line-height:1.8;letter-spacing:.1em}
 .sound-section-ja{display:block;margin-top:5px;color:#727277;font-size:11px;font-weight:400;letter-spacing:.05em}
 .sound-number{display:inline-block;margin-right:12px;color:#858589;font-size:11px;font-variant-numeric:tabular-nums}
-body.sound-page.xen-detail-unified main .sound-section .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:28px;margin:24px 0 0;align-items:start}
+body.sound-page.xen-detail-unified main .sound-section .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:var(--sound-work-gap);margin:24px 0 0;align-items:start}
 body.sound-page.xen-detail-unified.xen-polished main .work h3{display:block;margin:0 0 16px;padding:0;font-size:clamp(16px,2vw,20px);font-weight:500;line-height:1.65;letter-spacing:.025em;text-align:left}
 .sound-page .xen-spotify-player{display:block;position:static;width:100%;height:152px;min-height:152px;aspect-ratio:auto;border:0;border-radius:12px}
 .sound-page .sound-album-player{height:352px;min-height:352px}
 .sound-page .sound-work-links{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:4px 18px}
 body.sound-page main .sound-work-links a{display:inline-flex;align-items:center;min-height:44px;margin:0;padding:12px 0;color:#626269;font-size:11px;line-height:1.7;text-decoration:none;overflow-wrap:anywhere}
-.sound-page .sound-editions{border-top:1px solid #e4e4e6;margin-top:14px;min-width:0}
-.sound-page .sound-editions summary{min-height:48px;padding:15px 3px;color:#626269;font-size:11px;line-height:1.7;cursor:pointer}
-.sound-page .sound-editions .xen-spotify-player{margin-bottom:12px}
-.sound-page .sound-video-version{margin-top:22px}
-.sound-page .sound-video-label{display:block;margin:0 0 12px;font-size:10px;letter-spacing:.12em;color:#727277}
+/* Keep one work's players together; destination links follow the entire group. */
+.sound-page .sound-player-stack{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sound-player-gap);min-width:0}
+.sound-page .sound-player-stack>iframe,.sound-page .sound-player-stack>.video-container{margin:0}
+body.sound-page.xen-detail-unified main .sound-section .grid+.grid{margin-top:var(--sound-work-gap)}
 .sound-page .sound-empty{margin:0;padding:16px 0 2px;font-size:12px;line-height:1.8;color:#777}
 body.sound-page main .sound-channel{display:table;margin:14px 0 0 auto;font-size:11px;overflow-wrap:anywhere}
 body.sound-page main .sound-platform-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;text-align:center}
@@ -57,7 +57,7 @@ body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
  body.sound-page main .sound-category-nav a>span:first-child{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
  .sound-category-ja{margin-top:0}
  body.sound-page.xen-detail-unified main .sound-section{margin-top:40px}
- body.sound-page.xen-detail-unified main .sound-section .grid{grid-template-columns:1fr;gap:28px}
+ body.sound-page.xen-detail-unified main .sound-section .grid{grid-template-columns:1fr;gap:var(--sound-work-gap)}
  body.sound-page main .sound-platform-columns{grid-template-columns:1fr;gap:32px}
  .sound-platform-group+.sound-platform-group{border-left:0;padding-left:0;border-top:1px solid #e4e4e6;padding-top:28px}
  body.sound-page main .sound-service-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}
