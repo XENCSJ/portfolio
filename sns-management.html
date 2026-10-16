@@ -29,220 +29,12 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <noscript><style>.reveal,.xen-reveal{opacity:1!important;transform:none!important}</style></noscript><link rel="stylesheet" href="./xen-refinements.css?v=20261014-1">
 <link rel="stylesheet" href="./xen-gallery.css?v=20261015-stable">
 <link rel="stylesheet" href="./xen-experience.css?v=20261015-luxury">
-<link rel="stylesheet" href="./xen-sns.css?v=20261015-text">
 <noscript><style>body.xen-polished .xen-header{height:auto;min-height:80px;flex-wrap:wrap;padding-block:18px}body.xen-polished .xen-menu-button{display:none}body.xen-polished .xen-menu[hidden]{display:grid!important;position:static;width:100%;max-height:none;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;box-shadow:none;padding:8px;gap:0 8px}body.xen-polished .xen-menu a{font-size:10px;overflow-wrap:anywhere}body.xen-polished .reveal,body.xen-polished .xen-reveal{opacity:1!important;transform:none!important}</style></noscript>
 <link rel="stylesheet" href="./xen-detail-refined.css?v=20261015-review1">
-<style id="sns-impact-refinement">
-/* SNS page only: clear promise, concise copy, existing artwork and shared UI retained. */
-body.sns-management-page.xen-detail-unified .sns-statement { padding-block:clamp(24px,4vw,40px); }
-body.sns-management-page.xen-detail-unified .sns-statement h2 { margin:18px 0; }
-body.sns-management-page.xen-detail-unified .sns-statement h2 strong { margin:0;font-size:clamp(34px,5.1vw,60px);font-weight:600;line-height:1.45;letter-spacing:-.025em; }
-body.sns-management-page .sns-statement h2 strong span { display:inline-block; }
-body.sns-management-page.xen-detail-unified .sns-statement-copy { margin:18px 0 0;font-size:clamp(14px,1.6vw,16px);line-height:1.9; }
-.sns-management-page .sns-quick-links { display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:24px; }
-.sns-management-page .sns-quick-links a { display:inline-flex;align-items:center;justify-content:space-between;gap:18px;min-height:44px;padding-block:8px;border-bottom:1px solid #cfcfd3;font-size:13px;transition:color 250ms,border-color 250ms; }
-.sns-management-page .sns-quick-links a:hover { color:#897348;border-color:currentColor; }
-.sns-management-page main :is(#sns-results,#sns-services,#sns-contact) { scroll-margin-top:106px; }
-.sns-management-page .sns-production-count { margin:0 0 20px; }
-.sns-management-page .sns-production-count strong { color:#171719;font-size:1.2em;font-weight:600; }
-body.sns-management-page.xen-detail-unified .sns-metric-total { padding-block:clamp(24px,3.5vw,40px); }
-@media(max-width:650px) {
- body.sns-management-page .sns-statement h2 strong span { display:block; }
- .sns-management-page .sns-quick-links { gap:8px 20px; }
- .sns-management-page .sns-quick-links a { gap:12px; }
-}
-@media(prefers-reduced-motion:reduce) { .sns-management-page .sns-quick-links a { transition:none; } }
-</style>
-<style id="sns-gold-20261016">
-/* SNS GOLD 20261016: page-local finish; all artwork, copy and shared navigation retained. */
-body.sns-management-page { --sns-gold:#c79b42; --sns-bright:#f7e2a8; --sns-dark:#12100d; --sns-ease:cubic-bezier(.16,1,.3,1); }
-body.sns-management-page main .hero .eyebrow { color:#8a6629; }
-body.sns-management-page main .hero h1 { position:relative;padding-bottom:18px; }
-body.sns-management-page main .hero h1::after { content:'';position:absolute;bottom:0;left:calc(50% - 32px);width:64px;height:2px;background:linear-gradient(90deg,#9b6b20,#eed39a,#9b6b20); }
-body.sns-management-page.xen-detail-unified .sns-statement {
- position:relative;isolation:isolate;overflow:clip;padding:clamp(28px,5vw,56px);border:1px solid #bb934a70;
- background:radial-gradient(ellipse at 90% 12%,#62491d70,transparent 53%),linear-gradient(125deg,#10100f,#211c13 65%,#12110f);
- color:#fff5df;box-shadow:0 22px 60px #32240a15;
-}
-body.sns-management-page .sns-statement::before { content:'';position:absolute;z-index:-1;width:430px;height:430px;right:-190px;top:-160px;border:1px solid #e9bb5e48;border-radius:50%;box-shadow:0 0 0 36px #d1a64d08,0 0 0 37px #d1a64d20,0 0 0 85px #d1a64d05,0 0 0 86px #d1a64d12;pointer-events:none; }
-body.sns-management-page .sns-statement::after { content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 35%,#edc87518 46%,#ffe6a849 50%,#edc8750c 55%,transparent 64%);transform:translateX(-110%);pointer-events:none; }
-body.sns-management-page .sns-statement .sns-kicker { position:relative;z-index:1;color:#d9bd80;font-size:10px;letter-spacing:.18em; }
-body.sns-management-page.xen-detail-unified .sns-statement h2 { position:relative;z-index:1;margin:22px 0; }
-body.sns-management-page.xen-detail-unified .sns-statement h2 strong { font-size:clamp(32px,4.8vw,58px);font-weight:650;line-height:1.5;letter-spacing:-.035em; }
-body.sns-management-page .sns-statement h2 strong span { color:#efd397;background-image:linear-gradient(108deg,#ba8631 0%,#f3dba4 18%,#fff7da 30%,#c59946 42%,#f3dba4 55%,#fff9df 68%,#ba8631 85%,#f3dba4 100%);background-size:220% 100%;background-position:100% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; }
-body.sns-management-page.xen-detail-unified .sns-statement-copy { position:relative;z-index:1;color:#e5dfd3;font-size:clamp(13px,1.4vw,15px);line-height:2; }
-body.sns-management-page .sns-quick-links { position:relative;z-index:1;gap:12px;margin-top:28px; }
-body.sns-management-page .sns-quick-links a { min-height:44px;padding:11px 16px;gap:18px;border:1px solid #c49b4d70;background:#ffffff05;color:#f6e6c5;font-size:12px;transition:background .3s,color .3s,transform .3s; }
-body.sns-management-page .sns-quick-links a:first-child { background:linear-gradient(120deg,#b98d39,#efd397 55%,#cba656);border-color:#e7c57d;color:#19150d;font-weight:600; }
-body.sns-management-page .sns-quick-links a:hover { background:#ead095;color:#19150d;transform:translateY(-2px); }
-body.sns-management-page .sns-sparks { position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none; }
-body.sns-management-page .sns-sparks i { position:absolute;left:var(--x);top:var(--y);width:3px;height:3px;background:#ebc774;border-radius:50%;opacity:.48;box-shadow:0 0 12px #ffd88c; }
-body.sns-management-page .sns-sparks i:nth-child(3n) { width:2px;height:2px;opacity:.25; }
-body.sns-management-page .sns-kicker { color:#8b6629;letter-spacing:.2em; }
-body.sns-management-page .sns-section-heading::after { background:linear-gradient(90deg,#b88935,#d8bc7d70 55%,#d8bc7d14); }
-body.sns-management-page .sns-production-count strong { color:#8b6020; }
-body.sns-management-page .sns-metrics { gap:1px;background:#b58d4360;border:1px solid #b58d4360; }
-body.sns-management-page .sns-metric { background:linear-gradient(125deg,#fbf8ef,#f2e7cf); }
-body.sns-management-page .sns-metric dt { color:#5c503a; }
-body.sns-management-page .sns-metric .sns-number { color:#8d631e; }
-body.sns-management-page .sns-metric .sns-unit { color:#574323; }
-body.sns-management-page.xen-detail-unified .sns-metric-total { background:radial-gradient(ellipse at 88% 50%,#82602744,transparent 60%),linear-gradient(120deg,#12110e,#211b11);padding:clamp(26px,4vw,42px); }
-body.sns-management-page .sns-metric-total dt { color:#e9d5ac; }
-body.sns-management-page .sns-metric-total dd { position:relative;z-index:1; }
-body.sns-management-page .sns-metric-total .sns-number { color:#f2d18c;text-shadow:0 0 40px #edbe5530;font-weight:400; }
-body.sns-management-page .sns-metric-total .sns-unit { color:#f3dfb3; }
-body.sns-management-page .sns-metric-total::before { content:'';position:absolute;right:-65px;top:50%;width:240px;height:240px;transform:translateY(-50%);border:1px solid #caa25236;border-radius:50%;box-shadow:0 0 0 30px #caa2520b,0 0 0 31px #caa25220,0 0 0 65px #caa25205,0 0 0 66px #caa25214;pointer-events:none; }
-body.sns-management-page .sns-metric-total::after { background:linear-gradient(105deg,transparent 25%,#e6bc5d12 43%,#ffe8b646 50%,transparent 72%); }
-body.sns-management-page :is(.sns-step-index,.sns-list-index) { color:#976e29;font-weight:600; }
-body.sns-management-page .sns-process-list { gap:8px; }
-body.sns-management-page .sns-process-list li { border:1px solid #d4b56b60;background:linear-gradient(145deg,#fcfaf5,#f6eedc);padding:20px 16px; }
-body.sns-management-page .sns-process-list .sns-step-arrow { right:12px;bottom:20px;color:#aa7b2d; }
-body.sns-management-page .detail-list-line::after { background:linear-gradient(90deg,#cda14e,#e9dfc9 70%,transparent); }
-body.sns-management-page :is(.sns-service-list,.sns-strength-list) li { transition:background .3s,padding .3s; }
-body.sns-management-page :is(.sns-service-list,.sns-strength-list) li:hover { padding-left:12px;background:#caa04c0b; }
-body.sns-management-page .sns-evidence .gallery-item { outline:1px solid #bf994326;outline-offset:0;transition:outline-color .35s,box-shadow .35s; }
-body.sns-management-page .sns-evidence .gallery-item:hover { outline-color:#bd8a31;box-shadow:0 12px 36px #573c151a; }
-body.sns-management-page .detail-frame::before,body.sns-management-page .detail-frame::after { border-color:#bf913a80; }
-body.sns-management-page.xen-detail-unified .sns-fit { background:radial-gradient(ellipse at 100% 0%,#8a632b40,transparent 70%),#16130f;border:1px solid #b58a4150; }
-body.sns-management-page .sns-fit :is(.sns-kicker,.sns-list-index,.sns-fit-arrow) { color:#e0be7a; }
-body.sns-management-page .sns-fit .sns-section-heading h2 { color:#f6e7c9; }
-body.sns-management-page .sns-fit .sns-section-heading::after,body.sns-management-page .sns-fit .detail-list-line::after { background:#c8a35a4d; }
-body.sns-management-page .sns-contact { position:relative;isolation:isolate;overflow:hidden;padding:clamp(26px,4vw,48px);border:1px solid #b9904960;background:linear-gradient(125deg,#19150f,#2c2316);color:#f7e7c5; }
-body.sns-management-page .sns-contact :is(.sns-kicker,.sns-body) { color:#deca9f; }
-body.sns-management-page .sns-contact .sns-section-heading::after { background:linear-gradient(90deg,#c9a15b80,transparent); }
-body.sns-management-page .sns-contact::after { content:'';position:absolute;z-index:-1;inset:0;background:linear-gradient(110deg,transparent 25%,#e5b95f19 50%,transparent 70%);transform:translateX(-110%);pointer-events:none; }
-body.sns-management-page .contact-actions a { color:#eeddbb;border-color:#cba45a70; }
-body.sns-management-page .contact-actions a:first-child { background:linear-gradient(115deg,#b68732,#efd59b 50%,#bd9346);border-color:#dfbc73;color:#1b160c;font-weight:600;box-shadow:0 6px 26px #d1a75020; }
-body.sns-management-page .contact-actions a:hover { background:#f6deaa;color:#1b160c;border-color:#f6deaa; }
-body.sns-management-page :is(.sns-quick-links,.sns-contact) a:focus-visible { outline:2px solid #f9dfa0;outline-offset:4px; }
-body.sns-management-page .sns-gold-progress { position:fixed;z-index:45;left:0;top:0;width:100%;height:3px;background:linear-gradient(90deg,#9c6920,#f3d491,#a57c2a);transform:scaleX(0);transform-origin:left;pointer-events:none; }
-@media (prefers-reduced-motion:no-preference) {
- body.sns-management-page main .hero h1::after { animation:sns-gold-line 1.1s var(--sns-ease) .4s backwards; }
- body.sns-management-page .sns-statement.sns-gold-in::before { animation:sns-orbit-entry 2.1s var(--sns-ease) both; }
- body.sns-management-page .sns-statement.sns-gold-in::after { animation:sns-gold-sweep 2.8s var(--sns-ease) .25s both; }
- body.sns-management-page .sns-statement.sns-gold-in h2 strong span { animation:sns-metal 4.6s ease-out both; }
- body.sns-management-page .sns-statement.sns-gold-in .sns-sparks i { animation:sns-spark 4.6s ease-out both; }
- body.sns-management-page .sns-metric-total.sns-gold-in::after { animation:sns-gold-sweep 2.4s ease-out .3s both; }
- body.sns-management-page .sns-process.sns-gold-in .sns-process-list li { animation:sns-step-gold 1.3s var(--sns-ease) both;animation-delay:calc(var(--sns-order,0) * .18s); }
- body.sns-management-page .sns-contact.sns-gold-in::after { animation:sns-gold-sweep 2.6s ease-out both; }
- body.sns-management-page .sns-gold-in .sns-section-heading::after { animation:sns-gold-line 1s var(--sns-ease) both; }
-}
-@keyframes sns-gold-sweep { 0%{transform:translateX(-110%);opacity:0}20%{opacity:1}85%{opacity:1}100%{transform:translateX(110%);opacity:0} }
-@keyframes sns-metal { from{background-position:100% 50%}to{background-position:0% 50%} }
-@keyframes sns-spark { 0%{opacity:0;transform:translateY(22px)}28%{opacity:.65}100%{opacity:.25;transform:translateY(-20px)} }
-@keyframes sns-orbit-entry { from{opacity:0;transform:scale(.72) rotate(-28deg)}to{opacity:1;transform:scale(1) rotate(0)} }
-@keyframes sns-gold-line { from{transform:scaleX(0)}to{transform:scaleX(1)} }
-@keyframes sns-step-gold { 0%{opacity:.25;transform:translateY(18px);box-shadow:inset 0 2px #b98b2c}50%{box-shadow:inset 0 2px #dbb35c,0 6px 22px #bc8a2a20}100%{opacity:1;transform:none;box-shadow:inset 0 2px #b98b2c} }
-@media(max-width:650px) {
- body.sns-management-page.xen-detail-unified .sns-statement { padding:26px 22px; }
- body.sns-management-page .sns-statement::before { right:-280px;top:-210px; }
- body.sns-management-page.xen-detail-unified .sns-statement h2 strong { font-size:clamp(29px,8.1vw,44px);line-height:1.5; }
- body.sns-management-page .sns-statement .sns-kicker { font-size:8px;letter-spacing:.1em; }
- body.sns-management-page .sns-quick-links { gap:8px; }
- body.sns-management-page .sns-quick-links a { padding:10px 11px;font-size:11px;gap:8px; }
- body.sns-management-page .sns-process-list li { padding:15px 16px; }
- body.sns-management-page .sns-process-list .sns-step-arrow { position:static; }
- body.sns-management-page .sns-metric-total::before { right:-130px; }
- body.sns-management-page .sns-contact { padding:28px 22px; }
-}
-@media(prefers-reduced-motion:reduce) {
- body.sns-management-page .sns-gold-progress { display:none; }
- body.sns-management-page .sns-sparks { display:none; }
- body.sns-management-page :is(.sns-statement,.sns-contact,.sns-metric-total)::after { display:none; }
-}
-</style>
-<style id="sns-cinematic-20261016">
-/* SNS CINEMATIC 20261016 — confined to this page. */
-body.sns-management-page main { animation:none; }
-body.sns-management-page.xen-detail-unified .sns-statement {
-  display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:26px;
-  padding:clamp(28px,4.5vw,52px);background:#10110f;border-color:#b5a17b55;
-  box-shadow:0 24px 60px #17140d13;min-height:430px;
-}
-body.sns-management-page .sns-statement::before,
-body.sns-management-page .sns-statement::after { display:none; }
-.sns-management-page .sns-film-atmosphere { position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none; }
-.sns-management-page .sns-film-atmosphere::before { content:'';position:absolute;inset:-45%;background:radial-gradient(ellipse at 72% 40%,#b6934b38,transparent 40%),radial-gradient(ellipse at 30% 80%,#d9bd7518,transparent 40%); }
-.sns-management-page .sns-film-beam { position:absolute;inset:-50%;background:linear-gradient(110deg,transparent 42%,#e5c37d08 47%,#fbe6b634 50%,#e5c37d0a 52%,transparent 58%);transform:translateX(-28%) rotate(-8deg); }
-.sns-management-page .sns-film-copy { position:relative;align-self:center;z-index:2;min-width:0; }
-body.sns-management-page .sns-statement .sns-kicker { color:#c5b38f;font-size:9px;letter-spacing:.18em; }
-body.sns-management-page.xen-detail-unified .sns-statement h2 { margin:24px 0; }
-body.sns-management-page.xen-detail-unified .sns-statement h2 strong { font-size:clamp(30px,4.1vw,48px);line-height:1.5;font-weight:500;letter-spacing:-.045em; }
-body.sns-management-page .sns-statement h2 strong span { display:block;color:#eadab6;background:linear-gradient(105deg,#bfa77a,#fff1d0 45%,#d3b987 75%,#f5e8ca);background-clip:text;-webkit-background-clip:text;background-size:100%;-webkit-text-fill-color:transparent; }
-body.sns-management-page.xen-detail-unified .sns-statement-copy { color:#c7c5bc;font-size:13px;line-height:2.05; }
-body.sns-management-page .sns-quick-links { gap:8px;margin-top:28px; }
-body.sns-management-page .sns-quick-links a { padding:10px 12px;font-size:11px;gap:10px;border-color:#b7a37a55; }
-body.sns-management-page .sns-quick-links a:first-child { background:#dbc8a0;border-color:#dbc8a0; }
-.sns-management-page .sns-film-visual { position:relative;align-self:center;min-width:0;height:280px;display:grid;place-items:center; }
-.sns-management-page .sns-film-halo { position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid #c6ac7266;box-shadow:inset 0 0 30px #b7934d0b,0 0 45px #d0b3730d;transform:rotate(-30deg) rotateY(48deg); }
-.sns-management-page .sns-film-halo::before,.sns-management-page .sns-film-halo::after { content:'';position:absolute;inset:16px;border-radius:50%;border:1px solid #e0c89533; }
-.sns-management-page .sns-film-halo::after { inset:38px;border-color:#d7bd7a1a; }
-.sns-management-page .sns-film-stage { position:relative;width:100%;height:180px;display:grid;place-items:center;text-align:center; }
-.sns-management-page .sns-film-scene { position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;opacity:0; }
-.sns-management-page .sns-film-scene:first-child { opacity:1; }
-.sns-management-page .sns-film-scene small { font-size:9px;letter-spacing:.21em;color:#c5b38f;font-weight:400; }
-.sns-management-page .sns-film-scene b { font-size:clamp(40px,4.7vw,60px);font-weight:400;letter-spacing:.15em;margin-right:-.15em;color:#f1e2bf;line-height:1.3; }
-.sns-management-page .sns-film-stage::after { content:'';position:absolute;bottom:0;left:calc(50% - 18px);height:1px;width:36px;background:#d0ba8580; }
-.sns-management-page .sns-film-footer { grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:20px;margin-top:6px;border-top:1px solid #c6b28230; }
-.sns-management-page .sns-film-timeline { display:flex;align-items:center;gap:10px;flex:1;max-width:240px; }
-.sns-management-page .sns-film-track { height:2px;flex:1;background:#e2cb9a2b;overflow:hidden; }
-.sns-management-page .sns-film-track i { display:block;height:100%;background:#e7d3a7;transform:scaleX(0);transform-origin:left; }
-.sns-management-page .sns-film-toggle { display:inline-flex;align-items:center;gap:9px;flex-shrink:0;min-height:44px;padding:8px 0 8px 12px;color:#d2c5a8;border:0;background:transparent;font-size:10px;letter-spacing:.09em;cursor:pointer; }
-.sns-management-page .sns-film-toggle[hidden] { display:none; }
-.sns-management-page .sns-film-toggle:focus-visible { outline:2px solid #e7d3a7;outline-offset:6px; }
-.sns-management-page .sns-film-control-icon { width:8px;height:10px;border-inline:2px solid currentColor; }
-.sns-management-page .sns-film-toggle[aria-pressed="true"] .sns-film-control-icon { width:0;height:0;border:5px solid transparent;border-right:0;border-left:8px solid currentColor; }
-body.sns-management-page .sns-metric-total::before { opacity:.45; }
-body.sns-management-page .sns-metric { background:linear-gradient(120deg,#fbfaf6,#f4efdf); }
-body.sns-management-page .sns-process-list li { background:#faf8f3;border-color:#c5b38555; }
-@media(prefers-reduced-motion:no-preference) {
- .sns-management-page .sns-film-active .sns-film-atmosphere::before { animation:sns-film-light 16s ease-in-out infinite alternate; }
- .sns-management-page .sns-film-active .sns-film-beam { animation:sns-film-beam 16s ease-in-out infinite; }
- .sns-management-page .sns-film-active .sns-film-halo { animation:sns-film-orbit 16s ease-in-out infinite alternate; }
- .sns-management-page .sns-film-active .sns-film-scene { animation:sns-film-scene 16s linear infinite both;animation-delay:calc(var(--scene) * 3.2s); }
- .sns-management-page .sns-film-active .sns-film-track i { animation:sns-film-track 16s linear infinite both;animation-delay:calc(var(--scene) * 3.2s); }
- .sns-management-page .sns-film-active .sns-film-copy > .sns-kicker { animation:sns-film-reveal 1.1s var(--sns-ease) .1s both; }
- .sns-management-page .sns-film-active h2 strong span { animation:sns-film-reveal 1.4s var(--sns-ease) .3s both; }
- .sns-management-page .sns-film-active h2 strong span:nth-child(2) { animation-delay:.55s; }
- .sns-management-page .sns-film-active .sns-statement-copy { animation:sns-film-reveal 1.4s var(--sns-ease) .8s both; }
- .sns-management-page .sns-film-active .sns-quick-links { animation:sns-film-reveal 1.2s var(--sns-ease) 1.05s both; }
- .sns-management-page .sns-film-paused *, .sns-management-page .sns-film-paused *::before,
- .sns-management-page .sns-film-suspended *, .sns-management-page .sns-film-suspended *::before { animation-play-state:paused!important; }
-}
-@keyframes sns-film-reveal { from{opacity:0;transform:translateY(20px);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)} }
-@keyframes sns-film-scene {
- 0%{opacity:0;transform:translateY(16px) scale(1.035);filter:blur(7px)}
- 4%,16%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
- 20%,100%{opacity:0;transform:translateY(-12px) scale(.98);filter:blur(5px)}
-}
-@keyframes sns-film-track { 0%{transform:scaleX(0);opacity:1}20%{transform:scaleX(1);opacity:1}22%,100%{transform:scaleX(1);opacity:0} }
-@keyframes sns-film-light { from{transform:translate(-4%,-3%) scale(.95);opacity:.7}to{transform:translate(5%,5%) scale(1.12);opacity:1} }
-@keyframes sns-film-beam { 0%{transform:translateX(-28%) rotate(-8deg);opacity:0}20%,65%{opacity:.8}100%{transform:translateX(34%) rotate(8deg);opacity:0} }
-@keyframes sns-film-orbit { from{transform:rotate(-30deg) rotateY(48deg) scale(.95)}to{transform:rotate(28deg) rotateY(22deg) scale(1.04)} }
-@media(max-width:700px) {
- body.sns-management-page.xen-detail-unified .sns-statement { grid-template-columns:minmax(0,1fr);gap:12px;padding:28px 24px 14px; }
- body.sns-management-page.xen-detail-unified .sns-statement h2 strong { font-size:clamp(29px,8vw,44px); }
- .sns-management-page .sns-film-visual { height:190px;margin-top:5px; }
- .sns-management-page .sns-film-halo { width:190px;height:190px; }
- .sns-management-page .sns-film-stage { height:145px; }
- .sns-management-page .sns-film-scene { gap:14px; }
- .sns-management-page .sns-film-scene b { font-size:42px; }
- .sns-management-page .sns-film-footer { padding-top:6px;margin-top:0; }
- .sns-management-page .sns-film-timeline { max-width:170px;gap:6px; }
- body.sns-management-page .sns-quick-links a { padding:10px;font-size:10px;gap:7px; }
- body.sns-management-page.xen-detail-unified .sns-statement-copy { font-size:12px; }
-}
-@media(prefers-reduced-motion:reduce) {
- .sns-management-page .sns-film-toggle,.sns-management-page .sns-film-timeline { display:none; }
- .sns-management-page .sns-film-footer { display:none; }
- .sns-management-page .sns-film-scene { opacity:0; }
- .sns-management-page .sns-film-scene:first-child { opacity:1; }
-}
-
-</style>
-</head><body id="top" class="detail-page xen-polished sns-management-page xen-detail-unified"><div class="sns-gold-progress" aria-hidden="true"></div><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html" aria-current="page">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content"><section class="hero reveal"><div class="eyebrow">XEN | CREATIVE STUDIO JAPAN</div><h1><span class="title-en">SNS MANAGEMENT</span><span class="page-title-ja" lang="ja">SNS運用</span></h1></section>
+<link rel="stylesheet" href="./xen-sns.css?v=20261016-white1">
+<link rel="stylesheet" href="./xen-ui.css?v=20261016-white1">
+</head><body id="top" class="detail-page xen-polished sns-management-page xen-detail-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html" aria-current="page">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content"><section class="hero reveal"><div class="eyebrow">XEN | CREATIVE STUDIO JAPAN</div><h1><span class="title-en">SNS MANAGEMENT</span><span class="page-title-ja" lang="ja">SNS運用</span></h1></section>
 <section class="sns-statement text-graphic" data-sns-film aria-labelledby="sns-statement-title">
-<div class="sns-film-atmosphere" aria-hidden="true"><div class="sns-film-beam"></div></div>
 <div class="sns-film-copy"><p class="sns-kicker">SHORT VIDEO / SNS MANAGEMENT</p>
   <h2 id="sns-statement-title"><strong><span>バズを、</span><span>狙ってつくる。</span></strong></h2>
   <p class="sns-statement-copy">企画・撮影・編集から、分析・改善まで。<br>SNS運用を、まとめてお任せください。</p>
@@ -251,7 +43,7 @@ body.sns-management-page .sns-process-list li { background:#faf8f3;border-color:
 <div class="sns-film-scene" style="--scene:1"><small>02 / SHOOTING</small><b>撮影</b></div>
 <div class="sns-film-scene" style="--scene:2"><small>03 / EDITING</small><b>編集</b></div>
 <div class="sns-film-scene" style="--scene:3"><small>04 / ANALYSIS</small><b>分析</b></div>
-<div class="sns-film-scene" style="--scene:4"><small>05 / OPTIMIZATION</small><b>改善</b></div></div></div>
+<div class="sns-film-scene" style="--scene:4"><small>05 / IMPROVEMENT</small><b>改善</b></div></div></div>
 <div class="sns-film-footer"><div class="sns-film-timeline" aria-hidden="true"><span class="sns-film-track" style="--scene:0"><i></i></span><span class="sns-film-track" style="--scene:1"><i></i></span><span class="sns-film-track" style="--scene:2"><i></i></span><span class="sns-film-track" style="--scene:3"><i></i></span><span class="sns-film-track" style="--scene:4"><i></i></span></div><button class="sns-film-toggle" type="button" aria-label="アニメーションを一時停止" aria-pressed="false" hidden><span class="sns-film-control-icon" aria-hidden="true"></span><span class="sns-film-control-label">一時停止</span></button></div>
 </section>
 <section id="sns-results" class="sns-results" aria-labelledby="sns-results-title">
@@ -269,7 +61,7 @@ body.sns-management-page .sns-process-list li { background:#faf8f3;border-color:
 
 <section class="sns-process text-graphic" aria-labelledby="sns-process-title">
   <div class="sns-section-heading"><p class="sns-kicker">WORKFLOW</p><h2 id="sns-process-title">制作から改善まで、5つのステップ。</h2></div>
-  <ol class="sns-process-list"><li><span class="sns-step-index" aria-hidden="true">01</span><span>企画</span><span class="sns-step-arrow" aria-hidden="true">→</span></li><li><span class="sns-step-index" aria-hidden="true">02</span><span>撮影</span><span class="sns-step-arrow" aria-hidden="true">→</span></li><li><span class="sns-step-index" aria-hidden="true">03</span><span>編集</span><span class="sns-step-arrow" aria-hidden="true">→</span></li><li><span class="sns-step-index" aria-hidden="true">04</span><span>分析</span><span class="sns-step-arrow" aria-hidden="true">→</span></li><li><span class="sns-step-index" aria-hidden="true">05</span><span>改善</span></li></ol>
+  <ol class="sns-process-list"><li><span class="sns-step-index" aria-hidden="true">01</span><span class="sns-step-ja">企画</span><span class="sns-step-en" lang="en">PLANNING</span><span class="sns-step-arrow" aria-hidden="true">↓</span></li><li><span class="sns-step-index" aria-hidden="true">02</span><span class="sns-step-ja">撮影</span><span class="sns-step-en" lang="en">SHOOTING</span><span class="sns-step-arrow" aria-hidden="true">↓</span></li><li><span class="sns-step-index" aria-hidden="true">03</span><span class="sns-step-ja">編集</span><span class="sns-step-en" lang="en">EDITING</span><span class="sns-step-arrow" aria-hidden="true">↓</span></li><li><span class="sns-step-index" aria-hidden="true">04</span><span class="sns-step-ja">分析</span><span class="sns-step-en" lang="en">ANALYSIS</span><span class="sns-step-arrow" aria-hidden="true">↓</span></li><li><span class="sns-step-index" aria-hidden="true">05</span><span class="sns-step-ja">改善</span><span class="sns-step-en" lang="en">IMPROVEMENT</span><span class="sns-step-arrow" aria-hidden="true">↓</span></li></ol>
 </section>
 <div class="sns-cases" data-gallery-group>
 <section class="sns-case" aria-labelledby="sns-case-1"><div class="sns-section-heading text-graphic"><p class="sns-kicker">FACELESS CONTENT</p><h2 id="sns-case-1">顔出しなしでも、広がる。</h2></div><div class="image-gallery sns-evidence"><a class="gallery-item" href="./IMG_8560.PNG" aria-label="SNS MANAGEMENT 作品 3を拡大"><img src="./xen-preview-3824101a316fc1bb.webp" alt="SNS MANAGEMENT 作品 3" loading="lazy" decoding="async" width="1376" height="768"></a>
@@ -296,9 +88,9 @@ body.sns-management-page .sns-process-list li { background:#faf8f3;border-color:
 <section id="sns-contact" class="sns-contact" aria-labelledby="sns-contact-title">
   <div class="sns-section-heading text-graphic"><p class="sns-kicker">CONTACT</p><h2 id="sns-contact-title">SNSの次の一手を、一緒に。</h2></div>
   <p class="sns-body text-graphic">動画制作からSNS運用まで。ご希望や課題を、InstagramのDMでお聞かせください。</p>
-  <div class="contact-actions"><a href="https://www.instagram.com/xen_csj/" target="_blank" rel="noopener noreferrer">Instagramで相談する</a><a href="./price-list.html">料金一覧を見る</a></div>
+  <div class="xen-contact"><div class="contact-actions"><a class="xen-contact-primary" href="https://www.instagram.com/xen_csj/" target="_blank" rel="noopener noreferrer"><span>Instagramで問い合わせる</span><span class="xen-contact-arrow" aria-hidden="true">↗</span></a><a href="./price-list.html">料金一覧を見る</a></div><p class="xen-contact-note">お問い合わせは公式SNSからお願いいたします。</p></div>
 </section>
-</main><footer><a class="xen-back-top" href="#top">Back to Top</a><nav class="shared-social" aria-label="公式SNS"><a aria-label="Instagram" href="https://www.instagram.com/xen_csj/" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r=".8" stroke="none"></circle></svg><span class="xen-icon-label">Instagram</span></a><a aria-label="X" href="https://x.com/xen_csj" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3L20 21M20 3L4 21M4 3h4l12 18h-4M20 3h-4L4 21h4"></path></svg><span class="xen-icon-label">X</span></a><a aria-label="YouTube" href="https://youtube.com/@xen_csj" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="4" width="20" x="2" y="5"></rect><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"></path></svg><span class="xen-icon-label">YouTube</span></a><a aria-label="TikTok" href="https://www.tiktok.com/@xen_jns" rel="noopener noreferrer" target="_blank" title="TikTok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v11.5a4.5 4.5 0 1 1-4.5-4.5M14 3c.5 3.4 2.5 5 6 5v3c-2.5 0-4.5-.8-6-2.3"></path></svg><span class="xen-icon-label">TikTok</span></a><a aria-label="SPOTIFY" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS?si=uso7JeRLSwG5z5L08eD5Dg" rel="noopener noreferrer" target="_blank" title="SPOTIFY"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M6.8 9.2c4.5-1.1 8.1-.5 11.1 1.3M7.4 12.2c3.6-.8 7-.3 9.6 1.2M8 15.1c3-.5 5.5-.1 7.7 1.1"></path></svg><span class="xen-icon-label">Spotify</span></a></nav><p class="footer-text">© XEN CREATIVE STUDIO JAPAN</p><p class="xen-powered">Powered by XEN</p></footer><script src="./xen-shared.js?v=20261015-luxury" defer></script><dialog data-gallery-enhanced class="image-viewer" id="image-viewer" aria-label="作品画像の拡大表示"><button class="viewer-close" type="button" aria-label="閉じる">×</button><img alt=""><p class="viewer-caption"></p><div class="viewer-controls"><button class="viewer-prev" type="button" aria-label="前の作品">←</button><span class="viewer-counter" aria-live="polite"></span><button class="viewer-next" type="button" aria-label="次の作品">→</button></div><a class="viewer-original" target="_blank" rel="noopener noreferrer">元の画像を開く</a></dialog><script id="sns-cinematic-motion">
+</main><footer><a class="xen-back-top" href="#top">Back to Top</a><nav class="shared-social" aria-label="公式SNS"><a aria-label="Instagram" href="https://www.instagram.com/xen_csj/" rel="noopener noreferrer" target="_blank" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="18" rx="5" width="18" x="3" y="3"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r=".8" stroke="none"></circle></svg><span class="xen-icon-label">Instagram</span></a><a aria-label="X" href="https://x.com/xen_csj" rel="noopener noreferrer" target="_blank" title="X"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3L20 21M20 3L4 21M4 3h4l12 18h-4M20 3h-4L4 21h4"></path></svg><span class="xen-icon-label">X</span></a><a aria-label="YouTube" href="https://youtube.com/@xen_csj" rel="noopener noreferrer" target="_blank" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="4" width="20" x="2" y="5"></rect><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"></path></svg><span class="xen-icon-label">YouTube</span></a><a aria-label="TikTok" href="https://www.tiktok.com/@xen_jns" rel="noopener noreferrer" target="_blank" title="TikTok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3v11.5a4.5 4.5 0 1 1-4.5-4.5M14 3c.5 3.4 2.5 5 6 5v3c-2.5 0-4.5-.8-6-2.3"></path></svg><span class="xen-icon-label">TikTok</span></a><a aria-label="SPOTIFY" href="https://open.spotify.com/artist/1xJnCyKbwRWbxtDHAMYdsS?si=uso7JeRLSwG5z5L08eD5Dg" rel="noopener noreferrer" target="_blank" title="SPOTIFY"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M6.8 9.2c4.5-1.1 8.1-.5 11.1 1.3M7.4 12.2c3.6-.8 7-.3 9.6 1.2M8 15.1c3-.5 5.5-.1 7.7 1.1"></path></svg><span class="xen-icon-label">Spotify</span></a></nav><p class="footer-text">© XEN CREATIVE STUDIO JAPAN</p><p class="xen-powered">Powered by XEN</p></footer><script src="./xen-shared.js?v=20261016-contact1" defer></script><dialog data-gallery-enhanced class="image-viewer" id="image-viewer" aria-label="作品画像の拡大表示"><button class="viewer-close" type="button" aria-label="閉じる">×</button><img alt=""><p class="viewer-caption"></p><div class="viewer-controls"><button class="viewer-prev" type="button" aria-label="前の作品">←</button><span class="viewer-counter" aria-live="polite"></span><button class="viewer-next" type="button" aria-label="次の作品">→</button></div><a class="viewer-original" target="_blank" rel="noopener noreferrer">元の画像を開く</a></dialog><script id="sns-cinematic-motion">
 /* SNS-only motion; static content remains complete without JavaScript. */
 (() => {
  const init = () => {
@@ -323,14 +115,6 @@ body.sns-management-page .sns-process-list li { background:#faf8f3;border-color:
    visibility.observe(film);
   }
   document.addEventListener('visibilitychange',sync);
-  const animations=new Set();
-  const animate=(el,frames,options)=>{
-   if(!el||!el.animate||reduced.matches||document.hidden)return;
-   const a=el.animate(frames,options);animations.add(a);
-   a.onfinish=()=>{animations.delete(a);a.cancel();};
-  };
-  const reveal=(el,delay=0)=>animate(el,[{opacity:0,transform:'translateY(22px)',filter:'blur(3px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:1100,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'both'});
-  reveal(document.querySelector('.hero'),0);
   const counters=new Map();
   document.querySelectorAll('[data-sns-count]').forEach(el=>counters.set(el,{value:Number(el.dataset.snsCount),final:el.textContent,frame:0,done:false}));
   const finish=()=>counters.forEach((state,el)=>{cancelAnimationFrame(state.frame);el.textContent=state.final;state.done=true;});
@@ -347,19 +131,12 @@ body.sns-management-page .sns-process-list li { background:#faf8f3;border-color:
    const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
     if(!entry.isIntersecting)return;
     const el=entry.target;revealObserver.unobserve(el);
-    reveal(el,Number(el.dataset.snsDelay||0));
     if(el.matches('[data-sns-count]'))count(el);
     el.querySelectorAll('[data-sns-count]').forEach(count);
    }),{threshold:0,rootMargin:'0px 0px -24px 0px'});
-   document.querySelectorAll('.sns-section-heading,.sns-production-count,.sns-metric,.sns-process-list li,.sns-evidence .gallery-item,.sns-service-list li,.sns-strength-list li,.sns-fit-list li,.sns-disclaimer,.sns-contact > .sns-body,.contact-actions').forEach(el=>revealObserver.observe(el));
-   document.querySelectorAll('.sns-process-list li').forEach((el,i)=>el.dataset.snsDelay=String(i*140));
+   document.querySelectorAll('[data-sns-count]').forEach(el=>revealObserver.observe(el));
   }
-  const progress=document.querySelector('.sns-gold-progress');
-  let scrollFrame=0;
-  const update=()=>{scrollFrame=0;if(!progress||reduced.matches)return;const max=document.documentElement.scrollHeight-innerHeight;progress.style.transform=`scaleX(${max>0?Math.max(0,Math.min(1,scrollY/max)):0})`;};
-  const scroll=()=>{if(!scrollFrame&&!reduced.matches)scrollFrame=requestAnimationFrame(update);};
-  addEventListener('scroll',scroll,{passive:true});addEventListener('resize',scroll,{passive:true});update();
-  const settle=()=>{finish();animations.forEach(a=>a.cancel());animations.clear();cancelAnimationFrame(scrollFrame);scrollFrame=0;};
+  const settle=finish;
   reduced.addEventListener('change',()=>{sync();if(reduced.matches)settle();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)settle();});
   addEventListener('pagehide',settle);

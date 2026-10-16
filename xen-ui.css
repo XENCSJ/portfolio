@@ -1,0 +1,61 @@
+/* Shared interaction and contact design, loaded after page-specific styles. */
+html {
+  -webkit-tap-highlight-color: transparent;
+  accent-color: #171717;
+}
+body#top :is(a, button, input, textarea, select, summary, [role="button"], [tabindex]) {
+  -webkit-tap-highlight-color: transparent;
+}
+/* Pointer focus is quiet; keyboard focus always has a visible neutral outline. */
+body#top :is(a, button, input, textarea, select, summary, [role="button"], [tabindex]):focus:not(:focus-visible) {
+  outline: none;
+}
+body#top :is(a, button, input, textarea, select, summary, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid #777;
+  outline-offset: 4px;
+}
+body#top .image-viewer:focus-visible { outline-offset: -5px; }
+body#top .image-viewer.is-fullscreen-gallery :is(a,button):focus-visible { outline-color: #ddd; }
+body#top .xen-contact {
+  width: 100%; max-width: 760px; margin: 0 auto;
+  color: #171717; text-align: center; letter-spacing: normal;
+}
+body#top footer > .xen-contact { margin-bottom: 34px; }
+body#top .xen-contact .contact-actions {
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 12px; margin: 28px 0 0; width: 100%;
+}
+body#top .xen-contact .contact-actions a {
+  display: flex; align-items: center; justify-content: center;
+  min-width: 0; min-height: 56px; padding: 16px 24px;
+  border: 1px solid #d7d7d7; border-radius: 0;
+  background: #fff; background-image: none; color: #171717;
+  font-size: 13px; font-weight: 400; line-height: 1.65; letter-spacing: .035em;
+  text-decoration: none; box-shadow: none;
+  transition: background-color .25s ease, border-color .25s ease, transform .25s ease;
+}
+body#top .xen-contact .contact-actions .xen-contact-primary {
+  justify-content: space-between; gap: 18px;
+  border-color: #171717; background: #171717; color: #fff;
+}
+body#top .xen-contact .contact-actions a::before,
+body#top .xen-contact .contact-actions a::after { content: none; }
+body#top .xen-contact-arrow { display: inline-block; font-size: 18px; transition: transform .25s ease; }
+body#top .xen-contact .xen-contact-note {
+  margin: 22px 0 0; padding: 0; max-width: none;
+  font-size: 11px; line-height: 1.9; color: #777; text-align: center; letter-spacing: .02em;
+}
+@media (hover: hover) {
+  body#top .xen-contact .contact-actions a:hover { background: #f5f5f5; border-color: #aaa; }
+  body#top .xen-contact .contact-actions .xen-contact-primary:hover { background: #333; border-color: #333; color: #fff; }
+  body#top .xen-contact-primary:hover .xen-contact-arrow { transform: translate(3px,-3px); }
+}
+body#top .xen-contact .contact-actions a:active { transform: scale(.985); }
+@media (max-width: 560px) {
+  body#top .xen-contact .contact-actions { grid-template-columns: minmax(0,1fr); gap: 10px; }
+  body#top .xen-contact .contact-actions a { min-height: 54px; padding: 15px 20px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body#top .xen-contact .contact-actions a,
+  body#top .xen-contact-arrow { transition: none; transform: none; }
+}

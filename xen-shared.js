@@ -225,14 +225,6 @@
     }, {once: true});
   });
 
-  // The existing form has no delivery destination. Never submit to this page.
-  const form = document.getElementById('contact');
-  if (form && !form.getAttribute('action')) {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      document.getElementById('formnote').textContent = '現在フォームからの送信は受け付けていません。';
-    });
-  }
 })();
 
 /* Read the unchanged price tables once; never maintain a second set of fees. */
