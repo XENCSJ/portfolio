@@ -46,7 +46,7 @@
   orbit.append(reflection);
 
   const logoPairs = [];
-  for (const img of body.querySelectorAll('.logo-final > img.center-logo, #xen-site-header .xen-header-home > img.xen-header-logo')) {
+  for (const img of body.querySelectorAll('.logo-final > img.center-logo')) {
     const surface = document.createElement('span');
     surface.className = 'xen-luxury-logo';
     surface.setAttribute('aria-hidden', 'true');

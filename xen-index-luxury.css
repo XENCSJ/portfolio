@@ -65,7 +65,6 @@ body#top.home-page .xen-luxury-orbit-line {
 }
 /* The original images remain visible beneath an alpha-masked reflection.
    Only the light strip moves; the images and their masks never transform. */
-body#top.home-page #xen-site-header .xen-header-home { position: relative; }
 body#top.home-page .xen-luxury-logo {
   position: absolute;
   inset: 0;
@@ -80,12 +79,6 @@ body#top.home-page .xen-luxury-logo {
   -webkit-mask-position: center;
   mask-position: center;
   mask-mode: alpha;
-}
-body#top.home-page #xen-site-header .xen-luxury-logo {
-  inset: 0 auto 0 0;
-  width: var(--luxury-logo-width);
-  height: var(--luxury-logo-height);
-  margin-block: auto;
 }
 body#top.home-page .xen-luxury-logo-light {
   position: absolute;
