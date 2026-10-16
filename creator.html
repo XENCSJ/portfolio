@@ -31,6 +31,34 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <link rel="stylesheet" href="./xen-experience.css?v=20261015-luxury">
 <noscript><style>body.xen-polished .xen-header{height:auto;min-height:80px;flex-wrap:wrap;padding-block:18px}body.xen-polished .xen-menu-button{display:none}body.xen-polished .xen-menu[hidden]{display:grid!important;position:static;width:100%;max-height:none;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px;box-shadow:none;padding:8px;gap:0 8px}body.xen-polished .xen-menu a{font-size:10px;overflow-wrap:anywhere}body.xen-polished .reveal,body.xen-polished .xen-reveal{opacity:1!important;transform:none!important}</style></noscript>
 <link rel="stylesheet" href="./xen-creator-refined.css?v=20261016-2">
+<style id="creator-profile-layout">
+/* CREATOR profile only; the sticky header remains in normal document flow. */
+body.creator-page.xen-polished.detail-page main {
+  padding-top: clamp(24px, 3vw, 40px);
+}
+body.creator-page.xen-polished.detail-page main .hero h1 {
+  margin-top: 12px;
+}
+body.creator-page.xen-polished.detail-page main h1 .page-title-ja {
+  margin-top: 8px;
+}
+.creator-page .profile-portrait {
+  /* 75% of the previous min(88vw, 360px), including the parent-width cap. */
+  width: min(66vw, 270px);
+  max-width: 75%;
+  margin: 22px auto 16px;
+}
+.creator-page .profile-portrait img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.creator-page .creator-identity { margin: 0 auto; }
+.creator-page .creator-identity h2 { margin-bottom: 4px; }
+.creator-page.xen-polished .creator-identity + .creator-bio {
+  margin-top: clamp(24px, 3vw, 32px);
+}
+</style>
 </head><body id="top" class="detail-page creator-page xen-polished"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header"><a class="xen-brand" href="./index.html" aria-label="XEN | CREATIVE STUDIO JAPAN"><img class="shared-xen-logo" src="./xen-logo.png" alt="XEN" width="2232" height="2293"></a><button class="xen-menu-button" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" hidden><a href="./index.html">INDEX</a><a href="./studio.html">STUDIO</a><a href="./creator.html" aria-current="page">CREATOR</a><a href="./storybooks.html">STORYBOOKS</a><a href="./animation.html">ANIMATION</a><a href="./sound.html">SOUND</a><a href="./cinematic.html">CINEMATIC</a><a href="./snap.html">SNAP</a><a href="./design.html">DESIGN</a><a href="./apparel.html">APPAREL</a><a href="./architecture.html">ARCHITECTURE</a><a href="./space.html">SPACE</a><a href="./artworks.html">ARTWORKS</a><a href="./sns-management.html">SNS MANAGEMENT</a><a href="./price-list.html">PRICE LIST</a></nav></header><main id="main-content"><section class="hero reveal"><div class="eyebrow">XEN | CREATIVE STUDIO JAPAN</div><h1><span class="title-en">CREATOR</span><span class="page-title-ja" lang="ja">クリエイター</span></h1></section><div class="profile-portrait"><div class="image-gallery "><a class="gallery-item" href="./%20ABOUT%20%282%29.PNG" aria-label="ABOUT (2)を拡大"><img src="./xen-preview-af66c77c480b2311.webp" alt="ABOUT (2)" width="1600" height="2143" loading="eager" fetchpriority="high" decoding="async"></a></div></div><div class="creator-identity text-graphic"><h2>XEN / ゼン</h2><p>Creative Director &amp; Photographer</p></div>
 <section class="project-group creator-bio" aria-labelledby="creator-fields"><h2 id="creator-fields">領域</h2>
 <ul class="creator-fields text-graphic"><li><span>Visual</span>映像 / 写真 / PV</li><li><span>Sound</span>BGM / 音楽</li><li><span>Design</span>ロゴ / グラフィック</li><li><span>Story</span>絵本 / アニメ</li><li><span>Architecture</span>空間 / 建築</li></ul></section>
