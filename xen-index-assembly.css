@@ -5,7 +5,7 @@
 .home-page#top .orbit .orbit-ja{font-family:Arial,'Noto Sans JP',sans-serif;font-size:10.5px;letter-spacing:.3px;fill:#666}
 .home-page#top .orbit a:is(:hover,:focus-visible,:active) text{fill:#9b8258}
 /* Avoid moving the logo through its parent; the orbit retains its own 65s spin. */
-.home-page#top .wheel{animation:none!important}
+.home-page#top .wheel{animation:none!important;overflow:clip}
 .home-page#top .logo-stage{position:relative;display:block;width:54%;height:54%;padding:0;margin:0;border:0;background:transparent;z-index:3;pointer-events:none}
 .home-page#top .logo-stage::before,.home-page#top .logo-stage::after{display:none}
 .home-page#top .logo-final{position:absolute;inset:0;display:block;opacity:1;animation:xen-logo-minimal-fade 1.4s cubic-bezier(.2,.65,.3,1) both}
