@@ -1,0 +1,126 @@
+/* INDEX motion only. Geometry, artwork, links and shared UI belong to their
+   existing stylesheets. Every added surface is absolute and non-interactive. */
+body#top.home-page {
+  --luxury-champagne: #d8c29d;
+  --luxury-soft: #c9a96e;
+  --luxury-highlight: #f0dfb5;
+}
+body#top.home-page .wheel .orbit text {
+  animation: none;
+  filter: none;
+}
+body#top.home-page .xen-luxury-ambient,
+body#top.home-page .xen-luxury-rings,
+body#top.home-page .xen-luxury-reflection,
+body#top.home-page .xen-luxury-reflection *,
+body#top.home-page .xen-luxury-logo,
+body#top.home-page .xen-luxury-logo * {
+  pointer-events: none !important;
+}
+body#top.home-page .xen-luxury-ambient {
+  position: absolute;
+  inset: 10%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(216 194 157 / 9%) 0%, rgb(201 169 110 / 4%) 34%, transparent 68%);
+  opacity: .3;
+  animation: xen-luxury-breathe 7.5s ease-in-out infinite;
+}
+body#top.home-page .xen-luxury-rings {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  fill: none;
+  stroke: var(--luxury-soft);
+  stroke-width: .7;
+  transform-origin: center;
+  animation: xen-luxury-counterturn 52s linear infinite;
+}
+body#top.home-page .xen-luxury-rings circle { vector-effect: non-scaling-stroke; }
+body#top.home-page .xen-luxury-rings .luxury-ring-inner { opacity: .12; }
+body#top.home-page .xen-luxury-rings .luxury-ring-outer { opacity: .2; }
+/* The mask is inside the existing 65s orbit. JS derives its relative period
+   so the light makes one absolute clockwise revolution in 22s. */
+body#top.home-page .xen-luxury-sector {
+  transform-box: view-box;
+  transform-origin: 300px 300px;
+  animation: xen-luxury-orbit var(--luxury-relative-period, 33.255814s) linear infinite;
+}
+body#top.home-page .xen-luxury-reflection {
+  opacity: 0;
+  animation: xen-luxury-orbit-intensity 15s ease-in-out infinite;
+}
+body#top.home-page .wheel .orbit .xen-luxury-reflection text {
+  fill: var(--luxury-champagne) !important;
+  transition: none;
+}
+body#top.home-page .xen-luxury-orbit-line {
+  fill: none;
+  stroke: var(--luxury-highlight);
+  stroke-width: .8;
+  stroke-opacity: .6;
+  vector-effect: non-scaling-stroke;
+}
+/* The original images remain visible beneath an alpha-masked reflection.
+   Only the light strip moves; the images and their masks never transform. */
+body#top.home-page #xen-site-header .xen-header-home { position: relative; }
+body#top.home-page .xen-luxury-logo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  -webkit-mask-image: var(--luxury-logo-image);
+  mask-image: var(--luxury-logo-image);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  mask-mode: alpha;
+}
+body#top.home-page #xen-site-header .xen-luxury-logo {
+  inset: 0 auto 0 0;
+  width: var(--luxury-logo-width);
+  height: var(--luxury-logo-height);
+  margin-block: auto;
+}
+body#top.home-page .xen-luxury-logo-light {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 32%, rgb(216 194 157 / 0%) 38%, #d8c29d 47%, #f0dfb5 50%, #fff8e8 52%, #d8c29d 55%, transparent 66%);
+  opacity: 0;
+  transform: translateX(-100%);
+  animation: xen-luxury-metal-sweep 15s ease-in-out infinite;
+}
+@keyframes xen-luxury-orbit { to { transform: rotate(360deg); } }
+@keyframes xen-luxury-counterturn { to { transform: rotate(-360deg); } }
+@keyframes xen-luxury-breathe { 0%, 100% { opacity: .25; } 50% { opacity: .6; } }
+/* 0–4s rest; 4–9s local orbit reflection; 9–11.7s logo; 12–15s rest. */
+@keyframes xen-luxury-orbit-intensity {
+  0%, 26.6667%, 60%, 100% { opacity: 0; }
+  35%, 50% { opacity: 1; }
+}
+@keyframes xen-luxury-metal-sweep {
+  0%, 60% { transform: translateX(-100%); opacity: 0; }
+  63% { opacity: .9; }
+  75% { opacity: .9; }
+  78%, 100% { transform: translateX(100%); opacity: 0; }
+}
+/* Pause the shared CSS clock when the document is hidden. */
+body#top.home-page.xen-luxury-paused .xen-luxury-ambient,
+body#top.home-page.xen-luxury-paused .xen-luxury-rings,
+body#top.home-page.xen-luxury-paused .xen-luxury-sector,
+body#top.home-page.xen-luxury-paused .xen-luxury-reflection,
+body#top.home-page.xen-luxury-paused .xen-luxury-logo-light,
+body#top.home-page.xen-luxury-paused .orbit { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  body#top.home-page .xen-luxury-ambient,
+  body#top.home-page .xen-luxury-rings,
+  body#top.home-page .xen-luxury-reflection,
+  body#top.home-page .xen-luxury-logo { display: none; }
+  body#top.home-page .xen-luxury-sector,
+  body#top.home-page .xen-luxury-logo-light { animation: none !important; }
+}
