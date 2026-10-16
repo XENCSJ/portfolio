@@ -223,7 +223,7 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 .home-page#top .orbit a text{pointer-events:all}
 .home-page#top .orbit a:is(.is-selected,:hover,:focus-visible,:active) text{fill:#a58a5d}
 /* Independent layers keep centering, floating, selection scale and sheen apart. */
-.home-page#top .logo-stage{position:relative;width:59%;height:59%;z-index:1;pointer-events:none}
+.home-page#top .logo-stage{position:relative;width:54%;height:54%;z-index:1;pointer-events:none}
 .home-page#top .logo-float,.home-page#top .logo-scale{position:relative;width:100%;height:100%;transform-origin:50% 50%}
 .home-page#top .logo-float{animation:xen-logo-float 5s ease-in-out infinite}
 .home-page#top .logo-scale{isolation:isolate}
@@ -234,7 +234,7 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 @keyframes xen-logo-sweep{0%,4%{opacity:0;transform:translate(-36%,-36%)}8%{opacity:1}30%{opacity:1}34%,100%{opacity:0;transform:translate(36%,36%)}}
 .home-page#top .logo-stage.is-motion-paused .logo-float,.home-page#top .logo-stage.is-motion-paused .logo-sheen::before{animation-play-state:paused}
 @supports not ((mask-image:url('')) or (-webkit-mask-image:url(''))){.home-page#top .logo-sheen{display:none}}
-@media(max-width:600px){.home-page#top .logo-stage{width:57%;height:57%}}
+@media(max-width:600px){.home-page#top .logo-stage{width:54%;height:54%}}
 @media(prefers-reduced-motion:reduce){.home-page#top .logo-float,.home-page#top .logo-scale{animation:none!important;transform:none!important}.home-page#top .logo-sheen{display:none}}
 .home-page#top .logo-ripple{position:absolute;left:50%;top:50%;width:62%;aspect-ratio:1;border:1px solid #bda77e;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.55);box-shadow:0 0 7px #bda77e25,inset 0 0 5px #bda77e15;pointer-events:none;z-index:0}
 @media(prefers-reduced-motion:reduce){.home-page#top .logo-ripple{display:none}.home-page#top .orbit{animation:none!important}.home-page#top .orbit text{transition:none}}
@@ -340,6 +340,7 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
   frame=0;
   const paused = motion.matches || document.hidden || !visible;
   logoStage.classList.toggle('is-motion-paused',paused);
+  orbit.style.animationPlayState = paused ? 'paused' : '';
   if(paused) stopFeedback();
   else frame=requestAnimationFrame(tick);
  }
