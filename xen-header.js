@@ -15,6 +15,7 @@
     menu.hidden = !open;
     menu.inert = !open;
     if (open) {
+      menu.scrollTop = 0;
       saved = { x: scrollX, y: scrollY, body: document.body.getAttribute('style'), overflow: document.documentElement.style.overflow };
       Object.assign(document.body.style, { position: 'fixed', top: `-${saved.y}px`, left: '0', right: '0', width: '100%', overflow: 'hidden' });
       document.documentElement.style.overflow = 'hidden';
@@ -31,7 +32,7 @@
         window.scrollTo({ left: saved.x, top: saved.y, behavior: 'instant' });
         saved = undefined;
       }
-      if (restoreFocus) button.focus({ preventScroll: true });
+      if (restoreFocus || menu.contains(document.activeElement)) button.focus({ preventScroll: true });
     }
   };
   menu.inert = true;
@@ -57,5 +58,8 @@
     }
   });
   document.addEventListener('click', event => { if (isOpen() && !header.contains(event.target)) setOpen(false, true); });
+  header.addEventListener('click', event => {
+    if (isOpen() && event.target.closest('a') && !menu.contains(event.target)) setOpen(false);
+  });
   window.addEventListener('pagehide', () => setOpen(false));
 })();

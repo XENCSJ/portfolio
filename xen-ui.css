@@ -1,16 +1,69 @@
 /* Shared interaction and contact design, loaded after page-specific styles. */
-/* Shared navigation refinements; the official fixed-header geometry is retained. */
-body#top .xen-menu-group {
-  display: block; padding: 19px 5px 8px; color: #888;
-  font-size: 10px; line-height: 1.6; letter-spacing: .12em;
+/* Shared bilingual navigation. Header and official logo geometry stay intact. */
+body#top header.xen-header > nav#xen-menu {
+  --xen-menu-gutter: max(16px, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  display: block;
+  top: 100%; right: var(--xen-menu-gutter);
+  width: min(420px, calc(100vw - 2 * var(--xen-menu-gutter)));
+  max-height: calc(100vh - var(--xen-header-height) - 12px - env(safe-area-inset-bottom, 0px));
+  max-height: calc(100dvh - var(--xen-header-height) - 12px - env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box; margin: 0; padding: 12px 24px 20px;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch; touch-action: pan-y;
+  background: #080808; color: #fff; border: 1px solid #303030;
+  border-radius: 0; box-shadow: none; animation: none;
+  text-align: left; scrollbar-width: thin; scrollbar-color: #555 #080808;
+  scroll-padding-block: 12px;
 }
-body#top .xen-menu a { min-height: 44px; overflow-wrap: anywhere; }
-body#top .xen-menu .xen-menu-contact { margin-top: 10px; border-bottom: 0; }
-body#top .xen-menu { overscroll-behavior: contain; }
-body#top .xen-menu:focus-within { animation: none; }
-body#top.xen-noir .xen-menu-group,
-body#top.home-page .xen-menu-group { color: #b8b8be; }
-html:has(.xen-menu-noscript) body#top .xen-menu-group { grid-column: 1 / -1; }
+body#top #xen-menu .xen-menu-category {
+  display: block; margin: 12px 0 0; padding: 20px 0 0;
+  border-top: 1px solid #303030;
+}
+body#top #xen-menu .xen-menu-heading {
+  display: block; margin: 0; padding: 0 8px 12px;
+  font: inherit; background: none; border: 0; border-radius: 0;
+}
+body#top #xen-menu .xen-menu-items {
+  display: block; list-style: none; margin: 0; padding: 0;
+}
+body#top #xen-menu .xen-menu-items > li { display: block; margin: 0; padding: 0; }
+body#top header.xen-header #xen-menu a.xen-menu-link {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: 4px; min-width: 0; min-height: 60px; margin: 0; padding: 12px 8px;
+  box-sizing: border-box; border: 0; border-radius: 0;
+  background: transparent; color: #fff; text-decoration: none;
+  animation: none; transform: none; transition: background-color .15s ease;
+  white-space: normal; overflow-wrap: anywhere; touch-action: manipulation;
+}
+body#top #xen-menu .xen-menu-en,
+body#top #xen-menu .xen-menu-ja { display: block; margin: 0; padding: 0; }
+body#top #xen-menu .xen-menu-en {
+  font-size: 13px; line-height: 1.5; font-weight: 500; letter-spacing: .12em; color: #fff;
+}
+body#top #xen-menu .xen-menu-ja {
+  font-size: 11px; line-height: 1.6; font-weight: 400; letter-spacing: .06em; color: #bdbdbd;
+}
+body#top #xen-menu .xen-menu-heading > .xen-menu-ja { margin-top: 4px; }
+body#top #xen-menu .xen-menu-heading .xen-menu-en,
+body#top #xen-menu .xen-menu-heading .xen-menu-ja { color: #C9AA78; }
+body#top #xen-menu .xen-menu-heading .xen-menu-en { font-size: 14px; font-weight: 600; }
+body#top #xen-menu .xen-menu-heading:has(> a) { padding: 0; }
+body#top header.xen-header #xen-menu a.xen-menu-link::before,
+body#top header.xen-header #xen-menu a.xen-menu-link::after { content: none; }
+body#top header.xen-header #xen-menu a.xen-menu-link:is(:hover, :focus-visible) { background: #181818; }
+body#top header.xen-header #xen-menu a.xen-menu-link:focus-visible { outline: 1px solid #C9AA78; outline-offset: -1px; }
+body#top #xen-menu a[aria-current="page"] .xen-menu-en { font-weight: 700; }
+@media (max-width: 650px) {
+  body#top header.xen-header > nav#xen-menu { padding-inline: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body#top header.xen-header #xen-menu a.xen-menu-link { transition: none; }
+}
+/* The same generated hierarchy remains available without JavaScript. */
+html:has(.xen-menu-noscript) body#top header.xen-header > nav#xen-menu[hidden] {
+  display: block !important; position: static; grid-column: 1 / -1;
+  width: 100%; max-height: none; margin-top: 16px;
+}
 body#top :is(main, footer) :is(a, button, summary) { touch-action: manipulation; }
 body#top .sns-results-note {
   margin: 20px 0 0; font-size: 12px; line-height: 1.9; color: var(--muted, #777);
