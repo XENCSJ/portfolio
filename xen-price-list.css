@@ -53,8 +53,11 @@ body.price-list-page .contents-return { display: table; margin: 20px 0 0 auto; p
  .price-list-page .price-category-heading { gap: 8px; }
  .price-list-page .price-category-note { margin-left: 23px; }
  .price-list-page .price-table { font-size: 14px; }
- .price-list-page .price-col-time { width: 46px; }
- .price-list-page .price-col-fee { width: 146px; }
+ .price-list-page .price-col-time { width: 42px; }
+ .price-list-page .price-col-fee { width: 100px; }
+ .price-list-page .price-table[aria-labelledby="price-section-4"] .price-col-fee { width: 110px; }
+ .price-list-page .price-table:is([aria-labelledby="price-section-5"],[aria-labelledby="price-section-6"]) .price-col-fee { width: 130px; }
+ .price-list-page .price-table[aria-labelledby="price-section-8"] .price-col-fee { width: 140px; }
  .price-list-page .price-table thead th { padding: 9px 0; }
  .price-list-page .price-table thead th:first-child { padding-left: 4px; }
  .price-list-page .price-toggle { gap: 7px; min-height: 62px; padding: 14px 6px 14px 4px; }
