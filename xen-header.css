@@ -309,3 +309,40 @@ body#top #xen-site-header .xen-header-home { view-transition-name: xen-header-br
 body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78; }
 /* scroll-padding accounts for the fixed bar; margin gives the heading breathing room. */
 body#top #studio-contact { scroll-margin-top: 16px; }
+
+/* Drawer icons only: keep the existing row heights, padding and navigation. */
+body#top #xen-site-header #xen-drawer .xen-menu .xen-menu-icon-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  align-content: center;
+}
+body#top #xen-site-header #xen-drawer .xen-menu .xen-menu-icon {
+  display: block;
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--xen-brand-gold);
+  pointer-events: none;
+}
+body#top #xen-site-header #xen-drawer .xen-menu .xen-menu-icon-row > .xen-menu-en {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+body#top #xen-site-header #xen-drawer .xen-menu .xen-menu-icon-row > .xen-menu-ja {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  white-space: nowrap;
+}
