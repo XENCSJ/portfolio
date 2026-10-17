@@ -45,17 +45,6 @@
   });
   orbit.append(reflection);
 
-  const logoPairs = [];
-  for (const img of body.querySelectorAll('.logo-final > img.center-logo')) {
-    const surface = document.createElement('span');
-    surface.className = 'xen-luxury-logo';
-    surface.setAttribute('aria-hidden', 'true');
-    const light = document.createElement('span');
-    light.className = 'xen-luxury-logo-light';
-    surface.append(light);
-    img.after(surface);
-    logoPairs.push({ img, surface });
-  }
   const syncGeometry = () => {
     // The existing assembly script owns spacing and responsive font sizing.
     // Mirror its results without touching a single source text node.
@@ -63,12 +52,6 @@
       const offset = source.querySelector('textPath').getAttribute('startOffset');
       copy.querySelector('textPath').setAttribute('startOffset', offset);
       copy.style.fontSize = source.style.fontSize;
-    }
-    for (const { img, surface } of logoPairs) {
-      surface.style.setProperty('--luxury-logo-image', `url("${img.currentSrc || img.src}")`);
-      const rect = img.getBoundingClientRect();
-      surface.style.setProperty('--luxury-logo-width', `${rect.width}px`);
-      surface.style.setProperty('--luxury-logo-height', `${rect.height}px`);
     }
     const duration = parseFloat(getComputedStyle(orbit).animationDuration);
     if (duration > 22) {
@@ -86,10 +69,6 @@
   window.addEventListener('resize', scheduleSync, { passive: true });
   const observer = new ResizeObserver(scheduleSync);
   observer.observe(wheel);
-  logoPairs.forEach(({ img }) => {
-    observer.observe(img);
-    img.addEventListener('load', scheduleSync, { once: true });
-  });
   const visibility = () => body.classList.toggle('xen-luxury-paused', document.hidden);
   document.addEventListener('visibilitychange', visibility);
   visibility();

@@ -291,24 +291,21 @@ body#top #xen-site-header .xen-header-logo {
 }
 body#top #xen-site-header .xen-header-home::before,
 body#top #xen-site-header .xen-header-home::after { content: none; }
-/* One entrance per page load. Hover, scrolling and drawer state never change
-   this animation; the official artwork, filter and geometry stay intact. */
+/* The official header brand is static, including pointer/focus states. */
 body#top #xen-site-header .xen-header-home,
-body#top #xen-site-header .xen-header-logo { box-shadow: none; }
-@media (prefers-reduced-motion: no-preference) {
-  body#top #xen-site-header .xen-header-logo {
-    animation: xen-header-fade-slide .8s cubic-bezier(.22, 1, .36, 1) 1 both;
-  }
+body#top #xen-site-header .xen-header-home:is(:hover, :focus-visible, :active),
+body#top #xen-site-header .xen-header-logo {
+  animation: none; transition: none; transform: none; opacity: 1;
+  box-shadow: none;
 }
-@keyframes xen-header-fade-slide {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Keep the brand out of the page-wide navigation crossfade. */
+body#top #xen-site-header .xen-header-home { view-transition-name: xen-header-brand; }
+::view-transition-group(xen-header-brand),
+::view-transition-image-pair(xen-header-brand),
+::view-transition-new(xen-header-brand) {
+  animation: none; mix-blend-mode: normal; opacity: 1;
 }
-@media (prefers-reduced-motion: reduce) {
-  body#top #xen-site-header .xen-header-logo {
-    animation: none; opacity: 1; transform: none;
-  }
-}
+::view-transition-old(xen-header-brand) { display: none; }
 body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78; }
 /* scroll-padding accounts for the fixed bar; margin gives the heading breathing room. */
 body#top #studio-contact { scroll-margin-top: 16px; }

@@ -12,9 +12,7 @@ body#top.home-page .wheel .orbit text {
 body#top.home-page .xen-luxury-ambient,
 body#top.home-page .xen-luxury-rings,
 body#top.home-page .xen-luxury-reflection,
-body#top.home-page .xen-luxury-reflection *,
-body#top.home-page .xen-luxury-logo,
-body#top.home-page .xen-luxury-logo * {
+body#top.home-page .xen-luxury-reflection * {
   pointer-events: none !important;
 }
 body#top.home-page .xen-luxury-ambient {
@@ -63,57 +61,23 @@ body#top.home-page .xen-luxury-orbit-line {
   stroke-opacity: .6;
   vector-effect: non-scaling-stroke;
 }
-/* The original images remain visible beneath an alpha-masked reflection.
-   Only the light strip moves; the images and their masks never transform. */
-body#top.home-page .xen-luxury-logo {
-  position: absolute;
-  inset: 0;
-  display: block;
-  overflow: hidden;
-  -webkit-mask-image: var(--luxury-logo-image);
-  mask-image: var(--luxury-logo-image);
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  mask-mode: alpha;
-}
-body#top.home-page .xen-luxury-logo-light {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, transparent 32%, rgb(216 194 157 / 0%) 38%, #d8c29d 47%, #f0dfb5 50%, #fff8e8 52%, #d8c29d 55%, transparent 66%);
-  opacity: 0;
-  transform: translateX(-100%);
-  animation: xen-luxury-metal-sweep 15s ease-in-out infinite;
-}
 @keyframes xen-luxury-orbit { to { transform: rotate(360deg); } }
 @keyframes xen-luxury-counterturn { to { transform: rotate(-360deg); } }
 @keyframes xen-luxury-breathe { 0%, 100% { opacity: .25; } 50% { opacity: .6; } }
-/* 0–4s rest; 4–9s local orbit reflection; 9–11.7s logo; 12–15s rest. */
+/* Keep the existing 4–9s orbit reflection within its 15s cycle. */
 @keyframes xen-luxury-orbit-intensity {
   0%, 26.6667%, 60%, 100% { opacity: 0; }
   35%, 50% { opacity: 1; }
-}
-@keyframes xen-luxury-metal-sweep {
-  0%, 60% { transform: translateX(-100%); opacity: 0; }
-  63% { opacity: .9; }
-  75% { opacity: .9; }
-  78%, 100% { transform: translateX(100%); opacity: 0; }
 }
 /* Pause the shared CSS clock when the document is hidden. */
 body#top.home-page.xen-luxury-paused .xen-luxury-ambient,
 body#top.home-page.xen-luxury-paused .xen-luxury-rings,
 body#top.home-page.xen-luxury-paused .xen-luxury-sector,
 body#top.home-page.xen-luxury-paused .xen-luxury-reflection,
-body#top.home-page.xen-luxury-paused .xen-luxury-logo-light,
 body#top.home-page.xen-luxury-paused .orbit { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
   body#top.home-page .xen-luxury-ambient,
   body#top.home-page .xen-luxury-rings,
-  body#top.home-page .xen-luxury-reflection,
-  body#top.home-page .xen-luxury-logo { display: none; }
-  body#top.home-page .xen-luxury-sector,
-  body#top.home-page .xen-luxury-logo-light { animation: none !important; }
+  body#top.home-page .xen-luxury-reflection { display: none; }
+  body#top.home-page .xen-luxury-sector { animation: none !important; }
 }

@@ -8,9 +8,11 @@
 .home-page#top .wheel{animation:none!important;overflow:clip}
 .home-page#top .logo-stage{position:relative;display:block;width:54%;height:54%;padding:0;margin:0;border:0;background:transparent;z-index:3;pointer-events:none}
 .home-page#top .logo-stage::before,.home-page#top .logo-stage::after{display:none}
-.home-page#top .logo-final{position:absolute;inset:0;display:block;opacity:1;animation:xen-logo-minimal-fade 1.4s cubic-bezier(.2,.65,.3,1) both}
+.home-page#top .logo-final{position:absolute;inset:0;display:block;opacity:1;filter:blur(0);animation:xen-logo-fade-focus 1.8s ease-out 1 both}
 .home-page#top .logo-stage .center-logo{width:100%;height:100%;display:block;object-fit:contain;mix-blend-mode:normal}
-@keyframes xen-logo-minimal-fade{from{opacity:0}to{opacity:1}}
+/* CSS-only: complete state remains visible even if JavaScript fails.
+   Blur belongs to the wrapper; the original artwork color filter is untouched. */
+@keyframes xen-logo-fade-focus{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:blur(0)}}
 /* The SNS row lives outside the wheel, so it cannot cover a rotating link. */
 .home-page#top .hero{flex-direction:column;gap:8px;padding-bottom:8px}
 .home-page#top .index-social{display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:14px;flex:none;width:100%;margin:0;padding:0}
@@ -20,7 +22,7 @@
 @media(max-width:600px){.home-page#top .hero{padding-top:24px}.home-page#top .index-social{gap:12px}}
 @media(prefers-reduced-motion:reduce){
  .home-page#top .orbit{animation:none!important}
- .home-page#top .logo-final{animation:none!important;opacity:1;transform:none}
+ .home-page#top .logo-final{animation:none!important;opacity:1;filter:none;transform:none}
  .home-page#top .index-social a{transition:none}
 }
 
