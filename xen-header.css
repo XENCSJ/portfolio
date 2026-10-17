@@ -311,7 +311,7 @@ body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78;
 body#top #studio-contact { scroll-margin-top: 16px; }
 
 /* Drawer icons only: keep the existing row heights, padding and navigation. */
-body#top #xen-site-header #xen-drawer .xen-menu .xen-menu-icon-row {
+body#top #xen-site-header #xen-drawer .xen-menu :is(a.xen-menu-link, h2.xen-menu-heading).xen-menu-icon-row {
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr);
   grid-template-rows: auto auto;
