@@ -84,7 +84,7 @@ jobs:
            const beforeGeometry=await geometry();
            const beforeLogo=await page.locator('.center-logo').screenshot();
            const beforeLinks=await page.locator('a').evaluateAll(es=>es.map(e=>[e.getAttribute('href'),e.textContent]));
-           await page.locator('.orbit a').first().focus();await page.waitForTimeout(450);
+           await page.keyboard.press('Tab');await page.locator('.orbit a').first().focus();await page.waitForTimeout(450);
            const beforeGold=await page.locator('.orbit a').first().locator('text').first().evaluate(e=>getComputedStyle(e).fill);
            await page.goto(url+'/');
            await page.waitForFunction(()=>document.querySelector('.logo-stage').classList.contains('is-precision-tracing'));
@@ -113,7 +113,7 @@ jobs:
            await page.getByRole('button',{name:'メニューを開く',exact:true}).click();await page.waitForTimeout(450);
            assert.equal(await page.locator('#xen-menu').isVisible(),true);assert.equal((await state()).active,false);
            if(opts.hasTouch)await page.locator('.xen-drawer-close').tap();else await page.keyboard.press('Escape');await page.waitForTimeout(450);assert.equal(await page.locator('#xen-menu').isVisible(),false);
-           await page.locator('.orbit a').first().focus();await page.waitForTimeout(450);
+           await page.keyboard.press('Tab');await page.locator('.orbit a').first().focus();await page.waitForTimeout(450);
            assert.equal(await page.locator('.orbit a').first().locator('text').first().evaluate(e=>getComputedStyle(e).fill),beforeGold);
            assert.equal((await state()).active,false);
            await page.emulateMedia({reducedMotion:'reduce'});await stage.click();assert.equal((await state()).opacity,'1');assert.equal((await state()).active,false);
@@ -124,6 +124,7 @@ jobs:
            assert.equal(pixels(beforeLogo,await simple.locator('.center-logo').screenshot()),0,'No JS original image');
            await nojs.close();assert.deepEqual(errors,[],'No JS errors');
            results.push({engine,device,viewport:opts.viewport,exactSubpaths:23,finalPixelDifference:delta,geometry:afterGeometry['.center-logo'],checks:'autoplay, sequence, 2.5s completion, static, rapid replay, keyboard, drawer, gold highlight, links, reduced motion, no JS: PASS'});
+           console.log('PASS',JSON.stringify(results[results.length-1]));
            await fs.writeFile('qa-output/results.json',JSON.stringify(results,null,2));
            await context.close();await browser.close();
           }
