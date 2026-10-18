@@ -35,7 +35,8 @@ jobs:
       - run: node --check xen-latest-videos.js
 
   refresh:
-    if: github.event_name != 'pull_request'
+    # Owner-selected videos remain fixed until OAuth is configured and explicitly enabled.
+    if: github.event_name != 'pull_request' && vars.YOUTUBE_AUTO_UPDATE_ENABLED == 'true'
     needs: checks
     runs-on: ubuntu-latest
     timeout-minutes: 15
