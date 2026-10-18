@@ -7,7 +7,7 @@
   let dialog, playerSlot, fallback, lastTrigger;
   function openVideo(video, trigger) {
     // YouTube requires a player viewport >=200x200. Keep 16:9 on small devices.
-    if (!('HTMLDialogElement' in window) || window.innerWidth < 374 || !video.embeddable || video.madeForKids) {
+    if (!('HTMLDialogElement' in window) || window.innerWidth < 374 || video.embeddable === false || video.madeForKids === true) {
       window.location.assign(video.url);
       return;
     }
@@ -41,10 +41,10 @@
     playerSlot.replaceChildren(frame);
     dialog.showModal();
   }
-  function valid(video) {
+  function valid(video, curated) {
     if (!video || !/^[A-Za-z0-9_-]{11}$/.test(video.id) || typeof video.title !== 'string' || !video.title.trim()) return false;
-    if (video.url !== `https://www.youtube.com/watch?v=${video.id}` || !Number.isFinite(Date.parse(video.publishedAt))) return false;
-    if (typeof video.embeddable !== 'boolean' || typeof video.madeForKids !== 'boolean') return false;
+    if (video.url !== `https://www.youtube.com/watch?v=${video.id}`) return false;
+    if (!curated && (!Number.isFinite(Date.parse(video.publishedAt)) || typeof video.embeddable !== 'boolean' || typeof video.madeForKids !== 'boolean')) return false;
     try { const u = new URL(video.thumbnail); return u.protocol === 'https:' && ['i.ytimg.com','img.youtube.com'].includes(u.hostname); } catch { return false; }
   }
   async function init() {
@@ -54,8 +54,11 @@
       const response = await fetch('./youtube-latest.json', {cache:'no-cache', signal:controller.signal});
       if (!response.ok) throw new Error('Video data unavailable');
       const data = await response.json();
+      // Owner-selected links stay visible until deliberately replaced. No API classification is implied.
+      const curated = data.status === 'curated' && data.source === 'owner_selection';
       const age = Date.now() - Date.parse(data.validatedAt);
-      if (data.schemaVersion !== 1 || data.status !== 'verified' || !Number.isFinite(age) || age < -300000 || age > 30*86400000 || !Array.isArray(data.items) || data.items.length > 4 || !data.items.every(valid)) return;
+      if (data.schemaVersion !== 1 || !Array.isArray(data.items) || data.items.length > 4 || !data.items.every(video => valid(video, curated))) return;
+      if (!curated && (data.status !== 'verified' || !Number.isFinite(age) || age < -300000 || age > 30*86400000)) return;
       const fragment = document.createDocumentFragment();
       for (const video of data.items) {
         const li = document.createElement('li'); li.className = 'xen-latest-item';

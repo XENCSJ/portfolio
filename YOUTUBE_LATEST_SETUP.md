@@ -1,11 +1,18 @@
-# CREATOR / 最新通常動画4本 — 設定・検証待ち
+# CREATOR / YouTube映像作品4本
 
 ## 現状
 
-- 追加先は `creator.html` の CONCEPT PROJECT / XEN FREQUENCY LOUNGE の後、CREATION SUPPORT の前。
-- 取得処理・表示・6時間ごとのワークフローを準備。実API、PC/iPhone Safari、Pages反映は未検証。
-- `youtube-latest.json` は未認証の空データ。架空の動画を入れず、検証済みJSONがない間はセクションを非表示にする。
-- mainへのマージは認証設定と実データ検証後。既存の共通CSS・ヘッダー・フッターは変更しない。
+- ユーザーが指定した4本を、指定された順番で固定表示する方式。
+- 動画ID: `Df4ekWvuGng` → `5AQmdt1HvXI` → `IykFCu-sYKk` → `X3DrK_IgSzg`。
+- タイトル・チャンネル名・サムネイルURLはYouTube公式oEmbedで取得。
+- `youtube-latest.json` の `status: curated` / `source: owner_selection` は所有者指定を示す。公開日時やAnalytics分類を確認済みとは扱わない。
+- 追加先は `creator.html` の XEN FREQUENCY LOUNGE の後、CREATION SUPPORT の前。既存の共通CSS・ヘッダー・フッターは変更しない。
+- 最新動画の自動取得は未稼働。OAuth 3 Secretsを設定し、Actions Variablesの `YOUTUBE_AUTO_UPDATE_ENABLED` を `true` にした場合のみ取得ジョブが動く。
+- 自動更新を有効にするまでは指定の4本を保持。6時間ごとのワークフローはチェックのみ実行し、動画を差し替えない。
+
+## 固定表示と自動取得の区別
+
+固定表示は、ユーザーが提供したYouTube URLの一覧を保持する。通常動画の自動分類・新着順の取得が成功したという意味ではない。以降のAPI説明は、認証設定後に有効化できる自動取得の仕様。
 
 ## 分類方式
 
@@ -47,7 +54,7 @@ APIキーだけではAnalyticsの分類は取得できない。OAuth同意画面
 - JSONだけをコミット。最新mainをrebaseし、競合・push拒否時は停止。force pushしない。
 - 現在のPagesはmain/rootのブランチ公開。GITHUB_TOKENのpushだけに依存せず、Pages Build APIを明示的に呼び出す。ビルド完了まで確認し、失敗はActionsで報告する。このAPI経路は本番認証後に実行検証が必要。
 - 手動実行は `Refresh latest YouTube videos` → Run workflow。`publish=false` が検証専用、mainで `publish=true` が保存・公開。作業ブランチからの実行は公開しない。
-- ワークフローは既定ブランチに存在して初めてスケジュール実行される。現段階では未稼働。
+- ワークフローは既定ブランチに存在して初めてスケジュール実行される。取得ジョブは上記の有効化変数がtrueになるまでスキップする。
 
 ## 表示と再生
 
@@ -57,13 +64,13 @@ PCは4列、800px以下は2列。16:9を保ち、画像を引き伸ばさず表�
 
 Safari等でユーザー操作後の自動再生が制限された場合はYouTubeプレーヤーの再生ボタンを押す。プレーヤーの最小寸法を満たせない374px未満の画面、埋め込み禁止、子ども向け指定の動画はYouTubeへ直接移動する。
 
-## マージ・公開前の残作業
+## 自動取得を有効にする前の残作業
 
 1. 3 Secretsを安全に設定し、@xen_csjのOAuthチャンネル所有を確認。
 2. 実APIで4本のID・タイトル・サムネイル・日時・分類を確認。YouTube Studioの「動画」一覧と比較。
 3. 新しい未分類動画がある場合は保留理由を解消。通常動画が4本未満なら存在する分だけ。
 4. PCおよびiPhone Safariの2列表示、改行、横スクロール、クリック再生、失敗時リンクを確認。
-5. mainの他の改修との差分を確認してマージ。手動更新、Pages Build API、実公開JSONを確認。
+5. 有効化変数をtrueにし、検証専用の手動実行を確認。その後、公開を伴う手動更新・Pages Build API・実公開JSONを確認。
 6. Actionsの成功URL・コミットID・実際の動画4本・PC/スマホの確認結果を記録する。
 
 ローカル確認: `python -m unittest -v test_youtube_latest.py` / `node --check xen-latest-videos.js`

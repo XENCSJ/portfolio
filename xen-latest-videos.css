@@ -5,7 +5,7 @@ body.creator-page #latest-videos { border-top:0; padding-top:0; }
 #latest-videos .xen-latest-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; list-style:none; margin:0; padding:0; }
 #latest-videos .xen-latest-item { min-width:0; margin:0; padding:0; }
 #latest-videos .xen-latest-play { display:block; position:relative; width:100%; aspect-ratio:16/9; padding:0; overflow:hidden; background:#000; color:#fff; border:0; border-radius:0; box-shadow:none; cursor:pointer; }
-#latest-videos .xen-latest-play img { display:block; width:100%; height:100%; object-fit:contain; }
+#latest-videos .xen-latest-play img { display:block; width:100%; height:100%; object-fit:cover; }
 #latest-videos .xen-latest-play span { position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; }
 #latest-videos .xen-latest-play svg { width:30px; height:30px; fill:#fff; stroke:#000; stroke-width:1px; }
 #latest-videos .xen-latest-title { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; margin:12px 0 0; font:inherit; font-size:12px; font-weight:400; line-height:1.7; letter-spacing:0; word-break:normal; overflow-wrap:break-word; line-break:strict; text-wrap:pretty; }

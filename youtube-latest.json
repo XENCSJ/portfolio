@@ -1,7 +1,33 @@
 {
   "schemaVersion": 1,
-  "status": "pending_authentication",
+  "status": "curated",
+  "source": "owner_selection",
   "channelUrl": "https://www.youtube.com/@xen_csj",
-  "validatedAt": null,
-  "items": []
+  "selectedAt": "2026-10-18T22:00:46.754038+00:00",
+  "items": [
+    {
+      "id": "Df4ekWvuGng",
+      "title": "ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった",
+      "url": "https://www.youtube.com/watch?v=Df4ekWvuGng",
+      "thumbnail": "https://i.ytimg.com/vi/Df4ekWvuGng/hqdefault.jpg"
+    },
+    {
+      "id": "5AQmdt1HvXI",
+      "title": "【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www",
+      "url": "https://www.youtube.com/watch?v=5AQmdt1HvXI",
+      "thumbnail": "https://i.ytimg.com/vi/5AQmdt1HvXI/hqdefault.jpg"
+    },
+    {
+      "id": "IykFCu-sYKk",
+      "title": "女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場",
+      "url": "https://www.youtube.com/watch?v=IykFCu-sYKk",
+      "thumbnail": "https://i.ytimg.com/vi/IykFCu-sYKk/hqdefault.jpg"
+    },
+    {
+      "id": "X3DrK_IgSzg",
+      "title": "朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me",
+      "url": "https://www.youtube.com/watch?v=X3DrK_IgSzg",
+      "thumbnail": "https://i.ytimg.com/vi/X3DrK_IgSzg/hqdefault.jpg"
+    }
+  ]
 }
