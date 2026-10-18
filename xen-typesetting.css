@@ -1,18 +1,17 @@
-/* Mobile prose only. The desktop hierarchy, navigation and artwork are unchanged.
-   Explicit phrase spans supply a Safari-compatible fallback for text-wrap:pretty. */
+/* Japanese prose. Keep authored clauses intact, including in Safari.
+   pretty is only an enhancement; it must not be relied on for orphan control. */
 @media (max-width: 768px) {
   body#top main :is(p, blockquote, dd) {
     line-break: strict;
     word-break: normal;
-    overflow-wrap: break-word;
-    text-wrap: pretty;
+    overflow-wrap: normal;
+    text-wrap: wrap;
   }
   body#top main .xen-phrase {
     display: inline-block;
-    max-width: 100%;
-    vertical-align: top;
-    white-space: normal;
-    overflow-wrap: break-word;
+    vertical-align: baseline;
+    white-space: nowrap;
+    overflow-wrap: normal;
   }
   body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy {
     line-height: 2;
@@ -26,8 +25,22 @@
   }
   body#top.studio-page .studio-mvv-copy { line-height: 2; letter-spacing: .015em; }
   body#top.studio-page .studio-mvv-copy p + p { margin-top: 12px; }
-  body#top.studio-page .studio-mvv-statement { text-wrap: balance; }
+  body#top.creator-page .cp-philosophy blockquote {
+    font-size: clamp(20px, 5.6vw, 22px);
+    letter-spacing: 0;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  body#top.creator-page .cp-philosophy blockquote .xen-phrase { display: inline-block; }
+  body#top.studio-page .studio-mvv-statement { text-wrap: wrap; }
   body#top.studio-page .studio-mvv-value-label h4 { text-wrap: balance; }
+}
+/* Only the measured short final line is protected. The rest of a paragraph
+   retains native Japanese line breaking, without narrow artificial columns. */
+.xen-prose-tail { white-space: nowrap; }
+@media (min-width: 769px) {
+  .xen-prose-tail { white-space: normal; }
+  .cp-philosophy blockquote .xen-phrase { display: block; }
 }
 @media (max-width: 600px) {
   /* Keep the value icon in the heading row, giving the body its full reading width. */

@@ -505,7 +505,8 @@ body#top.home-page #xen-news[hidden] { display: none; }
   #xen-news .xen-news-date { font-size: 10px; letter-spacing: 0; }
 }
 </style>
-<link rel="stylesheet" href="./xen-typesetting.css?v=20261019-1">
+<link rel="stylesheet" href="./xen-typesetting.css?v=20261019-2">
+<script src="./xen-typesetting.js?v=20261019-2" defer></script>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
 <header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN APPAREL STOREへ"><img src="./xen-header-cart.png" alt="" width="56" height="51"></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html" aria-current="page"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
@@ -541,6 +542,13 @@ body#top.home-page #xen-news[hidden] { display: none; }
 <script type="application/json" id="xen-news-data">
 [
   {
+    "date": "2026-10-19",
+    "category": "STUDIO",
+    "title": "XEN CSJ BRAND FILM",
+    "url": "./studio.html#brand-film",
+    "source": "./studio.html#brand-film"
+  },
+  {
     "date": "2026-02-02",
     "category": "SOUND",
     "title": "BLUE SLEEP",
@@ -574,7 +582,7 @@ body#top.home-page #xen-news[hidden] { display: none; }
     const records = JSON.parse(source.textContent);
     if (!Array.isArray(records)) return;
     const categories = new Set(['STORYBOOKS', 'ANIMATION', 'SOUND', 'CINEMATIC', 'SNAP',
-      'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'ARTWORKS']);
+      'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'ARTWORKS', 'STUDIO']);
     const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const seen = new Set();
     const latest = records.filter(item => {
@@ -584,7 +592,9 @@ body#top.home-page #xen-news[hidden] { display: none; }
         item.date <= today && categories.has(item.category) &&
         typeof item.title === 'string' && item.title.trim() &&
         typeof item.url === 'string' && /^\.\/[a-z0-9-]+\.html(?:#[a-z0-9_-]+)?$/i.test(item.url) &&
-        item.url.split('#')[0] === './' + item.category.toLowerCase() + '.html';
+        (item.category === 'STUDIO'
+          ? item.url === './studio.html#brand-film'
+          : item.url.split('#')[0] === './' + item.category.toLowerCase() + '.html');
     }).filter(item => {
       const key = item.category + ':' + item.title.trim();
       if (seen.has(key)) return false;
