@@ -28,7 +28,7 @@
     const link = target && target.closest ? target.closest('a[href]') : null;
     if (!link || link.hasAttribute('download')) return;
     let destination;
-    try { destination = new URL(link.href, window.location.href); }
+    try { destination = new URL(link.getAttribute('href'), window.location.href); }
     catch (_) { return; }
     if (destination.origin !== window.location.origin) return;
 
