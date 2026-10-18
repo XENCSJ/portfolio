@@ -1,0 +1,135 @@
+name: Precision Trace QA
+on:
+  push:
+    branches: [work/precision-trace-20261019]
+permissions:
+  contents: read
+jobs:
+  browser-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*.html
+            /*.css
+            /*.js
+            /XEN_logo_fixed_black.svg
+            /xen-header-logo.png
+            /xen-header-cart.png
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test browsers
+        run: |
+          npm install --no-save playwright pngjs
+          npx playwright install --with-deps chromium webkit
+      - name: Check exact artwork and browser behavior
+        run: |
+          cat > precision-qa.mjs <<'JS'
+          import { chromium, webkit } from 'playwright';
+          import fs from 'node:fs/promises';
+          import http from 'node:http';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          import { PNG } from 'pngjs';
+          
+          const base = execFileSync('git',['show','80e44c74b65919545c9d4aab6383c0e7d0d7cc65:index.html'],{encoding:'utf8'});
+          const current = await fs.readFile('index.html','utf8');
+          const originalSVG = await fs.readFile('XEN_logo_fixed_black.svg','utf8');
+          const removeChanges = s => s
+            .replace(/<style id="xen-index-(shadow-reveal|precision-trace)">[\s\S]*?<\/style>/,'')
+            .replace(/<script id="xen-index-(shadow-reveal|precision-trace)-control">[\s\S]*?<\/script>/,'')
+            .replace(/<span class="xen-shadow-reveal" aria-hidden="true"><\/span>/,'')
+            .replace(/<svg class="xen-precision-trace"[\s\S]*?<\/svg>/,'')
+            .replace('XENロゴのPrecision Traceアニメーションを再生','XENロゴのShadow Revealアニメーションを再生');
+          assert.equal(removeChanges(current),removeChanges(base),'Unrelated INDEX source must be identical');
+          const officialD = originalSVG.match(/ d="([^"]+)"/)[1];
+          const officialParts = officialD.match(/M[^M]+/g).map(s=>s.trim()).sort();
+          const traceParts = [...current.matchAll(/class="xen-trace-line" pathLength="1" d="([^"]+)"/g)].map(m=>m[1]).sort();
+          assert.deepEqual(traceParts,officialParts,'Exact official contour strings');
+          assert.ok(current.includes(`<path d="${officialD}" clip-rule="evenodd"/>`));
+          
+          await fs.mkdir('qa-output',{recursive:true});
+          const types={'.html':'text/html','.css':'text/css','.js':'application/javascript','.svg':'image/svg+xml','.png':'image/png'};
+          const server=http.createServer(async(req,res)=>{
+            try{
+              const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
+              if(pathname==='/baseline.html'){res.setHeader('Content-Type','text/html');res.end(base);return;}
+              const f=path.resolve('.','.'+(pathname==='/'?'/index.html':pathname));
+              if(!f.startsWith(process.cwd()+path.sep)){res.writeHead(403);res.end();return;}
+              res.setHeader('Content-Type',types[path.extname(f)]||'application/octet-stream');
+              res.end(await fs.readFile(f));
+            }catch{res.writeHead(404);res.end();}
+          });
+          await new Promise(r=>server.listen(4173,'127.0.0.1',r));
+          const url='http://127.0.0.1:4173';
+          const results=[];
+          function pixels(a,b){const x=PNG.sync.read(a),y=PNG.sync.read(b);assert.equal(x.width,y.width);assert.equal(x.height,y.height);let n=0;for(let i=0;i<x.data.length;i+=4)if(!x.data.subarray(i,i+4).equals(y.data.subarray(i,i+4)))n++;return n;}
+          for(const [engine,device,opts] of [
+            ['chromium','desktop',{viewport:{width:1440,height:1000}}],
+            ['chromium','mobile',{viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true}],
+            ['webkit','mobile',{viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true}]
+          ]){
+           const browser=await ({chromium,webkit}[engine]).launch();
+           const context=await browser.newContext(opts);
+           await context.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
+           const page=await context.newPage(); const errors=[];page.on('pageerror',e=>errors.push(e.message));
+           const geometry=()=>page.evaluate(()=>Object.fromEntries(['.logo-stage','.center-logo','.wheel','#xen-site-header','#creative-index','#xen-footer'].map(s=>[s,document.querySelector(s).getBoundingClientRect().toJSON()])));
+           await page.goto(url+'/baseline.html');await page.waitForTimeout(2800);await page.evaluate(()=>document.fonts.ready);
+           const beforeGeometry=await geometry();
+           const beforeLogo=await page.locator('.center-logo').screenshot();
+           const beforeLinks=await page.locator('a').evaluateAll(es=>es.map(e=>[e.getAttribute('href'),e.textContent]));
+           await page.goto(url+'/');
+           await page.waitForFunction(()=>document.querySelector('.logo-stage').classList.contains('is-precision-tracing'));
+           await page.waitForTimeout(2800);
+           const afterGeometry=await geometry();assert.deepEqual(afterGeometry,beforeGeometry,'Preserved layout');
+           const finalLogo=await page.locator('.center-logo').screenshot();
+           const delta=pixels(beforeLogo,finalLogo);assert.equal(delta,0,'Final artwork exact pixel match');
+           assert.deepEqual(await page.locator('a').evaluateAll(es=>es.map(e=>[e.getAttribute('href'),e.textContent])),beforeLinks);
+           const stage=page.locator('.logo-stage'); const img=page.locator('.center-logo');
+           const state=()=>page.evaluate(()=>({active:document.querySelector('.logo-stage').classList.contains('is-precision-tracing'),opacity:getComputedStyle(document.querySelector('.center-logo')).opacity,trace:getComputedStyle(document.querySelector('.xen-precision-trace')).opacity,offsets:[...document.querySelectorAll('.xen-trace-line')].map(e=>+getComputedStyle(e).strokeDashoffset),transform:getComputedStyle(document.querySelector('.center-logo')).transform}));
+           const prefix=`qa-output/${engine}-${device}`;
+           await page.screenshot({path:prefix+'-complete.png'});
+           await stage.click();await page.mouse.move(0,0);await page.waitForTimeout(200);
+           const initial=await state();assert.equal(initial.opacity,'0');assert.ok(initial.active);assert.equal(initial.transform,'none');
+           await page.screenshot({path:prefix+'-start.png'});
+           await page.waitForTimeout(650);
+           const drawing=await state();assert.equal(drawing.opacity,'0');assert.ok(drawing.offsets.some(x=>x===0));assert.ok(drawing.offsets.some(x=>x>0));
+           await page.screenshot({path:prefix+'-drawing.png'});
+           await page.waitForTimeout(1700);
+           assert.equal((await state()).opacity,'1');assert.equal((await state()).trace,'0');
+           await page.waitForTimeout(800);assert.equal((await state()).active,false,'No automatic loop');
+           for(let i=0;i<5;i++){if(opts.hasTouch)await stage.tap();else await stage.click();await page.waitForTimeout(75);}
+           assert.ok((await state()).active,'Rapid replay');await page.waitForTimeout(2700);assert.equal((await state()).active,false);
+           await stage.focus();await page.keyboard.press('Enter');assert.ok((await state()).active);
+           await page.waitForTimeout(100);await page.keyboard.press('Space');assert.ok((await state()).active);await page.waitForTimeout(2700);
+           await page.getByRole('button',{name:'メニューを開く',exact:true}).click();await page.waitForTimeout(450);
+           assert.equal(await page.locator('#xen-menu').isVisible(),true);assert.equal((await state()).active,false);
+           await page.keyboard.press('Escape');await page.waitForTimeout(450);assert.equal(await page.locator('#xen-menu').isVisible(),false);
+           await page.locator('.orbit a').first().focus();await page.waitForTimeout(450);
+           assert.equal(await page.locator('.orbit a').first().locator('text').first().evaluate(e=>getComputedStyle(e).fill),'rgb(203, 179, 135)');
+           assert.equal((await state()).active,false);
+           await page.emulateMedia({reducedMotion:'reduce'});await stage.click();assert.equal((await state()).opacity,'1');assert.equal((await state()).active,false);
+           await page.reload();assert.equal((await state()).opacity,'1');assert.equal((await state()).active,false);
+           const nojs=await browser.newContext({...opts,javaScriptEnabled:false});
+           const simple=await nojs.newPage();await simple.goto(url+'/');await simple.waitForTimeout(300);
+           assert.equal(await simple.locator('.center-logo').evaluate(e=>getComputedStyle(e).opacity),'1');
+           assert.equal(pixels(beforeLogo,await simple.locator('.center-logo').screenshot()),0,'No JS original image');
+           await nojs.close();assert.deepEqual(errors,[],'No JS errors');
+           results.push({engine,device,viewport:opts.viewport,exactSubpaths:23,finalPixelDifference:delta,geometry:afterGeometry['.center-logo'],checks:'autoplay, sequence, 2.5s completion, static, rapid replay, keyboard, drawer, gold highlight, links, reduced motion, no JS: PASS'});
+           await context.close();await browser.close();
+          }
+          await fs.writeFile('qa-output/results.json',JSON.stringify(results,null,2));
+          console.log(JSON.stringify(results,null,2));server.close();
+          JS
+          node precision-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: precision-trace-evidence
+          path: qa-output/
