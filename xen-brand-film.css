@@ -10,7 +10,7 @@ body#top.studio-page .xbf { color: #fff; width: 100%; }
 .xbf-category[data-category="13"] .xbf-en { font-size: 10.5px; }
 .xbf-category .xbf-ja { font-family: inherit; font-size: 11px; letter-spacing: .2px; }
 .xbf-logo { position: absolute; top: 50%; left: 50%; height: 48%; width: auto; max-width: none; transform: translate(-50%, -50%); filter: brightness(0) invert(1); object-fit: contain; }
-body#top.studio-page .xbf .xbf-philosophy { position: absolute; inset: auto 4% 9%; margin: 0; text-align: center; color: #fff; opacity: 0; font-size: clamp(12px, 1.9cqw, 21px); line-height: 1.7; letter-spacing: .025em; }
+body#top.studio-page .xbf .xbf-philosophy { position: absolute; inset: auto 4% 1%; margin: 0; text-align: center; color: #fff; opacity: 0; font-size: clamp(12px, 1.9cqw, 21px); line-height: 1.7; letter-spacing: .025em; }
 .xbf-philosophy span { display: inline-block; white-space: nowrap; }
 body#top.studio-page .xbf-start { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 0 12px; border: 0; color: #fff; background: transparent; cursor: pointer; font: inherit; font-size: 10px; letter-spacing: .1em; }
 .xbf-start svg { width: 18px; height: 18px; }

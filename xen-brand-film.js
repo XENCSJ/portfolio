@@ -6,6 +6,7 @@
   const frame = film.querySelector('.xbf-frame');
   const logo = film.querySelector('.xbf-logo');
   const orbit = film.querySelector('.xbf-orbit');
+  const circle = film.querySelector('.xbf-circle');
   const items = [...film.querySelectorAll('.xbf-category')];
   const philosophy = film.querySelector('.xbf-philosophy');
   const button = film.querySelector('.xbf-play');
@@ -29,15 +30,22 @@
     let angle = t < 5 ? 0 : t < 7 ? 2.5*(t-5)*(t-5)/2 : t < 27 ? 5+5*(t-7) : t < 31 ? 105+5*(t-27)-.625*(t-27)*(t-27) : 115;
     if (reduce.matches) angle = 0;
     orbit.style.transform = `rotate(${angle}deg)`;
-    const ringFade = smooth((32-t)/2);
+    const settle = smooth((t-27)/4);
+    const restore = smooth((t-35.3)/.7);
+    const circleTarget = compact ? 66 : 78;
+    const logoTarget = compact ? 28 : 38;
+    circle.style.height = `${96+(circleTarget-96)*settle}%`;
+    logo.style.height = `${48+(logoTarget-48)*settle*(1-restore)}%`;
+    const ringFade = smooth((35.3-t)/2);
     items.forEach((item,i) => {
       const pulseStart = compact ? 3+Math.floor(i/3)*5+(i%3)*1.5 : 7+i*1.3;
       const highlight = windowFade(t,pulseStart,pulseStart+1.8,.65);
-      const appear = compact ? windowFade(t,3+Math.floor(i/3)*5,8+Math.floor(i/3)*5,.65) : smooth((t-2-i*.18)/.7)*ringFade;
+      const appear = compact ? windowFade(t,3+Math.floor(i/3)*5,i>=12 ? 35.3 : 8+Math.floor(i/3)*5,.65) : smooth((t-2-i*.18)/.7)*ringFade;
       item.style.opacity = String(appear*(.46+.54*highlight));
     });
-    // Ring is fading out before the philosophy enters its own clear area.
-    philosophy.style.opacity = String(windowFade(t,32,35.2,.7));
+    // The settled circle leaves a clear lower band for the philosophy.
+    // Categories remain visible in scene 05, then fade in scene 06.
+    philosophy.style.opacity = String(windowFade(t,31.5,35.2,.7));
     const current = t >= 3 && t < 28 ? Math.min(14, Math.floor((t-3)/5)*3+Math.min(2,Math.floor(((t-3)%5)/1.67))) : -1;
     if (current !== lastCaption) {
       caption.children[0].textContent = current < 0 ? '' : items[current].dataset.en;
