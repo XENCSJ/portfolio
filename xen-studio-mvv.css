@@ -11,7 +11,7 @@ body#top.studio-page main .cp-page-label {
 body#top.studio-page main .cp-page-label > span:first-child {
   flex:none; font-size:14px; letter-spacing:.17em; color:var(--cp-ink);
 }
-body#top.studio-page main .cp-page-label > span:last-child {
+body#top.studio-page main .cp-page-label > span:last-child:not(:first-child) {
   min-width:0; text-align:right; font-size:10px; letter-spacing:.12em;
   color:var(--cp-muted); line-height:1.6;
 }
@@ -28,17 +28,17 @@ body#top.studio-page .studio-mvv-experience { margin-top:36px; --studio-accent:#
 .studio-page .mvv-ring-base { fill:none; stroke:#353538; stroke-width:1; }
 .studio-page .mvv-ring-arc {
   fill:none; stroke:var(--studio-accent); stroke-width:1;
-  stroke-dasharray:42 78; opacity:.75;
+  stroke-dasharray:60 300; stroke-linecap:round;
 }
 .studio-page .mvv-ring-marker { fill:var(--studio-accent); }
-.studio-page .mvv-ring-rotation {
-  transform-origin:300px 300px; animation:xen-mvv-orbit 48s linear infinite;
-  animation-play-state:paused;
+.studio-page .mvv-ring-segment {
+  opacity:0; transition:opacity 420ms ease;
+  filter:drop-shadow(0 0 3px rgb(181 161 123 / 40%));
 }
-.studio-page .studio-mvv-experience.is-running .mvv-ring-rotation { animation-play-state:running; }
+.studio-page .mvv-ring-segment.is-active { opacity:1; }
 .studio-page .mvv-logo {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  display:block; width:29%; height:auto; max-height:34%; object-fit:contain;
+  display:block; width:34.22%; height:auto; max-height:40.12%; object-fit:contain;
   filter:invert(1); pointer-events:none;
 }
 .studio-page .mvv-tabs { position:absolute; inset:0; }
@@ -46,7 +46,8 @@ body#top.studio-page .studio-mvv-experience { margin-top:36px; --studio-accent:#
   position:absolute; transform:translate(-50%,-50%); display:flex;
   flex-direction:column; align-items:center; justify-content:center; gap:5px;
   min-width:88px; min-height:48px; padding:8px 6px; border:0;
-  background:#000; color:#c6c6cb; cursor:pointer;
+  background:#000; color:#c6c6cb; cursor:pointer; text-decoration:none;
+  touch-action:manipulation;
   transition:color 420ms ease; -webkit-tap-highlight-color:transparent;
 }
 .studio-page .mvv-tab:nth-child(1) { top:13%; left:50%; }
@@ -54,18 +55,20 @@ body#top.studio-page .studio-mvv-experience { margin-top:36px; --studio-accent:#
 .studio-page .mvv-tab:nth-child(3) { top:68.5%; left:18%; }
 .studio-page .mvv-tab span { font-size:10px; letter-spacing:.14em; line-height:1; }
 .studio-page .mvv-tab strong { font-size:clamp(11px,2.8vw,13px); font-weight:400; letter-spacing:.12em; line-height:1.5; }
-.studio-page .mvv-tab[aria-selected="true"] { color:var(--studio-accent); }
-.studio-page .mvv-controls { display:flex; justify-content:flex-end; min-height:44px; }
-.studio-page .mvv-auto {
-  border:0; padding:10px 0 10px 16px; min-height:44px; background:none;
-  color:#a7a7ae; font:inherit; font-size:10px; letter-spacing:.06em; cursor:pointer;
+.studio-page .mvv-tab[aria-current="location"] { color:var(--studio-accent); }
+.studio-page .mvv-tab:focus-visible { outline:1px solid currentColor; outline-offset:3px; }
+@media(hover:hover) {
+  .studio-page .mvv-tab:hover strong { text-decoration:underline; text-underline-offset:5px; }
 }
-.studio-page .mvv-panels { position:relative; }
-.studio-page .is-enhanced .mvv-panels { transition:height 450ms ease; overflow:clip; }
-.studio-page .studio-mvv-panel { padding:0 0 20px; min-width:0; }
-.studio-page .studio-mvv-panel + .studio-mvv-panel { margin-top:32px; }
-.studio-page .is-enhanced .studio-mvv-panel + .studio-mvv-panel { margin-top:0; }
-.studio-page .studio-mvv-panel[hidden], .studio-page .mvv-tabs[hidden], .studio-page .mvv-auto[hidden] { display:none; }
+body#top.studio-page main > .studio-about { padding-top:0; }
+body#top.studio-page .studio-about .studio-mvv-brand { margin-top:32px; }
+body#top.studio-page .studio-about .studio-mvv-core { padding-bottom:0; }
+body#top.studio-page main > .studio-mvv-panel {
+  padding:0; margin-top:64px; min-width:0; scroll-margin-top:16px;
+}
+body#top.studio-page .studio-mvv-panel:focus { outline:none; }
+body#top.studio-page .studio-mvv-experience { scroll-margin-top:16px; }
+body#top.studio-page .studio-index a { min-width:0; }
 .studio-page .mvv-definition { margin:18px 0 0; color:#a7a7ae; font-size:11px; letter-spacing:.06em; }
 body#top.studio-page .studio-mvv-panel .studio-mvv-copy { max-width:760px; }
 body#top.studio-page .studio-mvv-panel > .studio-mvv-statement { margin:12px 0 16px; }
@@ -77,14 +80,10 @@ body#top.studio-page main :is(p,blockquote,dd,h3,h4) {
   overflow-wrap:break-word; line-break:strict;
 }
 body#top.studio-page main :is(p,blockquote,dd) { text-wrap:pretty; }
-@supports (word-break:auto-phrase) {
-  body#top.studio-page main :is(p,blockquote,dd) { word-break:auto-phrase; }
-}
 body#top.studio-page main :is(.xen-phrase,.xen-tail) {
   display:inline; white-space:normal; max-width:100%;
 }
 body#top.studio-page #studio-manifesto-title span { display:inline; }
-@keyframes xen-mvv-orbit { to { transform:rotate(360deg); } }
 @media(max-width:800px) {
   body#top.studio-page main { padding-inline:32px; }
 }
@@ -92,8 +91,9 @@ body#top.studio-page #studio-manifesto-title span { display:inline; }
   body#top.studio-page main { padding:24px 22px 64px; }
   body#top.studio-page main .cp-page-label { font-size:9px; letter-spacing:.04em; padding-bottom:16px; gap:12px; }
   body#top.studio-page main .cp-page-label > span:first-child { font-size:12px; }
-  body#top.studio-page main .cp-page-label > span:last-child { font-size:9px; letter-spacing:.04em; }
+  body#top.studio-page main .cp-page-label > span:last-child:not(:first-child) { font-size:9px; letter-spacing:.04em; }
   body#top.studio-page .studio-mvv-experience { margin-top:28px; }
+  body#top.studio-page main > .studio-mvv-panel { margin-top:40px; }
   .studio-page .mvv-orbit { margin-top:24px; }
   .studio-page .mvv-tab { min-width:78px; padding-inline:3px; }
   body#top.studio-page .studio-mvv-panel .studio-mvv-statement { font-size:19px; }
@@ -103,11 +103,8 @@ body#top.studio-page #studio-manifesto-title span { display:inline; }
   body#top.studio-page .studio-services { grid-template-columns:1fr; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .studio-page .mvv-ring-rotation { animation:none; }
-  .studio-page .mvv-tab, .studio-page .is-enhanced .mvv-panels { transition:none; }
+  .studio-page .mvv-ring-segment, .studio-page .mvv-tab { transition:none; }
 }
 @media print {
-  .studio-page .mvv-controls, .studio-page .mvv-orbit { display:none; }
-  .studio-page .is-enhanced .mvv-panels { height:auto!important; overflow:visible; }
-  .studio-page .studio-mvv-panel[hidden] { display:block; }
+  .studio-page .mvv-orbit { display:none; }
 }
