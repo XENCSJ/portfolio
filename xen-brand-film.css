@@ -1,49 +1,38 @@
-/* STUDIO-owned 40-second film. No selectors touch the INDEX logo or shared UI. */
+/* STUDIO-owned film; no selectors or animation names touch INDEX or shared UI. */
 body#top.studio-page .xbf { color: #fff; width: 100%; }
 .xbf-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #000; border: 1px solid #292929; container-type: inline-size; isolation: isolate; }
-.xbf-art, .xbf-structure { position: absolute; inset: 0; width: 100%; height: 100%; }
-.xbf-art { pointer-events: none; }
-.xbf-structure { color: #a8a8a8; }
-.xbf-logo { position: absolute; top: 15%; left: 50%; height: 34%; width: auto; max-width: 34%; transform: translateX(-50%); overflow: visible; }
-.xbf-logo-fill { opacity: .85; }
-.xbf-logo-trace { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
-.xbf-network, .xbf-nodes, .xbf-seed, .xbf-light { opacity: 0; }
-.xbf-network path, .xbf-value-union path { stroke-dasharray: 1; stroke-dashoffset: 1; }
-.xbf-light { stroke-dasharray: .06 .94; }
-.xbf-scene, .xbf-poster { position: absolute; inset: 56% 5% auto; text-align: center; opacity: 0; }
-.xbf-poster { opacity: 1; }
-body#top.studio-page .xbf :is(p, span) { font-family: inherit; font-weight: 400; }
-body#top.studio-page .xbf :is(.xbf-title,.xbf-poster-title) { display: block; color: #fff; margin: 0; font-size: clamp(18px, 3.2cqw, 34px); line-height: 1.35; letter-spacing: .22em; padding-left: .22em; }
-body#top.studio-page .xbf :is(.xbf-ja,.xbf-poster-ja) { display: block; margin: 10px 0 0; font-size: clamp(13px, 1.9cqw, 18px); line-height: 1.5; color: #bdbdbd; letter-spacing: .08em; }
-body#top.studio-page .xbf .xbf-label { margin: 0 0 12px; color: #c3c3c3; font-size: clamp(10px, 1.2cqw, 13px); line-height: 1.5; letter-spacing: .2em; }
-body#top.studio-page .xbf .xbf-copy { margin: 0; font-size: clamp(14px, 2.5cqw, 27px); line-height: 1.7; letter-spacing: .035em; color: #fff; overflow-wrap: normal; line-break: strict; }
-.xbf-copy span { display: inline-block; max-width: 100%; }
-.xbf-end .xbf-label { margin-top: 14px!important; }
-.xbf-values { position: absolute; inset: 22% 15%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 1px; }
-.xbf-value { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; opacity: 0; text-align: center; }
-.xbf-value span:first-child { font-size: clamp(10px, 1.8cqw, 18px); letter-spacing: .12em; }
-.xbf-value span:last-child { font-size: clamp(14px, 2.2cqw, 24px); letter-spacing: .08em; color: #cecece; }
-.xbf-value-union { position: absolute; inset: 0; width: 100%; height: 100%; color: #777; pointer-events: none; opacity: 0; }
+.xbf-art { position: absolute; inset: 0; pointer-events: none; }
+.xbf-circle { position: absolute; top: 50%; left: 50%; height: 96%; width: auto; aspect-ratio: 1; transform: translate(-50%, -50%); overflow: visible; }
+.xbf-orbit { transform-origin: 300px 300px; }
+.xbf-category { opacity: 0; }
+.xbf-category text { fill: #fff; font-family: Arial, 'Helvetica Neue', sans-serif; font-weight: 400; letter-spacing: .45px; }
+.xbf-category .xbf-en { font-size: 12px; }
+.xbf-category[data-category="13"] .xbf-en { font-size: 10.5px; }
+.xbf-category .xbf-ja { font-family: inherit; font-size: 11px; letter-spacing: .2px; }
+.xbf-logo { position: absolute; top: 50%; left: 50%; height: 48%; width: auto; max-width: none; transform: translate(-50%, -50%); filter: brightness(0) invert(1); object-fit: contain; }
+body#top.studio-page .xbf .xbf-philosophy { position: absolute; inset: auto 4% 9%; margin: 0; text-align: center; color: #fff; opacity: 0; font-size: clamp(12px, 1.9cqw, 21px); line-height: 1.7; letter-spacing: .025em; }
+.xbf-philosophy span { display: inline-block; white-space: nowrap; }
+body#top.studio-page .xbf-start { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 0 12px; border: 0; color: #fff; background: transparent; cursor: pointer; font: inherit; font-size: 10px; letter-spacing: .1em; }
+.xbf-start svg { width: 18px; height: 18px; }
+.xbf-start[hidden] { display: none!important; }
 .xbf-controls { display: flex; align-items: center; gap: 16px; min-height: 54px; }
 body#top.studio-page .xbf-play { display: inline-flex; align-items: center; gap: 9px; min-width: 95px; min-height: 44px; padding: 8px 4px; border: 0; border-radius: 0; background: transparent; color: #fff; font: inherit; font-size: 12px; cursor: pointer; touch-action: manipulation; }
 .xbf-play svg { width: 16px; height: 16px; flex: none; }
-.xbf-play:disabled { opacity: .45; cursor: default; }
+.xbf-play:disabled, .xbf-start:disabled { opacity: .45; cursor: default; }
 .xbf-time { color: #aaa; font-size: 10px; font-variant-numeric: tabular-nums; letter-spacing: .05em; }
 .xbf-silent { margin-left: auto; color: #888; font-size: 9px; letter-spacing: .12em; }
 .xbf-progress { height: 1px; background: #292929; }
 .xbf-progress span { display: block; width: 100%; height: 100%; background: #c0c0c0; transform: scaleX(0); transform-origin: left; }
 body#top.studio-page .xbf-status { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .xbf-fallback { font-size: 13px; line-height: 1.8; }
-@container (max-width: 500px) {
-  .xbf-logo { top: 10%; height: 31%; }
-  .xbf-scene, .xbf-poster { top: 49%; inset-inline: 4%; }
-  body#top.studio-page .xbf .xbf-label { margin-bottom: 5px; font-size: 10px; letter-spacing: .15em; }
-  body#top.studio-page .xbf .xbf-copy { font-size: 14px; line-height: 1.65; letter-spacing: 0; }
-  .xbf-copy span { display: block; }
-  .xbf-values { inset: 13% 8%; }
-  .xbf-value { gap: 5px; }
-  .xbf-end .xbf-label { margin-top: 8px!important; }
-}
+.xbf-now { display: none; }
+/* The 16:9 phone frame cannot legibly hold 15 bilingual labels at once.
+   Five sets of three preserve the circle; the full-size caption aids reading. */
+.xbf[data-compact="true"] .xbf-en { font-size: 42px; letter-spacing: .4px; }
+.xbf[data-compact="true"] .xbf-ja { font-size: 39px; letter-spacing: .2px; }
+.xbf[data-compact="true"] .xbf-now { display: flex; justify-content: center; align-items: baseline; gap: 10px; min-height: 30px; padding-top: 8px; text-align: center; }
+.xbf-now span { color: #eee; font-size: 12px; letter-spacing: .06em; }
+.xbf-now small { color: #bdbdbd; font-size: 11px; }
 @media (max-width: 375px) {
   .xbf-controls { gap: 10px; }
   .xbf-silent { font-size: 8px; letter-spacing: .06em; }

@@ -1,124 +1,87 @@
-/* Exact existing SVG geometry; independent of all other page animations. */
+/* 36 seconds, six scenes, one local clock. The official logo is an unchanged img. */
 (() => {
   'use strict';
   const film = document.getElementById('xen-brand-film');
   if (!film) return;
   const frame = film.querySelector('.xbf-frame');
+  const logo = film.querySelector('.xbf-logo');
+  const orbit = film.querySelector('.xbf-orbit');
+  const items = [...film.querySelectorAll('.xbf-category')];
+  const philosophy = film.querySelector('.xbf-philosophy');
   const button = film.querySelector('.xbf-play');
+  const startButton = film.querySelector('.xbf-start');
   const label = button.querySelector('span');
   const status = film.querySelector('.xbf-status');
   const time = film.querySelector('.xbf-time');
   const progress = film.querySelector('.xbf-progress span');
-  const poster = film.querySelector('.xbf-poster');
+  const caption = film.querySelector('.xbf-now');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const duration = 40000;
-  let animations = [], clock = null, raf = 0, state = 'idle';
-  const animation = (node, frames, options = {}) => {
-    // Keep even short effects on the same 40-second timeline so resume never
-    // rewinds an effect that finished earlier in the film.
-    if (options.delay || options.duration) {
-      const start = (options.delay || 0) / duration;
-      const end = Math.min(1, ((options.delay || 0) + (options.duration || duration)) / duration);
-      const first = frames[0], last = frames[frames.length - 1];
-      frames = [{...first,offset:0},{...first,offset:start,easing:options.easing || 'linear'},
-        {...last,offset:end},{...last,offset:1}];
+  const duration = 36000;
+  let state = 'idle', elapsed = 0, origin = 0, raf = 0, compact = false, lastCaption = -1;
+  const clamp = n => Math.min(1, Math.max(0, n));
+  const smooth = n => { n = clamp(n); return n*n*(3-2*n); };
+  const windowFade = (t,a,b,edge=.7) => smooth((t-a)/edge)*smooth((b-t)/edge);
+  function render(ms) {
+    const t = ms / 1000;
+    // Stationary logo fades on, then remains white through the final frame.
+    logo.style.opacity = String(smooth((t-.2)/1.8));
+    // 5 degrees/s, with smooth acceleration and deceleration; no abrupt stop.
+    let angle = t < 5 ? 0 : t < 7 ? 2.5*(t-5)*(t-5)/2 : t < 27 ? 5+5*(t-7) : t < 31 ? 105+5*(t-27)-.625*(t-27)*(t-27) : 115;
+    if (reduce.matches) angle = 0;
+    orbit.style.transform = `rotate(${angle}deg)`;
+    const ringFade = smooth((32-t)/2);
+    items.forEach((item,i) => {
+      const pulseStart = compact ? 3+Math.floor(i/3)*5+(i%3)*1.5 : 7+i*1.3;
+      const highlight = windowFade(t,pulseStart,pulseStart+1.8,.65);
+      const appear = compact ? windowFade(t,3+Math.floor(i/3)*5,8+Math.floor(i/3)*5,.65) : smooth((t-2-i*.18)/.7)*ringFade;
+      item.style.opacity = String(appear*(.46+.54*highlight));
+    });
+    // Ring is fading out before the philosophy enters its own clear area.
+    philosophy.style.opacity = String(windowFade(t,32,35.2,.7));
+    const current = t >= 3 && t < 28 ? Math.min(14, Math.floor((t-3)/5)*3+Math.min(2,Math.floor(((t-3)%5)/1.67))) : -1;
+    if (current !== lastCaption) {
+      caption.children[0].textContent = current < 0 ? '' : items[current].dataset.en;
+      caption.children[1].textContent = current < 0 ? '' : items[current].dataset.ja;
+      lastCaption = current;
     }
-    const a = node.animate(frames, {duration, fill: 'both', easing: 'linear'});
-    animations.push(a);
-    return a;
-  };
-  const fade = (node, start, end, move = true) => {
-    const span = end - start, edge = Math.min(.65, span / 4);
-    const offset = s => s / 40;
-    const transform = y => !reduce.matches && move ? `translateY(${y}px)` : 'none';
-    animation(node, [
-      {opacity:0, transform:transform(5), offset:0},
-      {opacity:0, transform:transform(5), offset:offset(start)},
-      {opacity:1, transform:transform(0), offset:offset(start+edge)},
-      {opacity:1, transform:transform(0), offset:offset(end-edge)},
-      {opacity:0, transform:transform(-3), offset:offset(end)},
-      {opacity:0, transform:transform(-3), offset:1}
-    ]);
-  };
-  const tick = () => {
-    const ms = Math.min(duration, Number(clock?.currentTime) || 0);
-    progress.style.transform = `scaleX(${ms / duration})`;
-    time.textContent = `00:${String(Math.floor(ms/1000)).padStart(2,'0')} / 00:40`;
-    if (state === 'playing') raf = requestAnimationFrame(tick);
-  };
-  const stop = () => {
-    cancelAnimationFrame(raf);
-    animations.forEach(a => { a.onfinish = null; a.cancel(); });
-    animations = []; clock = null;
-  };
-  const finish = () => {
-    state = 'ended'; film.dataset.state = state;
-    cancelAnimationFrame(raf); tick();
-    label.textContent = 'もう一度再生';
-    button.setAttribute('aria-label', 'ブランドフィルムを最初から再生');
-    status.textContent = '再生が終了しました。もう一度再生できます。';
-  };
-  const start = () => {
-    stop(); state = 'playing'; film.dataset.state = state;
-    poster.style.opacity = '0';
-    const fill = film.querySelector('.xbf-logo-fill');
-    const trace = film.querySelector('.xbf-logo-trace');
-    animation(fill, [
-      {opacity:0,offset:0},{opacity:0,offset:.09},{opacity:1,offset:.13},
-      {opacity:1,offset:.625},{opacity:0,offset:.65},{opacity:0,offset:.825},
-      {opacity:1,offset:.865},{opacity:1,offset:.96},{opacity:0,offset:1}
-    ]);
-    if (!reduce.matches) {
-      animation(trace,[{opacity:0,strokeDashoffset:1,offset:0},{opacity:1,strokeDashoffset:1,offset:.025},{opacity:1,strokeDashoffset:0,offset:.115},{opacity:0,strokeDashoffset:0,offset:.145},{opacity:0,strokeDashoffset:0,offset:1}]);
-      fade(film.querySelector('.xbf-seed'),.15,1.4,false);
-      const light=film.querySelector('.xbf-light'); fade(light,5.2,11.6,false);
-      animation(light,[{strokeDashoffset:1},{strokeDashoffset:0}],{delay:5200,duration:6400});
-      const network=film.querySelector('.xbf-network'); fade(network,12,26,false);
-      network.querySelectorAll('path').forEach((p,i)=>animation(p,[{strokeDashoffset:1},{strokeDashoffset:0}],{delay:12000+i*650,duration:4500}));
-      fade(film.querySelector('.xbf-nodes'),19.3,25.8,false);
-      const union=film.querySelector('.xbf-value-union'); fade(union,30.7,34,false);
-      animation(union.querySelector('path'),[{strokeDashoffset:1},{strokeDashoffset:0}],{delay:30700,duration:1800});
-      animation(union,[{transform:'scale(1)'},{transform:'scale(.05)'}],{delay:32800,duration:1200,fill:'forwards',easing:'cubic-bezier(.4,0,.2,1)'});
-    }
-    film.querySelectorAll('.xbf-scene').forEach(node=>fade(node,+node.dataset.start,+node.dataset.end));
-    film.querySelectorAll('.xbf-value').forEach(node=>fade(node,+node.dataset.start,33.4));
-    clock=animation(frame,[{opacity:1},{opacity:1}]);
-    // All timelines share one origin; repeat taps cannot create overlapping runs.
-    const origin=document.timeline.currentTime;
-    animations.forEach(a=>{a.startTime=origin;});
-    clock.onfinish=finish;
-    label.textContent='一時停止'; button.setAttribute('aria-label','ブランドフィルムを一時停止');
-    status.textContent='ブランドフィルムを再生しています。音声はありません。';
-    tick();
-  };
-  const pause = () => {
-    animations.forEach(a=>a.pause()); state='paused'; film.dataset.state=state;
-    cancelAnimationFrame(raf); label.textContent='続きから再生';
-    button.setAttribute('aria-label','ブランドフィルムを続きから再生');
-    status.textContent='一時停止中です。';
-  };
-  if (!frame.animate) {
-    status.textContent='このブラウザではブランドフィルムを再生できません。ページ内の理念をご覧ください。';
-    return;
+    progress.style.transform = `scaleX(${ms/duration})`;
+    time.textContent = `00:${String(Math.floor(ms/1000)).padStart(2,'0')} / 00:36`;
   }
-  button.disabled=false;
-  button.setAttribute('aria-label','40秒のブランドフィルムを再生');
-  button.addEventListener('click',()=>{
-    if(state==='playing')pause();
-    else if(state==='paused'){
-      animations.forEach(a=>a.play());state='playing';film.dataset.state=state;
-      label.textContent='一時停止';button.setAttribute('aria-label','ブランドフィルムを一時停止');
-      status.textContent='再生を再開しました。';tick();
-    } else start();
-  });
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='playing')pause();});
-  reduce.addEventListener('change',()=>{
-    if(state==='playing'||state==='paused'){
-      stop();state='idle';film.dataset.state=state;poster.style.opacity='1';
-      label.textContent='再生';button.setAttribute('aria-label','40秒のブランドフィルムを再生');
-      progress.style.transform='scaleX(0)';time.textContent='00:00 / 00:40';
-      status.textContent='動きを減らす設定を反映しました。再生ボタンで開始できます。';
-    }
-  });
-  window.addEventListener('pagehide',()=>{if(state==='playing')pause();});
+  function finish() {
+    state='ended'; film.dataset.state=state; elapsed=duration; cancelAnimationFrame(raf); render(duration);
+    label.textContent='もう一度再生'; button.setAttribute('aria-label','ブランドフィルムを最初から再生');
+    status.textContent='再生が終了しました。もう一度再生できます。';
+  }
+  function tick(now) {
+    if(state !== 'playing') return;
+    elapsed=Math.min(duration,now-origin); render(elapsed);
+    if(elapsed>=duration) finish(); else raf=requestAnimationFrame(tick);
+  }
+  function play() {
+    if(state==='idle'||state==='ended') elapsed=0;
+    state='playing';film.dataset.state=state;startButton.hidden=true;
+    origin=performance.now()-elapsed;cancelAnimationFrame(raf);render(elapsed);raf=requestAnimationFrame(tick);
+    label.textContent='一時停止';button.setAttribute('aria-label','ブランドフィルムを一時停止');
+    status.textContent='ブランドフィルムを再生しています。音声はありません。';
+  }
+  function pause() {
+    if(state!=='playing')return;
+    elapsed=Math.min(duration,performance.now()-origin);cancelAnimationFrame(raf);render(elapsed);
+    state='paused';film.dataset.state=state;label.textContent='続きから再生';
+    button.setAttribute('aria-label','ブランドフィルムを続きから再生');status.textContent='一時停止中です。';
+  }
+  function resize() {
+    compact=frame.clientWidth<760;film.dataset.compact=String(compact);
+    items.forEach((item,i) => item.querySelectorAll('textPath').forEach(p=>p.setAttribute('startOffset',`${compact ? (i%3+.5)*100/3 : (i+.5)*100/15}%`)));
+    if(state!=='idle')render(elapsed);
+  }
+  button.disabled=false;startButton.disabled=false;
+  button.addEventListener('click',()=>state==='playing'?pause():play());
+  startButton.addEventListener('click',play);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+  window.addEventListener('pagehide',pause);
+  if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)pause();},{threshold:0}).observe(frame);
+  if('ResizeObserver' in window)new ResizeObserver(resize).observe(frame);else window.addEventListener('resize',resize,{passive:true});
+  reduce.addEventListener('change',()=>{if(state!=='idle')render(elapsed);});
+  resize();
 })();
