@@ -1,5 +1,13 @@
-/* Mobile prose only. The desktop hierarchy, navigation and artwork are unchanged.
-   Explicit phrase spans supply a Safari-compatible fallback for text-wrap:pretty. */
+/* Prose wrapping. Short semantic units are atomic; no device-wide forced breaks.
+   Do not make an inline-block wrap internally: that recreates Japanese orphans. */
+body#top main :is(.xen-phrase, .xen-tail) {
+  display: inline-block;
+  max-width: none;
+  vertical-align: baseline;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
 @media (max-width: 768px) {
   body#top main :is(p, blockquote, dd) {
     line-break: strict;
@@ -7,30 +15,19 @@
     overflow-wrap: break-word;
     text-wrap: pretty;
   }
-  body#top main .xen-phrase {
-    display: inline-block;
-    max-width: 100%;
-    vertical-align: top;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
   body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy {
     line-height: 2;
     letter-spacing: .015em;
   }
-  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy p {
-    margin: 0;
-  }
-  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy p + p {
-    margin-top: 12px;
-  }
+  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy p { margin: 0; }
+  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy p + p { margin-top: 12px; }
+  body#top.creator-page .cp-philosophy blockquote { text-wrap: balance; }
   body#top.studio-page .studio-mvv-copy { line-height: 2; letter-spacing: .015em; }
   body#top.studio-page .studio-mvv-copy p + p { margin-top: 12px; }
   body#top.studio-page .studio-mvv-statement { text-wrap: balance; }
   body#top.studio-page .studio-mvv-value-label h4 { text-wrap: balance; }
 }
 @media (max-width: 600px) {
-  /* Keep the value icon in the heading row, giving the body its full reading width. */
   body#top.studio-page .studio-mvv-list > li > .studio-icon { grid-row: 1; }
   body#top.studio-page .studio-mvv-value-body { grid-column: 1 / -1; }
   body#top.studio-page .studio-mvv-purpose > section { padding-inline: 16px; }
