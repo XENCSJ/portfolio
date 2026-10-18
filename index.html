@@ -337,11 +337,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<style id="xen-index-water-ripple">
-/* Keep only the tap-triggered ripples; remove the old decorative circle outlines. */
+<style id="xen-index-shadow-reveal">
+/* Central artwork only. Preserve the existing 54% stage and original image. */
 body#top.home-page .xen-luxury-rings,
-body#top.home-page .xen-luxury-orbit-line { display: none; }
-/* Central artwork only. Keep the existing 54% stage and original image intact. */
+body#top.home-page .xen-luxury-orbit-line,
+body#top.home-page .xen-luxury-ambient { display: none; }
 body#top.home-page .logo-stage {
   pointer-events: auto;
   cursor: pointer;
@@ -352,6 +352,7 @@ body#top.home-page .logo-stage:focus-visible {
   outline: 1px solid #cbb387;
   outline-offset: 8px;
 }
+/* Override the former Fade & Focus without changing shared stylesheets. */
 body#top.home-page .logo-stage .logo-final {
   z-index: 1;
   animation: none !important;
@@ -361,44 +362,47 @@ body#top.home-page .logo-stage .logo-final {
   filter: none;
   pointer-events: none;
 }
-/* 54% × 146% = 78.84% of the wheel: stops inside the bilingual orbit. */
-body#top.home-page .xen-water-ripple {
-  position: absolute;
-  inset: -23%;
-  z-index: 0;
-  pointer-events: none;
-}
-body#top.home-page .xen-water-ripple > span {
+/* The original white image stays in place. Only this masked shadow moves.
+   Match object-fit: contain exactly; SVG alpha excludes every transparent gap. */
+body#top.home-page .logo-stage .xen-shadow-reveal {
+  display: none;
   position: absolute;
   inset: 0;
-  border: 2px solid #e6ebf0;
-  border-radius: 50%;
-  opacity: 0;
-  transform: scale(.06);
-  transform-origin: center;
+  z-index: 2;
   pointer-events: none;
+  opacity: 0;
+  background-image: linear-gradient(135deg,
+    rgb(0 0 0 / 5%) 0%, rgb(0 0 0 / 12%) 30%,
+    rgb(0 0 0 / 85%) 52%, #000 68%, #000 100%);
+  background-size: 400% 400%;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask: url('./XEN_logo_fixed_black.svg') center / contain no-repeat;
+  mask: url('./XEN_logo_fixed_black.svg') center / contain no-repeat;
+  mask-mode: alpha;
 }
-body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span {
-  animation: xen-water-ripple-expand 2.05s ease-out forwards,
-    xen-water-ripple-fade 2.05s linear forwards;
+@supports ((mask-image: url('')) or (-webkit-mask-image: url(''))) {
+  body#top.home-page .logo-stage.is-shadow-revealing .xen-shadow-reveal {
+    display: block;
+    animation: xen-shadow-reveal 2.5s linear 1 both;
+  }
 }
-body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span + span {
-  animation-delay: .35s;
-}
-@keyframes xen-water-ripple-expand {
-  from { transform: scale(.06); }
-  to { transform: scale(1); }
-}
-/* Retain contrast while the wave crosses the artwork, then fade at the edge. */
-@keyframes xen-water-ripple-fade {
-  0% { opacity: .7; }
-  45% { opacity: .6; }
-  70% { opacity: .35; }
-  100% { opacity: 0; }
+@keyframes xen-shadow-reveal {
+  /* 0–0.6s: a quiet silhouette emerges, with no movement of the artwork. */
+  0% { background-position: 100% 100%; opacity: .98; }
+  24% { background-position: 100% 100%; opacity: .9;
+    animation-timing-function: cubic-bezier(.35, 0, .25, 1); }
+  /* 0.6–1.8s: the soft shadow boundary travels from top-left to bottom-right. */
+  72% { background-position: 0% 0%; opacity: .9;
+    animation-timing-function: ease-out; }
+  /* 1.8–2.5s: residual shading dissolves into the unchanged white artwork. */
+  100% { background-position: 0% 0%; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body#top.home-page .xen-water-ripple { display: none; }
-  body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span { animation: none; }
+  body#top.home-page .logo-stage.is-shadow-revealing .xen-shadow-reveal {
+    display: none;
+    animation: none;
+  }
 }
 </style>
 </head><body id="top" class="xen-polished home-page"><a class="skip-link" href="#home">本文へ移動</a>
@@ -409,7 +413,7 @@ body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span + span {
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><a class="xen-menu-link xen-menu-category-link" href="./price-list.html"><span class="xen-menu-en" lang="en">PRICE LIST</span><span class="xen-menu-ja" lang="ja">料金一覧</span></a></h2></section>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><a class="xen-menu-link xen-menu-category-link" href="./studio.html#studio-contact"><span class="xen-menu-en" lang="en">CONTACT</span><span class="xen-menu-ja" lang="ja">制作相談</span></a></h2></section>
 </nav></header>
-<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path id="circle" d="M300 300 m-265 0 a265 265 0 1 1 530 0 a265 265 0 1 1 -530 0"/><path id="circle-ja" d="M300 300 m-246 0 a246 246 0 1 1 492 0 a246 246 0 1 1 -492 0"/></defs><a href="./index.html" aria-label="INDEX｜ホーム" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="3.3333333333333335%">INDEX</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="3.3333333333333335%">ホーム</textPath></text></a><a href="./studio.html" aria-label="STUDIO｜スタジオ" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="10%">STUDIO</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="10%">スタジオ</textPath></text></a><a href="./creator.html" aria-label="CREATOR｜クリエイター" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="16.666666666666664%">CREATOR</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="16.666666666666664%">クリエイター</textPath></text></a><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="23.333333333333332%">STORYBOOKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="23.333333333333332%">絵本</textPath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="30%">ANIMATION</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="30%">アニメーション</textPath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="36.666666666666664%">SOUND</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="36.666666666666664%">音楽</textPath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="43.333333333333336%">CINEMATIC</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="43.333333333333336%">映像</textPath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="50%">SNAP</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="50%">写真</textPath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="56.666666666666664%">DESIGN</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="56.666666666666664%">デザイン</textPath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="63.33333333333333%">APPAREL</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="63.33333333333333%">アパレル</textPath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="70%">ARCHITECTURE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="70%">建築</textPath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="76.66666666666667%">SPACE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="76.66666666666667%">空間</textPath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="83.33333333333334%">ARTWORKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="83.33333333333334%">作品集</textPath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="90%">SNS MANAGEMENT</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="90%">SNS運用</textPath></text></a><a href="./price-list.html" aria-label="PRICE LIST｜料金一覧" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="96.66666666666667%">PRICE LIST</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="96.66666666666667%">料金一覧</textPath></text></a></svg><div class="logo-stage" role="button" tabindex="0" aria-label="XENロゴの波紋アニメーションを再生"><span class="xen-water-ripple" aria-hidden="true"><span></span><span></span></span><span class="logo-final"><img alt="XEN symbol logo" class="center-logo" src="./XEN_logo_fixed_black.svg" width="2232" height="2293"></span></div></div></section>
+<main id="home"><section aria-label="XEN CREATIVE STUDIO JAPAN" class="hero"><div class="wheel"><svg aria-label="作品カテゴリー" class="orbit" role="group" viewBox="0 0 600 600"><defs><path id="circle" d="M300 300 m-265 0 a265 265 0 1 1 530 0 a265 265 0 1 1 -530 0"/><path id="circle-ja" d="M300 300 m-246 0 a246 246 0 1 1 492 0 a246 246 0 1 1 -492 0"/></defs><a href="./index.html" aria-label="INDEX｜ホーム" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="3.3333333333333335%">INDEX</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="3.3333333333333335%">ホーム</textPath></text></a><a href="./studio.html" aria-label="STUDIO｜スタジオ" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="10%">STUDIO</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="10%">スタジオ</textPath></text></a><a href="./creator.html" aria-label="CREATOR｜クリエイター" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="16.666666666666664%">CREATOR</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="16.666666666666664%">クリエイター</textPath></text></a><a href="./storybooks.html" aria-label="STORYBOOKS｜絵本" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="23.333333333333332%">STORYBOOKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="23.333333333333332%">絵本</textPath></text></a><a href="./animation.html" aria-label="ANIMATION｜アニメーション" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="30%">ANIMATION</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="30%">アニメーション</textPath></text></a><a href="./sound.html" aria-label="SOUND｜音楽" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="36.666666666666664%">SOUND</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="36.666666666666664%">音楽</textPath></text></a><a href="./cinematic.html" aria-label="CINEMATIC｜映像" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="43.333333333333336%">CINEMATIC</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="43.333333333333336%">映像</textPath></text></a><a href="./snap.html" aria-label="SNAP｜写真" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="50%">SNAP</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="50%">写真</textPath></text></a><a href="./design.html" aria-label="DESIGN｜デザイン" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="56.666666666666664%">DESIGN</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="56.666666666666664%">デザイン</textPath></text></a><a href="./apparel.html" aria-label="APPAREL｜アパレル" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="63.33333333333333%">APPAREL</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="63.33333333333333%">アパレル</textPath></text></a><a href="./architecture.html" aria-label="ARCHITECTURE｜建築" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="70%">ARCHITECTURE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="70%">建築</textPath></text></a><a href="./space.html" aria-label="SPACE｜空間" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="76.66666666666667%">SPACE</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="76.66666666666667%">空間</textPath></text></a><a href="./artworks.html" aria-label="ARTWORKS｜作品集" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="83.33333333333334%">ARTWORKS</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="83.33333333333334%">作品集</textPath></text></a><a href="./sns-management.html" aria-label="SNS MANAGEMENT｜SNS運用" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="90%">SNS MANAGEMENT</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="90%">SNS運用</textPath></text></a><a href="./price-list.html" aria-label="PRICE LIST｜料金一覧" tabindex="0"><text class="orbit-en" text-anchor="middle"><textPath href="#circle" startOffset="96.66666666666667%">PRICE LIST</textPath></text><text class="orbit-ja" text-anchor="middle"><textPath href="#circle-ja" startOffset="96.66666666666667%">料金一覧</textPath></text></a></svg><div class="logo-stage" role="button" tabindex="0" aria-label="XENロゴのShadow Revealアニメーションを再生"><span class="logo-final"><img alt="XEN symbol logo" class="center-logo" src="./XEN_logo_fixed_black.svg" width="2232" height="2293"><span class="xen-shadow-reveal" aria-hidden="true"></span></span></div></div></section>
 <section class="index" id="creative-index"><h1 class="section-label studio-heading"><span class="title-en">XEN | CREATIVE STUDIO JAPAN</span></h1><span class="home-ja">ホーム・作品一覧</span><nav class="index-directory" aria-label="カテゴリー一覧">
 <section class="index-category"><h2 class="index-heading"><span class="index-en" lang="en"><svg class="index-icon" data-icon="info" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>ABOUT XEN</span><span class="index-ja" lang="ja">XENについて</span></h2><ul class="index-items"><li><a class="index-link " href="./studio.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="layers" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /> <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /> <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></svg>STUDIO</span><span class="index-ja" lang="ja">スタジオ</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./creator.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="user-round" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /></svg>CREATOR</span><span class="index-ja" lang="ja">クリエイター</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></section>
 <section class="index-category"><h2 class="index-heading"><span class="index-en" lang="en"><svg class="index-icon" data-icon="layout-grid" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1" /> <rect width="7" height="7" x="14" y="3" rx="1" /> <rect width="7" height="7" x="14" y="14" rx="1" /> <rect width="7" height="7" x="3" y="14" rx="1" /></svg>WORKS</span><span class="index-ja" lang="ja">制作・作品</span></h2><ul class="index-items"><li><a class="index-link " href="./storybooks.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="book-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg>STORYBOOKS</span><span class="index-ja" lang="ja">ストーリーブック</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./animation.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="clapperboard" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12.296 3.464 3.02 3.956" /> <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" /> <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <path d="m6.18 5.276 3.1 3.899" /></svg>ANIMATION</span><span class="index-ja" lang="ja">アニメーション</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./sound.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="audio-lines" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /></svg>SOUND</span><span class="index-ja" lang="ja">音楽</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./cinematic.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="film" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M7 3v18" /> <path d="M3 7.5h4" /> <path d="M3 12h18" /> <path d="M3 16.5h4" /> <path d="M17 3v18" /> <path d="M17 7.5h4" /> <path d="M17 16.5h4" /></svg>CINEMATIC</span><span class="index-ja" lang="ja">映像</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./snap.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="camera" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" /> <circle cx="12" cy="13" r="3" /></svg>SNAP</span><span class="index-ja" lang="ja">写真</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./design.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="pen-tool" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 13-.654-4.736a4 4 0 00-2.756-3.266l-9.163-2.9a2 2 0 00-2.017.493l-.82.819a2 2 0 00-.492 2.017l2.9 9.163a4 4 0 003.266 2.756L13 18" /> <path d="M18.648 12.352a1.205 1.205 0 011.704 0l1.296 1.296a1.205 1.205 0 010 1.704l-6.296 6.296a1.205 1.205 0 01-1.704 0l-1.296-1.296a1.205 1.205 0 010-1.704z" /> <path d="m3 3 6.586 6.586" /> <circle cx="11" cy="11" r="2" /></svg>DESIGN</span><span class="index-ja" lang="ja">デザイン</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./apparel.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="shirt" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></svg>APPAREL</span><span class="index-ja" lang="ja">アパレル</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./architecture.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="building" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 10h.01" /> <path d="M12 14h.01" /> <path d="M12 6h.01" /> <path d="M16 10h.01" /> <path d="M16 14h.01" /> <path d="M16 6h.01" /> <path d="M8 10h.01" /> <path d="M8 14h.01" /> <path d="M8 6h.01" /> <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" /> <rect x="4" y="2" width="16" height="20" rx="2" /></svg>ARCHITECTURE</span><span class="index-ja" lang="ja">建築</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./space.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="box" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>SPACE</span><span class="index-ja" lang="ja">空間</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./artworks.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="palette" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" /> <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /> <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /> <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /> <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /></svg>ARTWORKS</span><span class="index-ja" lang="ja">アートワーク</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./sns-management.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="share-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3" /> <circle cx="6" cy="12" r="3" /> <circle cx="18" cy="19" r="3" /> <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /> <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>SNS MANAGEMENT</span><span class="index-ja" lang="ja">SNS運用</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></section>
@@ -420,20 +424,33 @@ body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span + span {
 
 <a class="xen-back-top" href="#top">Back to Top</a><p class="xen-powered">Powered by XEN</p><div class="xen-copyright">© XEN CREATIVE STUDIO JAPAN</div>
 </footer>
-<script src="./xen-index-assembly.js?v=20261017-drawer70-gold" defer></script><script src="./xen-index-luxury.js?v=20261017-static-fade-focus" defer></script><script src="./xen-shared.js?v=20261017-official2" defer></script><script src="./xen-motion.js?v=20261015-luxury" defer></script><script id="xen-index-water-ripple-control">
+<script src="./xen-index-assembly.js?v=20261017-drawer70-gold" defer></script><script src="./xen-index-luxury.js?v=20261017-static-fade-focus" defer></script><script src="./xen-shared.js?v=20261017-official2" defer></script><script src="./xen-motion.js?v=20261015-luxury" defer></script><script id="xen-index-shadow-reveal-control">
 (() => {
   'use strict';
   const stage = document.querySelector('body.home-page .logo-stage');
-  const ripple = stage?.querySelector('.xen-water-ripple');
-  if (!ripple) return;
+  const image = stage?.querySelector('.center-logo');
+  const shadow = stage?.querySelector('.xen-shadow-reveal');
+  if (!image || !shadow) return;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const reset = () => stage.classList.remove('is-rippling');
+  const masksSupported = window.CSS && (
+    CSS.supports('mask-image', 'url("")') ||
+    CSS.supports('-webkit-mask-image', 'url("")')
+  );
+  let cleanupTimer = 0;
+  let hasPlayed = false;
+  const reset = () => {
+    window.clearTimeout(cleanupTimer);
+    stage.classList.remove('is-shadow-revealing');
+  };
   const play = () => {
     reset();
-    if (motion.matches) return;
-    // Reuse exactly two rings. Flush the reset so a repeated tap restarts both.
-    void ripple.offsetWidth;
-    stage.classList.add('is-rippling');
+    if (motion.matches || !masksSupported || document.hidden ||
+        !image.complete || !image.naturalWidth) return;
+    hasPlayed = true;
+    // One bounded layer, one CSS clock. Flush reset for safe rapid-tap replay.
+    void shadow.offsetWidth;
+    stage.classList.add('is-shadow-revealing');
+    cleanupTimer = window.setTimeout(reset, 2600);
   };
   stage.addEventListener('click', play);
   stage.addEventListener('keydown', (event) => {
@@ -446,13 +463,22 @@ body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span + span {
     event.preventDefault();
     play();
   });
-  ripple.addEventListener('animationend', (event) => {
-    if (event.target === ripple.lastElementChild && event.animationName === 'xen-water-ripple-expand') reset();
+  shadow.addEventListener('animationend', (event) => {
+    if (event.target === shadow && event.animationName === 'xen-shadow-reveal') reset();
   });
-  // Do not resume an unfinished effect after returning to the page.
   document.addEventListener('visibilitychange', () => { if (document.hidden) reset(); });
   window.addEventListener('pagehide', reset);
-  motion.addEventListener('change', reset);
+  if (motion.addEventListener) motion.addEventListener('change', reset);
+  else if (motion.addListener) motion.addListener(reset);
+  // Wait for the original artwork and deferred page setup. Never hide the logo
+  // by default: absent JS, unsupported masks or reduced motion show pure white.
+  const autoplay = () => {
+    if (image.complete) { if (!hasPlayed) play(); }
+    else image.addEventListener('load', () => { if (!hasPlayed) play(); }, { once: true });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoplay, { once: true });
+  } else autoplay();
 })();
 </script>
 </body></html>
