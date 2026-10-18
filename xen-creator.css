@@ -1,6 +1,6 @@
 /* CREATOR editorial system. All selectors are scoped; original photography is untouched. */
 /* CONNECT was moved intact from INDEX; the profile retains its two-column layout. */
-body#top.creator-page h1.cp-page-label {
+body#top:is(.creator-page,.studio-page) h1.cp-page-label {
   margin: 0; font-size: 10px; font-weight: 400; line-height: 1.6;
 }
 body#top.creator-page .creator-connect {
@@ -45,8 +45,8 @@ body#top.creator-page .cp-connect-return { margin: 12px 0 0; text-align: center;
 }
 .creator-page{--cp-ink:#202020;--cp-muted:#717171;--cp-line:#dededb;--cp-paper:#f7f7f5;--cp-ease:cubic-bezier(.22,.68,0,1)}
 body.creator-page.xen-polished.detail-page main{max-width:1120px;padding:32px 48px 76px;animation:none}
-.creator-page .cp-page-label{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--cp-line);font-size:10px;letter-spacing:.12em;color:var(--cp-muted)}
-.creator-page .cp-page-label>span:first-child{font-size:14px;letter-spacing:.17em;color:var(--cp-ink)}
+:is(.creator-page,.studio-page) .cp-page-label{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--cp-line);font-size:10px;letter-spacing:.12em;color:var(--cp-muted)}
+:is(.creator-page,.studio-page) .cp-page-label>span:first-child{font-size:14px;letter-spacing:.17em;color:var(--cp-ink)}
 .creator-page .cp-profile-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(40px,6vw,88px);align-items:center;margin:36px 0 30px}
 .creator-page .profile-portrait{width:100%;max-width:400px;margin:0}
 .creator-page .profile-portrait .image-gallery{display:block;margin:0}
@@ -149,8 +149,8 @@ body.creator-page.xen-polished.detail-page .creation-support>h2{font-size:11px;p
 }
 @media(max-width:600px){
  body.creator-page.xen-polished.detail-page main{padding:24px 22px 48px}
- .creator-page .cp-page-label{font-size:9px;letter-spacing:.04em;padding-bottom:16px}
- .creator-page .cp-page-label>span:first-child{font-size:12px}
+ :is(.creator-page,.studio-page) .cp-page-label{font-size:9px;letter-spacing:.04em;padding-bottom:16px}
+ :is(.creator-page,.studio-page) .cp-page-label>span:first-child{font-size:12px}
  .creator-page .cp-profile-layout{grid-template-columns:1fr;gap:24px;margin:26px 0 20px}
  .creator-page .profile-portrait{width:76%;max-width:290px;margin:0 auto}
  .creator-page .cp-identity{width:100%;max-width:380px;margin:0 auto}
