@@ -1,0 +1,99 @@
+name: Refresh latest YouTube videos
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish verified data to main (leave false for validation only)'
+        type: boolean
+        default: false
+  pull_request:
+    paths:
+      - 'creator.html'
+      - '*youtube*'
+      - 'xen-latest-videos.*'
+      - '.github/workflows/youtube-latest.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: youtube-latest-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest -v test_youtube_latest.py
+      - run: node --check xen-latest-videos.js
+
+  refresh:
+    # Owner-selected videos remain fixed until OAuth is configured and explicitly enabled.
+    if: github.event_name != 'pull_request' && vars.YOUTUBE_AUTO_UPDATE_ENABLED == 'true'
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch and verify with official YouTube APIs
+        env:
+          YOUTUBE_OAUTH_CLIENT_ID: ${{ secrets.YOUTUBE_OAUTH_CLIENT_ID }}
+          YOUTUBE_OAUTH_CLIENT_SECRET: ${{ secrets.YOUTUBE_OAUTH_CLIENT_SECRET }}
+          YOUTUBE_OAUTH_REFRESH_TOKEN: ${{ secrets.YOUTUBE_OAUTH_REFRESH_TOKEN }}
+        run: python update_youtube_latest.py
+      - name: Report verified results
+        run: |
+          python - <<'PY'
+          import json, os
+          data = json.load(open('youtube-latest.json'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('Verified public regular videos: ' + str(len(data['items'])) + '\n')
+              for video in data['items']:
+                  out.write('\n- ' + video['url'])
+          PY
+      - name: Commit data and request Pages build
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || inputs.publish)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --quiet -- youtube-latest.json; then
+            git add -- youtube-latest.json
+            git commit -m 'Refresh verified latest YouTube videos'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+          # GITHUB_TOKEN pushes alone do not trigger branch-based Pages builds.
+          build_url=$(gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --jq .url)
+          for attempt in $(seq 1 36); do
+            state=$(gh api "$build_url" --jq .status)
+            if [ "$state" = built ]; then
+              echo 'GitHub Pages build completed.' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            if [ "$state" = errored ]; then
+              echo 'GitHub Pages build failed.' >&2
+              exit 1
+            fi
+            sleep 10
+          done
+          echo 'GitHub Pages build did not complete within 6 minutes.' >&2
+          exit 1
