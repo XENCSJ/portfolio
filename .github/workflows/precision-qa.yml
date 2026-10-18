@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 8
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /*.html
@@ -92,14 +92,14 @@ jobs:
            const delta=pixels(beforeLogo,finalLogo);assert.equal(delta,0,'Final artwork exact pixel match');
            assert.deepEqual(await page.locator('a').evaluateAll(es=>es.map(e=>[e.getAttribute('href'),e.textContent])),beforeLinks);
            const stage=page.locator('.logo-stage'); const img=page.locator('.center-logo');
-           const state=()=>page.evaluate(()=>({active:document.querySelector('.logo-stage').classList.contains('is-precision-tracing'),opacity:getComputedStyle(document.querySelector('.center-logo')).opacity,trace:getComputedStyle(document.querySelector('.xen-precision-trace')).opacity,offsets:[...document.querySelectorAll('.xen-trace-line')].map(e=>+getComputedStyle(e).strokeDashoffset),transform:getComputedStyle(document.querySelector('.center-logo')).transform}));
+           const state=()=>page.evaluate(()=>({active:document.querySelector('.logo-stage').classList.contains('is-precision-tracing'),opacity:getComputedStyle(document.querySelector('.center-logo')).opacity,trace:getComputedStyle(document.querySelector('.xen-precision-trace')).opacity,offsets:[...document.querySelectorAll('.xen-trace-line')].map(e=>parseFloat(getComputedStyle(e).strokeDashoffset)),transform:getComputedStyle(document.querySelector('.center-logo')).transform}));
            const prefix=`qa-output/${engine}-${device}`;
            await page.screenshot({path:prefix+'-complete.png'});
            await stage.click();await page.mouse.move(0,0);await page.waitForTimeout(200);
            const initial=await state();assert.equal(initial.opacity,'0');assert.ok(initial.active);assert.equal(initial.transform,'none');
            await page.screenshot({path:prefix+'-start.png'});
            await page.waitForTimeout(650);
-           const drawing=await state();assert.equal(drawing.opacity,'0');assert.ok(drawing.offsets.some(x=>x===0));assert.ok(drawing.offsets.some(x=>x>0));
+           const drawing=await state();console.log(engine,device,'drawing',drawing);assert.equal(drawing.opacity,'0');assert.ok(drawing.offsets.some(x=>x===0));assert.ok(drawing.offsets.some(x=>x>0));
            await page.screenshot({path:prefix+'-drawing.png'});
            await page.waitForTimeout(1700);
            assert.equal((await state()).opacity,'1');assert.equal((await state()).trace,'0');
