@@ -338,6 +338,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 <style id="xen-index-water-ripple">
+/* Keep only the tap-triggered ripples; remove the old decorative circle outlines. */
+body#top.home-page .xen-luxury-rings,
+body#top.home-page .xen-luxury-orbit-line { display: none; }
 /* Central artwork only. Keep the existing 54% stage and original image intact. */
 body#top.home-page .logo-stage {
   pointer-events: auto;
@@ -368,7 +371,7 @@ body#top.home-page .xen-water-ripple {
 body#top.home-page .xen-water-ripple > span {
   position: absolute;
   inset: 0;
-  border: 1px solid #dce2e7;
+  border: 2px solid #e6ebf0;
   border-radius: 50%;
   opacity: 0;
   transform: scale(.06);
@@ -376,14 +379,22 @@ body#top.home-page .xen-water-ripple > span {
   pointer-events: none;
 }
 body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span {
-  animation: xen-water-ripple-expand 2.05s ease-out forwards;
+  animation: xen-water-ripple-expand 2.05s ease-out forwards,
+    xen-water-ripple-fade 2.05s linear forwards;
 }
 body#top.home-page .logo-stage.is-rippling .xen-water-ripple > span + span {
   animation-delay: .35s;
 }
 @keyframes xen-water-ripple-expand {
-  from { transform: scale(.06); opacity: .3; }
-  to { transform: scale(1); opacity: 0; }
+  from { transform: scale(.06); }
+  to { transform: scale(1); }
+}
+/* Retain contrast while the wave crosses the artwork, then fade at the edge. */
+@keyframes xen-water-ripple-fade {
+  0% { opacity: .7; }
+  45% { opacity: .6; }
+  70% { opacity: .35; }
+  100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   body#top.home-page .xen-water-ripple { display: none; }
