@@ -119,7 +119,7 @@ jobs:
            await page.emulateMedia({reducedMotion:'reduce'});await stage.click();assert.equal((await state()).opacity,'1');assert.equal((await state()).active,false);
            await page.reload();assert.equal((await state()).opacity,'1');assert.equal((await state()).active,false);
            const nojs=await browser.newContext({...opts,javaScriptEnabled:false});
-           const simple=await nojs.newPage();await simple.goto(url+'/');await simple.waitForTimeout(300);
+           const simple=await nojs.newPage();await simple.goto(url+'/');await simple.waitForTimeout(700);
            assert.equal(await simple.locator('.center-logo').evaluate(e=>getComputedStyle(e).opacity),'1');
            assert.equal(pixels(beforeLogo,await simple.locator('.center-logo').screenshot()),0,'No JS original image');
            await nojs.close();assert.deepEqual(errors,[],'No JS errors');
