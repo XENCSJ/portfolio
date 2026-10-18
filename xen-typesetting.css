@@ -1,34 +1,16 @@
-/* Prose wrapping. Short semantic units are atomic; no device-wide forced breaks.
-   Do not make an inline-block wrap internally: that recreates Japanese orphans. */
-body#top main :is(.xen-phrase, .xen-tail) {
-  display: inline-block;
-  max-width: none;
-  vertical-align: baseline;
-  white-space: nowrap;
-  overflow-wrap: normal;
+/* Shared prose rules only: dimensions, alignment and typography remain page-owned.
+   Natural Japanese text stays inline; do not group whole phrases into boxes. */
+body#top main :is(p, blockquote, dd) {
+  white-space: normal;
   word-break: normal;
+  line-break: strict;
+  overflow-wrap: break-word;
 }
-@media (max-width: 768px) {
-  body#top main :is(p, blockquote, dd) {
-    line-break: strict;
-    word-break: normal;
-    overflow-wrap: break-word;
-    text-wrap: pretty;
-  }
-  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy {
-    line-height: 2;
-    letter-spacing: .015em;
-  }
-  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy p { margin: 0; }
-  body#top.creator-page main :is(.cp-about, .cp-philosophy) .cp-copy p + p { margin-top: 12px; }
-  body#top.creator-page .cp-philosophy blockquote { text-wrap: balance; }
-  body#top.studio-page .studio-mvv-copy { line-height: 2; letter-spacing: .015em; }
-  body#top.studio-page .studio-mvv-copy p + p { margin-top: 12px; }
-  body#top.studio-page .studio-mvv-statement { text-wrap: balance; }
-  body#top.studio-page .studio-mvv-value-label h4 { text-wrap: balance; }
-}
-@media (max-width: 600px) {
-  body#top.studio-page .studio-mvv-list > li > .studio-icon { grid-row: 1; }
-  body#top.studio-page .studio-mvv-value-body { grid-column: 1 / -1; }
-  body#top.studio-page .studio-mvv-purpose > section { padding-inline: 16px; }
+/* Short, intentional sentence endings and expressions only. Unlike inline-block,
+   inline spans retain normal baseline/line-height behavior. */
+body#top main .xen-tail {
+  display: inline;
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
 }
