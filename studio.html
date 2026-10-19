@@ -63,6 +63,45 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <!-- /XEN official home-screen and browser icons -->
 <link rel="stylesheet" href="./xen-studio-services.css?v=20261019-services1">
 <script defer src="./xen-studio-services.js?v=20261019-services1"></script>
+<style id="studio-contact-accordion-styles">
+/* CONTACT only: independent disclosures, without changing shared components. */
+#studio-contact .contact-catch{margin:24px 0 28px;color:#f3f1ed;font-size:clamp(19px,2.5vw,27px);font-weight:400;line-height:1.8;letter-spacing:.02em;word-break:normal;overflow-wrap:break-word;line-break:strict;text-wrap:pretty}
+#studio-contact .contact-accordion{border-top:1px solid rgba(255,255,255,.2)}
+#studio-contact .contact-item{border-bottom:1px solid rgba(255,255,255,.2)}
+#studio-contact .contact-item h3{margin:0;padding:0;font-size:inherit;line-height:inherit}
+#studio-contact .contact-toggle{width:100%;min-height:80px;display:grid;grid-template-columns:26px minmax(0,1fr) 18px;align-items:center;gap:12px;margin:0;padding:20px 0;border:0;border-radius:0;background:transparent;color:#eee;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#studio-contact .contact-toggle:focus-visible{outline:2px solid #b5a17b;outline-offset:5px}
+#studio-contact .contact-number{color:#b5a17b;font-size:11px;letter-spacing:.1em}
+#studio-contact .contact-label{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 18px;min-width:0}
+#studio-contact .contact-label-en{font-size:12px;line-height:1.6;letter-spacing:.12em;font-weight:500}
+#studio-contact .contact-label-ja{font-size:14px;line-height:1.8;letter-spacing:normal;font-weight:400;word-break:normal;line-break:strict}
+#studio-contact .contact-plus{position:relative;width:14px;height:14px;color:#b5a17b}
+#studio-contact .contact-plus::before,#studio-contact .contact-plus::after{content:"";position:absolute;top:6px;left:0;width:14px;height:1px;background:currentColor;transition:transform .24s ease}
+#studio-contact .contact-plus::after{transform:rotate(90deg)}
+#studio-contact .contact-toggle[aria-expanded="true"] .contact-plus::after{transform:rotate(0)}
+#studio-contact .contact-panel{overflow:hidden;min-width:0}
+#studio-contact .contact-panel[hidden]{display:none!important}
+#studio-contact .contact-panel-inner{padding:0 0 26px 38px;min-width:0}
+#studio-contact .contact-panel p,#studio-contact .contact-panel li,#studio-contact .contact-get-in-touch p{max-width:none;width:auto;font-size:14px;line-height:2;letter-spacing:normal;color:#c9c9c9;text-align:left;white-space:normal;word-break:normal;overflow-wrap:break-word;line-break:strict;text-wrap:pretty}
+#studio-contact .contact-panel p{margin:0 0 14px}
+#studio-contact .contact-service-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 24px;margin:0;padding:0;list-style:none}
+#studio-contact .contact-flow{margin:0;padding-left:1.5em}
+#studio-contact .contact-flow li{padding-left:8px;margin:0 0 16px}
+#studio-contact .contact-flow li:last-child{margin-bottom:0}
+#studio-contact .contact-flow li::marker{color:#b5a17b;font-size:12px}
+#studio-contact .contact-panel h4{margin:0 0 2px;color:#eee;font-size:14px;line-height:1.8;font-weight:500;letter-spacing:normal}
+#studio-contact .contact-flow p{margin:0}
+#studio-contact .contact-brief{margin:0;padding-left:1.2em}
+#studio-contact .contact-brief li{padding-left:4px;margin:4px 0}
+#studio-contact .contact-get-in-touch{padding-top:28px}
+#studio-contact .contact-get-in-touch h3{margin:0 0 12px;color:#eee;font-size:12px;font-weight:500;line-height:1.6;letter-spacing:.14em}
+#studio-contact .contact-get-in-touch p{margin:0 0 14px}
+#studio-contact .contact-get-in-touch .studio-actions{margin-top:20px}
+#studio-contact .contact-get-in-touch .studio-button-primary{background:#eee;color:#111;border-color:#eee}
+#studio-contact .contact-get-in-touch .studio-button-primary:hover{background:#fff;border-color:#fff}
+@media(max-width:600px){#studio-contact .contact-label{display:block}#studio-contact .contact-label-en,#studio-contact .contact-label-ja{display:block}#studio-contact .contact-label-en{margin-bottom:4px;font-size:11px}#studio-contact .contact-toggle{gap:9px;grid-template-columns:23px minmax(0,1fr) 16px;padding:17px 0}#studio-contact .contact-panel-inner{padding-left:0}#studio-contact .contact-service-list{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){#studio-contact .contact-plus::before,#studio-contact .contact-plus::after{transition:none!important}}
+</style>
 </head><body id="top" class="xen-noir detail-page video-page studio-page xen-polished xen-detail-unified xen-youtube-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN APPAREL STOREへ"><img src="./xen-header-cart.png" alt="" width="56" height="51"></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><span class="xen-menu-en" lang="en">ABOUT XEN</span><span class="xen-menu-ja" lang="ja">XENについて</span></h2><ul class="xen-menu-items"><li><a class="xen-menu-link " href="./studio.html" aria-current="page"><span class="xen-menu-en" lang="en">STUDIO</span><span class="xen-menu-ja" lang="ja">スタジオ</span></a></li><li><a class="xen-menu-link " href="./creator.html"><span class="xen-menu-en" lang="en">CREATOR</span><span class="xen-menu-ja" lang="ja">クリエイター</span></a></li></ul></section>
@@ -122,17 +161,90 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <button type="button" class="studio-motion-toggle" aria-pressed="false" hidden>もう一度再生</button>
 </div>
 </section>
-<section class="studio-section" id="studio-contact" aria-labelledby="studio-contact-title">
+<section class="studio-section" id="studio-contact" aria-labelledby="studio-contact-title" data-contact-version="20261019-accordion1">
 <h2 class="cp-page-label" id="studio-contact-title"><span>CONTACT</span></h2>
-<p class="studio-subtitle" lang="en">LET’S CREATE TOGETHER</p>
-<div class="studio-copy xen-prose-container">
-<p class="xen-description">制作のご相談やご依頼は、InstagramのDMからお気軽にお問い合わせください。</p>
-<p class="xen-description">ご希望の制作内容やイメージが決まっていない段階でもご相談いただけます。</p>
+<p class="contact-catch">アイデアから、価値ある表現へ。</p>
+<div class="contact-accordion">
+<div class="contact-item">
+<h3><button class="contact-toggle" type="button" id="contact-consultation-toggle" aria-expanded="false" aria-controls="contact-consultation-panel"><span class="contact-number">01</span><span class="contact-label"><span class="contact-label-en" lang="en">CONSULTATION</span><span class="contact-label-ja">ご相談いただける内容</span></span><span class="contact-plus" aria-hidden="true"></span></button></h3>
+<div class="contact-panel" id="contact-consultation-panel" role="region" aria-labelledby="contact-consultation-toggle" hidden inert><div class="contact-panel-inner">
+<p>ご希望の制作内容やイメージが決まっていない段階でもご相談いただけます。</p>
+<ul class="contact-service-list" role="list">
+<li>楽曲・BGM・サウンド制作</li><li>アニメーション・映像表現</li><li>絵本・ストーリー制作</li><li>映像・PV・プロモーション制作</li><li>写真撮影・ビジュアル制作</li><li>グラフィック・Webデザイン</li><li>アパレル・グッズデザイン</li><li>建築デザイン・設計</li><li>空間デザイン・演出</li><li>SNS企画・コンテンツ制作・運用</li>
+</ul>
+</div></div>
 </div>
+<div class="contact-item">
+<h3><button class="contact-toggle" type="button" id="contact-process-toggle" aria-expanded="false" aria-controls="contact-process-panel"><span class="contact-number">02</span><span class="contact-label"><span class="contact-label-en" lang="en">PROCESS</span><span class="contact-label-ja">ご依頼の流れ</span></span><span class="contact-plus" aria-hidden="true"></span></button></h3>
+<div class="contact-panel" id="contact-process-panel" role="region" aria-labelledby="contact-process-toggle" hidden inert><div class="contact-panel-inner">
+<ol class="contact-flow">
+<li><h4>お問い合わせ</h4><p>ジャンル・用途・納期をお知らせください。</p></li>
+<li><h4>ヒアリング</h4><p>世界観・目的・ターゲットを共有。参考資料があれば任意で。</p></li>
+<li><h4>ご提案</h4><p>ビジュアル・音・構成など最適な方向性をご提案します。</p></li>
+<li><h4>制作</h4><p>映像・音楽・デザイン・アニメなど必要領域を統合して制作。</p></li>
+<li><h4>修正</h4><p>方向性を確認しながらブラッシュアップ。</p></li>
+<li><h4>納品</h4><p>整えた最終データを納品。形式は用途に合わせて調整可能。</p></li>
+</ol>
+</div></div>
+</div>
+<div class="contact-item">
+<h3><button class="contact-toggle" type="button" id="contact-details-toggle" aria-expanded="false" aria-controls="contact-details-panel"><span class="contact-number">03</span><span class="contact-label"><span class="contact-label-en" lang="en">PROJECT DETAILS</span><span class="contact-label-ja">お問い合わせ時に伝えること</span></span><span class="contact-plus" aria-hidden="true"></span></button></h3>
+<div class="contact-panel" id="contact-details-panel" role="region" aria-labelledby="contact-details-toggle" hidden inert><div class="contact-panel-inner">
+<p>ご記入いただくとスムーズです：</p>
+<ul class="contact-brief">
+<li>制作ジャンル（映像・BGM・アニメ・ロゴムービー・世界観デザインなど）</li>
+<li>目的・用途（PR・広告・SNS・MVなど）</li>
+<li>参考イメージやキーワード</li>
+<li>希望納期</li>
+<li>ご予算の目安</li>
+<li>企業名・個人名（任意）</li>
+</ul>
+</div></div>
+</div>
+</div>
+<div class="contact-get-in-touch">
+<h3 lang="en">GET IN TOUCH</h3>
+<p>制作のご相談やご依頼は、InstagramのDMからお気軽にお問い合わせください。</p>
 <div class="studio-actions">
-<a class="studio-button studio-button-primary" href="https://ig.me/m/xen_csj" rel="noopener noreferrer">制作について相談する</a>
+<a class="studio-button studio-button-primary" href="https://ig.me/m/xen_csj" rel="noopener noreferrer">Instagram DMで相談する</a>
 <a class="studio-button" href="./price-list.html">料金一覧を見る</a>
 </div>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('studio-contact');
+  if (!root) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const items = Array.from(root.querySelectorAll('.contact-toggle')).map(button => ({
+    button, panel: document.getElementById(button.getAttribute('aria-controls')), animation: null
+  }));
+  function settle(item, open) {
+    if (item.animation) { item.animation.onfinish = null; item.animation.cancel(); item.animation = null; }
+    item.panel.hidden = !open;
+    item.panel.inert = !open;
+  }
+  items.forEach(item => {
+    if (!item.panel) return;
+    item.button.addEventListener('click', () => {
+      const open = item.button.getAttribute('aria-expanded') !== 'true';
+      const start = item.panel.hidden ? 0 : item.panel.getBoundingClientRect().height;
+      if (item.animation) { item.animation.onfinish = null; item.animation.cancel(); item.animation = null; }
+      item.button.setAttribute('aria-expanded', String(open));
+      item.panel.hidden = false;
+      item.panel.inert = !open;
+      if (reduced.matches || !item.panel.animate) { settle(item, open); return; }
+      const end = open ? item.panel.scrollHeight : 0;
+      item.animation = item.panel.animate([{height: start + 'px'}, {height: end + 'px'}], {
+        duration: 240, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'both'
+      });
+      item.animation.onfinish = () => settle(item, open);
+    });
+  });
+  reduced.addEventListener('change', () => {
+    if (reduced.matches) items.forEach(item => settle(item, item.button.getAttribute('aria-expanded') === 'true'));
+  });
+})();
+</script>
 </section>
 </main>
 <!-- Formal MVV preserved verbatim from main 71fb227. Inert source archive; display summaries above do not replace the official wording. -->
