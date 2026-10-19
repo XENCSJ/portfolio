@@ -214,3 +214,29 @@ body#top.studio-page .studio-button-primary:active { background:#dcc18d; color:#
 @media(prefers-reduced-motion:reduce) {
   body#top.studio-page :is(.studio-service-link,.studio-button,.contact-toggle) { transition:none; }
 }
+
+/* The three STUDIO section headings follow CREATOR's PERSONAL heading.
+   Values: xen-creator.css .cp-section-heading (including its 600px breakpoint).
+   Keep cp-page-label as the existing motion hook and retain the STUDIO rule.
+   Japanese labels use the requested existing STUDIO gold. */
+body#top.studio-page main h2.studio-section-heading {
+  display:flex; flex-wrap:nowrap; align-items:baseline; justify-content:flex-start;
+  gap:8px 16px; margin:0 0 24px; padding:0;
+  border:0; border-bottom:1px solid var(--studio-line); background:transparent;
+  color:#fff; font-family:inherit; font-size:15px; font-weight:400;
+  letter-spacing:.1em; line-height:1.6; text-align:left;
+}
+body#top.studio-page main h2.studio-section-heading > span:first-child {
+  flex:0 0 auto; color:inherit; font-size:inherit; font-weight:inherit;
+  letter-spacing:inherit; line-height:inherit; white-space:nowrap;
+}
+body#top.studio-page main h2.studio-section-heading > small {
+  flex:0 0 auto; font-size:11px; font-weight:400; letter-spacing:.04em;
+  line-height:inherit; color:var(--studio-gold); white-space:nowrap;
+}
+@media(max-width:600px) {
+  body#top.studio-page main h2.studio-section-heading {
+    font-size:13px; gap:8px 12px; margin-bottom:20px;
+  }
+  body#top.studio-page main h2.studio-section-heading > small { font-size:10px; }
+}
