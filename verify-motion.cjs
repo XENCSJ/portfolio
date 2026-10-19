@@ -51,12 +51,13 @@ async function check(browser,profile,label) {
         await target.scrollIntoViewIfNeeded();await page.waitForTimeout(1300);
         if(!profile.isMobile && await target.evaluate(n=>n.classList.contains('xm-tilt'))) {
           await target.hover({position:{x:20,y:20}});await page.waitForTimeout(350);
-          assert.notEqual(await target.evaluate(n=>getComputedStyle(n).rotate),'1 0 0 0deg');
+          const rotation=await target.evaluate(n=>n.style.getPropertyValue('--xm-rotate'));
+          assert(rotation && !rotation.endsWith(' 0.00deg'),`pointer tilt did not react: ${rotation}`);
         }
         await page.screenshot({path:`motion-qa/${label}-${name}-detail.png`});
       }
       if(['snap','artworks','architecture','design','space','apparel'].includes(name)) {
-        await page.locator('main .gallery-item').first().click();await page.locator('#image-viewer[open]').waitFor();await page.keyboard.press('Escape');await page.locator('#image-viewer:not([open])').waitFor();
+        await page.locator('main .gallery-item').first().click();await page.locator('#image-viewer[open]').waitFor();await page.keyboard.press('Escape');await page.locator('#image-viewer').waitFor({state:'hidden'});
       }
       await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(200);
       assert.equal(await page.locator('.xm-atmosphere').evaluate(n=>getComputedStyle(n).display),'none');
