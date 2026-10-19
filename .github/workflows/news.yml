@@ -1,0 +1,103 @@
+name: Update verified NEWS
+
+on:
+  workflow_run:
+    workflows: [pages-build-deployment]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+    paths: ['news*', 'xen-news.*', 'test_news.py', 'test_news_browser.cjs', '.github/workflows/news.yml', 'index.html']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xen-news-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest -v test_news.py
+      - run: node --check xen-news.js
+
+  browser-checks:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Check desktop, iPhone, small phone and reduced motion
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/news-http.log 2>&1 &
+          node test_news_browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-browser-checks
+          path: news-qa/
+
+  refresh:
+    needs: checks
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+      deployments: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          filter: blob:none
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Read successful Pages deployments and aggregate new works
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python news.py --refresh
+          python -m unittest -v test_news.py
+      - name: Commit only NEWS data and request Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- news-state.json news-events.json news-archive.json index.html; then
+            echo 'No new published content. Fixed article unchanged.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- news-state.json news-events.json news-archive.json index.html
+          git commit -m 'NEWS: record verified published content'
+          # Never force-push or overwrite parallel changes. Conflicts stop this run.
+          git pull --rebase origin main
+          python -m unittest -v test_news.py
+          git push origin HEAD:main
+          # Bot pushes alone do not start branch-based Pages builds.
+          build_url=$(gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --jq .url)
+          for attempt in $(seq 1 36); do
+            state=$(gh api "$build_url" --jq .status)
+            if [ "$state" = built ]; then
+              echo 'NEWS published; normal items limited to four, renewal article preserved.' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            if [ "$state" = errored ]; then exit 1; fi
+            sleep 10
+          done
+          echo 'Pages publication was not confirmed in time.' >&2
+          exit 1
