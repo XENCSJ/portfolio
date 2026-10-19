@@ -33,7 +33,8 @@ body.xm-ready { isolation:isolate; --xm-gold:198,161,91; --xm-ease:cubic-bezier(
 @keyframes xm-sweep { 0%,8% { opacity:0; transform:translateX(-70%); } 17% { opacity:1; } 36%,100% { opacity:0; transform:translateX(70%); } }
 /* Individual transforms compose with existing entry/disclosure transforms. */
 body.xm-ready .xm-tilt { rotate:var(--xm-rotate,1 0 0 0deg); transition:rotate 220ms ease-out,box-shadow 350ms ease-out; }
-body.xm-ready :is(.image-gallery,.grid,.studio-service-grid,.cp-editorial-index) { perspective:1200px; }
+/* Keep perspective local to entry keyframes: a long gallery's shared vanishing
+   point would skew its first rows when an individual card rotates. */
 body.xm-ready .xm-depth { translate:0 var(--xm-depth,0px); transition:translate 180ms ease-out; }
 body.xm-ready .xm-tilt.xm-pointed { box-shadow:0 12px 30px -20px #c6a15b60; }
 .xm-control { transition:translate 200ms ease-out,scale 200ms ease-out; }

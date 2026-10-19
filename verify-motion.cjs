@@ -50,9 +50,14 @@ async function check(browser,profile,label) {
       if(await target.count()) {
         await target.scrollIntoViewIfNeeded();await page.waitForTimeout(1300);
         if(!profile.isMobile && await target.evaluate(n=>n.classList.contains('xm-tilt'))) {
+          const before=await target.boundingBox();
           await target.hover({position:{x:20,y:20}});await page.waitForTimeout(350);
           const rotation=await target.evaluate(n=>n.style.getPropertyValue('--xm-rotate'));
           assert(rotation && !rotation.endsWith(' 0.00deg'),`pointer tilt did not react: ${rotation}`);
+          const after=await target.boundingBox();
+          assert(Math.abs(after.x+after.width/2-before.x-before.width/2)<8,'hover displaced card center horizontally');
+          assert(Math.abs(after.y+after.height/2-before.y-before.height/2)<8,'hover displaced card center vertically');
+          assert(Math.abs(after.width/before.width-1)<.1 && Math.abs(after.height/before.height-1)<.1,'hover distorted card dimensions');
         }
         await page.screenshot({path:`motion-qa/${label}-${name}-detail.png`});
       }
