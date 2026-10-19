@@ -1,0 +1,384 @@
+[
+  {
+    "id": "legacy-1",
+    "date": "2026-10-10",
+    "category": "YOUTUBE",
+    "title": "『【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www』を公開しました。",
+    "url": "./creator.html#latest-videos",
+    "contentIds": [
+      "youtube:5AQmdt1HvXI"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=5AQmdt1HvXI"
+  },
+  {
+    "id": "legacy-2",
+    "date": "2026-09-24",
+    "category": "YOUTUBE",
+    "title": "『朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me』を公開しました。",
+    "url": "./creator.html#latest-videos",
+    "contentIds": [
+      "youtube:X3DrK_IgSzg"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=X3DrK_IgSzg"
+  },
+  {
+    "id": "legacy-3",
+    "date": "2026-09-04",
+    "category": "YOUTUBE",
+    "title": "『女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場』を公開しました。",
+    "url": "./creator.html#latest-videos",
+    "contentIds": [
+      "youtube:IykFCu-sYKk"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=IykFCu-sYKk"
+  },
+  {
+    "id": "legacy-4",
+    "date": "2026-09-03",
+    "category": "YOUTUBE",
+    "title": "『ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった』を公開しました。",
+    "url": "./creator.html#latest-videos",
+    "contentIds": [
+      "youtube:Df4ekWvuGng"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=Df4ekWvuGng"
+  },
+  {
+    "id": "legacy-5",
+    "date": "2026-02-02",
+    "category": "SOUND",
+    "title": "『BLUE SLEEP』を公開しました。",
+    "url": "./sound.html#ambient-chill",
+    "contentIds": [
+      "work:BLUE SLEEP"
+    ],
+    "evidence": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D"
+  },
+  {
+    "id": "legacy-6",
+    "date": "2026-01-02",
+    "category": "SOUND",
+    "title": "『Celestial Lake』を公開しました。",
+    "url": "./sound.html#celestial-lake-title",
+    "contentIds": [
+      "work:Celestial Lake"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=t2sB0oOTOAA"
+  },
+  {
+    "id": "legacy-7",
+    "date": "2025-12-19",
+    "category": "SOUND",
+    "title": "『NIGHT'S AWAKENING』を公開しました。",
+    "url": "./sound.html#nights-awakening-title",
+    "contentIds": [
+      "work:NIGHT'S AWAKENING"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=uqQI6369VYg"
+  },
+  {
+    "id": "historical-f5795f9-snap",
+    "date": "2026-10-16",
+    "publishedAt": "2026-10-15T21:38:56.000Z",
+    "category": "SNAP",
+    "url": "./snap.html",
+    "contentIds": [
+      "image:SNAP (21).JPEG",
+      "image:SNAP (22).JPEG",
+      "image:SNAP (23).JPEG",
+      "image:SNAP (24).JPEG",
+      "image:SNAP (25).JPEG",
+      "image:SNAP (26).JPEG",
+      "image:SNAP (27).JPEG",
+      "image:SNAP (28).JPEG",
+      "image:SNAP (29).JPEG",
+      "image:SNAP (30).JPEG",
+      "image:SNAP (31).JPEG"
+    ],
+    "evidence": {
+      "commit": "https://github.com/XENCSJ/portfolio/commit/f5795f99295524f7100425d68b8bed9e4c2ce98c",
+      "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+      "status": "Deployed (completed)",
+      "publishedAt": "2026-10-15T21:38:56.000Z"
+    }
+  },
+  {
+    "id": "historical-9b71d7d-snap",
+    "date": "2026-10-16",
+    "publishedAt": "2026-10-16T07:02:05.000Z",
+    "category": "SNAP",
+    "url": "./snap.html",
+    "contentIds": [
+      "image:SNAP (32).JPEG",
+      "image:SNAP (33).JPEG"
+    ],
+    "evidence": {
+      "commit": "https://github.com/XENCSJ/portfolio/commit/9b71d7d6e7bf848bd9b1778889d7d4d777358d0e",
+      "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+      "status": "Deployed (completed)",
+      "publishedAt": "2026-10-16T07:02:05.000Z"
+    }
+  },
+  {
+    "id": "historical-798d76b-snap",
+    "date": "2026-10-16",
+    "publishedAt": "2026-10-16T09:56:16.000Z",
+    "category": "SNAP",
+    "url": "./snap.html",
+    "contentIds": [
+      "image:SNAP (100).JPEG",
+      "image:SNAP (101).JPEG",
+      "image:SNAP (102).JPEG",
+      "image:SNAP (103).JPEG",
+      "image:SNAP (104).JPEG",
+      "image:SNAP (105).JPEG",
+      "image:SNAP (106).JPEG",
+      "image:SNAP (107).JPEG",
+      "image:SNAP (108).JPEG",
+      "image:SNAP (109).JPEG",
+      "image:SNAP (110).JPEG",
+      "image:SNAP (111).JPEG",
+      "image:SNAP (112).JPEG",
+      "image:SNAP (113).JPEG",
+      "image:SNAP (114).JPEG",
+      "image:SNAP (115).JPEG",
+      "image:SNAP (116).JPEG",
+      "image:SNAP (117).JPEG",
+      "image:SNAP (118).JPEG",
+      "image:SNAP (119).JPEG",
+      "image:SNAP (120).JPEG",
+      "image:SNAP (121).JPEG",
+      "image:SNAP (122).JPEG",
+      "image:SNAP (123).JPEG",
+      "image:SNAP (124).JPEG",
+      "image:SNAP (125).JPEG",
+      "image:SNAP (126).JPEG",
+      "image:SNAP (127).JPEG",
+      "image:SNAP (128).JPEG",
+      "image:SNAP (129).JPEG",
+      "image:SNAP (130).JPEG",
+      "image:SNAP (131).JPEG",
+      "image:SNAP (132).JPEG",
+      "image:SNAP (133).JPEG",
+      "image:SNAP (134).JPEG",
+      "image:SNAP (135).JPEG",
+      "image:SNAP (136).JPEG",
+      "image:SNAP (137).JPEG",
+      "image:SNAP (138).JPEG",
+      "image:SNAP (139).JPEG",
+      "image:SNAP (140).JPEG",
+      "image:SNAP (141).JPEG",
+      "image:SNAP (142).JPEG",
+      "image:SNAP (143).JPEG",
+      "image:SNAP (144).JPEG",
+      "image:SNAP (145).JPEG",
+      "image:SNAP (146).JPEG",
+      "image:SNAP (147).JPEG",
+      "image:SNAP (148).JPEG",
+      "image:SNAP (149).JPEG",
+      "image:SNAP (201).JPEG",
+      "image:SNAP (202).JPEG",
+      "image:SNAP (203).JPEG",
+      "image:SNAP (204).JPEG",
+      "image:SNAP (205).JPEG",
+      "image:SNAP (206).JPEG",
+      "image:SNAP (207).JPEG",
+      "image:SNAP (208).JPEG",
+      "image:SNAP (209).JPEG",
+      "image:SNAP (210).JPEG",
+      "image:SNAP (211).JPEG",
+      "image:SNAP (212).JPEG",
+      "image:SNAP (213).JPEG",
+      "image:SNAP (214).JPEG",
+      "image:SNAP (215).JPEG",
+      "image:SNAP (216).JPEG",
+      "image:SNAP (217).JPEG",
+      "image:SNAP (218).JPEG",
+      "image:SNAP (219).JPEG",
+      "image:SNAP (220).JPEG",
+      "image:SNAP (221).JPEG",
+      "image:SNAP (222).JPEG",
+      "image:SNAP (223).JPEG",
+      "image:SNAP (224).JPEG",
+      "image:SNAP (225).JPEG",
+      "image:SNAP (34).JPEG",
+      "image:SNAP (35).JPEG",
+      "image:SNAP (36).JPEG",
+      "image:SNAP (37).JPEG",
+      "image:SNAP (38).JPEG",
+      "image:SNAP (39).JPEG",
+      "image:SNAP (40).JPEG",
+      "image:SNAP (41).JPEG",
+      "image:SNAP (42).JPEG",
+      "image:SNAP (43).JPEG",
+      "image:SNAP (44).JPEG",
+      "image:SNAP (45).JPEG",
+      "image:SNAP (46).JPEG",
+      "image:SNAP (47).JPEG",
+      "image:SNAP (48).JPEG",
+      "image:SNAP (49).JPEG",
+      "image:SNAP (50).JPEG",
+      "image:SNAP (51).JPEG",
+      "image:SNAP (52).JPEG",
+      "image:SNAP (53).JPEG",
+      "image:SNAP (54).JPEG",
+      "image:SNAP (55).JPEG",
+      "image:SNAP (56).JPEG",
+      "image:SNAP (57).JPEG",
+      "image:SNAP (58).JPEG",
+      "image:SNAP (59).JPEG",
+      "image:SNAP (60).JPEG",
+      "image:SNAP (61).JPEG",
+      "image:SNAP (62).JPEG",
+      "image:SNAP (63).JPEG",
+      "image:SNAP (64).JPEG",
+      "image:SNAP (65).JPEG",
+      "image:SNAP (66).JPEG",
+      "image:SNAP (67).JPEG",
+      "image:SNAP (68).JPEG",
+      "image:SNAP (69).JPEG",
+      "image:SNAP (70).JPEG",
+      "image:SNAP (71).JPEG",
+      "image:SNAP (72).JPEG",
+      "image:SNAP (73).JPEG",
+      "image:SNAP (74).JPEG",
+      "image:SNAP (75).JPEG",
+      "image:SNAP (76).JPEG",
+      "image:SNAP (77).JPEG",
+      "image:SNAP (78).JPEG",
+      "image:SNAP (79).JPEG",
+      "image:SNAP (80).JPEG",
+      "image:SNAP (81).JPEG",
+      "image:SNAP (82).JPEG",
+      "image:SNAP (83).JPEG",
+      "image:SNAP (84).JPEG",
+      "image:SNAP (85).JPEG",
+      "image:SNAP (86).JPEG",
+      "image:SNAP (87).JPEG",
+      "image:SNAP (88).JPEG",
+      "image:SNAP (89).JPEG",
+      "image:SNAP (90).JPEG",
+      "image:SNAP (91).JPEG",
+      "image:SNAP (92).JPEG",
+      "image:SNAP (93).JPEG",
+      "image:SNAP (94).JPEG",
+      "image:SNAP (95).JPEG",
+      "image:SNAP (96).JPEG",
+      "image:SNAP (97).JPEG",
+      "image:SNAP (98).JPEG",
+      "image:SNAP (99).JPEG"
+    ],
+    "evidence": {
+      "commit": "https://github.com/XENCSJ/portfolio/commit/798d76b931067a811e2e7f0bf7a4ec18ffeea1d8",
+      "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+      "status": "Deployed (completed)",
+      "publishedAt": "2026-10-16T09:56:16.000Z"
+    }
+  },
+  {
+    "id": "historical-82186b8-artworks",
+    "date": "2026-10-19",
+    "publishedAt": "2026-10-18T21:32:02.000Z",
+    "category": "ARTWORKS",
+    "url": "./artworks.html",
+    "contentIds": [
+      "image:xen-artwork-20261019-01.jpg",
+      "image:xen-artwork-20261019-02.jpg",
+      "image:xen-artwork-20261019-03.jpg",
+      "image:xen-artwork-20261019-04.jpg",
+      "image:xen-artwork-20261019-05.jpg",
+      "image:xen-artwork-20261019-06.jpg",
+      "image:xen-artwork-20261019-07.jpg"
+    ],
+    "evidence": {
+      "commit": "https://github.com/XENCSJ/portfolio/commit/82186b823d6127187b34aa3fae258cba7ac841c8",
+      "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+      "status": "Deployed (completed)",
+      "publishedAt": "2026-10-18T21:32:02.000Z"
+    }
+  },
+  {
+    "id": "historical-release--rXKvIhFDkw",
+    "date": "2025-11-04",
+    "publishedAt": "2025-11-04T02:47:16-08:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 30秒ver.』を公開しました。",
+    "contentIds": [
+      "youtube:-rXKvIhFDkw"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=-rXKvIhFDkw",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  },
+  {
+    "id": "historical-release-CIFs1lkQzx0",
+    "date": "2025-07-16",
+    "publishedAt": "2025-07-16T02:43:03-07:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 90秒ver.』を公開しました。",
+    "contentIds": [
+      "youtube:CIFs1lkQzx0"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=CIFs1lkQzx0",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  },
+  {
+    "id": "historical-release-kst9sv118HI",
+    "date": "2025-11-04",
+    "publishedAt": "2025-11-04T02:47:43-08:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 30秒ver.』を公開しました。",
+    "contentIds": [
+      "youtube:kst9sv118HI"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=kst9sv118HI",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  },
+  {
+    "id": "historical-release-nTRTE7KVGFY",
+    "date": "2025-11-05",
+    "publishedAt": "2025-11-05T06:21:03-08:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 60秒ver.』を公開しました。",
+    "contentIds": [
+      "youtube:nTRTE7KVGFY"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=nTRTE7KVGFY",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  }
+]

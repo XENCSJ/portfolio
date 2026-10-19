@@ -412,99 +412,7 @@ body#top.home-page .logo-stage .xen-trace-line {
   body#top.home-page .logo-stage .xen-trace-line { animation: none; }
 }
 </style>
-<style id="xen-index-news-style">
-/* NEWS only: approved left heading / gold divider / right update list. */
-body#top.home-page #xen-news {
-  display: grid;
-  grid-template-columns: 28% minmax(0, 1fr);
-  width: min(640px, calc(100% - 36px));
-  min-width: 0;
-  margin: 22px auto 0;
-  padding: 0;
-  background: #000;
-  color: var(--ink);
-  font-family: inherit;
-  text-align: left;
-}
-body#top.home-page #xen-news[hidden] { display: none; }
-#xen-news .xen-news-label {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: 0;
-  padding: 18px 16px 18px 0;
-  text-align: center;
-}
-#xen-news .xen-news-heading {
-  margin: 0;
-  color: var(--gold);
-  font-family: inherit;
-  font-size: clamp(24px, 4.5vw, 38px);
-  font-weight: 500;
-  letter-spacing: .14em;
-  line-height: 1.25;
-}
-#xen-news .xen-news-subtitle {
-  margin: 10px 0 0;
-  color: var(--gray);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: .04em;
-  line-height: 1.6;
-}
-#xen-news .xen-news-list {
-  min-width: 0;
-  list-style: none;
-  margin: 0;
-  padding: 8px 0 8px clamp(12px, 3vw, 28px);
-  border-left: 1px solid var(--gold);
-}
-#xen-news .xen-news-item { margin: 0; padding: 0; }
-#xen-news .xen-news-item + .xen-news-item { border-top: 1px solid var(--xen-line); }
-#xen-news .xen-news-link {
-  display: grid;
-  grid-template-columns: 80px minmax(0, 1fr) 10px;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 10px 0;
-  color: inherit;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.65;
-  text-decoration: none;
-}
-#xen-news .xen-news-date {
-  color: var(--gray);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: .01em;
-  white-space: nowrap;
-}
-#xen-news .xen-news-title { min-width: 0; overflow-wrap: anywhere; }
-#xen-news .xen-news-arrow {
-  justify-self: end;
-  width: 6px;
-  height: 6px;
-  border-top: 1px solid var(--gold);
-  border-right: 1px solid var(--gold);
-  transform: rotate(45deg);
-}
-#xen-news .xen-news-link:is(:hover, :focus-visible) .xen-news-title { color: var(--gold); }
-#xen-news .xen-news-link:focus-visible { outline-offset: 3px; }
-@media (max-width: 600px) {
-  body#top.home-page #xen-news { margin-top: 16px; }
-  #xen-news .xen-news-label { padding-right: 10px; }
-  #xen-news .xen-news-heading { font-size: clamp(22px, 6.1vw, 32px); letter-spacing: .1em; }
-  #xen-news .xen-news-subtitle { font-size: 10px; letter-spacing: .01em; }
-  #xen-news .xen-news-link { grid-template-columns: 58px minmax(0, 1fr) 6px; gap: 7px; font-size: 12px; }
-  #xen-news .xen-news-date { font-size: 10px; letter-spacing: 0; }
-}
-</style>
+<link rel="stylesheet" href="./xen-news.css?v=20261020-1">
 <link rel="stylesheet" href="./xen-typesetting.css?v=20261019-1">
 <link rel="stylesheet" href="./xen-prose.css?v=20261019-body14">
 
@@ -536,135 +444,23 @@ body#top.home-page #xen-news[hidden] { display: none; }
 <path class="xen-trace-guide" d="M 819 2171 L 819 2257 L 1412 2256 L 1411 2170 Z M 908 1918 L 908 2003 L 910 2004 L 1412 2003 L 1412 1917 Z M 1634 1663 L 1632 1665 L 1632 1749 L 1634 1751 L 2072 1751 L 2074 1753 L 1633 2194 L 1632 2255 L 1634 2257 L 1680 2258 L 2225 2258 L 2227 2255 L 2226 2170 L 1787 2170 L 1785 2167 L 2226 1726 L 2226 1664 Z M 819 1664 L 819 1750 L 821 1751 L 1412 1750 L 1412 1664 L 1410 1663 Z M 598 1664 L 511 1664 L 510 2104 L 507 2104 L 67 1664 L 6 1664 L 4 1698 L 4 2256 L 92 2256 L 92 1817 L 95 1816 L 536 2257 L 597 2257 Z M 259 939 L 258 1442 L 344 1443 L 345 940 Z M 2139 850 L 2139 1442 L 2226 1443 L 2227 852 L 2226 850 Z M 1886 850 L 1886 1353 L 1971 1354 L 1973 1352 L 1973 851 Z M 512 850 L 511 1442 L 598 1443 L 598 850 Z M 1635 849 L 1632 852 L 1632 1441 L 1633 1443 L 1719 1443 L 1720 851 L 1718 849 Z M 7 849 L 4 851 L 4 1442 L 91 1443 L 92 851 L 89 849 Z M 751 781 L 750 1511 L 1479 1512 L 1481 1510 L 1481 782 Z M 937 1402 L 1114 1224 L 1119 1226 L 1293 1400 L 1291 1404 L 939 1404 Z M 1250 1201 L 1370 1200 L 1373 1203 L 1373 1322 L 1371 1324 L 1367 1322 L 1250 1205 Z M 979 1200 L 981 1204 L 861 1324 L 859 1324 L 858 1202 L 861 1200 Z M 1371 968 L 1373 970 L 1373 1090 L 1371 1092 L 1251 1092 L 1249 1090 Z M 860 968 L 982 1090 L 980 1092 L 860 1092 L 858 1090 L 858 970 Z M 938 890 L 1292 889 L 1293 892 L 1115 1069 L 938 892 Z M 819 543 L 819 629 L 1412 628 L 1411 542 Z M 819 290 L 820 376 L 1323 375 L 1322 289 Z M 1634 35 L 1632 87 L 1633 629 L 1720 628 L 1720 190 L 1722 188 L 2164 629 L 2225 629 L 2226 36 L 2139 36 L 2139 475 L 2136 477 L 1695 36 Z M 819 36 L 820 123 L 1412 122 L 1411 35 Z M 5 35 L 5 123 L 445 123 L 446 126 L 4 568 L 4 628 L 598 629 L 597 542 L 159 542 L 157 540 L 598 98 L 598 36 Z"/>
 <path class="xen-trace-line" pathLength="1" d="M 5 35 L 5 123 L 445 123 L 446 126 L 4 568 L 4 628 L 598 629 L 597 542 L 159 542 L 157 540 L 598 98 L 598 36 Z" style="--trace-start:400.000000ms;--trace-duration:119.363846ms"/><path class="xen-trace-line" pathLength="1" d="M 819 36 L 820 123 L 1412 122 L 1411 35 Z" style="--trace-start:519.363846ms;--trace-duration:44.809852ms"/><path class="xen-trace-line" pathLength="1" d="M 819 290 L 820 376 L 1323 375 L 1322 289 Z" style="--trace-start:564.173698ms;--trace-duration:38.870474ms"/><path class="xen-trace-line" pathLength="1" d="M 819 543 L 819 629 L 1412 628 L 1411 542 Z" style="--trace-start:603.044172ms;--trace-duration:44.776668ms"/><path class="xen-trace-line" pathLength="1" d="M 1634 35 L 1632 87 L 1633 629 L 1720 628 L 1720 190 L 1722 188 L 2164 629 L 2225 629 L 2226 36 L 2139 36 L 2139 475 L 2136 477 L 1695 36 Z" style="--trace-start:647.820839ms;--trace-duration:119.267357ms"/><path class="xen-trace-line" pathLength="1" d="M 7 849 L 4 851 L 4 1442 L 91 1443 L 92 851 L 89 849 Z" style="--trace-start:767.088196ms;--trace-duration:44.849597ms"/><path class="xen-trace-line" pathLength="1" d="M 512 850 L 511 1442 L 598 1443 L 598 850 Z" style="--trace-start:811.937793ms;--trace-duration:44.809634ms"/><path class="xen-trace-line" pathLength="1" d="M 259 939 L 258 1442 L 344 1443 L 345 940 Z" style="--trace-start:856.747427ms;--trace-duration:38.870474ms"/><path class="xen-trace-line" pathLength="1" d="M 751 781 L 750 1511 L 1479 1512 L 1481 1510 L 1481 782 Z" style="--trace-start:895.617901ms;--trace-duration:96.344551ms"/><path class="xen-trace-line" pathLength="1" d="M 938 890 L 1292 889 L 1293 892 L 1115 1069 L 938 892 Z" style="--trace-start:991.962452ms;--trace-duration:28.393708ms"/><path class="xen-trace-line" pathLength="1" d="M 860 968 L 982 1090 L 980 1092 L 860 1092 L 858 1090 L 858 970 Z" style="--trace-start:1020.356160ms;--trace-duration:13.892217ms"/><path class="xen-trace-line" pathLength="1" d="M 1371 968 L 1373 970 L 1373 1090 L 1371 1092 L 1251 1092 L 1249 1090 Z" style="--trace-start:1034.248377ms;--trace-duration:13.892217ms"/><path class="xen-trace-line" pathLength="1" d="M 979 1200 L 981 1204 L 861 1324 L 859 1324 L 858 1202 L 861 1200 Z" style="--trace-start:1048.140594ms;--trace-duration:13.851568ms"/><path class="xen-trace-line" pathLength="1" d="M 1250 1201 L 1370 1200 L 1373 1203 L 1373 1322 L 1371 1324 L 1367 1322 L 1250 1205 Z" style="--trace-start:1061.992162ms;--trace-duration:13.858924ms"/><path class="xen-trace-line" pathLength="1" d="M 937 1402 L 1114 1224 L 1119 1226 L 1293 1400 L 1291 1404 L 939 1404 Z" style="--trace-start:1075.851086ms;--trace-duration:28.435924ms"/><path class="xen-trace-line" pathLength="1" d="M 1635 849 L 1632 852 L 1632 1441 L 1633 1443 L 1719 1443 L 1720 851 L 1718 849 Z" style="--trace-start:1104.287010ms;--trace-duration:44.852576ms"/><path class="xen-trace-line" pathLength="1" d="M 1886 850 L 1886 1353 L 1971 1354 L 1973 1352 L 1973 851 Z" style="--trace-start:1149.139585ms;--trace-duration:38.897743ms"/><path class="xen-trace-line" pathLength="1" d="M 2139 850 L 2139 1442 L 2226 1443 L 2227 852 L 2226 850 Z" style="--trace-start:1188.037329ms;--trace-duration:44.850420ms"/><path class="xen-trace-line" pathLength="1" d="M 598 1664 L 511 1664 L 510 2104 L 507 2104 L 67 1664 L 6 1664 L 4 1698 L 4 2256 L 92 2256 L 92 1817 L 95 1816 L 536 2257 L 597 2257 Z" style="--trace-start:1232.887749ms;--trace-duration:119.221596ms"/><path class="xen-trace-line" pathLength="1" d="M 819 1664 L 819 1750 L 821 1751 L 1412 1750 L 1412 1664 L 1410 1663 Z" style="--trace-start:1352.109346ms;--trace-duration:44.825051ms"/><path class="xen-trace-line" pathLength="1" d="M 908 1918 L 908 2003 L 910 2004 L 1412 2003 L 1412 1917 Z" style="--trace-start:1396.934397ms;--trace-duration:38.910876ms"/><path class="xen-trace-line" pathLength="1" d="M 819 2171 L 819 2257 L 1412 2256 L 1411 2170 Z" style="--trace-start:1435.845273ms;--trace-duration:44.776668ms"/><path class="xen-trace-line" pathLength="1" d="M 1634 1663 L 1632 1665 L 1632 1749 L 1634 1751 L 2072 1751 L 2074 1753 L 1633 2194 L 1632 2255 L 1634 2257 L 1680 2258 L 2225 2258 L 2227 2255 L 2226 2170 L 1787 2170 L 1785 2167 L 2226 1726 L 2226 1664 Z" style="--trace-start:1480.621941ms;--trace-duration:119.378059ms"/>
 </g></svg></span></div></div></section>
-<!-- NEWS: new creative works only. Maintain the date/category/title/url records below.
-     Add a record only when a new work is publicly released; do not add site updates,
-     description/layout changes, or minor revisions to existing works.
-     date = verified original publication date (YYYY-MM-DD, Japan time), never a commit date.
-     title = the work name shown on its category page; url = its detail page or work anchor.
-     source = official publication-date evidence for editors; it is not displayed.
-     Categories: STORYBOOKS, ANIMATION, SOUND, CINEMATIC, SNAP, DESIGN, APPAREL,
-     ARCHITECTURE, SPACE, ARTWORKS, YOUTUBE. Keep one record per work; newest three are displayed.
-     Same-date entries keep their listed order. Future-dated records remain hidden.
-     Existing category pages have no shared publication-date dataset, so this block is
-     the single NEWS registry. No external API, CMS, or automatic change detection. -->
-<section id="xen-news" aria-labelledby="xen-news-heading" hidden>
+<!-- NEWS is generated by news.py from verified publication events and a separate fixed article. -->
+<section id="xen-news" aria-labelledby="xen-news-heading">
   <div class="xen-news-label">
     <h2 class="xen-news-heading" id="xen-news-heading" lang="en">NEWS</h2>
     <p class="xen-news-subtitle">新着作品</p>
   </div>
-  <ul class="xen-news-list" id="xen-news-list"></ul>
+  <ul class="xen-news-list" id="xen-news-list">
+<!-- NEWS:GENERATED:START -->
+<li class="xen-news-item" data-news-id="news-2026-10-19-artworks"><a class="xen-news-link" href="./artworks.html"><span class="xen-news-meta"><time class="xen-news-date" datetime="2026-10-19">2026.10.19</time><span class="xen-news-category" lang="en">ARTWORKS</span></span><span class="xen-news-copy"><span class="xen-news-title">新しいアートワークを7作品追加しました。</span></span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>
+<li class="xen-news-item" data-news-id="news-2026-10-16-snap"><a class="xen-news-link" href="./snap.html"><span class="xen-news-meta"><time class="xen-news-date" datetime="2026-10-16">2026.10.16</time><span class="xen-news-category" lang="en">SNAP</span></span><span class="xen-news-copy"><span class="xen-news-title">新しい写真を154枚追加しました。</span></span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>
+<li class="xen-news-item" data-news-id="news-2026-10-10-youtube"><a class="xen-news-link" href="./creator.html#latest-videos"><span class="xen-news-meta"><time class="xen-news-date" datetime="2026-10-10">2026.10.10</time><span class="xen-news-category" lang="en">YOUTUBE</span></span><span class="xen-news-copy"><span class="xen-news-title">『【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www』を公開しました。</span></span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>
+<li class="xen-news-item" data-news-id="news-2026-09-24-youtube"><a class="xen-news-link" href="./creator.html#latest-videos"><span class="xen-news-meta"><time class="xen-news-date" datetime="2026-09-24">2026.09.24</time><span class="xen-news-category" lang="en">YOUTUBE</span></span><span class="xen-news-copy"><span class="xen-news-title">『朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me』を公開しました。</span></span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>
+<li class="xen-news-item" data-news-id="website-renewal-20261020"><a class="xen-news-link" href="https://xencsj.github.io/portfolio/"><span class="xen-news-meta"><time class="xen-news-date" datetime="2026-10-20">2026.10.20</time><span class="xen-news-category" lang="en"><svg class="xen-news-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m9 3 6 0-1 6 4 4v2H6v-2l4-4-1-6ZM12 15v6"/></svg><span class="xen-news-sr">固定記事</span>WEBSITE</span></span><span class="xen-news-copy"><span class="xen-news-title">ホームページリニューアル</span><span class="xen-news-body">XEN CSJ公式サイトをリニューアルしました。各クリエイティブ領域の作品やサービスをより見やすく整理し、デザインやアニメーション、操作性を刷新しました。</span></span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>
+<!-- NEWS:GENERATED:END -->
+</ul>
 </section>
-<script type="application/json" id="xen-news-data">
-[
-  {
-    "date": "2026-10-10",
-    "category": "YOUTUBE",
-    "title": "【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www",
-    "url": "https://www.youtube.com/watch?v=5AQmdt1HvXI",
-    "source": "https://www.youtube.com/watch?v=5AQmdt1HvXI"
-  },
-  {
-    "date": "2026-09-24",
-    "category": "YOUTUBE",
-    "title": "朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me",
-    "url": "https://www.youtube.com/watch?v=X3DrK_IgSzg",
-    "source": "https://www.youtube.com/watch?v=X3DrK_IgSzg"
-  },
-  {
-    "date": "2026-09-04",
-    "category": "YOUTUBE",
-    "title": "女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場",
-    "url": "https://www.youtube.com/watch?v=IykFCu-sYKk",
-    "source": "https://www.youtube.com/watch?v=IykFCu-sYKk"
-  },
-  {
-    "date": "2026-09-03",
-    "category": "YOUTUBE",
-    "title": "ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった",
-    "url": "https://www.youtube.com/watch?v=Df4ekWvuGng",
-    "source": "https://www.youtube.com/watch?v=Df4ekWvuGng"
-  },
-  {
-    "date": "2026-02-02",
-    "category": "SOUND",
-    "title": "BLUE SLEEP",
-    "url": "./sound.html#ambient-chill",
-    "source": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D"
-  },
-  {
-    "date": "2026-01-02",
-    "category": "SOUND",
-    "title": "Celestial Lake",
-    "url": "./sound.html#celestial-lake-title",
-    "source": "https://www.youtube.com/watch?v=t2sB0oOTOAA"
-  },
-  {
-    "date": "2025-12-19",
-    "category": "SOUND",
-    "title": "NIGHT'S AWAKENING",
-    "url": "./sound.html#nights-awakening-title",
-    "source": "https://www.youtube.com/watch?v=uqQI6369VYg"
-  }
-]
-</script>
-<script id="xen-index-news-render">
-(() => {
-  'use strict';
-  const section = document.getElementById('xen-news');
-  const list = document.getElementById('xen-news-list');
-  const source = document.getElementById('xen-news-data');
-  if (!section || !list || !source) return;
-  try {
-    const records = JSON.parse(source.textContent);
-    if (!Array.isArray(records)) return;
-    const categories = new Set(['STORYBOOKS', 'ANIMATION', 'SOUND', 'CINEMATIC', 'SNAP',
-      'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'ARTWORKS', 'YOUTUBE']);
-    const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
-    const seen = new Set();
-    const latest = records.filter(item => {
-      if (!item || typeof item.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(item.date)) return false;
-      const date = new Date(item.date + 'T00:00:00Z');
-      return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === item.date &&
-        item.date <= today && categories.has(item.category) &&
-        typeof item.title === 'string' && item.title.trim() &&
-        typeof item.url === 'string' && (item.category === 'YOUTUBE'
-          ? /^https:\/\/www\.youtube\.com\/watch\?v=[A-Za-z0-9_-]{11}$/.test(item.url)
-          : /^\.\/[a-z0-9-]+\.html(?:#[a-z0-9_-]+)?$/i.test(item.url) &&
-            item.url.split('#')[0] === './' + item.category.toLowerCase() + '.html');
-    }).filter(item => {
-      const key = item.category + ':' + item.title.trim();
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    }).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
-    const fragment = document.createDocumentFragment();
-    latest.forEach(item => {
-      const row = document.createElement('li');
-      row.className = 'xen-news-item';
-      const link = document.createElement('a');
-      link.className = 'xen-news-link';
-      link.href = item.url;
-      const date = document.createElement('time');
-      date.className = 'xen-news-date';
-      date.dateTime = item.date;
-      date.textContent = item.date.replace(/-/g, '.');
-      const title = document.createElement('span');
-      title.className = 'xen-news-title';
-      title.textContent = item.category + '｜『' + item.title.trim() + '』公開';
-      const arrow = document.createElement('span');
-      arrow.className = 'xen-news-arrow';
-      arrow.setAttribute('aria-hidden', 'true');
-      link.append(date, title, arrow);
-      row.append(link);
-      fragment.append(row);
-    });
-    list.replaceChildren(fragment);
-    section.hidden = latest.length === 0;
-  } catch (error) {
-    console.warn('NEWS data could not be displayed.', error);
-  }
-})();
-</script>
+<script src="./xen-news.js?v=20261020-1" defer></script>
 <section class="index" id="creative-index"><h1 class="section-label studio-heading"><span class="title-en">XEN | CREATIVE STUDIO JAPAN</span></h1><span class="home-ja">ホーム・作品一覧</span><nav class="index-directory" aria-label="カテゴリー一覧">
 <section class="index-category"><h2 class="index-heading"><span class="index-en" lang="en"><svg class="index-icon" data-icon="info" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>ABOUT XEN</span><span class="index-ja" lang="ja">XENについて</span></h2><ul class="index-items"><li><a class="index-link " href="./studio.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="layers" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /> <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /> <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /></svg>STUDIO</span><span class="index-ja" lang="ja">スタジオ</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./creator.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="user-round" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /></svg>CREATOR</span><span class="index-ja" lang="ja">クリエイター</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></section>
 <section class="index-category"><h2 class="index-heading"><span class="index-en" lang="en"><svg class="index-icon" data-icon="layout-grid" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="7" x="3" y="3" rx="1" /> <rect width="7" height="7" x="14" y="3" rx="1" /> <rect width="7" height="7" x="14" y="14" rx="1" /> <rect width="7" height="7" x="3" y="14" rx="1" /></svg>WORKS</span><span class="index-ja" lang="ja">制作・作品</span></h2><ul class="index-items"><li><a class="index-link " href="./storybooks.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="book-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg>STORYBOOKS</span><span class="index-ja" lang="ja">ストーリーブック</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./animation.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="clapperboard" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12.296 3.464 3.02 3.956" /> <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" /> <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <path d="m6.18 5.276 3.1 3.899" /></svg>ANIMATION</span><span class="index-ja" lang="ja">アニメーション</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./sound.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="audio-lines" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /></svg>SOUND</span><span class="index-ja" lang="ja">音楽</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./cinematic.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="film" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M7 3v18" /> <path d="M3 7.5h4" /> <path d="M3 12h18" /> <path d="M3 16.5h4" /> <path d="M17 3v18" /> <path d="M17 7.5h4" /> <path d="M17 16.5h4" /></svg>CINEMATIC</span><span class="index-ja" lang="ja">映像</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./snap.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="camera" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" /> <circle cx="12" cy="13" r="3" /></svg>SNAP</span><span class="index-ja" lang="ja">写真</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./design.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="pen-tool" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m18 13-.654-4.736a4 4 0 00-2.756-3.266l-9.163-2.9a2 2 0 00-2.017.493l-.82.819a2 2 0 00-.492 2.017l2.9 9.163a4 4 0 003.266 2.756L13 18" /> <path d="M18.648 12.352a1.205 1.205 0 011.704 0l1.296 1.296a1.205 1.205 0 010 1.704l-6.296 6.296a1.205 1.205 0 01-1.704 0l-1.296-1.296a1.205 1.205 0 010-1.704z" /> <path d="m3 3 6.586 6.586" /> <circle cx="11" cy="11" r="2" /></svg>DESIGN</span><span class="index-ja" lang="ja">デザイン</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./apparel.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="shirt" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" /></svg>APPAREL</span><span class="index-ja" lang="ja">アパレル</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./architecture.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="building" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 10h.01" /> <path d="M12 14h.01" /> <path d="M12 6h.01" /> <path d="M16 10h.01" /> <path d="M16 14h.01" /> <path d="M16 6h.01" /> <path d="M8 10h.01" /> <path d="M8 14h.01" /> <path d="M8 6h.01" /> <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" /> <rect x="4" y="2" width="16" height="20" rx="2" /></svg>ARCHITECTURE</span><span class="index-ja" lang="ja">建築</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./space.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="box" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>SPACE</span><span class="index-ja" lang="ja">空間</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./artworks.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="palette" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" /> <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /> <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /> <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /> <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /></svg>ARTWORKS</span><span class="index-ja" lang="ja">アートワーク</span><span class="arrow" aria-hidden="true">↗</span></a></li><li><a class="index-link " href="./sns-management.html"><span class="index-en" lang="en"><svg class="index-icon" data-icon="share-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3" /> <circle cx="6" cy="12" r="3" /> <circle cx="18" cy="19" r="3" /> <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /> <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>SNS MANAGEMENT</span><span class="index-ja" lang="ja">SNS運用</span><span class="arrow" aria-hidden="true">↗</span></a></li></ul></section>
