@@ -80,11 +80,13 @@ body#top.studio-page .studio-philosophy h3 { font-size:16px; line-height:1.8; }
 body#top.studio-page .studio-philosophy h3 span { display:inline; margin-left:16px; font-size:14px; }
 body#top.studio-page .studio-philosophy .studio-prose { width:100%; }
 body#top.studio-page .studio-philosophy .studio-opening { font-size:20px; line-height:1.8; color:#fff; }
-body#top.studio-page .studio-services { grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 32px; }
+body#top.studio-page .studio-services { grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 32px; }
 body#top.studio-page .studio-service { padding:26px 0; border:0; border-top:1px solid var(--studio-line); background:none; }
 body#top.studio-page .studio-service h3 { font-size:19px; margin-top:18px; }
-body#top.studio-page .studio-service-en { font-size:11px; }
-body#top.studio-page .studio-service-arrow { right:0; top:23px; }
+body#top.studio-page .studio-service-en { font-size:11px; min-width:0; overflow-wrap:anywhere; }
+/* Shared service cards retain their full-card links without decorative arrows. */
+.studio-service .studio-service-arrow,
+.studio-service .studio-service-link > [aria-hidden="true"] { display:none; }
 body#top.studio-page .studio-service-link { font-size:13px; min-height:32px; align-items:center; }
 body#top.studio-page .studio-service:is(:hover,:active) { background:none; border-color:#ccc; }
 body#top.studio-page .studio-next { gap:12px 32px; }
@@ -127,9 +129,9 @@ body#top.studio-page .studio-closing { margin-top:32px; }
   body#top.studio-page .studio-index a { font-size:12px; gap:7px; }
   body#top.studio-page .studio-mvv-list { grid-template-columns:1fr; }
   body#top.studio-page .creative-process ol { grid-template-columns:1fr; }
-  body#top.studio-page .studio-services { grid-template-columns:1fr; }
+  body#top.studio-page .studio-services { grid-template-columns:repeat(2,minmax(0,1fr)); }
   body#top.studio-page .studio-service { padding:24px 0; }
-  body#top.studio-page .studio-service h3 { margin:0 34px 5px 42px; }
+  body#top.studio-page .studio-service h3 { margin:0 0 5px 42px; }
   body#top.studio-page .studio-service > .studio-icon { position:absolute; top:25px; left:0; }
   body#top.studio-page .studio-service-en { margin-left:42px; }
   body#top.studio-page .studio-service p { margin:16px 0; }
