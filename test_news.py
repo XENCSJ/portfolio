@@ -11,6 +11,31 @@ def publication():
     return {'sha':'published','publishedAt':'2026-10-19T15:01:00Z','evidence':'successful-pages-deployment'}
 
 class NewsTests(unittest.TestCase):
+    def test_requested_youtube_replacement_survives_regeneration(self):
+        events = news.read('news-events.json')
+        shown = news.select(events, news.PIN, NOW)
+        target = shown[3]
+        self.assertEqual(target['date'], '2026-09-03')
+        self.assertEqual(target['url'], 'https://youtu.be/Df4ekWvuGng')
+        self.assertEqual(target['title'], '『ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった』を公開しました。')
+        self.assertEqual([e['date'] for e in shown[:3]], ['2026-10-19', '2026-10-16', '2026-10-10'])
+        self.assertEqual(shown[-1], dict(news.PIN, pinned=True))
+        self.assertNotIn('youtube:X3DrK_IgSzg', [c for e in shown for c in e.get('contentIds', [])])
+        self.assertEqual(sum('youtube:Df4ekWvuGng' in e.get('contentIds', []) for e in shown), 1)
+        self.assertEqual(news.select(copy.deepcopy(events), news.PIN, NOW), shown)
+        newer = news.select(events + [event('new-art', 'ARTWORKS')], news.PIN, NOW)
+        self.assertEqual(len(newer), 5)
+        self.assertEqual(newer[-1], shown[-1])
+        self.assertNotIn(target, newer)
+    def test_youtube_links_are_restricted(self):
+        self.assertTrue(news.safe_url('https://youtu.be/Df4ekWvuGng'))
+        for url in ['javascript:alert(1)', 'https://youtu.be.evil.test/Df4ekWvuGng', 'https://youtu.be/Df4ekWvuGng?redirect=evil']:
+            self.assertFalse(news.safe_url(url))
+    def test_replacement_deduplicates_existing_history(self):
+        events = [e for e in news.read('news-events.json') if e['id'] in ('legacy-2', 'legacy-4')]
+        shown = news.select(events, news.PIN, NOW)
+        self.assertEqual(len(shown), 2)
+        self.assertEqual(shown[0]['url'], 'https://youtu.be/Df4ekWvuGng')
     def test_A_initial_four_plus_pin(self):
         shown=news.select([e for e in news.read('news-events.json') if e['id'].startswith(('legacy-', 'historical-'))],news.read('news-pinned.json'),NOW)
         self.assertEqual(len(shown),5);self.assertEqual(shown[-1]['id'],news.PIN_ID)
