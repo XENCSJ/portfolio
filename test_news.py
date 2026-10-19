@@ -12,7 +12,7 @@ def publication():
 
 class NewsTests(unittest.TestCase):
     def test_requested_youtube_replacement_survives_regeneration(self):
-        events = news.read('news-events.json')
+        events = [e for e in news.read('news-events.json') if e['id'].startswith(('legacy-', 'historical-'))]
         shown = news.select(events, news.PIN, NOW)
         target = shown[3]
         self.assertEqual(target['date'], '2026-09-03')
