@@ -25,7 +25,7 @@ body#top.studio-page .studio-about h1.cp-page-label { padding:0; margin:0; borde
 body#top.studio-page .studio-about h1.cp-page-label > span { font-size:clamp(38px,6.5vw,72px); letter-spacing:.065em; }
 body#top.studio-page main .studio-subtitle {
   color:var(--studio-gold); font-size:11px; line-height:1.8; letter-spacing:.14em;
-  margin:12px 0 0; text-align:left;
+  margin:12px 0 0; text-align:left; white-space:nowrap;
 }
 body#top.studio-page .studio-intro-logo {
   display:block; width:clamp(112px,14vw,152px); height:auto; object-fit:contain;
@@ -44,6 +44,17 @@ body#top.studio-page .studio-service-grid {
   margin:32px 0; padding:0; list-style:none;
 }
 body#top.studio-page .studio-service-grid li { margin:0; padding:0; }
+body#top.studio-page .studio-service-link {
+  display:block; min-height:44px; height:100%; color:inherit; text-decoration:none;
+  touch-action:manipulation; transition:background-color .2s;
+}
+body#top.studio-page .studio-service-link:focus-visible {
+  outline:2px solid var(--studio-gold); outline-offset:6px;
+}
+@media(hover:hover) {
+  body#top.studio-page .studio-service-link:hover { background:rgba(181,161,123,.07); }
+}
+body#top.studio-page .studio-service-link:active { background:rgba(181,161,123,.12); }
 body#top.studio-page .studio-service-grid h3 {
   margin:0 0 8px; color:#f5f5f5; font-size:clamp(12px,1.5vw,16px);
   font-weight:400; line-height:1.6; letter-spacing:.055em;
@@ -60,9 +71,7 @@ body#top.studio-page .studio-button {
   text-decoration:none; touch-action:manipulation;
   transition:background-color .2s,color .2s,border-color .2s;
 }
-body#top.studio-page .studio-button-primary { background:var(--studio-gold); border-color:var(--studio-gold); color:#080808; }
 body#top.studio-page .studio-button:hover { border-color:var(--studio-gold); }
-body#top.studio-page .studio-button-primary:hover { background:#c9b790; color:#080808; }
 body#top.studio-page .studio-button:focus-visible { outline:2px solid #ddd; outline-offset:5px; }
 body#top.studio-page main .studio-philosophy-copy {
   margin:0 0 24px; color:#fff; font-size:clamp(25px,3.4vw,38px);
@@ -96,13 +105,10 @@ body#top.studio-page .studio-values-summary { display:grid; gap:20px; margin:0; 
 body#top.studio-page .studio-values-summary > div { display:grid; grid-template-columns:100px minmax(0,1fr); gap:12px; scroll-margin-top:100px; }
 body#top.studio-page .studio-values-summary dt { color:var(--studio-gold); font-size:12px; line-height:28px; letter-spacing:.08em; }
 body#top.studio-page .studio-values-summary dd { margin:0; color:#b8b8be; }
-body#top.studio-page .studio-motion-toggle { display:block; min-height:44px; padding:10px 0; margin:16px 0 0 auto; border:0; background:none; color:#aaa; font:inherit; font-size:12px; cursor:pointer; }
-body#top.studio-page .studio-motion-toggle[hidden] { display:none; }
 body#top.studio-page .studio-values-motion.is-playing .studio-values-ring { animation:studio-service-orbit 6s ease-in-out both; }
 body#top.studio-page .studio-values-motion.is-playing .studio-values-label { animation:studio-service-light 2s ease-in-out; }
 body#top.studio-page .studio-values-motion.is-playing .studio-values-label:nth-of-type(2) { animation-delay:2s; }
 body#top.studio-page .studio-values-motion.is-playing .studio-values-label:nth-of-type(3) { animation-delay:4s; }
-body#top.studio-page #studio-contact .studio-subtitle { margin:-8px 0 24px; }
 @keyframes studio-service-orbit { from { transform:rotate(-120deg); } to { transform:rotate(240deg); } }
 @keyframes studio-service-light { 0%,100% { color:#ddd; } 40%,60% { color:#d5c198; text-shadow:0 0 12px #b5a17b55; } }
 @media(max-width:800px) { body#top.studio-page main { padding-inline:32px; } }
@@ -122,6 +128,4 @@ body#top.studio-page #studio-contact .studio-subtitle { margin:-8px 0 24px; }
 @media(max-width:350px) { body#top.studio-page .studio-about h1.cp-page-label > span { font-size:32px; } }
 @media(prefers-reduced-motion:reduce) {
   body#top.studio-page .studio-values-motion * { animation:none!important; transition:none!important; }
-  body#top.studio-page .studio-motion-toggle { display:none; }
 }
-@media print { body#top.studio-page .studio-motion-toggle { display:none; } }
