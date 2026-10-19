@@ -1,5 +1,5 @@
 {
-  "reviewedMain": "9a28d4a0a8abe0e43f435c33b9d3be4781db5435",
+  "reviewedMain": "3dcb7a19c99597777f68719d1d59a2227086a885",
   "history": [
     {
       "commit": "f5795f99295524f7100425d68b8bed9e4c2ce98c",
@@ -37,6 +37,7 @@
     "CINEMATIC: four new video embeds on deployed acd2a12.",
     "SOUND: Spotify album players reused existing works; not counted as new works.",
     "DESIGN/APPAREL/ARCHITECTURE/SPACE/ANIMATION/STORYBOOKS: recent changes were presentation, copy, removal or rearrangement; no verified new work event added.",
-    "Initial inventory seeds existing image paths and blob hashes conservatively; publishing previously unlisted old assets requires managed registration."
+    "Initial inventory seeds existing image paths and blob hashes conservatively; publishing previously unlisted old assets requires managed registration.",
+    "2026-10-20: verified official YouTube publishDate for all 19 listed music/video works. CINEMATIC dates corrected from site addition to original 2025 release dates; top four are ARTWORKS, SNAP, YOUTUBE 2026-10-10, YOUTUBE 2026-09-24. Full metadata retained in news-release-audit.json."
   ]
 }

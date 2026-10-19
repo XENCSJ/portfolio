@@ -14,7 +14,19 @@ class NewsTests(unittest.TestCase):
     def test_A_initial_four_plus_pin(self):
         shown=news.select([e for e in news.read('news-events.json') if e['id'].startswith(('legacy-', 'historical-'))],news.read('news-pinned.json'),NOW)
         self.assertEqual(len(shown),5);self.assertEqual(shown[-1]['id'],news.PIN_ID)
-        self.assertEqual([x['category'] for x in shown],['ARTWORKS','SNAP','CINEMATIC','YOUTUBE','WEBSITE'])
+        self.assertEqual([x['category'] for x in shown],['ARTWORKS','SNAP','YOUTUBE','YOUTUBE','WEBSITE'])
+    def test_original_release_date_overrides_site_addition(self):
+        r=dict(id='film',category='CINEMATIC',page='cinematic.html',contentIds=['youtube:film'],releaseDate='2025-11-04',releaseEvidence='official-release-page')
+        e=news.registered_event(r,publication())
+        self.assertEqual(e['date'],'2025-11-04')
+        self.assertEqual(e['sitePublishedAt'],publication()['publishedAt'])
+        self.assertEqual(news.groups([e],NOW)[0]['date'],'2025-11-04')
+        del r['releaseDate']
+        with self.assertRaises(ValueError):news.registered_event(r,publication())
+    def test_fixed_article_cannot_enter_normal_registry(self):
+        with self.assertRaises(ValueError):news.select([dict(news.PIN,contentIds=['renewal'],evidence='test')],news.PIN,NOW)
+    def test_fixed_title_exact(self):
+        self.assertEqual(news.PIN['title'],'ホームページリニューアル')
     def test_B_new_event_evicts_oldest_only(self):
         events=[event(i,date='2026-10-'+str(10+i)) for i in range(4)]
         old=news.select(events,news.PIN,NOW)

@@ -8,10 +8,11 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 JST = timezone(timedelta(hours=9))
-CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE')
+CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE', 'WEBSITE')
+RELEASE_CATEGORIES = ('SOUND', 'CINEMATIC', 'ANIMATION', 'YOUTUBE')
 AUTO = ('SNAP', 'ARTWORKS')
 PIN_ID = 'website-renewal-20261020'
-PIN = {'id': PIN_ID, 'date': '2026-10-20', 'category': 'WEBSITE', 'title': '公式サイトをリニューアルしました。', 'body': 'XEN CSJ公式サイトをリニューアルしました。各クリエイティブ領域の作品やサービスをより見やすく整理し、デザインやアニメーション、操作性を刷新しました。', 'url': 'https://xencsj.github.io/portfolio/'}
+PIN = {'id': PIN_ID, 'date': '2026-10-20', 'category': 'WEBSITE', 'title': 'ホームページリニューアル', 'body': 'XEN CSJ公式サイトをリニューアルしました。各クリエイティブ領域の作品やサービスをより見やすく整理し、デザインやアニメーション、操作性を刷新しました。', 'url': 'https://xencsj.github.io/portfolio/'}
 
 def read(name): return json.loads((ROOT / name).read_text())
 def write(name, value):
@@ -31,6 +32,7 @@ def groups(events, today=None):
     grouped, seen = {}, set()
     # First verified publication owns an ID, even if reintroduced later.
     for e in sorted(events, key=lambda e: (e['date'], e.get('publishedAt', ''), e['id'])):
+        if e['id'] == PIN_ID or e.get('pinned'): raise ValueError('Fixed article belongs only in news-pinned.json')
         date = e['date']
         if datetime.strptime(date, '%Y-%m-%d').date().isoformat() != date: raise ValueError('Invalid date')
         if e['category'] not in CATEGORIES or not safe_url(e['url']) or not e.get('evidence'): raise ValueError('Invalid NEWS record')
@@ -147,6 +149,25 @@ def api(path, method='GET'):
     req = urllib.request.Request('https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY'] + '/' + path, method=method, headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
     with urllib.request.urlopen(req, timeout=45) as r: return json.load(r)
 
+def registered_event(r, publication):
+    """An on-site addition date must never replace a verified music/video release date."""
+    release = r.get('releaseDate')
+    if r['category'] in RELEASE_CATEGORIES and not release:
+        raise ValueError('Music/video registration needs verified releaseDate and releaseEvidence')
+    date = jst_date(publication['publishedAt'])
+    evidence = publication['evidence']
+    if release:
+        if datetime.strptime(release, '%Y-%m-%d').date().isoformat() != release or not r.get('releaseEvidence'):
+            raise ValueError('Invalid or unsupported original release date')
+        if release > date: raise ValueError('Work is not publicly released yet')
+        date, evidence = release, {'release': r['releaseEvidence'], 'deployment': evidence}
+    result = {'id': r['id'], 'category': r['category'], 'date': date,
+              'sitePublishedAt': publication['publishedAt'], 'url': './'+r['page']+r.get('anchor',''),
+              'contentIds': r['contentIds'], 'countKnown': r.get('countKnown',True), 'evidence': evidence}
+    if not release: result['publishedAt'] = publication['publishedAt']
+    if r.get('title'): result['title'] = r['title']
+    return result
+
 def refresh():
     """Read successful deployment statuses, then inspect that exact published Git tree."""
     state = read('news-state.json'); events = read('news-events.json')
@@ -188,7 +209,7 @@ def refresh():
             if r['category'] not in CATEGORIES or not re.fullmatch(r'[a-z0-9-]+\.html', r['page']): raise ValueError('Invalid managed registration')
             source = git('show',p['sha'] + ':' + r['page'])
             if not r.get('marker') or r['marker'] not in source: raise ValueError('Registered work marker missing in deployed page')
-            events.append({'id': r['id'], 'category':r['category'], 'date':jst_date(p['publishedAt']), 'publishedAt':p['publishedAt'], 'url':'./'+r['page'] + r.get('anchor',''), 'contentIds':r['contentIds'], 'countKnown':r.get('countKnown',True), 'evidence':p['evidence'], **({ 'title':r['title']} if r.get('title') else {})})
+            events.append(registered_event(r, p))
             known.add(r['id'])
     # Validate first; errors must not partially update files.
     select(events, read('news-pinned.json'))

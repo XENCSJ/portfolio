@@ -298,22 +298,87 @@
     }
   },
   {
-    "id": "historical-acd2a12-cinematic",
-    "date": "2026-10-16",
-    "publishedAt": "2026-10-15T18:41:03.000Z",
+    "id": "historical-release--rXKvIhFDkw",
+    "date": "2025-11-04",
+    "publishedAt": "2025-11-04T02:47:16-08:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
     "category": "CINEMATIC",
     "url": "./cinematic.html",
+    "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 30秒ver.』を公開しました。",
     "contentIds": [
-      "youtube:kst9sv118HI",
-      "youtube:-rXKvIhFDkw",
-      "youtube:CIFs1lkQzx0",
+      "youtube:-rXKvIhFDkw"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=-rXKvIhFDkw",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  },
+  {
+    "id": "historical-release-CIFs1lkQzx0",
+    "date": "2025-07-16",
+    "publishedAt": "2025-07-16T02:43:03-07:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 90秒ver.』を公開しました。",
+    "contentIds": [
+      "youtube:CIFs1lkQzx0"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=CIFs1lkQzx0",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  },
+  {
+    "id": "historical-release-kst9sv118HI",
+    "date": "2025-11-04",
+    "publishedAt": "2025-11-04T02:47:43-08:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 30秒ver.』を公開しました。",
+    "contentIds": [
+      "youtube:kst9sv118HI"
+    ],
+    "evidence": {
+      "release": "https://www.youtube.com/watch?v=kst9sv118HI",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
+    }
+  },
+  {
+    "id": "historical-release-nTRTE7KVGFY",
+    "date": "2025-11-05",
+    "publishedAt": "2025-11-05T06:21:03-08:00",
+    "sitePublishedAt": "2026-10-15T18:41:03.000Z",
+    "category": "CINEMATIC",
+    "url": "./cinematic.html",
+    "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 60秒ver.』を公開しました。",
+    "contentIds": [
       "youtube:nTRTE7KVGFY"
     ],
     "evidence": {
-      "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
-      "deployment": "https://github.com/XENCSJ/portfolio/deployments",
-      "status": "Deployed (completed)",
-      "publishedAt": "2026-10-15T18:41:03.000Z"
+      "release": "https://www.youtube.com/watch?v=nTRTE7KVGFY",
+      "deployment": {
+        "commit": "https://github.com/XENCSJ/portfolio/commit/acd2a12a8971d9b0e86786df5c4a5d8707bfea3a",
+        "deployment": "https://github.com/XENCSJ/portfolio/deployments",
+        "status": "Deployed (completed)",
+        "publishedAt": "2026-10-15T18:41:03.000Z"
+      }
     }
   }
 ]

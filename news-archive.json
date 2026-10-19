@@ -187,23 +187,6 @@
     "body": ""
   },
   {
-    "id": "news-2026-10-16-cinematic",
-    "date": "2026-10-16",
-    "category": "CINEMATIC",
-    "publishedAt": "2026-10-15T18:41:03.000Z",
-    "url": "./cinematic.html",
-    "contentIds": [
-      "youtube:-rXKvIhFDkw",
-      "youtube:CIFs1lkQzx0",
-      "youtube:kst9sv118HI",
-      "youtube:nTRTE7KVGFY"
-    ],
-    "countKnown": true,
-    "count": 4,
-    "title": "新しい映像作品を4本追加しました。",
-    "body": ""
-  },
-  {
     "id": "news-2026-10-10-youtube",
     "date": "2026-10-10",
     "category": "YOUTUBE",
@@ -299,6 +282,49 @@
     "countKnown": true,
     "count": 1,
     "title": "『NIGHT'S AWAKENING』を公開しました。",
+    "body": ""
+  },
+  {
+    "id": "news-2025-11-05-cinematic",
+    "date": "2025-11-05",
+    "category": "CINEMATIC",
+    "publishedAt": "2025-11-05T06:21:03-08:00",
+    "url": "./cinematic.html",
+    "contentIds": [
+      "youtube:nTRTE7KVGFY"
+    ],
+    "countKnown": true,
+    "count": 1,
+    "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 60秒ver.』を公開しました。",
+    "body": ""
+  },
+  {
+    "id": "news-2025-11-04-cinematic",
+    "date": "2025-11-04",
+    "category": "CINEMATIC",
+    "publishedAt": "2025-11-04T02:47:43-08:00",
+    "url": "./cinematic.html",
+    "contentIds": [
+      "youtube:-rXKvIhFDkw",
+      "youtube:kst9sv118HI"
+    ],
+    "countKnown": true,
+    "count": 2,
+    "title": "新しい映像作品を2本追加しました。",
+    "body": ""
+  },
+  {
+    "id": "news-2025-07-16-cinematic",
+    "date": "2025-07-16",
+    "category": "CINEMATIC",
+    "publishedAt": "2025-07-16T02:43:03-07:00",
+    "url": "./cinematic.html",
+    "contentIds": [
+      "youtube:CIFs1lkQzx0"
+    ],
+    "countKnown": true,
+    "count": 1,
+    "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 90秒ver.』を公開しました。",
     "body": ""
   }
 ]

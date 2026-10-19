@@ -23,12 +23,14 @@ DESIGN, APPAREL, ARCHITECTURE, SPACE, SOUND, CINEMATIC, ANIMATION, STORYBOOKS an
     "page": "cinematic.html",
     "marker": "UNIQUE_VIDEO_ID_IN_THE_PAGE",
     "contentIds": ["youtube:UNIQUE_VIDEO_ID_IN_THE_PAGE"],
-    "countKnown": true
+    "countKnown": true,
+    "releaseDate": "2026-10-10",
+    "releaseEvidence": "OFFICIAL_RELEASE_PAGE_URL"
   }
 ]
 ```
 
-Use a permanent work ID, not a timestamp. `marker` must identify that work in the deployed HTML (a unique video ID, image URL or HTML id). Multiple images of one work share one content ID; different works need different IDs. For a new version or replacement of the same work, retain its ID and do not add an announcement. For a photo batch, list the unique photo IDs. Optional `anchor` begins with `#`; optional `title` supplies a concise announcement. Use `countKnown:false` when the work count cannot be confirmed. The deployment supplies the date only after success; do not put a guessed date in this registration. Preserve completed registrations to avoid reuse of IDs.
+Use a permanent work ID, not a timestamp. `marker` must identify that work in the deployed HTML (a unique video ID, image URL or HTML id). Multiple images of one work share one content ID; different works need different IDs. For a new version or replacement of the same work, retain its ID and do not add an announcement. For a photo batch, list the unique photo IDs. Optional `anchor` begins with `#`; optional `title` supplies a concise announcement. Use `countKnown:false` when the work count cannot be confirmed. SNAP/ARTWORKS/DESIGN and other site additions receive the successful deployment date. SOUND/CINEMATIC/ANIMATION/YOUTUBE require an editor-verified `releaseDate` (YYYY-MM-DD, JST) and `releaseEvidence`; the generator refuses to substitute the site-addition date. For any category, a supplied verified original release date takes priority. The work must still exist in a successful deployment before registration. Dates later than site publication are rejected. Never enter guessed dates. Preserve completed registrations to avoid reuse of IDs.
 
 Independent important announcements require an editor-verified event in `news-events.json`, with a permanent ID, evidence and a verified date. Do not edit the fixed article. Run `python news.py` after intentional event edits.
 
@@ -47,8 +49,11 @@ Generated HTML works without JavaScript; `xen-news.js` only adds a scroll reveal
 | --- | --- | --- |
 | 2026-10-19 | ARTWORKS | 7 new gallery works |
 | 2026-10-16 | SNAP | 11 + 2 + 141 = 154 photos, grouped into one item |
-| 2026-10-16 | CINEMATIC | 4 new video embeds |
-| 2026-10-10 | YOUTUBE | Existing verified Puroland publication notice |
+| 2025-07-16 / 2025-11-04 / 2025-11-05 | CINEMATIC | 4 videos, original YouTube release dates; outside latest four |
+| 2026-10-10 | YOUTUBE | Verified Puroland publication notice |
+| 2026-09-24 | YOUTUBE | Verified Study With Me publication notice |
 | 2026-10-20 | WEBSITE | Fixed renewal notice |
 
 `news-audit.json` and event evidence contain the reviewed commit IDs and observed successful deployment timestamps. SOUND Spotify album additions reuse already listed works; recent copy, layout, rearrangement and removal changes on other pages were excluded. Older release notices retain their previously verified original release dates. No unverifiable historical dates were invented.
+
+The fixed title is exactly `ホームページリニューアル`. A normal record may not use the fixed ID or pinned state. The 2026-10-20 audit corrected the earlier CINEMATIC site-addition dates using official YouTube metadata; `news-release-audit.json` retains all 19 checked release timestamps.
