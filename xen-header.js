@@ -73,7 +73,7 @@ SOFTWARE. */
     "PRICE LIST": "<path d=\"M3 3h8l10 10-8 8L3 11Z\"/><circle cx=\"7.5\" cy=\"7.5\" r=\"1\"/>",
   };
   menu.querySelectorAll('.xen-menu-en').forEach(label => {
-    const artwork = menuIcons[label.textContent.trim()];
+    const artwork = menuIcons[label.textContent.replace(/\s*↗\s*$/, '').trim()];
     const row = label.parentElement;
     if (!artwork || row.querySelector('.xen-menu-icon')) return;
     const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
