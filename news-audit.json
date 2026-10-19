@@ -1,0 +1,42 @@
+{
+  "reviewedMain": "9a28d4a0a8abe0e43f435c33b9d3be4781db5435",
+  "history": [
+    {
+      "commit": "f5795f99295524f7100425d68b8bed9e4c2ce98c",
+      "category": "SNAP",
+      "added": 11,
+      "removed": 0,
+      "publishedAt": "2026-10-15T21:38:56.000Z"
+    },
+    {
+      "commit": "9b71d7d6e7bf848bd9b1778889d7d4d777358d0e",
+      "category": "SNAP",
+      "added": 2,
+      "removed": 0,
+      "publishedAt": "2026-10-16T07:02:05.000Z"
+    },
+    {
+      "commit": "798d76b931067a811e2e7f0bf7a4ec18ffeea1d8",
+      "category": "SNAP",
+      "added": 141,
+      "removed": 0,
+      "publishedAt": "2026-10-16T09:56:16.000Z"
+    },
+    {
+      "commit": "82186b823d6127187b34aa3fae258cba7ac841c8",
+      "category": "ARTWORKS",
+      "added": 7,
+      "removed": 0,
+      "publishedAt": "2026-10-18T21:32:02.000Z"
+    }
+  ],
+  "notes": [
+    "Legacy NEWS: all seven records preserved in news-legacy.json and migrated with original dates.",
+    "SNAP: three pure gallery additions on 2026-10-16 grouped. Image blob identities checked within each addition.",
+    "ARTWORKS: seven new gallery links; asset upload alone on prior commit was excluded.",
+    "CINEMATIC: four new video embeds on deployed acd2a12.",
+    "SOUND: Spotify album players reused existing works; not counted as new works.",
+    "DESIGN/APPAREL/ARCHITECTURE/SPACE/ANIMATION/STORYBOOKS: recent changes were presentation, copy, removal or rearrangement; no verified new work event added.",
+    "Initial inventory seeds existing image paths and blob hashes conservatively; publishing previously unlisted old assets requires managed registration."
+  ]
+}

@@ -1,0 +1,25 @@
+/* Scoped to INDEX NEWS. Keep the existing split heading and gold divider. */
+body#top.home-page #xen-news{display:grid;grid-template-columns:24% minmax(0,1fr);width:min(760px,calc(100% - 36px));min-width:0;margin:22px auto 0;padding:0;background:#000;color:var(--ink,#eee);font-family:inherit;text-align:left;transition:opacity .65s ease,transform .65s ease}
+#xen-news .xen-news-label{display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:0;padding:18px 16px 18px 0;text-align:center}
+#xen-news .xen-news-heading{margin:0;color:var(--gold,#c6a15b);font-family:inherit;font-weight:500;font-size:clamp(24px,4.5vw,38px);line-height:1.25;letter-spacing:.14em}
+#xen-news .xen-news-subtitle{margin:10px 0 0;color:var(--gray,#aaa);font-size:12px;line-height:1.6;letter-spacing:.04em}
+#xen-news .xen-news-list{min-width:0;list-style:none;margin:0;padding:0 0 0 clamp(12px,3vw,28px);border-left:1px solid var(--gold,#c6a15b)}
+#xen-news .xen-news-item{margin:0;padding:0}
+#xen-news .xen-news-item+.xen-news-item{border-top:1px solid rgba(198,161,91,.18)}
+#xen-news .xen-news-link{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 8px;gap:5px 12px;align-items:center;min-height:44px;padding:15px 2px;color:inherit;font-family:inherit;text-decoration:none;transition:background-color .25s ease,box-shadow .25s ease}
+#xen-news .xen-news-link::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;background:var(--gold,#c6a15b);transform:scaleX(0);transform-origin:left;transition:transform .3s ease;pointer-events:none}
+#xen-news .xen-news-meta{grid-column:1;display:flex;align-items:center;flex-wrap:wrap;gap:5px 14px;min-width:0}
+#xen-news .xen-news-date{color:var(--gray,#aaa);font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.6}
+#xen-news .xen-news-category{display:inline-flex;align-items:center;gap:5px;color:var(--gold,#c6a15b);font-size:10px;line-height:1.6;letter-spacing:.1em}
+#xen-news .xen-news-copy{grid-column:1;min-width:0}
+#xen-news .xen-news-title{display:block;font-size:13px;font-weight:400;line-height:1.8;overflow-wrap:anywhere;transition:color .25s ease}
+#xen-news .xen-news-body{display:block;margin-top:5px;color:var(--gray,#aaa);font-size:11px;line-height:1.85;overflow-wrap:anywhere}
+#xen-news .xen-news-arrow{grid-column:2;grid-row:1 / span 2;justify-self:end;width:5px;height:5px;border-top:1px solid var(--gold,#c6a15b);border-right:1px solid var(--gold,#c6a15b);transform:rotate(45deg)}
+#xen-news .xen-news-pin{width:13px;height:13px;flex:none}
+#xen-news .xen-news-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#xen-news .xen-news-link:focus-visible{outline:1px solid var(--gold,#c6a15b);outline-offset:3px;background:rgba(198,161,91,.06)}
+#xen-news .xen-news-link:focus-visible::after,#xen-news .xen-news-link:active::after{transform:scaleX(1)}
+@media(hover:hover){#xen-news .xen-news-link:hover{background:rgba(198,161,91,.04);box-shadow:0 8px 18px -16px rgba(198,161,91,.5)}#xen-news .xen-news-link:hover::after{transform:scaleX(1)}#xen-news .xen-news-link:hover .xen-news-title{color:var(--gold,#c6a15b)}}
+@media(max-width:600px){body#top.home-page #xen-news{grid-template-columns:23% minmax(0,1fr);margin-top:16px}#xen-news .xen-news-label{padding-right:10px}#xen-news .xen-news-heading{font-size:clamp(20px,5.5vw,30px);letter-spacing:.08em}#xen-news .xen-news-subtitle{font-size:10px;letter-spacing:0}#xen-news .xen-news-link{padding:13px 1px;column-gap:7px}#xen-news .xen-news-title{font-size:12px}#xen-news .xen-news-meta{gap:3px 9px}#xen-news .xen-news-date{font-size:10px}#xen-news .xen-news-category{font-size:9px}#xen-news .xen-news-body{font-size:10px}}
+@media(prefers-reduced-motion:no-preference){body#top.home-page #xen-news.xen-news-pending{opacity:0;transform:translateY(12px)}}
+@media(prefers-reduced-motion:reduce){body#top.home-page #xen-news,#xen-news *{animation:none!important;transition:none!important}body#top.home-page #xen-news.xen-news-pending{opacity:1;transform:none}}
