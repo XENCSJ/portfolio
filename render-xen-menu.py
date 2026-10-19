@@ -20,11 +20,12 @@ WORKS = [
 ]
 GROUPS = [("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", WORKS),
           ("PRICE LIST", "料金一覧", "./price-list.html"),
-          ("CONTACT", "制作相談", "./studio.html#studio-contact")]
+          ("CONTACT", "制作相談", "./studio.html#contact")]
 
 
 def label(en, ja, prefix):
-    return f'<span class="{prefix}-en" lang="en">{escape(en)}</span><span class="{prefix}-ja" lang="ja">{escape(ja)}</span>'
+    en_text = escape(en) + ('<span aria-hidden="true"> ↗</span>' if en == "CONTACT" and prefix == "xen-menu" else "")
+    return f'<span class="{prefix}-en" lang="en">{en_text}</span><span class="{prefix}-ja" lang="ja">{escape(ja)}</span>'
 
 
 def navigation(page, directory=False):

@@ -34,7 +34,7 @@
 
     let eventName;
     if (destination.pathname === basePath + 'studio.html' &&
-        destination.hash === '#studio-contact') {
+        ['#contact', '#studio-contact'].includes(destination.hash)) {
       eventName = 'xen_contact_click';
     } else {
       const file = destination.pathname.slice(basePath.length);
