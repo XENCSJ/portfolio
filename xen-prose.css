@@ -1,0 +1,37 @@
+/* Description text only. STORYBOOKS .hero .lead is 14px / 28px.
+   Explicit opt-in keeps titles, catchphrases, navigation and media untouched.
+   Important declarations override the legacy page-specific prose cascade. */
+body#top :is(main, #creation-support) .xen-description {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  font-size: 14px !important;
+  line-height: 2 !important;
+  text-align: left !important;
+  text-indent: 0;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  line-break: strict !important;
+  text-wrap: wrap !important;
+}
+
+/* Release only prose wrappers, inside their existing column or card.
+   Page gutters, grids and media containers retain their original geometry. */
+body#top main .xen-prose-container {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
+/* Old phrase/tail wrappers must not force entire chunks onto another line. */
+body#top :is(main, #creation-support) .xen-description :is(.xen-phrase, .xen-tail) {
+  display: inline !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: inherit !important;
+}
