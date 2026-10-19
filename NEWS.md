@@ -34,6 +34,10 @@ Use a permanent work ID, not a timestamp. `marker` must identify that work in th
 
 Independent important announcements require an editor-verified event in `news-events.json`, with a permanent ID, evidence and a verified date. Do not edit the fixed article. Run `python news.py` after intentional event edits.
 
+## Requested YouTube article replacement (2026-10-20 JST)
+
+The homepage slot previously occupied by `legacy-2` now displays `legacy-4`, using `replacesEventId: "legacy-2"` on the replacement event. Its actual YouTube publication date was confirmed in the expanded video description as **2026-09-03**, and its link is `https://youtu.be/Df4ekWvuGng`. This explicit substitution preserves the other three visible articles and the fifth renewal article even though the replacement's release date is older than another archived video. It is not a second pinned article: future NEWS still displaces the oldest selected slot normally. The original notice remains only in the historical registry/archive. The generator applies the substitution on every run and deduplicates the already registered replacement video. Dates and other historical notices are unchanged.
+
 ## Verification and recovery
 
 - `python -m unittest -v test_news.py`

@@ -23,7 +23,7 @@ def jst_date(value):
     if dt.tzinfo is None: raise ValueError('Publication timestamp needs timezone')
     return dt.astimezone(JST).date().isoformat()
 def safe_url(value):
-    return value == PIN['url'] or bool(re.fullmatch(r'\./[a-z0-9-]+\.html(?:#[a-zA-Z0-9_-]+)?', value))
+    return value == PIN['url'] or bool(re.fullmatch(r'\./[a-z0-9-]+\.html(?:#[a-zA-Z0-9_-]+)?', value)) or bool(re.fullmatch(r'https://youtu\.be/[A-Za-z0-9_-]{11}', value))
 def validate_pin(pin):
     if pin != PIN: raise ValueError('Fixed renewal article changed; restore news-pinned.json')
 
@@ -67,7 +67,32 @@ def groups(events, today=None):
 
 def select(events, pin, today=None):
     validate_pin(pin)
-    return groups(events, today)[:4] + [dict(pin, pinned=True)]
+    grouped = groups(events, today)
+    by_event = {e['id']: e for e in events}
+    by_key = {(g['date'], g['category']): g for g in grouped}
+    replacements = {}
+    for e in events:
+        if not e.get('replacesEventId'): continue
+        source = by_event.get(e['replacesEventId'])
+        if source is None or source is e or source.get('replacesEventId'):
+            raise ValueError('Replacement needs an existing, unreplaced event')
+        old = by_key.get((source['date'], source['category']))
+        new = by_key.get((e['date'], e['category']))
+        if old is None or new is None: continue
+        if old['contentIds'] != sorted(source['contentIds']) or new['contentIds'] != sorted(e['contentIds']):
+            raise ValueError('Replacement must identify a single article')
+        if old['id'] in replacements or old['id'] == new['id']:
+            raise ValueError('Ambiguous article replacement')
+        replacements[old['id']] = new
+    # Keep the replaced article's selection slot; show the replacement's actual date.
+    # History stays intact, and future additions still evict the oldest selected slot.
+    selected, seen = [], set()
+    for group in grouped:
+        item = replacements.get(group['id'], group)
+        if item['id'] in seen: continue
+        selected.append(item); seen.add(item['id'])
+        if len(selected) == 4: break
+    return selected + [dict(pin, pinned=True)]
 
 class Gallery(HTMLParser):
     def __init__(self): super().__init__(); self.paths = set()
