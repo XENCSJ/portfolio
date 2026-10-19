@@ -31,10 +31,6 @@
     body.classList.add('xm-ready'); body.classList.toggle('xm-dark',Boolean(dark));
     const atmosphere = document.createElement('div'); atmosphere.className = 'xm-atmosphere'; atmosphere.setAttribute('aria-hidden','true');
     decoration(atmosphere,'xm-aura'); decoration(atmosphere,'xm-aura');
-    for (let i=0; i<(lowPower?8:18); i++) {
-      const dot = decoration(atmosphere,'xm-speck');
-      dot.style.cssText = `--x:${(i*43+9)%100}%;--y:${(i*29+11)%100}%;--s:${i%3===0?2:1}px;--d:${12+i%7}s;--delay:${-i*1.9}s`;
-    }
     body.prepend(atmosphere);
 
     // Shared titles/lines get light; existing observers retain entry ownership.

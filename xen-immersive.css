@@ -12,11 +12,7 @@ body.xm-ready { isolation:isolate; --xm-gold:198,161,91; --xm-ease:cubic-bezier(
 .xm-aura:first-child { top:-35%; right:-20%; }
 .xm-aura:nth-child(2) { bottom:-45%; left:-25%; animation-delay:-12s; }
 .xm-dark .xm-aura { opacity:.65; }
-.xm-speck { position:absolute; left:var(--x); top:var(--y); width:var(--s); height:var(--s); border-radius:50%;
-  background:rgb(var(--xm-gold)); opacity:0; animation:xm-particle var(--d) ease-in-out var(--delay) infinite; }
-.xm-dark .xm-speck { box-shadow:0 0 6px #c6a15b50; }
 @keyframes xm-drift { to { transform:translate3d(-9%,8%,0) scale(1.15); } }
-@keyframes xm-particle { 0%,100% { opacity:0; transform:translate3d(0,15px,0); } 25%,65% { opacity:.45; } 90% { opacity:0; transform:translate3d(20px,-85px,0); } }
 .xm-host { position:relative; }
 .xm-edge { position:absolute; bottom:0; left:0; width:100%; height:1px; pointer-events:none; overflow:hidden; }
 .xm-edge::before { content:""; display:block; width:100%; height:100%; transform-origin:left;
@@ -92,7 +88,6 @@ body#top.home-page.xm-ready.xm-ring-selected .logo-final { filter:drop-shadow(0 
 }
 @media (max-width:700px), (pointer:coarse) {
   body.xm-ready .xm-tilt { rotate:none; }
-  .xm-speck:nth-child(n+11) { display:none; }
   .xm-aura { width:110vw; }
   .xm-spectrum { width:52px; height:13px; gap:2px; bottom:3px; }
   body#top.home-page.xm-ready .logo-stage.xm-active { animation-duration:12s; }
