@@ -539,7 +539,7 @@ body#top.home-page #xen-news[hidden] { display: none; }
      title = the work name shown on its category page; url = its detail page or work anchor.
      source = official publication-date evidence for editors; it is not displayed.
      Categories: STORYBOOKS, ANIMATION, SOUND, CINEMATIC, SNAP, DESIGN, APPAREL,
-     ARCHITECTURE, SPACE, ARTWORKS. Keep one record per work; newest three are displayed.
+     ARCHITECTURE, SPACE, ARTWORKS, YOUTUBE. Keep one record per work; newest three are displayed.
      Same-date entries keep their listed order. Future-dated records remain hidden.
      Existing category pages have no shared publication-date dataset, so this block is
      the single NEWS registry. No external API, CMS, or automatic change detection. -->
@@ -552,6 +552,34 @@ body#top.home-page #xen-news[hidden] { display: none; }
 </section>
 <script type="application/json" id="xen-news-data">
 [
+  {
+    "date": "2026-10-10",
+    "category": "YOUTUBE",
+    "title": "【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www",
+    "url": "https://www.youtube.com/watch?v=5AQmdt1HvXI",
+    "source": "https://www.youtube.com/watch?v=5AQmdt1HvXI"
+  },
+  {
+    "date": "2026-09-24",
+    "category": "YOUTUBE",
+    "title": "朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me",
+    "url": "https://www.youtube.com/watch?v=X3DrK_IgSzg",
+    "source": "https://www.youtube.com/watch?v=X3DrK_IgSzg"
+  },
+  {
+    "date": "2026-09-04",
+    "category": "YOUTUBE",
+    "title": "女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場",
+    "url": "https://www.youtube.com/watch?v=IykFCu-sYKk",
+    "source": "https://www.youtube.com/watch?v=IykFCu-sYKk"
+  },
+  {
+    "date": "2026-09-03",
+    "category": "YOUTUBE",
+    "title": "ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった",
+    "url": "https://www.youtube.com/watch?v=Df4ekWvuGng",
+    "source": "https://www.youtube.com/watch?v=Df4ekWvuGng"
+  },
   {
     "date": "2026-02-02",
     "category": "SOUND",
@@ -586,7 +614,7 @@ body#top.home-page #xen-news[hidden] { display: none; }
     const records = JSON.parse(source.textContent);
     if (!Array.isArray(records)) return;
     const categories = new Set(['STORYBOOKS', 'ANIMATION', 'SOUND', 'CINEMATIC', 'SNAP',
-      'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'ARTWORKS']);
+      'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'ARTWORKS', 'YOUTUBE']);
     const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const seen = new Set();
     const latest = records.filter(item => {
@@ -595,8 +623,10 @@ body#top.home-page #xen-news[hidden] { display: none; }
       return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === item.date &&
         item.date <= today && categories.has(item.category) &&
         typeof item.title === 'string' && item.title.trim() &&
-        typeof item.url === 'string' && /^\.\/[a-z0-9-]+\.html(?:#[a-z0-9_-]+)?$/i.test(item.url) &&
-        item.url.split('#')[0] === './' + item.category.toLowerCase() + '.html';
+        typeof item.url === 'string' && (item.category === 'YOUTUBE'
+          ? /^https:\/\/www\.youtube\.com\/watch\?v=[A-Za-z0-9_-]{11}$/.test(item.url)
+          : /^\.\/[a-z0-9-]+\.html(?:#[a-z0-9_-]+)?$/i.test(item.url) &&
+            item.url.split('#')[0] === './' + item.category.toLowerCase() + '.html');
     }).filter(item => {
       const key = item.category + ':' + item.title.trim();
       if (seen.has(key)) return false;
