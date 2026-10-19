@@ -64,5 +64,26 @@ class NewsTests(unittest.TestCase):
         e=event(1);del e['evidence']
         with self.assertRaises(ValueError):news.groups([e],NOW)
     def test_output_is_current(self):news.generate(check=True)
+    def test_news_only_deployment_does_not_start_commit_loop(self):
+        s=state();s.update(baselineSha='baseline',baselinePublishedAt='2026-10-19T00:00:00Z')
+        d={'id':1,'sha':'published','ref':'main','created_at':'2026-10-19T15:00:00Z','statuses_url':'statuses'}
+        def api(path):
+            if '/statuses' in path:return [{'state':'success','environment_url':news.PIN['url'],'created_at':'2026-10-19T15:01:00Z','log_url':'log'}]
+            return [d] if path.endswith('&page=1') else []
+        data={'news-state.json':s,'news-events.json':[],'news-pinned.json':news.PIN}
+        writes={}
+        with patch.object(news,'api',side_effect=api),patch.object(news,'read',side_effect=data.__getitem__),patch.object(news,'write',side_effect=lambda k,v:writes.update({k:v})),patch.object(news,'inventory',return_value=s['inventory']),patch.object(news,'git',return_value='[]'),patch.object(news.subprocess,'run') as run,patch.object(news,'generate'):
+            run.return_value.returncode=0;news.refresh()
+        self.assertEqual(writes['news-state.json'],s)
+        self.assertEqual(writes['news-events.json'],[])
+    def test_failed_deployment_never_scans_content(self):
+        s=state();s.update(baselineSha='baseline',baselinePublishedAt='2026-10-19T00:00:00Z')
+        d={'id':1,'sha':'failed','ref':'main','created_at':'2026-10-19T15:00:00Z'}
+        def api(path):
+            if '/statuses' in path:return [{'state':'failure'}]
+            return [d] if path.endswith('&page=1') else []
+        data={'news-state.json':s,'news-events.json':[],'news-pinned.json':news.PIN}
+        with patch.object(news,'api',side_effect=api),patch.object(news,'read',side_effect=data.__getitem__),patch.object(news,'write'),patch.object(news,'inventory') as inv,patch.object(news.subprocess,'run') as run,patch.object(news,'generate'):
+            run.return_value.returncode=0;news.refresh();inv.assert_not_called()
 
 if __name__=='__main__':unittest.main()
