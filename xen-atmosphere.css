@@ -27,10 +27,6 @@ body#top.studio-page .xen-logo-sheen::after {
   content:""; position:absolute; inset:-40%; opacity:0;
   background:linear-gradient(115deg,transparent 40%,#e3c992bb 49%,#fff6ddee 50%,transparent 59%);
 }
-body#top.studio-page .xen-logo-particles {
-  position:absolute; inset:-30%; width:160%; height:160%; max-width:none;
-  pointer-events:none; z-index:-1;
-}
 body#top.studio-page .studio-values-orbit { isolation:isolate; perspective:760px; }
 body#top.studio-page .studio-values-orbit::before {
   content:""; position:absolute; inset:25%; border-radius:50%; pointer-events:none;
@@ -126,7 +122,6 @@ body#top.creator-page .creator-connect-links a:is(:focus-visible,:active) svg { 
 }
 @media(prefers-reduced-motion:reduce) {
   body:is(.studio-page,.creator-page) .xen-motion-divider,
-  body#top.studio-page .xen-logo-particles,
   body#top.studio-page .xen-logo-sheen,
   body#top.creator-page .xen-portrait-sheen { display:none; }
   body#top.studio-page :is(.xen-logo-tilt,.xen-ring-depth),

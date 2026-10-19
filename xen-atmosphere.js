@@ -14,8 +14,6 @@
   const orbit = page.querySelector('.studio-values-orbit');
   const portrait = page.querySelector('.profile-portrait');
   let scrollFrame = 0;
-  let particleFrame = 0;
-  let particleCanvas = null;
   let introPlayed = false;
   let portraitPlayed = false;
   let suspended = false;
@@ -90,47 +88,10 @@
   },{threshold:0,rootMargin:'0px 0px -12px 0px'});
   targets.forEach(node => revealObserver.observe(node));
 
-  function stopParticles() {
-    cancelAnimationFrame(particleFrame); particleFrame = 0;
-    particleCanvas?.remove(); particleCanvas = null;
-  }
-  function converge() {
+  function revealLogo() {
     if (!intro || introPlayed || !allowed()) return;
     introPlayed = true;
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    if (!context) return;
-    canvas.className = 'xen-logo-particles'; canvas.setAttribute('aria-hidden','true');
-    intro.prepend(canvas); particleCanvas = canvas;
-    const size = intro.getBoundingClientRect().width * 1.6;
-    const dpr = Math.min(devicePixelRatio || 1,1.5);
-    canvas.width = Math.round(size*dpr); canvas.height = Math.round(size*2293/2232*dpr);
-    context.scale(dpr,dpr);
-    const cx = size/2, cy = size*2293/2232/2;
-    const particles = Array.from({length:fine.matches?28:18},(_,i) => ({
-      angle:i*2.399963, radius:size*(.3+(i%5)*.025), size:.6+(i%3)*.25
-    }));
     animate(intro.querySelector('.xen-logo-tilt'),[{opacity:0},{opacity:1}],{delay:500,duration:650});
-    let start;
-    const tick = now => {
-      particleFrame = 0;
-      if (!allowed() || !activeScenes.has(intro)) { stopParticles(); return; }
-      if (start === undefined) start = now;
-      const t = Math.min(1,(now-start)/1250);
-      context.clearRect(0,0,size,size*2293/2232);
-      context.fillStyle = '#dfc593';
-      for (const particle of particles) {
-        const radius = particle.radius*Math.pow(1-t,1.8);
-        const angle = particle.angle+t*.55;
-        context.globalAlpha = Math.sin(Math.PI*t)*.65;
-        context.beginPath();
-        context.arc(cx+Math.cos(angle)*radius,cy+Math.sin(angle)*radius,particle.size,0,Math.PI*2);
-        context.fill();
-      }
-      if (t < 1) particleFrame = requestAnimationFrame(tick);
-      else stopParticles();
-    };
-    particleFrame = requestAnimationFrame(tick);
   }
   function lightPortrait() {
     if (!portrait || portraitPlayed || !allowed()) return;
@@ -175,7 +136,7 @@
       if (active) activeScenes.add(scene);
       else { activeScenes.delete(scene); cancelWithin(scene); }
     }
-    if (activeScenes.has(intro)) converge(); else stopParticles();
+    if (activeScenes.has(intro)) revealLogo();
     if (activeScenes.has(portrait)) lightPortrait();
     scheduleScroll();
   }
@@ -201,7 +162,7 @@
     for (const animation of animations.keys()) animation.cancel();
     animations.clear();
     cancelAnimationFrame(scrollFrame); scrollFrame = 0;
-    stopParticles(); syncScenes();
+    syncScenes();
   }
   addEventListener('scroll',scheduleScroll,{passive:true});
   addEventListener('resize',scheduleScroll,{passive:true});
