@@ -13,7 +13,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
-API_URL = "https://apiv2.thebase.com/api/items?visible=true&order=created&sort=desc&limit=6&offset=0"
+PAGE_SIZE = 100
+API_URL = "https://apiv2.thebase.com/api/items?visible=true&order=created&sort=desc&limit=100&offset=0"
 SHOP_URL = "https://xen.official.ec/"
 PUBLIC_URL = "https://xencsj.github.io/portfolio/base-products.json"
 OUTPUT = Path(__file__).resolve().with_name("base-products.json")
@@ -40,27 +41,48 @@ def read_json(response):
         raise SyncError("Invalid JSON; previous data preserved.") from None
 
 
-def fetch_products(token, opener=None, sleep=time.sleep):
-    if not token or token != token.strip() or any(c.isspace() for c in token):
-        raise SyncError("BASE_API_TOKEN is missing or invalid. Add the BASE v2 PAT to repository Actions secrets.")
-    opener = opener or build_opener(NoRedirect())
+def fetch_page(token, url, opener, sleep):
     for attempt in range(3):
         try:
-            request = Request(API_URL, headers={"Authorization": "Bearer " + token, "Accept": "application/json"})
+            request = Request(url, headers={"Authorization": "Bearer " + token, "Accept": "application/json"})
             with opener.open(request, timeout=30) as response:
-                return read_json(response)
+                payload = read_json(response)
+                if not isinstance(payload, list) or len(payload) > PAGE_SIZE:
+                    raise SyncError("Unexpected BASE response format; previous data preserved.")
+                return payload
         except HTTPError as error:
             code = error.code
             error.close()
-            if code in (401, 403):
-                raise SyncError("BASE authentication failed. Check the PAT expiry and items.read scope; previous data preserved.") from None
+            if code == 401:
+                raise SyncError("HTTP 401: BASE PAT expired or invalid. Replace BASE_API_TOKEN; previous data preserved.") from None
+            if code == 403:
+                raise SyncError("HTTP 403: check the BASE PAT items.read scope; previous data preserved.") from None
             if code != 429 and code < 500:
-                raise SyncError("BASE rejected the request; previous data preserved.") from None
+                raise SyncError(f"BASE HTTP {code}: request rejected; previous data preserved.") from None
         except (URLError, TimeoutError, OSError):
             pass
         if attempt < 2:
             sleep(2 ** (attempt + 1))
-    raise SyncError("BASE remained unavailable after three attempts; previous data preserved.")
+    raise SyncError("BASE unavailable (HTTP 429/5xx or network error) after three attempts; previous data preserved.")
+
+
+def fetch_products(token, opener=None, sleep=time.sleep):
+    if not token or token != token.strip() or any(c.isspace() for c in token):
+        raise SyncError("BASE_API_TOKEN is missing or invalid. Add the BASE v2 PAT to repository Actions secrets.")
+    opener = opener or build_opener(NoRedirect())
+    products, seen_pages = [], set()
+    for offset in range(0, 1_000_001, PAGE_SIZE):
+        url = API_URL.rsplit("=", 1)[0] + "=" + str(offset)
+        page = fetch_page(token, url, opener, sleep)
+        # Guard against a server ignoring offset; never publish a truncated catalog.
+        signature = json.dumps(page, sort_keys=True, ensure_ascii=True)
+        if page and signature in seen_pages:
+            raise SyncError("BASE pagination repeated a page; previous data preserved.")
+        seen_pages.add(signature)
+        products.extend(page)
+        if len(page) < PAGE_SIZE:
+            return products
+    raise SyncError("BASE pagination exceeded its supported range; previous data preserved.")
 
 
 def https_url(value):
@@ -77,20 +99,25 @@ def https_url(value):
 
 
 def normalize(payload):
-    if not isinstance(payload, list) or len(payload) > 6:
+    if not isinstance(payload, list):
         raise SyncError("Unexpected BASE response format; previous data preserved.")
     items, ids = [], set()
     for item in payload:
-        if not isinstance(item, dict) or item.get("visible") is not True:
+        if not isinstance(item, dict) or type(item.get("visible")) is not bool:
             raise SyncError("BASE returned an unexpected visibility value; previous data preserved.")
+        if not item["visible"]:
+            continue
         product_id, name, price = item.get("id"), item.get("name"), item.get("price")
         created, stock, status = item.get("created_at"), item.get("stock"), item.get("sales_status")
-        if (type(product_id) is not int or product_id < 1 or product_id in ids
+        if (type(product_id) is not int or product_id < 1
                 or not isinstance(name, str) or not name.strip() or len(name) > 1000
+                or "price" not in item
                 or (price is not None and (type(price) is not int or price < 0))
                 or type(stock) is not int or stock < 0
                 or status not in {"item_now_on_sale", "item_waiting_for_sale", "item_end_of_sale"}):
             raise SyncError("Invalid product fields; previous data preserved.")
+        if product_id in ids:
+            continue
         try:
             date = datetime.fromisoformat(created.replace("Z", "+00:00"))
             if date.tzinfo is None:
@@ -119,13 +146,16 @@ def normalize(payload):
     return items
 
 
-def save_products(items, path=OUTPUT):
+def save_products(items, path=OUTPUT, public_count=None):
+    public_count = len(items) if public_count is None else public_count
+    items = items[:6]
     previous = json.loads(path.read_text()) if path.exists() else {}
-    if previous.get("items") == items and previous.get("updated_at"):
+    if (previous.get("items") == items and previous.get("updated_at")
+            and previous.get("public_count") == public_count):
         return False
     data = {"schema_version": 1, "source": "BASE API v2", "shop_url": SHOP_URL,
             "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-            "items": items}
+            "public_count": public_count, "items": items}
     temp_path = None
     try:
         with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as out:
@@ -164,8 +194,9 @@ def main():
             verify_public()
             return
         items = normalize(fetch_products(os.environ.get("BASE_API_TOKEN", "")))
-        changed = save_products(items)
-        message = f"BASE v2: verified {len(items)} public products; data {'updated' if changed else 'unchanged'}."
+        changed = save_products(items, public_count=len(items))
+        message = (f"BASE v2 HTTP 200: verified {len(items)} unique public products across all pages; "
+                   f"displaying {min(6, len(items))}; data {'updated' if changed else 'unchanged'}.")
         print(message)
         if os.environ.get("GITHUB_STEP_SUMMARY"):
             with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
@@ -175,6 +206,11 @@ def main():
                 output.write(f"changed={str(changed).lower()}\n")
     except SyncError as error:
         print(str(error), file=sys.stderr)
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            print("::error title=BASE product sync failed::" + str(error))
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+                summary.write("BASE sync failed: " + str(error) + "\n")
         sys.exit(1)
     except Exception:
         # Do not emit arbitrary exceptions/response bodies that could contain credentials.

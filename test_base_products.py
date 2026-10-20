@@ -31,6 +31,60 @@ class ProductsTest(unittest.TestCase):
         self.assertNotIn("stock", items[0])
         self.assertEqual(len(items), 6)
 
+    def test_all_pages_sorted_before_six_are_saved(self):
+        opener = Mock()
+        # The newest product is deliberately on the second page.
+        older = [product(n, created_at="2026-01-01T00:00:00Z") for n in range(1, 101)]
+        newer = [product(101), product(102, visible=False), product(1)]
+        opener.open.side_effect = [io.BytesIO(json.dumps(page).encode()) for page in [older, newer]]
+        items = sync.normalize(sync.fetch_products("TEST-ONLY-TOKEN", opener))
+        self.assertEqual(len(items), 101)
+        self.assertEqual(items[0]["id"], 101)
+        urls = [call.args[0].full_url for call in opener.open.call_args_list]
+        self.assertTrue(urls[0].endswith("offset=0"))
+        self.assertTrue(urls[1].endswith("offset=100"))
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/"base-products.json"
+            sync.save_products(items, path)
+            data = json.loads(path.read_text())
+            self.assertEqual(data["public_count"], 101)
+            self.assertEqual([item["id"] for item in data["items"]], [101, 100, 99, 98, 97, 96])
+
+    def test_exact_page_requires_empty_final_page(self):
+        opener = Mock()
+        full = [product(n) for n in range(1, 101)]
+        opener.open.side_effect = [io.BytesIO(json.dumps(full).encode()), io.BytesIO(b"[]")]
+        self.assertEqual(len(sync.fetch_products("TEST-ONLY-TOKEN", opener)), 100)
+        self.assertEqual(opener.open.call_count, 2)
+
+    def test_second_page_failure_preserves_existing_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/"base-products.json"
+            sync.save_products(sync.normalize([product()]), path)
+            original = path.read_bytes()
+            opener = Mock()
+            full = [product(n) for n in range(1, 101)]
+            opener.open.side_effect = [io.BytesIO(json.dumps(full).encode()),
+                                      HTTPError(sync.API_URL, 401, "SECRET", {}, None)]
+            with self.assertRaises(sync.SyncError):
+                sync.save_products(sync.normalize(sync.fetch_products("TEST-ONLY-TOKEN", opener)), path)
+            self.assertEqual(path.read_bytes(), original)
+
+    def test_duplicate_and_hidden_items_are_excluded(self):
+        items = sync.normalize([product(1), product(1), product(2, visible=False), product(3)])
+        self.assertEqual([item["id"] for item in items], [3, 1])
+
+    def test_missing_price_and_repeating_page_are_rejected(self):
+        item = product()
+        del item["price"]
+        with self.assertRaises(sync.SyncError):
+            sync.normalize([item])
+        full = [product(n) for n in range(1, 101)]
+        opener = Mock()
+        opener.open.side_effect = [io.BytesIO(json.dumps(full).encode()), io.BytesIO(json.dumps(full).encode())]
+        with self.assertRaises(sync.SyncError):
+            sync.fetch_products("TEST-ONLY-TOKEN", opener)
+
     def test_empty_catalog_is_valid_and_clears_unpublished_products(self):
         self.assertEqual(sync.normalize([]), [])
 
@@ -43,11 +97,10 @@ class ProductsTest(unittest.TestCase):
         self.assertFalse(item["available"])
 
     def test_invalid_payload_never_replaces_last_success(self):
-        bad = [{}, {"items": []}, [product(visible=False)], [product(visible=1)],
+        bad = [{}, {"items": []}, [product(visible=1)],
                [product(price=-10)], [product(price=True)], [product(id=True)],
                [product(created_at="bad")], [product(created_at="2026-01-01")],
-               [product(), product()], [product(images=[{"url": "javascript:alert(1)"}])],
-               [product(n) for n in range(1, 8)]]
+               [product(images=[{"url": "javascript:alert(1)"}])]]
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/"base-products.json"
             sync.save_products(sync.normalize([product()]), path)
