@@ -1,0 +1,131 @@
+/* STUDIO intro only. The official logo, shared headings and MVV keep their owners. */
+body#top.studio-page h1.cp-page-label > span:last-child { color:var(--cp-muted); }
+
+.studio-fusion {
+  --fusion-gold:#c8ab75;
+  position:relative; isolation:isolate; height:520px;
+  margin:20px auto 32px; width:100%; max-width:1024px;
+}
+.studio-fusion-logo {
+  position:absolute; left:50%; top:49%; width:clamp(160px,19vw,218px);
+  aspect-ratio:2232/2293; transform:translate(-50%,-50%); pointer-events:none;
+}
+.studio-fusion-logo-enter,.studio-fusion-logo-drift {
+  position:relative; width:100%; height:100%;
+}
+.studio-fusion-logo img { display:block; width:100%; height:auto; filter:invert(1); }
+/* Reuse the exact source alpha, including the logo's original aspect ratio. */
+@supports ((mask-image:url('')) or (-webkit-mask-image:url(''))) {
+  .studio-fusion-logo-drift {
+    background:linear-gradient(135deg,#c8ab75 8%,#e4cd9e 45%,#b99a60 92%);
+    -webkit-mask:url('./XEN_logo_fixed_black.svg') center/contain no-repeat;
+    mask:url('./XEN_logo_fixed_black.svg') center/contain no-repeat;
+  }
+  .studio-fusion-logo img { opacity:0; }
+  .studio-fusion-sheen {
+    position:absolute; inset:-40%; opacity:0;
+    background:linear-gradient(110deg,transparent 43%,#fff4d58c 50%,transparent 57%);
+  }
+}
+.studio-fusion-list { list-style:none; margin:0; padding:0; }
+.studio-fusion-item {
+  position:absolute; left:var(--x); top:var(--y);
+  width:max-content; transform:translate(-50%,-50%);
+}
+.studio-fusion-entry,.studio-fusion-drift { display:block; }
+.studio-fusion a {
+  display:flex; align-items:center; justify-content:center;
+  min-width:44px; min-height:44px; padding:8px;
+  color:#d5d5d7; font-size:var(--size); font-weight:400;
+  line-height:1.25; letter-spacing:.035em; white-space:nowrap;
+  text-decoration:underline; text-decoration-thickness:1px;
+  text-decoration-color:#c8ab754d; text-underline-offset:7px;
+  cursor:pointer; touch-action:manipulation;
+  -webkit-tap-highlight-color:rgb(200 171 117 / 20%);
+  transition:color 180ms ease,transform 180ms ease,text-decoration-color 180ms ease;
+}
+.studio-fusion a:focus-visible {
+  color:var(--fusion-gold); outline:2px solid var(--fusion-gold); outline-offset:4px;
+  text-decoration-color:currentColor;
+}
+.studio-fusion a:active { color:#edd5a7; transform:scale(.98); text-decoration-color:currentColor; }
+.studio-fusion-item:focus-within .studio-fusion-drift { animation-play-state:paused; }
+.studio-fusion-item:focus-within .studio-fusion-entry { animation:none; }
+@media (hover:hover) and (pointer:fine) {
+  .studio-fusion-item:hover .studio-fusion-drift { animation-play-state:paused; }
+  .studio-fusion a:hover { color:var(--fusion-gold); transform:scale(1.035); text-decoration-color:currentColor; }
+}
+.studio-fusion-sound        { --x:22%; --y:14%; --size:28px; --dx:4px;  --dy:6px; --duration:8s;   --entry-x:-6px; --entry-y:3px;  --delay:1.35s; --float-delay:3.1s; }
+.studio-fusion-animation    { --x:65%; --y:12%; --size:21px; --dx:-3px; --dy:5px; --duration:9.5s; --entry-x:5px;  --entry-y:-5px; --delay:1.47s; --float-delay:3.2s; }
+.studio-fusion-storybooks   { --x:82%; --y:31%; --size:19px; --dx:3px;  --dy:4px; --duration:7.2s; --entry-x:6px;  --entry-y:2px;  --delay:1.59s; --float-delay:3.3s; }
+.studio-fusion-cinematic    { --x:18%; --y:40%; --size:23px; --dx:-4px; --dy:7px; --duration:10.5s;--entry-x:-5px; --entry-y:-4px; --delay:1.71s; --float-delay:3.4s; }
+.studio-fusion-photography  { --x:24%; --y:67%; --size:22px; --dx:5px;  --dy:5px; --duration:11s;  --entry-x:-4px; --entry-y:6px;  --delay:1.83s; --float-delay:3.5s; }
+.studio-fusion-design       { --x:82%; --y:57%; --size:30px; --dx:3px;  --dy:6px; --duration:8.7s; --entry-x:5px;  --entry-y:4px;  --delay:1.95s; --float-delay:3.6s; }
+.studio-fusion-apparel      { --x:77%; --y:79%; --size:20px; --dx:-4px; --dy:4px; --duration:6.8s; --entry-x:4px;  --entry-y:5px;  --delay:2.07s; --float-delay:3.7s; }
+.studio-fusion-architecture { --x:29%; --y:86%; --size:20px; --dx:3px;  --dy:5px; --duration:12s;  --entry-x:-6px; --entry-y:4px;  --delay:2.19s; --float-delay:3.8s; }
+.studio-fusion-space        { --x:32%; --y:26%; --size:17px; --dx:-2px; --dy:3px; --duration:7.8s; --entry-x:-3px; --entry-y:-6px; --delay:2.31s; --float-delay:3.9s; }
+.studio-fusion-sns          { --x:57%; --y:94%; --size:16px; --dx:2px;  --dy:4px; --duration:10s;  --entry-x:3px;  --entry-y:6px;  --delay:2.43s; --float-delay:4s; }
+
+/* Tablet composition leaves a clear central space at narrower content widths. */
+@media (min-width:601px) and (max-width:900px) {
+  .studio-fusion { height:540px; }
+  .studio-fusion-logo { width:158px; }
+  .studio-fusion-sound { --x:23%; --size:24px; }
+  .studio-fusion-animation { --x:70%; --size:18px; }
+  .studio-fusion-storybooks { --x:80%; --y:26%; --size:17px; }
+  .studio-fusion-cinematic { --x:18%; --y:42%; --size:19px; }
+  .studio-fusion-photography { --x:25%; --y:72%; --size:18px; }
+  .studio-fusion-design { --x:83%; --size:24px; }
+  .studio-fusion-architecture { --x:24%; --y:85%; --size:17px; }
+  .studio-fusion-space { --x:36%; --y:24%; --size:15px; }
+  .studio-fusion-sns { --x:64%; --size:15px; }
+}
+/* Phone composition: taller canvas, independent anchors, full-size tap targets. */
+@media (max-width:600px) {
+  .studio-fusion { height:660px; max-width:400px; margin:12px auto 28px; }
+  .studio-fusion-logo { width:128px; top:49%; }
+  .studio-fusion a { padding:8px 6px; letter-spacing:.025em; }
+  .studio-fusion-sound        { --x:24%; --y:8%;  --size:24px; }
+  .studio-fusion-animation    { --x:71%; --y:18%; --size:17px; }
+  .studio-fusion-storybooks   { --x:27%; --y:28%; --size:17px; }
+  .studio-fusion-cinematic    { --x:74%; --y:32%; --size:17px; }
+  .studio-fusion-photography  { --x:34%; --y:65%; --size:18px; }
+  .studio-fusion-design       { --x:87%; --y:52%; --size:18px; }
+  .studio-fusion-apparel      { --x:77%; --y:75%; --size:17px; }
+  .studio-fusion-architecture { --x:37%; --y:85%; --size:17px; }
+  .studio-fusion-space        { --x:12%; --y:46%; --size:14px; }
+  .studio-fusion-sns          { --x:60%; --y:95%; --size:16px; }
+}
+@media (max-width:359px) {
+  .studio-fusion { height:680px; }
+  .studio-fusion-logo { width:108px; }
+  .studio-fusion-design { --x:86%; --y:62%; }
+  .studio-fusion-storybooks { --y:26%; }
+  .studio-fusion-cinematic { --x:70%; --y:35%; }
+  .studio-fusion-space { --x:13%; --y:39%; }
+  .studio-fusion-sns { --x:57%; --size:15px; }
+}
+
+@media (prefers-reduced-motion:no-preference) {
+  .studio-fusion.is-running .studio-fusion-logo-enter { animation:studio-fusion-appear .6s ease-out both; }
+  .studio-fusion.is-running .studio-fusion-logo-drift { animation:studio-fusion-logo-float 8s ease-in-out 3.1s infinite; }
+  .studio-fusion.is-running .studio-fusion-sheen { animation:studio-fusion-sweep .75s ease-in-out .6s both; }
+  .studio-fusion.is-running .studio-fusion-entry { animation:studio-fusion-enter .55s ease-out var(--delay) both; }
+  .studio-fusion.is-running .studio-fusion-drift { animation:studio-fusion-drift var(--duration) ease-in-out var(--float-delay) infinite; }
+  .studio-fusion.is-running .studio-fusion-item:is(:hover,:focus-within) .studio-fusion-drift { animation-play-state:paused; }
+  .studio-fusion.is-running .studio-fusion-item:focus-within .studio-fusion-entry { animation:none; }
+  .studio-fusion.is-paused :is(.studio-fusion-logo-enter,.studio-fusion-logo-drift,.studio-fusion-sheen,.studio-fusion-entry,.studio-fusion-drift) { animation-play-state:paused; }
+}
+@keyframes studio-fusion-appear { from { opacity:0; } to { opacity:1; } }
+@keyframes studio-fusion-enter { from { opacity:0; transform:translate(var(--entry-x),var(--entry-y)); } to { opacity:1; transform:translate(0,0); } }
+@keyframes studio-fusion-sweep { 0% { opacity:0; transform:translateX(-65%); } 45% { opacity:.8; } 100% { opacity:0; transform:translateX(65%); } }
+@keyframes studio-fusion-logo-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+@keyframes studio-fusion-drift { 0%,100% { transform:translate(0,0); } 25% { transform:translate(var(--dx),calc(var(--dy) * -1)); } 75% { transform:translate(calc(var(--dx) * -1),var(--dy)); } }
+@media (max-width:600px) {
+  .studio-fusion-item { --dx:2px; --dy:3px; }
+  .studio-fusion-item:nth-child(even) { --dx:-2px; --dy:4px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .studio-fusion *, .studio-fusion *::before, .studio-fusion *::after { animation:none!important; transition:none!important; }
+  .studio-fusion-sheen { display:none; }
+}
