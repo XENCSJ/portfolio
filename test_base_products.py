@@ -21,8 +21,12 @@ def product(product_id=123, **changes):
     return item
 
 
+def selected_products(**changes):
+    return sync.normalize([product(n, **changes) for n in sync.PINNED_IDS])
+
+
 class ProductsTest(unittest.TestCase):
-    def test_newest_public_six_and_allowlisted_output(self):
+    def test_public_records_are_normalized_with_allowlisted_output(self):
         items = sync.normalize([product(n) for n in range(1, 7)])
         self.assertEqual([x["id"] for x in items], [6, 5, 4, 3, 2, 1])
         self.assertEqual(items[0]["url"], "https://xen.official.ec/items/6")
@@ -35,11 +39,11 @@ class ProductsTest(unittest.TestCase):
         opener = Mock()
         # The newest product is deliberately on the second page.
         older = [product(n, created_at="2026-01-01T00:00:00Z") for n in range(1, 101)]
-        newer = [product(101), product(102, visible=False), product(1)]
+        newer = [product(101), product(102, visible=False), product(1)] + [product(n) for n in sync.PINNED_IDS]
         opener.open.side_effect = [io.BytesIO(json.dumps(page).encode()) for page in [older, newer]]
         items = sync.normalize(sync.fetch_products("TEST-ONLY-TOKEN", opener))
-        self.assertEqual(len(items), 101)
-        self.assertEqual(items[0]["id"], 101)
+        self.assertEqual(len(items), 107)
+        self.assertEqual(items[0]["id"], sync.PINNED_IDS[0])
         urls = [call.args[0].full_url for call in opener.open.call_args_list]
         self.assertTrue(urls[0].endswith("offset=0"))
         self.assertTrue(urls[1].endswith("offset=100"))
@@ -47,8 +51,8 @@ class ProductsTest(unittest.TestCase):
             path = Path(tmp)/"base-products.json"
             sync.save_products(items, path)
             data = json.loads(path.read_text())
-            self.assertEqual(data["public_count"], 101)
-            self.assertEqual([item["id"] for item in data["items"]], [101, 100, 99, 98, 97, 96])
+            self.assertEqual(data["public_count"], 107)
+            self.assertEqual([item["id"] for item in data["items"]], list(sync.PINNED_IDS))
 
     def test_exact_page_requires_empty_final_page(self):
         opener = Mock()
@@ -60,7 +64,7 @@ class ProductsTest(unittest.TestCase):
     def test_second_page_failure_preserves_existing_file(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/"base-products.json"
-            sync.save_products(sync.normalize([product()]), path)
+            sync.save_products(selected_products(), path)
             original = path.read_bytes()
             opener = Mock()
             full = [product(n) for n in range(1, 101)]
@@ -85,7 +89,7 @@ class ProductsTest(unittest.TestCase):
         with self.assertRaises(sync.SyncError):
             sync.fetch_products("TEST-ONLY-TOKEN", opener)
 
-    def test_empty_catalog_is_valid_and_clears_unpublished_products(self):
+    def test_empty_api_response_normalizes_without_writing(self):
         self.assertEqual(sync.normalize([]), [])
 
     def test_sold_out_missing_price_and_image(self):
@@ -103,7 +107,7 @@ class ProductsTest(unittest.TestCase):
                [product(images=[{"url": "javascript:alert(1)"}])]]
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/"base-products.json"
-            sync.save_products(sync.normalize([product()]), path)
+            sync.save_products(selected_products(), path)
             original = path.read_bytes()
             for payload in bad:
                 with self.subTest(payload=payload), self.assertRaises(sync.SyncError):
@@ -113,21 +117,22 @@ class ProductsTest(unittest.TestCase):
     def test_unchanged_data_does_not_create_commits(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/"base-products.json"
-            items = sync.normalize([product()])
+            items = selected_products()
             self.assertTrue(sync.save_products(items, path))
             original = path.read_bytes()
             self.assertFalse(sync.save_products(items, path))
             self.assertEqual(path.read_bytes(), original)
-            self.assertTrue(sync.save_products([], path))
-            self.assertEqual(json.loads(path.read_text())["items"], [])
+            with self.assertRaises(sync.SyncError):
+                sync.save_products([], path)
+            self.assertEqual(path.read_bytes(), original)
 
     def test_failed_atomic_replace_keeps_previous_json(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/"base-products.json"
-            sync.save_products(sync.normalize([product()]), path)
+            sync.save_products(selected_products(), path)
             original = path.read_bytes()
             with patch.object(Path, "replace", side_effect=OSError), self.assertRaises(OSError):
-                sync.save_products([], path)
+                sync.save_products(selected_products(price=9999), path)
             self.assertEqual(path.read_bytes(), original)
             self.assertEqual(len(list(Path(tmp).iterdir())), 1)
 
@@ -164,6 +169,26 @@ class ProductsTest(unittest.TestCase):
             self.assertNotIn("SECRET", str(cm.exception))
             self.assertEqual(opener.open.call_count, 3)
             self.assertEqual(sleep.call_count, 2)
+
+    def test_fixed_selection_ignores_newer_products_and_api_order(self):
+        items = selected_products() + sync.normalize([product(999999999)])
+        self.assertEqual([x['id'] for x in sync.select_products(items[::-1])], list(sync.PINNED_IDS))
+
+    def test_incomplete_selected_data_preserves_all_six(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'base-products.json'
+            sync.save_products(selected_products(), path)
+            original = path.read_bytes()
+            for items in [selected_products()[:-1], [], selected_products(price=None), selected_products(images=[])]:
+                with self.assertRaises(sync.SyncError):
+                    sync.save_products(items, path)
+                self.assertEqual(path.read_bytes(), original)
+
+    def test_secret_surrounding_whitespace_is_trimmed(self):
+        opener = Mock()
+        opener.open.return_value = io.BytesIO(b'[]')
+        sync.fetch_products('  TEST-ONLY-TOKEN\n', opener)
+        self.assertEqual(opener.open.call_args.args[0].get_header('Authorization'), 'Bearer TEST-ONLY-TOKEN')
 
     def test_malformed_json_is_redacted(self):
         with self.assertRaises(sync.SyncError) as cm:

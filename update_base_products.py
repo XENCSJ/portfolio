@@ -1,4 +1,4 @@
-"""Publish only the six newest public BASE products; never persist API responses."""
+"""Refresh six explicitly selected BASE products without changing their order."""
 from __future__ import annotations
 
 import argparse
@@ -14,6 +14,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 PAGE_SIZE = 100
+PINNED_IDS = (163232279, 162561554, 160058456, 159175661, 157787639, 157783299)
 API_URL = "https://apiv2.thebase.com/api/items?visible=true&order=created&sort=desc&limit=100&offset=0"
 SHOP_URL = "https://xen.official.ec/"
 PUBLIC_URL = "https://xencsj.github.io/portfolio/base-products.json"
@@ -67,7 +68,8 @@ def fetch_page(token, url, opener, sleep):
 
 
 def fetch_products(token, opener=None, sleep=time.sleep):
-    if not token or token != token.strip() or any(c.isspace() for c in token):
+    token = token.strip()
+    if not token or any(c.isspace() for c in token):
         raise SyncError("BASE_API_TOKEN is missing or invalid. Add the BASE v2 PAT to repository Actions secrets.")
     opener = opener or build_opener(NoRedirect())
     products, seen_pages = [], set()
@@ -146,14 +148,26 @@ def normalize(payload):
     return items
 
 
+def select_products(items):
+    by_id = {item["id"]: item for item in items}
+    if any(product_id not in by_id for product_id in PINNED_IDS):
+        raise SyncError("One or more selected BASE products are unavailable; previous data preserved.")
+    selected = [by_id[product_id] for product_id in PINNED_IDS]
+    if any(item["price"] is None or not item["image_url"] for item in selected):
+        raise SyncError("A selected BASE product has no verified price or image; previous data preserved.")
+    return selected
+
+
 def save_products(items, path=OUTPUT, public_count=None):
     public_count = len(items) if public_count is None else public_count
-    items = items[:6]
+    items = select_products(items)
     previous = json.loads(path.read_text()) if path.exists() else {}
     if (previous.get("items") == items and previous.get("updated_at")
-            and previous.get("public_count") == public_count):
+            and previous.get("public_count") == public_count
+            and previous.get("source") == "BASE API v2"
+            and previous.get("selection") == "fixed"):
         return False
-    data = {"schema_version": 1, "source": "BASE API v2", "shop_url": SHOP_URL,
+    data = {"schema_version": 1, "selection": "fixed", "source": "BASE API v2", "shop_url": SHOP_URL,
             "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
             "public_count": public_count, "items": items}
     temp_path = None
@@ -196,7 +210,7 @@ def main():
         items = normalize(fetch_products(os.environ.get("BASE_API_TOKEN", "")))
         changed = save_products(items, public_count=len(items))
         message = (f"BASE v2 HTTP 200: verified {len(items)} unique public products across all pages; "
-                   f"displaying {min(6, len(items))}; data {'updated' if changed else 'unchanged'}.")
+                   f"displaying the 6 selected products in fixed order; data {'updated' if changed else 'unchanged'}.")
         print(message)
         if os.environ.get("GITHUB_STEP_SUMMARY"):
             with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:

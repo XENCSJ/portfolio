@@ -1,7 +1,69 @@
 {
   "schema_version": 1,
-  "source": "BASE API v2",
+  "selection": "fixed",
+  "source": "BASE official product pages",
   "shop_url": "https://xen.official.ec/",
-  "updated_at": null,
-  "items": []
+  "updated_at": "2026-10-20T20:20:16Z",
+  "items": [
+    {
+      "id": 163232279,
+      "name": "STATE OF MIND",
+      "price": 9000,
+      "url": "https://xen.official.ec/items/163232279",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/c9158761c4a6082e6361ce8f6afe77aa.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    },
+    {
+      "id": 162561554,
+      "name": "善因善果(ぜんいんぜんか)",
+      "price": 9000,
+      "url": "https://xen.official.ec/items/162561554",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/add538eddbdd9e5ea6e26a5067e48472.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    },
+    {
+      "id": 160058456,
+      "name": "日日是好日(にちにちこれこうじつ)",
+      "price": 9000,
+      "url": "https://xen.official.ec/items/160058456",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/087c6e877336be5e25ee9f457d0b3128.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    },
+    {
+      "id": 159175661,
+      "name": "脚下照顧(きゃっかしょうこ)",
+      "price": 9000,
+      "url": "https://xen.official.ec/items/159175661",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/47461d1c3a2096f13fd0174b3e46b286.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    },
+    {
+      "id": 157787639,
+      "name": "しろわし",
+      "price": 18800,
+      "url": "https://xen.official.ec/items/157787639",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    },
+    {
+      "id": 157783299,
+      "name": "たこれお",
+      "price": 18800,
+      "url": "https://xen.official.ec/items/157783299",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    }
+  ]
 }
