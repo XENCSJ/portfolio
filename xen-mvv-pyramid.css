@@ -5,8 +5,9 @@ body#top.studio-page #studio-mvv {
 }
 #studio-mvv .mvv-pyramid {
   position:relative; width:min(100%,480px); aspect-ratio:600 / 519.6152422706632;
-  margin:0 auto; filter:drop-shadow(0 14px 20px #0005);
+  margin:0 auto;
 }
+#studio-mvv .mvv-pyramid::before { content:""; position:absolute; bottom:0; left:10%; width:80%; height:1px; box-shadow:0 14px 20px 8px #0005; pointer-events:none; }
 #studio-mvv .mvv-layer {
   position:absolute; height:33.3333333333%; padding:0; border:0; margin:0;
   display:flex; align-items:center; justify-content:center; background:transparent;
@@ -58,6 +59,7 @@ body#top.studio-page #studio-mvv .studio-mvv-statement { color:#f2e7d1; font-siz
 @media(prefers-reduced-motion:no-preference) {
   #studio-mvv[data-mvv-state="waiting"] .mvv-layer { opacity:0; }
   #studio-mvv[data-mvv-state="waiting"] .mvv-outline { opacity:0; }
+  #studio-mvv[data-mvv-state="assembling"] .mvv-layer { will-change:transform,opacity; }
   #studio-mvv[data-mvv-state="assembling"] .mvv-layer--values { animation:mvv-rise .6s cubic-bezier(.22,.75,.22,1) both; }
   #studio-mvv[data-mvv-state="assembling"] .mvv-layer--vision { animation:mvv-rise .6s .6s cubic-bezier(.22,.75,.22,1) both; }
   #studio-mvv[data-mvv-state="assembling"] .mvv-layer--mission { animation:mvv-descend .6s 1.2s cubic-bezier(.22,.75,.22,1) both; }
