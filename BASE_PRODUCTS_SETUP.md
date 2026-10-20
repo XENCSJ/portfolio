@@ -15,13 +15,20 @@ The legacy `BASE_CLIENT_ID` / `BASE_CLIENT_SECRET` secrets and OAuth callback ar
 
 `GET https://apiv2.thebase.com/api/items?visible=true&order=created&sort=desc&limit=100&offset=0`
 
-Fetch all public-product pages using `offset += 100` until a page has fewer than 100 entries. The response is an array (not a v1 `items` wrapper). Independently exclude hidden products and duplicate IDs, validate all returned public records, sort by `created_at` descending (ID descending for ties), then publish at most six. `public_count` records the complete unique public count. Repeated pages or a failure on any page abort the update. Sold-out public products remain visible with a label. Fewer than six products are shown without fabricated cards. A valid empty API list removes all catalog cards. A null price links to the store without inventing a price; a missing/broken image uses a plain XEN placeholder.
+Fetch all public-product pages using `offset += 100` until a page has fewer than 100 entries. The response is an array. Validate public records and select exactly these IDs, in this order:
 
-`base-products.json` contains only the display allowlist: ID, name, tax-inclusive price in yen, public shop link, first image, creation date, availability flag and sales status. No raw API response, product descriptions, internal identifiers, stock counts, customer or order data is written. `updated_at` records the last content update; unchanged successful checks are recorded in the Actions summary without creating another commit.
+1. 163232279
+2. 162561554
+3. 160058456
+4. 159175661
+5. 157787639
+6. 157783299
 
-The initial JSON intentionally has no products and no successful-update timestamp. It is replaced only after an authenticated API fetch succeeds. Its presence does not mean integration is verified.
+Newer products never replace this selection. Changing the selected IDs requires owner approval. Missing/hidden selected products, missing prices/images, malformed responses and API failures abort the update and preserve the complete previous JSON. Sold-out selected products stay in position and receive a status label. A successful empty response does not clear the catalog.
 
-The page reads the public JSON with no credentials, uses safe DOM text insertion, and links only to `https://xen.official.ec/items/{id}`. Section title: centered `ONLINE STORE` with the small Japanese subtitle `オンラインストア`. Desktop: three columns; mobile up to 650px: two columns. Existing gallery, films, media, header, footer and animation assets are preserved.
+The initial six records were checked against the official BASE product pages on 2026-10-21 JST, with `source: BASE official product pages`; unknown creation dates remain null. A successful authenticated refresh replaces them with verified API data and sets `source: BASE API v2`. The first HTTP-200 refresh must be verified separately; bootstrap data is not evidence of API success.
+
+`base-products.json` contains only public display fields. The browser never receives credentials. The frontend checks all six IDs and their order before rendering and uses safe text insertion. Both desktop and mobile use three columns and two rows, square product images, and two-line clamped product names. The former LOGO T-SHIRT / LOGO HOODIE / BUCKET HAT cards and duplicate store CTA were removed. The brand visual, APPAREL FILMS, media, header, footer and animation assets are unchanged. The single store link sits below the catalog.
 
 ## Failure handling and verification
 

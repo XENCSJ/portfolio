@@ -5,6 +5,7 @@
   if (!root) return;
   const grid = root.querySelector('[data-base-grid]');
   const status = root.querySelector('[data-base-status]');
+  const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299];
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const secureURL = value => {
     try {
@@ -14,7 +15,8 @@
   };
   function validate(data) {
     if (data?.schema_version !== 1 || data.shop_url !== 'https://xen.official.ec/' ||
-        !Array.isArray(data.items) || data.items.length > 6) throw new Error('Invalid catalog');
+        !Array.isArray(data.items) || data.items.length !== pinnedIds.length ||
+        data.items.some((item, index) => item.id !== pinnedIds[index])) throw new Error('Invalid catalog');
     const ids = new Set();
     for (const item of data.items) {
       const url = secureURL(item.url);
@@ -58,7 +60,9 @@
       visual.append(img);
     }
     const copy = element('div', 'base-product-copy');
-    copy.append(element('h3', 'base-product-name', item.name));
+    const name = element('h3', 'base-product-name', item.name);
+    name.title = item.name;
+    copy.append(name);
     const price = element('p', 'base-product-price', item.price === null ? '価格はストアでご確認ください' : yen.format(item.price));
     if (item.price !== null) price.append(element('span', 'base-product-tax', '税込'));
     copy.append(price);
@@ -86,9 +90,7 @@
       const cards = document.createDocumentFragment();
       data.items.forEach(item => cards.append(card(item)));
       grid.replaceChildren(cards);
-      status.hidden = data.items.length > 0;
-      if (!data.items.length) status.textContent = data.updated_at ?
-        '現在、公開中の商品はありません。' : '最新の商品は公式ストアでご覧いただけます。';
+      status.hidden = true;
     } catch (_) {
       // Never erase already rendered cards on a failed refresh.
       if (!grid.children.length) {

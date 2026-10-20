@@ -4,12 +4,13 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const origin = 'http://127.0.0.1:8765';
+const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299];
 const fixture = {
   schema_version: 1, shop_url: 'https://xen.official.ec/', updated_at: '2026-10-20T10:00:00Z',
   items: Array.from({ length: 6 }, (_, i) => ({
-    id: 600-i, name: i === 0 ? '<img src=x onerror=alert(1)> XEN & テスト商品' : `XEN テスト商品 ${i+1}`,
+    id: pinnedIds[i], name: i === 0 ? '<img src=x onerror=alert(1)> XEN & テスト商品' : `XEN テスト商品 ${i+1}`,
     price: i === 4 ? null : 8800 + i * 1000,
-    url: `https://xen.official.ec/items/${600-i}`,
+    url: `https://xen.official.ec/items/${pinnedIds[i]}`,
     image_url: i === 3 ? null : 'https://xen.official.ec/test-products/image.jpg',
     available: i !== 1, sales_status: 'item_now_on_sale'
   }))
@@ -44,14 +45,26 @@ const fixture = {
       assert.equal(await page.locator('.base-product-state').innerText(), 'SOLD OUT');
       assert.match(await page.locator('.base-product-price').first().innerText(), /8,800/);
       assert.equal(await page.locator('.base-product-link').first().getAttribute('href'), fixture.items[0].url);
-      assert.equal(await page.locator('.image-gallery.trio .gallery-item').count(), 3);
+      assert.equal(await page.locator('.image-gallery.trio .gallery-item').count(), 0);
       assert.equal(await page.locator('.image-gallery.apparel-media .gallery-item').count(), 2);
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
-      assert.equal(columns, width <= 650 ? 2 : 3);
+      assert.equal(columns, 3);
+      const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
+      assert.equal(rows.length, 2);
+      assert.equal(await page.locator('iframe').count(), 3);
+      assert.equal(await page.getByText('XEN APPAREL STOREはこちら', {exact:true}).count(), 0);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       assert.deepEqual(errors, []);
       await catalog.screenshot({ path: `base-products-qa/catalog-${width}.png` });
       results.push({ width, cards: 6, columns, horizontalOverflow: false, pageErrors: errors });
+      // A reordered catalog must be rejected instead of replacing the approved selection.
+      await page.unroute('**/base-products.json');
+      const reordered = structuredClone(fixture);
+      reordered.items.reverse();
+      await page.route('**/base-products.json', route => route.fulfill({json:reordered}));
+      await page.reload();
+      await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
+      assert.equal(await page.locator('.base-product').count(), 0);
       // Missing JSON must expose the store fallback, without fake cards.
       await page.unroute('**/base-products.json');
       await page.route('**/base-products.json', route => route.fulfill({ status: 503, body: 'unavailable' }));

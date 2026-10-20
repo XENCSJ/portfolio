@@ -8,7 +8,7 @@ body#top.apparel-page .base-product-visual{position:relative;display:grid;place-
 body#top.apparel-page .base-product-placeholder{color:#a18c64;letter-spacing:.24em;font-size:20px}
 body#top.apparel-page .base-product-visual img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;background:#111;transition:transform .4s ease}
 body#top.apparel-page .base-product-copy{padding:16px 0 0;text-align:left}
-body#top.apparel-page .base-product-name{margin:0;font-size:14px;font-weight:400;line-height:1.7;letter-spacing:.03em;overflow-wrap:anywhere;color:#eee}
+body#top.apparel-page .base-product-name{margin:0;font-size:14px;font-weight:400;line-height:1.7;letter-spacing:.03em;overflow-wrap:anywhere;color:#eee;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:3.4em}
 body#top.apparel-page .base-product-price{margin:8px 0 0;font-size:15px;line-height:1.6;color:#c9b58b}
 body#top.apparel-page .base-product-tax{margin-left:8px;font-size:10px;color:#b5b5b5}
 body#top.apparel-page .base-product-state{display:inline-block;margin-top:8px;color:#bcbcbc;font-size:10px;letter-spacing:.1em}
@@ -16,6 +16,6 @@ body#top.apparel-page .base-products-status{color:#b8b8be;font-size:13px;line-he
 body#top.apparel-page .base-products-status[hidden]{display:none}
 body#top.apparel-page .base-products-store{display:inline-block;margin-top:30px;color:#c9b58b;border-bottom:1px solid #6d6048;padding-bottom:7px;font-size:12px;letter-spacing:.06em}
 body#top.apparel-page .base-product-link:focus-visible{outline:2px solid #c9b58b;outline-offset:5px}
-@media(max-width:650px){body#top.apparel-page .base-products-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 14px}body#top.apparel-page .base-product-name{font-size:12px}body#top.apparel-page .base-product-price{font-size:14px}}
+@media(max-width:650px){body#top.apparel-page .base-products-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 8px}body#top.apparel-page .base-product-name{font-size:11px}body#top.apparel-page .base-product-price{font-size:12px}body#top.apparel-page .base-product-copy{padding-top:10px}body#top.apparel-page .base-product-tax{display:block;margin-left:0;font-size:9px}}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){body#top.apparel-page .base-product-link:hover img{transform:scale(1.025)}}
 @media(prefers-reduced-motion:reduce){body#top.apparel-page .base-product-visual img{transition:none}}
