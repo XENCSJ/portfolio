@@ -9,6 +9,7 @@ module.exports = async function verifyCategoryTitles() {
   const browser=await engine.launch({headless:true,executablePath:process.env[engine===webkit?'WEBKIT_EXECUTABLE_PATH':'CHROMIUM_EXECUTABLE_PATH']});
   const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
   const page=await ctx.newPage();
+  let referenceTitleStyle;
   const errors=[]; page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/*',route=>route.request().url().startsWith('http://127.0.0.1:8765/')?route.continue():route.abort());
   for (const slug of ['index',...Object.keys(titles)]) {
@@ -26,6 +27,9 @@ module.exports = async function verifyCategoryTitles() {
     });
     assert.ok(layout.fits&&layout.separate&&layout.centered,device+' '+slug+' heading bounds '+JSON.stringify(layout));
     assert.ok(!layout.overflow,device+' '+slug+' horizontal overflow');
+    const style=await h.evaluate(e=>{const s=getComputedStyle(e);return [s.fontSize,s.fontWeight,s.letterSpacing,s.gap,s.paddingBottom,s.marginBottom];});
+    if(referenceTitleStyle)assert.deepEqual(style,referenceTitleStyle,device+' '+slug+' shared heading typography and spacing');
+    else referenceTitleStyle=style;
    } else {
     for(const [key,label] of Object.entries(titles)) {
      const ring=page.locator('.orbit > a[href="./'+key+'.html"]');
