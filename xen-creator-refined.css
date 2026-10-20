@@ -119,11 +119,6 @@ body.creator-page.xen-polished.detail-page main h1 .page-title-ja {
   content: ''; position: absolute; inset: auto 0 0; height: 1px;
   background: #e8e8eb; transform-origin: left;
 }
-.creator-page .creation-support .support-shell::after {
-  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, #ffffff09 48%, transparent 66%);
-  transform: translateX(120%);
-}
 .creator-page .creation-support .support-login svg { transition: transform 350ms var(--xen-ease); }
 
 /* No pre-hidden content: animations are applied only by the observer, once. */
@@ -167,12 +162,6 @@ body.creator-page.xen-polished.detail-page main h1 .page-title-ja {
   .creator-page .support-shell.creator-in-view::before {
     animation: creator-light 1600ms ease-out backwards;
   }
-  .creator-page .support-shell.creator-in-view::after {
-    animation: creator-sweep 1400ms ease-out 350ms backwards;
-  }
-  .creator-page .support-providers > li.creator-in-view .support-login::before {
-    animation: creator-sweep 900ms var(--xen-ease) calc(var(--creator-delay, 0ms) + 180ms) backwards;
-  }
   .creator-page .support-providers > li.creator-in-view .support-arrow {
     animation: creator-arrow 650ms var(--xen-ease) calc(var(--creator-delay, 0ms) + 300ms) backwards;
   }
@@ -184,13 +173,6 @@ body.creator-page.xen-polished.detail-page main h1 .page-title-ja {
   .creator-page .image-viewer[open]::backdrop { animation: creator-fade 350ms ease-out; }
   .creator-page footer .shared-social a.creator-in-view { animation-duration: 700ms; }
   .creator-page .xen-brand { animation: creator-fade 800ms ease-out; }
-  .creator-page .support-title .title-en.creator-in-view {
-    background: linear-gradient(110deg, #f4f4f6 35%, #b9bcc7 45%, #fff 50%, #f4f4f6 60%) 180% 0 / 250% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: xen-support-sheen 1800ms ease-out 350ms;
-  }
 }
 @keyframes creator-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes creator-fade { from { opacity: 0; } to { opacity: 1; } }
@@ -198,7 +180,7 @@ body.creator-page.xen-polished.detail-page main h1 .page-title-ja {
 @keyframes creator-portrait { from { transform: scale(.985); } to { transform: scale(1); } }
 @keyframes creator-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes creator-letter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-@keyframes creator-sweep { from { transform: translateX(-120%); opacity: 0; } 25% { opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+
 @keyframes creator-light { from { opacity: .3; transform: translate(-2%, 1%); } to { opacity: 1; transform: none; } }
 @keyframes creator-arrow { from { opacity: 0; transform: translateX(-4px); } 65% { opacity: 1; transform: translateX(3px); } to { opacity: 1; transform: none; } }
 @keyframes creator-dialog { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }

@@ -20,7 +20,7 @@
   }
   function growth(figure) {
     figure.querySelectorAll('.growth-bar').forEach((bar, index) => {
-      animate(bar, [{transform:'scaleY(0)', opacity:.2}, {transform:'scaleY(1)', opacity:1}], {duration:650, delay:index*75});
+      animate(bar, [{transform:'scaleY(0)', opacity:.2}, {transform:'scaleY(1)', opacity:1}], {duration:650, delay:index*100});
     });
     animate(figure.querySelector('.growth-path'), [{strokeDashoffset:1}, {strokeDashoffset:0}], {duration:1000, delay:700});
     animate(figure.querySelector('.growth-extension'), [{strokeDashoffset:1}, {strokeDashoffset:0}], {duration:450, delay:1700});
@@ -56,7 +56,7 @@
       node.querySelectorAll('.cp-field-entry').forEach((entry,index) => reveal(entry, Math.min(index*45,360)));
     } else reveal(node, Number(node.dataset.noirDelay)||0);
   }
-  const targets = page.querySelectorAll('[data-noir-reveal],.mvv-node,.sns-growth,[data-sns-count],.cp-editorial-index,.creator-page [data-cp-reveal]');
+  const targets = page.querySelectorAll('.sns-growth,[data-sns-count]');
   if ('IntersectionObserver' in window && !reduced.matches) {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (!entry.isIntersecting) return;

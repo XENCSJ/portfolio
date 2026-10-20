@@ -4,7 +4,6 @@
  const orbit=document.querySelector('.home-page .orbit');
  if(!orbit)return;
  const links=[...orbit.querySelectorAll('a')];
- links.forEach((link, index) => link.style.setProperty('--orbit-glint-delay', `${(index * .13).toFixed(2)}s`));
  function arrange(){
   const outer=orbit.querySelector('#circle').getTotalLength(),inner=orbit.querySelector('#circle-ja').getTotalLength();
   const en=links.map(a=>a.querySelector('.orbit-en')),ja=links.map(a=>a.querySelector('.orbit-ja'));

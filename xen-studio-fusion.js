@@ -3,6 +3,7 @@
   'use strict';
   const scene = document.querySelector('.studio-fusion');
   if (!scene || !('IntersectionObserver' in window)) return;
+  const desktop = matchMedia('(min-width:901px) and (pointer:fine)');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let visible = false;
   let entered = false;
@@ -10,12 +11,12 @@
   let scrollFrame = 0;
   function depth() {
     scrollFrame = 0;
-    if (!visible || document.hidden || suspended || reduced.matches) return;
+    if (!desktop.matches || !visible || document.hidden || suspended || reduced.matches) return;
     const progress = Math.max(0, Math.min(1, -scene.getBoundingClientRect().top / scene.offsetHeight));
     scene.style.setProperty('--fusion-depth', `${(progress * -5).toFixed(2)}px`);
   }
   function queueDepth() {
-    if (!scrollFrame && visible && !reduced.matches) scrollFrame = requestAnimationFrame(depth);
+    if (!scrollFrame && visible && desktop.matches && !reduced.matches) scrollFrame = requestAnimationFrame(depth);
   }
   function sync() {
     const active = visible && !document.hidden && !suspended && !reduced.matches;

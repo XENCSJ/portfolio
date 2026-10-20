@@ -15,34 +15,21 @@ body#top.studio-page h1.cp-page-label > span:last-child { color:var(--cp-muted);
 }
 .studio-fusion-logo-enter {
   transform:translateY(var(--fusion-depth,0px));
-  filter:drop-shadow(0 0 9px rgb(216 184 120 / 14%));
+
 }
 .studio-fusion-logo img {
   display:block; width:100%; height:auto;
   filter:invert(78%) sepia(29%) saturate(582%) hue-rotate(355deg) brightness(97%) contrast(93%);
 }
-/* Decorative light stays inside the scene; no particles or extra interactive nodes. */
-.studio-fusion::after {
-  content:""; position:absolute; left:50%; top:48%; z-index:-1;
-  transform:translate(-50%,-50%); pointer-events:none; border-radius:50%;
-}
-.studio-fusion::after {
-  width:calc(var(--logo-size) * 2.15); aspect-ratio:1;
-  background:radial-gradient(circle,rgb(216 184 120 / 8%),rgb(153 116 61 / 3%) 40%,transparent 70%);
-}
 body#top.studio-page main #studio-about .studio-copy { color:#E8E8E8; }
 /* Reuse the exact source alpha, including the logo's original aspect ratio. */
 @supports ((mask-image:url('')) or (-webkit-mask-image:url(''))) {
   .studio-fusion-logo-drift {
-    background:linear-gradient(125deg,#99743D 0%,#D8B878 22%,#F5DFA7 43%,#D8B878 52%,#99743D 68%,#D8B878 84%,#F5DFA7 100%);
+    background:linear-gradient(180deg,#E6CC94,#C3A065);
     -webkit-mask:url('./XEN_logo_fixed_black.svg') center/contain no-repeat;
     mask:url('./XEN_logo_fixed_black.svg') center/contain no-repeat;
   }
   .studio-fusion-logo img { opacity:0; }
-  .studio-fusion-sheen {
-    position:absolute; inset:-40%; opacity:0;
-    background:linear-gradient(110deg,transparent 42%,#F5DFA7b3 50%,transparent 58%);
-  }
 }
 .studio-fusion-list { list-style:none; margin:0; padding:0; }
 .studio-fusion-item {
@@ -59,7 +46,7 @@ body#top.studio-page main #studio-about .studio-copy { color:#E8E8E8; }
   text-decoration-color:#B99A60; text-underline-offset:7px;
   cursor:pointer; touch-action:manipulation;
   -webkit-tap-highlight-color:rgb(200 171 117 / 20%);
-  transition:color 180ms ease,transform 180ms ease,text-decoration-color 180ms ease;
+  transition:color 280ms ease,transform 280ms ease,text-decoration-color 280ms ease;
 }
 .studio-fusion a:focus-visible {
   color:#F0D397; outline:2px solid var(--fusion-gold); outline-offset:4px;
@@ -70,7 +57,7 @@ body#top.studio-page main #studio-about .studio-copy { color:#E8E8E8; }
 .studio-fusion-item:focus-within .studio-fusion-entry { animation:none; }
 @media (hover:hover) and (pointer:fine) {
   .studio-fusion-item:hover .studio-fusion-drift { animation-play-state:paused; }
-  .studio-fusion a:hover { color:#F0D397; transform:scale(1.035); text-decoration-color:currentColor; }
+  .studio-fusion a:hover { color:#F0D397; transform:translateY(-1px); text-decoration-color:currentColor; }
 }
 .studio-fusion-sound        { --x:22%; --y:9%; --size:28px; --dx:4px;  --dy:6px; --duration:8s;   --entry-x:-6px; --entry-y:3px;  --delay:1.35s; --float-delay:3.1s; }
 .studio-fusion-animation    { --x:65%; --y:12%; --size:21px; --dx:-3px; --dy:5px; --duration:9.5s; --entry-x:5px;  --entry-y:-5px; --delay:1.47s; --float-delay:3.2s; }
@@ -126,44 +113,23 @@ body#top.studio-page main #studio-about .studio-copy { color:#E8E8E8; }
 @media (max-height:700px) and (min-width:601px) {
   .studio-fusion { --logo-size:148px; height:360px; }
 }
-/* The underline remains gold throughout its subtle, staggered highlight. */
-.studio-fusion a::after {
-  content:""; position:absolute; height:1px; left:8px; right:8px;
-  top:calc(50% + .625em + 6px); opacity:0; pointer-events:none;
-  background:linear-gradient(90deg,transparent,#F5DFA7,transparent);
-  background-size:220% 100%;
-}
 
 @media (prefers-reduced-motion:no-preference) {
-  .studio-fusion.is-running .studio-fusion-logo-enter { animation:studio-fusion-appear .6s ease-out both; }
-  .studio-fusion.is-running .studio-fusion-logo-drift { animation:studio-fusion-logo-float 8s ease-in-out 3.1s infinite; }
-  .studio-fusion.is-running .studio-fusion-sheen { animation:studio-fusion-sweep 8s ease-in-out .6s infinite; }
-  .studio-fusion.is-running::after { animation:studio-fusion-glow 9s ease-in-out infinite; }
-  .studio-fusion.is-running a::after { animation:studio-fusion-line 8s ease-in-out var(--float-delay) infinite; }
-  .studio-fusion.is-running .studio-fusion-entry { animation:studio-fusion-enter .55s ease-out var(--delay) both; }
+  .studio-fusion.is-running .studio-fusion-logo-enter { animation:studio-fusion-appear .85s cubic-bezier(.22,.68,0,1) both; }
+  .studio-fusion.is-running .studio-fusion-logo-drift { animation:studio-fusion-logo-float 12s ease-in-out 3.1s infinite; }
+  .studio-fusion.is-running .studio-fusion-entry { animation:studio-fusion-enter .8s cubic-bezier(.22,.68,0,1) var(--delay) both; }
   .studio-fusion.is-running .studio-fusion-drift { animation:studio-fusion-drift var(--duration) ease-in-out var(--float-delay) infinite; }
   .studio-fusion.is-running .studio-fusion-item:is(:hover,:focus-within) .studio-fusion-drift { animation-play-state:paused; }
   .studio-fusion.is-running .studio-fusion-item:focus-within .studio-fusion-entry { animation:none; }
-  .studio-fusion.is-paused::after, .studio-fusion.is-paused a::after,
-  .studio-fusion.is-paused :is(.studio-fusion-logo-enter,.studio-fusion-logo-drift,.studio-fusion-sheen,.studio-fusion-entry,.studio-fusion-drift) { animation-play-state:paused; }
 }
 @keyframes studio-fusion-appear { from { opacity:0; } to { opacity:1; } }
 @keyframes studio-fusion-enter { from { opacity:0; transform:translate(var(--entry-x),var(--entry-y)); } to { opacity:1; transform:translate(0,0); } }
-@keyframes studio-fusion-sweep {
-  0%,12% { opacity:0; transform:translateX(-65%); }
-  26% { opacity:.65; }
-  40%,100% { opacity:0; transform:translateX(65%); }
-}
-@keyframes studio-fusion-glow { 0%,100% { opacity:.6; } 50% { opacity:1; } }
-@keyframes studio-fusion-line {
-  0%,20% { opacity:0; background-position:100% 0; }
-  35% { opacity:.55; }
-  50%,100% { opacity:0; background-position:-100% 0; }
-}
+
 @keyframes studio-fusion-logo-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-3px); } }
-@keyframes studio-fusion-drift { 0%,100% { transform:translate(0,0); } 25% { transform:translate(var(--dx),calc(var(--dy) * -1)); } 75% { transform:translate(calc(var(--dx) * -1),var(--dy)); } }
+@keyframes studio-fusion-drift { 0%,100% { transform:translate(0,0); } 25% { transform:translate(0,calc(var(--dy) * -.4)); } 75% { transform:translate(0,calc(var(--dy) * .4)); } }
 @media (prefers-reduced-motion:reduce) {
   .studio-fusion::before, .studio-fusion::after, .studio-fusion *, .studio-fusion *::before, .studio-fusion *::after { animation:none!important; transition:none!important; }
   .studio-fusion-logo-enter { transform:none; }
-  .studio-fusion-sheen,.studio-fusion a::after { display:none; }
 }
+
+.studio-fusion.is-paused :is(.studio-fusion-logo-enter,.studio-fusion-logo-drift,.studio-fusion-entry,.studio-fusion-drift) { animation-play-state:paused; }
