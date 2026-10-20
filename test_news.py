@@ -11,6 +11,15 @@ def publication():
     return {'sha':'published','publishedAt':'2026-10-19T15:01:00Z','evidence':'successful-pages-deployment'}
 
 class NewsTests(unittest.TestCase):
+    def test_category_labels_preserve_internal_ids_and_urls(self):
+        for category, label in [('SOUND', 'MUSIC'), ('ARTWORKS', 'ART GALLERY')]:
+            record = dict(news.PIN, category=category, url='./' + category.lower() + '.html')
+            before = copy.deepcopy(record)
+            markup = news.markup([record])
+            self.assertIn('lang="en">' + label + '</span>', markup)
+            self.assertIn('href="' + record['url'] + '"', markup)
+            self.assertEqual(record, before)
+
     def test_requested_youtube_replacement_survives_regeneration(self):
         events = [e for e in news.read('news-events.json') if e['id'].startswith(('legacy-', 'historical-'))]
         shown = news.select(events, news.PIN, NOW)

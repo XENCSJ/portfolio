@@ -1,0 +1,58 @@
+{
+  "studio": {
+    "en": "STUDIO",
+    "ja": "スタジオ"
+  },
+  "creator": {
+    "en": "CREATOR",
+    "ja": "クリエイター"
+  },
+  "storybooks": {
+    "en": "STORYBOOKS",
+    "ja": "絵本"
+  },
+  "animation": {
+    "en": "ANIMATION",
+    "ja": "アニメーション"
+  },
+  "sound": {
+    "en": "MUSIC",
+    "ja": "楽曲制作"
+  },
+  "cinematic": {
+    "en": "CINEMATIC",
+    "ja": "映像制作"
+  },
+  "snap": {
+    "en": "SNAP",
+    "ja": "写真"
+  },
+  "design": {
+    "en": "DESIGN",
+    "ja": "デザイン"
+  },
+  "apparel": {
+    "en": "APPAREL",
+    "ja": "アパレル"
+  },
+  "architecture": {
+    "en": "ARCHITECTURE",
+    "ja": "建築設計"
+  },
+  "space": {
+    "en": "SPACE",
+    "ja": "空間"
+  },
+  "artworks": {
+    "en": "ART GALLERY",
+    "ja": "アートギャラリー"
+  },
+  "sns-management": {
+    "en": "SNS MANAGEMENT",
+    "ja": "SNS運用"
+  },
+  "price-list": {
+    "en": "PRICE LIST",
+    "ja": "料金一覧"
+  }
+}

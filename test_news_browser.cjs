@@ -13,5 +13,6 @@ const fs=require('fs');
  await page.locator('#xen-news').screenshot({path:'news-qa/'+name+'.png'});
  results.push({name,width,count:data.items.length,pinLast:true,documentOverflow:data.scrollWidth>width,newsFits:true,visible:true});await browser.close();
  }
+ await require('./verify-category-titles.cjs')();
  fs.writeFileSync('news-qa/results.json',JSON.stringify(results,null,2));console.log(JSON.stringify(results));
 })().catch(e=>{console.error(e);process.exit(1)});

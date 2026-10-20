@@ -8,6 +8,8 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 JST = timezone(timedelta(hours=9))
+# Keep historical category IDs and URLs stable; translate labels only at render time.
+CATEGORY_TITLES = json.loads((ROOT / 'category-titles.json').read_text())
 CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE', 'WEBSITE')
 RELEASE_CATEGORIES = ('SOUND', 'CINEMATIC', 'ANIMATION', 'YOUTUBE')
 AUTO = ('SNAP', 'ARTWORKS')
@@ -153,7 +155,7 @@ def markup(items):
         esc = lambda v: html.escape(str(v), quote=True)
         pin = PIN_SVG if e.get('pinned') else ''
         body = '<span class="xen-news-body">' + esc(e['body']) + '</span>' if e.get('body') else ''
-        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(e["category"])}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
+        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(CATEGORY_TITLES.get(e["category"].lower(), {}).get("en", e["category"]))}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
     return '\n'.join(rows)
 
 def generate(check=False):
