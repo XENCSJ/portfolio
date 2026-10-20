@@ -1,4 +1,6 @@
 /* APPAREL's live catalog, scoped to keep the existing galleries untouched. */
+body#top.apparel-page #base-products-title{display:block;text-align:center}
+body#top.apparel-page #base-products-title .section-ja{display:block;margin:10px 0 0;font-size:12px;font-weight:400;letter-spacing:.12em;color:#b8b8be}
 body#top.apparel-page .base-products-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 24px}
 body#top.apparel-page .base-product{min-width:0;margin:0}
 body#top.apparel-page .base-product-link{display:block;height:100%;color:#fff}

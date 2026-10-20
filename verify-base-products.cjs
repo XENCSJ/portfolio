@@ -37,6 +37,9 @@ const fixture = {
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
       assert.equal(await page.locator('.base-product').count(), 6);
+      assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
+      assert.equal(await page.locator('#base-products-title').evaluate(el => getComputedStyle(el).textAlign), 'center');
+      assert.equal(await page.locator('#base-products-title .section-ja').evaluate(el => getComputedStyle(el).display), 'block');
       assert.equal(await page.locator('.base-product-name img').count(), 0, 'Product names must be rendered as text');
       assert.equal(await page.locator('.base-product-state').innerText(), 'SOLD OUT');
       assert.match(await page.locator('.base-product-price').first().innerText(), /8,800/);
