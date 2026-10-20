@@ -53,7 +53,8 @@ module.exports = async function verifyCategoryTitles() {
     assert.equal(await link.locator('.xen-menu-icon').count(),1,'icon '+slug+' '+key);
    }
    if(slug==='index')await page.screenshot({path:'news-qa/categories-'+device+'-menu.png'});
-   await page.locator('.xen-drawer-close').click(); await page.waitForTimeout(350);
+   await page.locator('.xen-drawer-close').click();
+   await page.locator('.xen-header-toggle[aria-expanded="false"]').waitFor({state:'attached',timeout:5000});
    assert.equal(await page.locator('.xen-header-toggle').getAttribute('aria-expanded'),'false');
    if(['sound','artworks','studio','creator'].includes(slug)) await page.screenshot({path:'news-qa/categories-'+device+'-'+slug+'.png'});
    results.push({device,slug,status:200,titles:true,menu:true});
