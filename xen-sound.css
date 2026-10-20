@@ -11,7 +11,9 @@ body.sound-page.xen-detail-unified main .sound-section>.series-title{display:blo
 .sound-section-ja{display:block;margin-top:5px;color:#727277;font-size:11px;font-weight:400;letter-spacing:.05em}
 .sound-number{display:inline-block;margin-right:12px;color:#858589;font-size:11px;font-variant-numeric:tabular-nums}
 body.sound-page.xen-detail-unified main .sound-section .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:var(--sound-work-gap);margin:24px 0 0;align-items:start}
-body.sound-page.xen-detail-unified.xen-polished main .work h3{display:block;margin:0 0 16px;padding:0;font-size:clamp(16px,2vw,20px);font-weight:500;line-height:1.65;letter-spacing:.025em;text-align:left}
+/* NOVA PULSE is the shared visual reference for all work-level titles. */
+body#top.sound-page main .work h3.sound-work-title{display:table;position:relative;max-width:100%;margin:0 auto 16px;padding:0;background:transparent;color:var(--xen-ink,#171719);border-radius:0;font-size:clamp(18px,2.2vw,22px);font-weight:500;line-height:1.65;letter-spacing:.025em;text-align:center}
+body#top.sound-page main .work h3.sound-work-title::after{content:'';position:absolute;left:calc(50% - 20px);bottom:-8px;width:40px;height:1px;background:currentColor;opacity:.22;pointer-events:none;transform-origin:center}
 .sound-page .xen-spotify-player{display:block;position:static;width:100%;height:152px;min-height:152px;aspect-ratio:auto;border:0;border-radius:12px}
 .sound-page .sound-album-player{height:352px;min-height:352px}
 .sound-page .sound-work-links{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:4px 18px}
@@ -20,6 +22,7 @@ body.sound-page main .sound-work-links a{display:inline-flex;align-items:center;
 .sound-page .sound-player-stack{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--sound-player-gap);min-width:0}
 .sound-page .sound-player-stack>iframe,.sound-page .sound-player-stack>.video-container{margin:0}
 body.sound-page.xen-detail-unified main .sound-section .grid+.grid{margin-top:var(--sound-work-gap)}
+body#top.sound-page main .sound-section .sound-sleep-series{grid-template-columns:minmax(0,1fr);gap:24px;margin-top:24px}
 .sound-page .sound-empty{margin:0;padding:16px 0 2px;font-size:12px;line-height:1.8;color:#777}
 body.sound-page main .sound-channel{display:table;margin:14px 0 0 auto;font-size:11px;overflow-wrap:anywhere}
 body.sound-page main .sound-platform-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;text-align:center}
