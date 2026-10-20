@@ -1,0 +1,106 @@
+name: Refresh BASE products
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['apparel.html', '*base-products*', '*base_products*', '.github/workflows/base-products.yml']
+  pull_request:
+    paths: ['apparel.html', '*base-products*', '*base_products*', '.github/workflows/base-products.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: base-products-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m unittest -v test_base_products.py
+      - run: node --check xen-base-products.js
+      - name: Browser checks for implementation changes
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/base-products-http.log 2>&1 &
+          node verify-base-products.cjs
+      - uses: actions/upload-artifact@v4
+        if: always() && (github.event_name == 'pull_request' || github.event_name == 'push')
+        with:
+          name: base-products-browser-evidence
+          path: base-products-qa/
+          retention-days: 14
+
+  refresh:
+    needs: checks
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch public products using BASE API v2
+        id: products
+        env:
+          BASE_API_TOKEN: ${{ secrets.BASE_API_TOKEN }}
+        run: python update_base_products.py
+      - name: Commit only public product data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --quiet -- base-products.json; then
+            git add -- base-products.json
+            git commit -m 'APPAREL: refresh verified public BASE products'
+            # A concurrent change must be rebased cleanly; never force-push.
+            git pull --rebase origin main
+            python -m unittest -q test_base_products.py
+            git push origin HEAD:main
+          fi
+      - name: Request and confirm GitHub Pages publication
+        # Bot commits do not automatically trigger branch-based Pages builds.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          build_url=$(gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --jq .url)
+          for attempt in $(seq 1 36); do
+            state=$(gh api "$build_url" --jq .status)
+            if [ "$state" = built ]; then
+              echo 'GitHub Pages build completed.' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            if [ "$state" = errored ]; then
+              echo 'GitHub Pages build failed.' >&2
+              exit 1
+            fi
+            sleep 10
+          done
+          echo 'GitHub Pages build was not confirmed within six minutes.' >&2
+          exit 1
+      - name: Verify published product JSON
+        run: python update_base_products.py --verify-public
