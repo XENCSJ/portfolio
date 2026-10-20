@@ -209,3 +209,16 @@ body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
     opacity: 1; transform: none !important; animation: none !important;
   }
 }
+
+/* Category titles: keep page styling; align the Japanese label at the right,
+   following the CREATOR heading. Long labels fit without clipping. */
+body#top.detail-page:not(.studio-page):not(.creator-page) main .hero h1 {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:16px; text-align:left;
+}
+body#top.detail-page:not(.studio-page):not(.creator-page) main .hero h1 .title-en {
+  min-width:0; font-size:clamp(20px, 5vw, 52px);
+}
+body#top.detail-page:not(.studio-page):not(.creator-page) main .hero h1 .page-title-ja {
+  flex:0 0 auto; margin:0; text-align:right; white-space:nowrap;
+}

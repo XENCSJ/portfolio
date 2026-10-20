@@ -4,20 +4,17 @@ Run: python render-xen-menu.py. Committed HTML also preserves the shared data.
 from html import escape
 from pathlib import Path
 import re
+import json
 
 ROOT = Path(__file__).resolve().parent
 VERSION = "20261017-unified5"
 HOME = ("INDEX", "トップページ", "./index.html")
-ABOUT = [("STUDIO", "スタジオ", "./studio.html"), ("CREATOR", "クリエイター", "./creator.html")]
-WORKS = [
-    ("STORYBOOKS", "ストーリーブック", "./storybooks.html"),
-    ("ANIMATION", "アニメーション", "./animation.html"),
-    ("SOUND", "音楽", "./sound.html"), ("CINEMATIC", "映像", "./cinematic.html"),
-    ("SNAP", "写真", "./snap.html"), ("DESIGN", "デザイン", "./design.html"),
-    ("APPAREL", "アパレル", "./apparel.html"), ("ARCHITECTURE", "建築", "./architecture.html"),
-    ("SPACE", "空間", "./space.html"), ("ARTWORKS", "アートワーク", "./artworks.html"),
-    ("SNS MANAGEMENT", "SNS運用", "./sns-management.html"),
-]
+# Stable URL stems are separate from the canonical display labels.
+TITLES = json.loads((ROOT / "category-titles.json").read_text())
+def category(slug):
+    return (TITLES[slug]["en"], TITLES[slug]["ja"], "./" + slug + ".html")
+ABOUT = [category(slug) for slug in ("studio", "creator")]
+WORKS = [category(slug) for slug in TITLES if slug not in ("studio", "creator", "price-list")]
 GROUPS = [("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", WORKS),
           ("PRICE LIST", "料金一覧", "./price-list.html"),
           ("CONTACT", "制作相談", "./studio.html#contact")]
