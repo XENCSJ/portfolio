@@ -4,16 +4,12 @@ body#top:is(.creator-page,.studio-page) h1.cp-page-label {
   margin: 0; font-size: 10px; font-weight: 400; line-height: 1.6;
 }
 body#top.creator-page .creator-connect {
-  padding: 20px 0 22px; margin: 0; border-top: 1px solid var(--cp-line);
+  padding: 8px 0 16px; margin: 0; border: 0;
   background: #000; color: #f5f5f5;
 }
-body#top.creator-page .creator-connect-heading {
-  margin: 0 0 12px; padding: 0; border: 0; background: none;
-  color: #b8b8be; font-size: 10px; font-weight: 400; line-height: 1.6;
-  letter-spacing: .16em; text-align: center;
-}
 body#top.creator-page .creator-connect-links {
-  display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;
+  max-width: 640px; margin-inline: auto;
 }
 body#top.creator-page .creator-connect-links a {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -38,7 +34,7 @@ body#top.creator-page .cp-related-link a { display: inline-flex; align-items: ce
 body#top.creator-page .cp-connect-return { margin: 12px 0 0; text-align: center; }
 @media (max-width: 800px) {
   body#top.creator-page .creator-connect-links { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
-  body#top.creator-page .creator-connect { padding-block: 16px 18px; }
+  body#top.creator-page .creator-connect { padding-block: 4px 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   body#top.creator-page .creator-connect-links a { transition: none; }

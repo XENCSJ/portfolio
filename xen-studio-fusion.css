@@ -22,13 +22,9 @@ body#top.studio-page h1.cp-page-label > span:last-child { color:var(--cp-muted);
   filter:invert(78%) sepia(29%) saturate(582%) hue-rotate(355deg) brightness(97%) contrast(93%);
 }
 /* Decorative light stays inside the scene; no particles or extra interactive nodes. */
-.studio-fusion::before,.studio-fusion::after {
+.studio-fusion::after {
   content:""; position:absolute; left:50%; top:48%; z-index:-1;
   transform:translate(-50%,-50%); pointer-events:none; border-radius:50%;
-}
-.studio-fusion::before {
-  width:calc(var(--logo-size) * 1.65); aspect-ratio:1;
-  border:1px solid rgb(185 154 96 / 13%);
 }
 .studio-fusion::after {
   width:calc(var(--logo-size) * 2.15); aspect-ratio:1;

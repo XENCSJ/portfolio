@@ -1,0 +1,70 @@
+/* Page-level h1 only. Existing heading/letter animation hooks stay in place. */
+body#top.detail-page main {
+  padding-top: clamp(16px, 4vw, 48px);
+}
+body#top.detail-page main h1.xen-page-title {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto 12px;
+  padding: 0 0 14px;
+  border: 0;
+  background: none;
+  color: var(--ink, #171719);
+  font-family: inherit;
+  font-size: clamp(24px, 4.2vw, 52px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: .035em;
+  text-align: center;
+}
+body#top.detail-page main h1.xen-page-title > .title-en {
+  display: block;
+  flex: none;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: normal;
+  overflow-wrap: normal;
+  text-wrap: balance;
+}
+body#top.detail-page main h1.xen-page-title > .page-title-ja {
+  display: block;
+  flex: none;
+  margin: 0;
+  color: var(--cp-muted, var(--muted, #727277));
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: .12em;
+  text-align: center;
+  white-space: normal;
+}
+body#top.detail-page main h1.xen-page-title::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: auto auto 0 50%;
+  width: 40px;
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--gold, #897348);
+  pointer-events: none;
+}
+/* Retain animated light/dividers, with the same centered line length. */
+body#top.detail-page main h1.xen-page-title :is(.xm-edge, .xen-motion-divider) {
+  left: calc(50% - 20px);
+  right: auto;
+  width: 40px;
+}
