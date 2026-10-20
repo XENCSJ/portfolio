@@ -29,7 +29,7 @@ async function check(browser,profile,label){
  const context=await browser.newContext(profile);
  await context.route('**/*',r=>/googletagmanager|google-analytics/.test(r.request().url())?r.abort():r.continue());
  const page=await context.newPage();page.setDefaultTimeout(12000);
- await page.addInitScript(()=>{window.__qaMotionCounts=new Map();const animate=Element.prototype.animate;Element.prototype.animate=function(...args){if(this.hasAttribute('data-ql-motion'))window.__qaMotionCounts.set(this,(window.__qaMotionCounts.get(this)||0)+1);return animate.apply(this,args);};window.__qaErrors=[];addEventListener('error',e=>window.__qaErrors.push({message:e.message,source:e.filename}));addEventListener('unhandledrejection',e=>window.__qaErrors.push({message:String(e.reason)}));});
+ await page.addInitScript(()=>{window.__qaMotionCounts=new Map();const animate=Element.prototype.animate;Element.prototype.animate=function(...args){if(this.hasAttribute('data-ql-motion')&&Array.isArray(args[0])&&args[0].some(frame=>Object.hasOwn(frame,'opacity')))window.__qaMotionCounts.set(this,(window.__qaMotionCounts.get(this)||0)+1);return animate.apply(this,args);};window.__qaErrors=[];addEventListener('error',e=>window.__qaErrors.push({message:e.message,source:e.filename}));addEventListener('unhandledrejection',e=>window.__qaErrors.push({message:String(e.reason)}));});
  for(const name of pages){
   const errors=[];const onError=e=>errors.push(e.message);page.on('pageerror',onError);
   try{
