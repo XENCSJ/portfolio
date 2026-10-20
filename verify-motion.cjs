@@ -29,12 +29,12 @@ async function check(browser,profile,label){
  const context=await browser.newContext(profile);
  await context.route('**/*',r=>/googletagmanager|google-analytics/.test(r.request().url())?r.abort():r.continue());
  const page=await context.newPage();page.setDefaultTimeout(12000);
- await page.addInitScript(()=>{window.__qaErrors=[];addEventListener('error',e=>window.__qaErrors.push({message:e.message,source:e.filename}));addEventListener('unhandledrejection',e=>window.__qaErrors.push({message:String(e.reason)}));});
+ await page.addInitScript(()=>{window.__qaMotionCounts=new Map();const animate=Element.prototype.animate;Element.prototype.animate=function(...args){if(this.hasAttribute('data-ql-motion'))window.__qaMotionCounts.set(this,(window.__qaMotionCounts.get(this)||0)+1);return animate.apply(this,args);};window.__qaErrors=[];addEventListener('error',e=>window.__qaErrors.push({message:e.message,source:e.filename}));addEventListener('unhandledrejection',e=>window.__qaErrors.push({message:String(e.reason)}));});
  for(const name of pages){
   const errors=[];const onError=e=>errors.push(e.message);page.on('pageerror',onError);
   try{
    await page.goto(base+name+'.html',{waitUntil:'domcontentloaded'});
-   await page.waitForSelector('body.ql-ready');await page.waitForTimeout(1500);
+   await page.waitForSelector('body.ql-ready');await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(2000);
    const initial=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,title:document.querySelector('main h1')?.textContent.trim(),targets:document.querySelectorAll('[data-ql-motion]').length,seen:document.querySelectorAll('.ql-seen').length,banned:document.querySelectorAll('.xm-sheen,.xen-portrait-sheen,.studio-fusion-sheen,.mvv-outline-sweep').length,hidden:[...document.querySelectorAll('main h1,main h2')].filter(n=>!n.closest('[hidden],dialog')&&getComputedStyle(n).opacity==='0').length}));
    assert(initial.overflow<=2,`horizontal overflow ${initial.overflow}`);assert(initial.title);assert(initial.targets>0);assert(initial.seen>0);assert.equal(initial.banned,0);assert.equal(initial.hidden,0);
    await shot(page,`${label}-${name}-top`);
@@ -57,8 +57,8 @@ async function check(browser,profile,label){
     assert.deepEqual(cards.map(c=>c.url),expected.map(i=>i.url));assert.deepEqual(cards.map(c=>c.name),expected.map(i=>i.name));assert.deepEqual(cards.map(c=>Number(c.price.replace(/[^0-9]/g,''))),expected.map(i=>Number(i.price))); assert.deepEqual(cards.map(c=>c.image),expected.map(i=>i.image_url));
     const layout=await page.locator('.base-products-grid').evaluate(n=>getComputedStyle(n).gridTemplateColumns.split(' ').length);assert.equal(layout,3);
     await page.locator('#base-products-title').scrollIntoViewIfNeeded();await page.waitForTimeout(1500);const after=await gap(page);assert(after.gap>=23&&after.gap<=37,`apparel gap ${after.gap}`);
-    await page.evaluate(()=>scrollBy(0,-160));await shot(page,`${label}-apparel-after`);
-    if(!process.env.MOTION_BASE_URL){const before=await context.newPage();await before.goto(base+'_before/apparel.html',{waitUntil:'domcontentloaded'});await before.locator('#base-products-title').scrollIntoViewIfNeeded();await before.waitForTimeout(1800);const previous=await gap(before);assert(Math.abs(after.width-previous.width)<1&&Math.abs(after.height-previous.height)<1,'brand visual dimensions changed');await before.evaluate(()=>scrollBy(0,-160));await shot(before,`${label}-apparel-before`);gaps.push({profile:label,before:previous,after});await before.close();}else gaps.push({profile:label,after});
+    await page.evaluate(()=>scrollTo({top:scrollY+document.querySelector('#base-products-title').getBoundingClientRect().top-250,behavior:'instant'}));await page.waitForTimeout(400);await shot(page,`${label}-apparel-after`);
+    if(!process.env.MOTION_BASE_URL){const before=await context.newPage();await before.goto(base+'_before/apparel.html',{waitUntil:'domcontentloaded'});await before.locator('#base-products-title').scrollIntoViewIfNeeded();await before.waitForTimeout(1800);const previous=await gap(before);assert(Math.abs(after.width-previous.width)<1&&Math.abs(after.height-previous.height)<1,'brand visual dimensions changed');await before.evaluate(()=>scrollTo({top:scrollY+document.querySelector('#base-products-title').getBoundingClientRect().top-250,behavior:'instant'}));await before.waitForTimeout(400);await shot(before,`${label}-apparel-before`);gaps.push({profile:label,before:previous,after});await before.close();}else gaps.push({profile:label,after});
    }
    if(['snap','artworks','architecture','design','space','apparel'].includes(name)){
     const item=page.locator('main .gallery-item').first();if(await item.count()){await item.click();await page.locator('#image-viewer[open]').waitFor();await page.keyboard.press('Escape');await page.locator('#image-viewer').waitFor({state:'hidden'});}
@@ -67,7 +67,7 @@ async function check(browser,profile,label){
    for(const part of [.35,.7,1]){await page.evaluate(p=>scrollTo({top:(document.documentElement.scrollHeight-innerHeight)*p,behavior:'instant'}),part);await page.waitForTimeout(1550);assert(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=2));}
    assert(await page.locator('footer').isVisible());await shot(page,`${label}-${name}-bottom`);
    await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(400);
-   const replay=await page.evaluate(()=>document.getAnimations().filter(a=>a.effect?.target?.matches('[data-ql-motion]')&&a.playState==='running').length);assert.equal(replay,0,'entry replayed on return');
+   const replay=await page.evaluate(()=>[...window.__qaMotionCounts.values()].filter(count=>count>1).length);assert.equal(replay,0,'entry replayed on return');
    await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(100);
    const moving=await page.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length);assert.equal(moving,0,'reduced motion still running');
    assert.deepEqual(await page.evaluate(()=>window.__qaErrors),[],'top-level site error');const external=errors.filter(e=>/^Minified React error #418;/.test(e));embedWarnings.push(...external.map(message=>({profile:label,page:name,message})));assert.deepEqual(errors.filter(e=>!external.includes(e)),[]);results.push({profile:label,page:name,...initial,controls:true,reduced:true,pass:true});console.log('PASS',label,name);
