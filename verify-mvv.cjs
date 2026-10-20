@@ -69,7 +69,7 @@ const server=http.createServer((req,res)=>{
        const timing=animation?.effect.getTiming();
        return {name:animation?.animationName,delay:timing?.delay,duration:timing?.duration};
       });
-      window.mvvSamples.push({t:t-started,opacity:[...el.querySelectorAll('.mvv-layer')].map(n=>+getComputedStyle(n).opacity),sweep:+getComputedStyle(el.querySelector('.mvv-outline-sweep')).opacity});
+      window.mvvSamples.push({t:t-started,opacity:[...el.querySelectorAll('.mvv-layer')].map(n=>+getComputedStyle(n).opacity),decorations:el.querySelectorAll('.mvv-outline-sweep,.mvv-apex,.mvv-boundary').length});
      }
      if(el.dataset.mvvState==='complete'&&started)return;
      requestAnimationFrame(record);
@@ -91,7 +91,7 @@ const server=http.createServer((req,res)=>{
    const maxFrameGap=Math.max(...samples.slice(1).map((x,i)=>x.t-samples[i].t));
    if(maxFrameGap<300&&samples[0].opacity[1]<.1)assert(first(2)<first(1)&&first(1)<first(0),'VALUES → VISION → MISSION');
    else console.log(name,'CI frame gaps; browser timeline verified',JSON.stringify({maxFrameGap,timings}));
-   assert(samples.some(x=>x.sweep>.5),'Perimeter sweep is visible');
+   assert(samples.every(x=>x.decorations===0),'Assembly must not add traveling light or glow');
    const geometry=await page.locator('.mvv-pyramid').evaluate(el=>{
     const r=el.getBoundingClientRect();return {width:r.width,height:r.height,layers:[...el.querySelectorAll('.mvv-layer')].map(n=>n.getBoundingClientRect().height)};
    });

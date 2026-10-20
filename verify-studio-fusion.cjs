@@ -25,9 +25,10 @@ function measure(){
  let browser;try{browser=await type.launch({headless:true});}catch(e){results.push({engine,unavailable:e.message});continue;}
  for(const [w,h] of sizes){const p=await browser.newPage({viewport:{width:w,height:h}});let errors=[];p.on('pageerror',e=>errors.push(e.message));await p.route('**/*',r=>(r.request().url().startsWith(url)||r.request().url().startsWith('https://xencsj.github.io/portfolio/'))?r.continue():r.abort());await p.goto(process.env.FUSION_PUBLIC_URL||url+'/studio.html');await p.waitForTimeout(3500);
  if(w===390){
- const initial=await p.evaluate(()=>document.querySelector('.studio-fusion-sheen').getAnimations()[0]?.currentTime);await p.waitForTimeout(180);
- const advanced=await p.evaluate(()=>document.querySelector('.studio-fusion-sheen').getAnimations()[0]?.currentTime);
- if(!(advanced>initial))errors.push('Logo sweep did not advance');
+ if(await p.locator('.studio-fusion-sheen').count())errors.push('Removed diagonal overlay returned');
+ const initial=await p.evaluate(()=>document.querySelector('.studio-fusion-logo-drift').getAnimations()[0]?.currentTime);await p.waitForTimeout(180);
+ const advanced=await p.evaluate(()=>document.querySelector('.studio-fusion-logo-drift').getAnimations()[0]?.currentTime);
+ if(!(advanced>initial))errors.push('Ambient logo motion did not advance');
  const hrefs=await p.locator('.studio-fusion a').evaluateAll(es=>es.map(e=>e.href));
  for(const href of hrefs){const response=await p.request.get(href);if(!response.ok())errors.push('Broken service link '+href);}
  }
