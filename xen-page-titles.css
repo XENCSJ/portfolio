@@ -1,8 +1,8 @@
 /* Page-level h1 only. Existing heading/letter animation hooks stay in place. */
-body#top.detail-page main {
+body#top.detail-page.xen-polished main {
   padding-top: clamp(16px, 4vw, 48px);
 }
-body#top.detail-page main h1.xen-page-title {
+body#top.detail-page.xen-polished main h1.xen-page-title {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -24,7 +24,7 @@ body#top.detail-page main h1.xen-page-title {
   letter-spacing: .035em;
   text-align: center;
 }
-body#top.detail-page main h1.xen-page-title > .title-en {
+body#top.detail-page.xen-polished main h1.xen-page-title > .title-en {
   display: block;
   flex: none;
   min-width: 0;
@@ -39,7 +39,7 @@ body#top.detail-page main h1.xen-page-title > .title-en {
   overflow-wrap: normal;
   text-wrap: balance;
 }
-body#top.detail-page main h1.xen-page-title > .page-title-ja {
+body#top.detail-page.xen-polished main h1.xen-page-title > .page-title-ja {
   display: block;
   flex: none;
   margin: 0;
@@ -51,7 +51,7 @@ body#top.detail-page main h1.xen-page-title > .page-title-ja {
   text-align: center;
   white-space: normal;
 }
-body#top.detail-page main h1.xen-page-title::after {
+body#top.detail-page.xen-polished main h1.xen-page-title::after {
   content: "";
   display: block;
   position: absolute;
@@ -63,7 +63,7 @@ body#top.detail-page main h1.xen-page-title::after {
   pointer-events: none;
 }
 /* Retain animated light/dividers, with the same centered line length. */
-body#top.detail-page main h1.xen-page-title :is(.xm-edge, .xen-motion-divider) {
+body#top.detail-page.xen-polished main h1.xen-page-title :is(.xm-edge, .xen-motion-divider) {
   left: calc(50% - 20px);
   right: auto;
   width: 40px;
