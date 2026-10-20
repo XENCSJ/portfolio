@@ -36,6 +36,8 @@ function measure(){
  if([[390,744],[430,840],[320,568],[768,1024],[1280,800],[844,390]].some(s=>s[0]===w&&s[1]===h))await p.screenshot({path:path.join(evidence,engine+'-'+w+'x'+h+'.png')});
  if(w===390){
  await p.emulateMedia({reducedMotion:'reduce'});
+ // A fresh document removes test-owned paused animations before checking the preference.
+ await p.reload();
  await p.waitForFunction(()=>document.querySelector('.studio-fusion').getAnimations({subtree:true}).length===0&&getComputedStyle(document.querySelector('.studio-fusion-entry')).opacity==='1',{},{timeout:2000});
  const reduced=await p.evaluate(()=>({count:document.querySelector('.studio-fusion').getAnimations({subtree:true}).length,opacity:getComputedStyle(document.querySelector('.studio-fusion-entry')).opacity}));
  if(reduced.count||reduced.opacity!=='1')errors.push('Reduced motion did not settle');
