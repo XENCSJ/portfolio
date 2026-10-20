@@ -60,10 +60,15 @@ const server=http.createServer((req,res)=>{
    assert.equal(await page.locator('.mvv-detail').isVisible(),false);
    // Record the actual animation frames while scroll enters the observer.
    await root.evaluate(el=>{
-    window.mvvSamples=[]; let started=0;
+    window.mvvSamples=[]; window.mvvTimings=null; let started=0;
     const record=t=>{
      if(el.dataset.mvvState==='assembling'){
       if(!started)started=t;
+      if(!window.mvvTimings)window.mvvTimings=[...el.querySelectorAll('.mvv-layer')].map(n=>{
+       const animation=n.getAnimations()[0];
+       const timing=animation?.effect.getTiming();
+       return {name:animation?.animationName,delay:timing?.delay,duration:timing?.duration};
+      });
       window.mvvSamples.push({t:t-started,opacity:[...el.querySelectorAll('.mvv-layer')].map(n=>+getComputedStyle(n).opacity),sweep:+getComputedStyle(el.querySelector('.mvv-outline-sweep')).opacity});
      }
      if(el.dataset.mvvState==='complete'&&started)return;
@@ -73,11 +78,19 @@ const server=http.createServer((req,res)=>{
    await page.locator('.mvv-pyramid').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>document.querySelector('#studio-mvv').dataset.mvvState==='complete');
    const samples=await page.evaluate(()=>window.mvvSamples);
+   const timings=await page.evaluate(()=>window.mvvTimings);
    const first=idx=>samples.find(x=>x.opacity[idx]>.1)?.t;
    fs.writeFileSync(path.join(output,`${name}-animation-samples.json`),JSON.stringify(samples));
    await page.screenshot({path:path.join(output,`${name}-complete.png`)});
    console.log(name,'animation',JSON.stringify({frames:samples.length,values:first(2),vision:first(1),mission:first(0),first:samples[0],last:samples.at(-1)}));
-   assert(first(2)<first(1)&&first(1)<first(0),'VALUES → VISION → MISSION');
+   // Validate the browser's actual animation timeline even when a slow CI
+   // renderer skips a 600ms interval between requestAnimationFrame callbacks.
+   assert.deepEqual(timings,[{name:'mvv-descend',delay:1200,duration:600},{name:'mvv-rise',delay:600,duration:600},{name:'mvv-rise',delay:0,duration:600}]);
+   assert(samples.length>2&&samples.some(x=>x.opacity.some(v=>v<.95)),'Assembly is visibly in progress');
+   assert(samples.every(x=>x.opacity[2]+.02>=x.opacity[1]&&x.opacity[1]+.02>=x.opacity[0]),'No layer appears ahead of its supporting layer');
+   const maxFrameGap=Math.max(...samples.slice(1).map((x,i)=>x.t-samples[i].t));
+   if(maxFrameGap<300&&samples[0].opacity[1]<.1)assert(first(2)<first(1)&&first(1)<first(0),'VALUES → VISION → MISSION');
+   else console.log(name,'CI frame gaps; browser timeline verified',JSON.stringify({maxFrameGap,timings}));
    assert(samples.some(x=>x.sweep>.5),'Perimeter sweep is visible');
    const geometry=await page.locator('.mvv-pyramid').evaluate(el=>{
     const r=el.getBoundingClientRect();return {width:r.width,height:r.height,layers:[...el.querySelectorAll('.mvv-layer')].map(n=>n.getBoundingClientRect().height)};
@@ -135,7 +148,7 @@ const server=http.createServer((req,res)=>{
    assert.equal(await fallback.locator('#studio-mvv').getAttribute('data-mvv-state'),'complete');
    await fallback.locator('#mvv-vision-button').click();assert.equal(await fallback.locator('#vision').isVisible(),true);
    await noio.close();
-   results.push({name,pass:true,geometry,timing:{values:first(2),vision:first(1),mission:first(0)},errors});
+   results.push({name,pass:true,geometry,timing:{values:first(2),vision:first(1),mission:first(0)},timings,maxFrameGap,errors});
    fs.writeFileSync(path.join(output,`${name}-animation-samples.json`),JSON.stringify(samples));
    console.log(name,'PASS',JSON.stringify(results.at(-1)));
   } catch(error){results.push({name,pass:false,error:String(error)});console.error(error);throw error;}
