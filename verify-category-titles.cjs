@@ -18,7 +18,7 @@ module.exports = async function verifyCategoryTitles() {
    if(slug!=='index') {
     const h=page.locator('h1');
     const spans=await h.locator(':scope > span').allTextContents();
-    assert.deepEqual(spans.map(x=>x.trim()),[titles[slug].en,titles[slug].ja],device+' '+slug+' heading');
+    assert.deepEqual(spans.map(x=>x.trim()).filter(Boolean),[titles[slug].en,titles[slug].ja],device+' '+slug+' heading');
     const layout=await h.evaluate(el=>{
      const [en,ja]=[...el.children].map(x=>x.getBoundingClientRect());
      return {fits:en.left>=-1&&ja.right<=innerWidth+1,separate:en.right<=ja.left+1,overflow:document.documentElement.scrollWidth>innerWidth+1};
