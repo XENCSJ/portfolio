@@ -45,6 +45,13 @@ const server=http.createServer((req,res)=>{
    const page=await context.newPage();const errors=[];
    page.on('pageerror',err=>errors.push(String(err)));
    await page.goto(url,{waitUntil:'load'});
+   // WebKit's first mobile paint can spend a second decoding the existing hero.
+   // Finish that work before measuring the 600ms MVV steps.
+   await page.evaluate(async()=>{
+    await document.fonts.ready;
+    await Promise.all([...document.images].filter(img=>img.complete&&img.naturalWidth).map(img=>img.decode().catch(()=>{})));
+   });
+   await page.screenshot({path:path.join(output,`${name}-page-top.png`)});
    const root=page.locator('#studio-mvv');
    await page.waitForFunction(()=>document.querySelector('#studio-mvv')?.dataset.mvvState==='waiting');
    assert.equal(await page.locator('.studio-values-orbit,.studio-values-summary').count(),0);
