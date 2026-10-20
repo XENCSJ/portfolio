@@ -68,14 +68,6 @@ body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
   position: relative; isolation: isolate; overflow: hidden;
   transition: border-color 280ms, background-color 280ms, color 280ms, transform 280ms var(--xen-ease);
 }
-.xen-detail-unified .detail-action::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: -1;
-  background: linear-gradient(110deg, transparent 25%, #8d8d980e 48%, transparent 70%);
-  transform: translateX(-120%);
-}
-.xen-detail-unified .contact-actions a:first-child::before {
-  background: linear-gradient(110deg, transparent 25%, #ffffff22 48%, transparent 70%);
-}
 .xen-detail-unified .detail-arrow { display: inline-block; transition: transform 280ms var(--xen-ease); }
 .xen-detail-unified :is(.text-link, .video-source, .xen-spotify-link) { min-height: 44px; }
 .xen-detail-unified .text-link { padding-block: 12px; font-size: 14px; line-height: 1.5; }
@@ -113,7 +105,7 @@ body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
 .xen-detail-unified.design-page .design-description { margin-top: 24px; }
 .xen-detail-unified.design-page .design-description p { font-size: 15px; line-height: 2; }
 
-/* SNS: keep emphasis on results, with a restrained light pass on dark surfaces. */
+/* SNS: keep emphasis on results, with restrained typography. */
 .xen-detail-unified.sns-management-page :is(.sns-results, .sns-statement, .sns-process, .sns-case, .sns-services, .sns-strengths, .sns-fit, .sns-contact) { margin-block: var(--detail-section-gap); }
 .xen-detail-unified.sns-management-page .sns-section-heading { position: relative; padding-bottom: 16px; margin-bottom: 24px; }
 .xen-detail-unified.sns-management-page .sns-section-heading h2 { font-size: clamp(20px, 2.5vw, 28px); }
@@ -125,11 +117,6 @@ body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
 .xen-detail-unified.sns-management-page .sns-metric-total .sns-number { font-size: clamp(72px, 10vw, 112px); }
 .xen-detail-unified.sns-management-page :is(.sns-service-list, .sns-strength-list, .sns-fit-list) li { padding-block: 20px; }
 .xen-detail-unified.sns-management-page .sns-fit { position: relative; overflow: hidden; isolation: isolate; }
-.xen-detail-unified.sns-management-page .sns-fit::before {
-  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(115deg, transparent 30%, #ffffff09 48%, transparent 66%);
-  transform: translateX(120%);
-}
 
 /* SPACE captions are transcribed from the supplied screenshots. */
 .xen-detail-unified.space-page .space-caption {
@@ -168,11 +155,6 @@ body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
   .xen-detail-unified :is(.pill, .series-title, .project-group > h2, .studio-heading, .sns-section-heading, .detail-list-line).detail-in-view::after {
     animation: detail-line 750ms var(--xen-ease) var(--detail-delay, 0ms) backwards;
   }
-  .xen-detail-unified .detail-action.detail-in-view::before {
-    animation: detail-sweep 900ms var(--xen-ease) calc(var(--detail-delay, 0ms) + 180ms) backwards;
-  }
-  .xen-detail-unified .sns-metric-total.detail-in-view::after { animation: detail-sweep 1400ms ease-out 350ms backwards; }
-  .xen-detail-unified .sns-fit.detail-in-view::before { animation: detail-sweep 1400ms ease-out 350ms backwards; }
   .xen-detail-unified .xen-menu:not([hidden]) > a { animation-duration: 450ms; }
   .xen-detail-unified .xen-brand { animation: detail-fade 800ms ease-out; }
   .xen-detail-unified .image-viewer[open]:not(.is-fullscreen-gallery) { animation: detail-dialog 400ms var(--xen-ease); }
@@ -187,10 +169,9 @@ body.xen-detail-unified.xen-polished.detail-page main h1 .page-title-ja {
 @keyframes detail-image { from { transform: scale(1.02); } to { transform: scale(1); } }
 @keyframes detail-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes detail-line-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-@keyframes detail-sweep { from { transform: translateX(-120%); opacity: 0; } 25% { opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+
 @keyframes detail-dialog { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .xen-detail-unified .detail-action:hover::before { transform: translateX(120%); transition: transform 700ms ease-out; }
   .xen-detail-unified .detail-action:hover .detail-arrow,
   .xen-detail-unified .sns-fit-list li:hover .sns-fit-arrow { transform: translateX(4px); }
   .xen-detail-unified .contact-actions a:hover { border-color: #bdbdc9; }

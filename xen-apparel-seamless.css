@@ -16,3 +16,7 @@ body.xen-curated.apparel-page .apparel-media-caption span{display:block;font-siz
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){body.xen-curated.apparel-page .image-gallery.trio>.gallery-item:hover img{transform:scale(1.025)}}
 @media(max-width:360px){body.xen-curated.apparel-page .product-caption{padding-inline:6px;font-size:9px;letter-spacing:0}}
 @media(prefers-reduced-motion:reduce){body.xen-curated.apparel-page .image-gallery.trio .gallery-visual img{transition:none;transform:none!important}}
+
+/* The brand visual is followed by a compact store heading, not a section-size gap. */
+body#top.xen-noir.apparel-page main .brand-visual { margin-bottom:0; }
+body#top.xen-noir.apparel-page main > .base-products { margin-top:clamp(24px,3vw,36px); }
