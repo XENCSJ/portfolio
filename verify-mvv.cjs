@@ -67,6 +67,9 @@ const server=http.createServer((req,res)=>{
    await page.waitForFunction(()=>document.querySelector('#studio-mvv').dataset.mvvState==='complete');
    const samples=await page.evaluate(()=>window.mvvSamples);
    const first=idx=>samples.find(x=>x.opacity[idx]>.1)?.t;
+   fs.writeFileSync(path.join(output,`${name}-animation-samples.json`),JSON.stringify(samples));
+   await page.screenshot({path:path.join(output,`${name}-complete.png`)});
+   console.log(name,'animation',JSON.stringify({frames:samples.length,values:first(2),vision:first(1),mission:first(0),first:samples[0],last:samples.at(-1)}));
    assert(first(2)<first(1)&&first(1)<first(0),'VALUES → VISION → MISSION');
    assert(samples.some(x=>x.sweep>.5),'Perimeter sweep is visible');
    const geometry=await page.locator('.mvv-pyramid').evaluate(el=>{
