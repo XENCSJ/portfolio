@@ -70,6 +70,8 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <script defer src="./xen-immersive.js?v=20261020-no-particles"></script>
 <link rel="stylesheet" href="./xen-studio-fusion.css?v=20261020-fusion1">
 <script defer src="./xen-studio-fusion.js?v=20261020-fusion1"></script>
+<link rel="stylesheet" href="./xen-mvv-pyramid.css?v=20261020-1">
+<script defer src="./xen-mvv-pyramid.js?v=20261020-1"></script>
 </head><body id="top" class="xen-noir detail-page video-page studio-page xen-polished xen-detail-unified xen-youtube-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN APPAREL STOREへ"><img src="./xen-header-cart.png" alt="" width="56" height="51"></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><span class="xen-menu-en" lang="en">ABOUT XEN</span><span class="xen-menu-ja" lang="ja">XENについて</span></h2><ul class="xen-menu-items"><li><a class="xen-menu-link " href="./studio.html" aria-current="page"><span class="xen-menu-en" lang="en">STUDIO</span><span class="xen-menu-ja" lang="ja">スタジオ</span></a></li><li><a class="xen-menu-link " href="./creator.html"><span class="xen-menu-en" lang="en">CREATOR</span><span class="xen-menu-ja" lang="ja">クリエイター</span></a></li></ul></section>
@@ -166,19 +168,76 @@ SOFTWARE.
 <section class="studio-section" id="studio-philosophy" aria-labelledby="studio-philosophy-title">
 <h2 class="cp-page-label cp-section-heading studio-section-heading" id="studio-philosophy-title"><span lang="en">PHILOSOPHY</span><small lang="ja">理念</small></h2>
 <p class="studio-philosophy-copy">創造の可能性を、社会の価値へ。</p>
-<div class="studio-values-motion" id="studio-mvv">
-<div class="studio-values-orbit" aria-label="MISSION・VISION・VALUES">
-<div class="xen-ring-depth" aria-hidden="true"><div class="studio-values-ring"></div></div>
-<img class="studio-values-logo" src="./XEN_logo_fixed_black.svg" alt="XEN" width="2232" height="2293" loading="lazy" decoding="async">
-<a class="studio-values-label" href="#mission" lang="en" aria-label="MISSION">MISSION</a>
-<a class="studio-values-label" href="#vision" lang="en" aria-label="VISION">VISION</a>
-<a class="studio-values-label" href="#values" lang="en" aria-label="VALUES">VALUES</a>
+<div id="studio-mvv" data-mvv-pyramid="20261020-1">
+<div class="mvv-pyramid" role="group" aria-label="MISSION・VISION・VALUES 各層から詳細を開く">
+  <button class="mvv-layer mvv-layer--mission" id="mvv-mission-button" type="button" data-mvv-select="mission" aria-controls="mission" aria-expanded="true" disabled>
+    <svg viewBox="0 0 200 173.20508075688772" aria-hidden="true" focusable="false"><defs><linearGradient id="mvv-gold-mission" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#70562c"/><stop offset=".55" stop-color="#332719"/><stop offset="1" stop-color="#70562c"/></linearGradient></defs><polygon class="mvv-face" fill="url(#mvv-gold-mission)" points="100 0 200 173.2050807568877 0 173.2050807568877"/></svg>
+    <span class="mvv-layer-label" lang="en">MISSION</span>
+  </button>
+  <button class="mvv-layer mvv-layer--vision" id="mvv-vision-button" type="button" data-mvv-select="vision" aria-controls="vision" aria-expanded="true" disabled>
+    <svg viewBox="0 0 400 173.20508075688772" aria-hidden="true" focusable="false"><defs><linearGradient id="mvv-gold-vision" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#594323"/><stop offset=".55" stop-color="#211b12"/><stop offset="1" stop-color="#594323"/></linearGradient></defs><polygon class="mvv-face" fill="url(#mvv-gold-vision)" points="100 0 300 0 400 173.2050807568877 0 173.2050807568877"/><path class="mvv-boundary" d="M100 0H300" stroke-dasharray="200 200"/></svg>
+    <span class="mvv-layer-label" lang="en">VISION</span>
+  </button>
+  <button class="mvv-layer mvv-layer--values" id="mvv-values-button" type="button" data-mvv-select="values" aria-controls="values" aria-expanded="true" disabled>
+    <svg viewBox="0 0 600 173.20508075688772" aria-hidden="true" focusable="false"><defs><linearGradient id="mvv-gold-values" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#49391f"/><stop offset=".55" stop-color="#16130e"/><stop offset="1" stop-color="#49391f"/></linearGradient></defs><polygon class="mvv-face" fill="url(#mvv-gold-values)" points="100 0 500 0 600 173.2050807568877 0 173.2050807568877"/></svg>
+    <span class="mvv-layer-label" lang="en">VALUES</span>
+  </button>
+  <svg class="mvv-outline" viewBox="0 0 600 519.6152422706632" aria-hidden="true" focusable="false"><path class="mvv-outline-base" d="M300 0L600 519.6152422706632H0Z"/><path class="mvv-outline-sweep" d="M300 0L600 519.6152422706632H0Z" pathLength="1800"/><path class="mvv-apex" d="M286 24.24871130596428L300 0L314 24.24871130596428"/></svg>
 </div>
-<dl class="studio-values-summary">
-<div id="mission"><dt lang="en">MISSION</dt><dd class="xen-description">想いや課題を創造の力で形にする</dd></div>
-<div id="vision"><dt lang="en">VISION</dt><dd class="xen-description">創造の可能性を社会の価値へつなげる</dd></div>
-<div id="values"><dt lang="en">VALUES</dt><dd class="xen-description">独創性・信頼・社会への貢献</dd></div>
-</dl>
+<p class="mvv-hint">各層をタップして詳細を表示</p>
+<div class="mvv-detail">
+<!-- Formal MVV moved verbatim from the existing source archive. -->
+<section aria-labelledby="mvv-mission-button" class="mvv-detail-panel" role="region" data-mvv-panel="mission" id="mission" tabindex="-1">
+<h3 class="mvv-panel-title" id="studio-mission-title"><span>MISSION</span></h3><p class="mvv-definition">存在意義</p>
+<p class="studio-mvv-statement">独創的な表現で、想いを社会に届く価値へ。</p>
+<div class="studio-mvv-copy xen-prose-container">
+<p class="xen-description">独自の感性と創造力を活かし、人々の想いや課題を形にする。表現の領域を超えて、受け取る人にとって意味のある価値を生み出す。</p>
+</div>
+</section>
+<section aria-labelledby="mvv-vision-button" class="mvv-detail-panel" role="region" data-mvv-panel="vision" id="vision" tabindex="-1">
+<h3 class="mvv-panel-title" id="studio-vision-title"><span>VISION</span></h3><p class="mvv-definition">目指す未来</p>
+<p class="studio-mvv-statement">創造が、人々の心と社会を豊かにする未来。</p>
+<div class="studio-mvv-copy xen-prose-container">
+<p class="xen-description">新しい発想や表現が、人々の感情や暮らしに前向きな変化をもたらし、創造の価値が社会に広がる未来を目指す。</p>
+</div>
+</section>
+<section aria-labelledby="mvv-values-button" class="mvv-detail-panel" role="region" data-mvv-panel="values" id="values" tabindex="-1">
+<h3 class="mvv-panel-title" id="studio-values-title"><span>VALUES</span></h3><p class="mvv-definition">4つの行動指針</p>
+<ol class="studio-mvv-list" role="list">
+<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="m4 12 5 5L20 6"></path><circle cx="12" cy="12" r="10"></circle></svg>
+<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">01</span><h4>CONTRIBUTION <span>貢献</span></h4></div>
+<div class="studio-mvv-value-body">
+<p class="studio-mvv-statement">価値で、応える。</p>
+<div class="studio-mvv-copy xen-prose-container">
+<p class="xen-description">相手の目的に向き合い、確かな成果と信頼を積み重ねる。</p>
+<p class="xen-description">受託制作では、顧客と合意した目的・品質・条件を優先し、長期的な信頼を大切にする。</p>
+</div>
+</div>
+</li>
+<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"></path></svg>
+<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">02</span><h4>ORIGINALITY <span>独創性</span></h4></div>
+<div class="studio-mvv-value-body">
+<p class="studio-mvv-statement">独自の答えを、創る。</p>
+<div class="studio-mvv-copy xen-prose-container"><p class="xen-description">自分自身の美学と相手の目的を掛け合わせ、既存の正解にとらわれない価値を生み出す。</p></div>
+</div>
+</li>
+<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="M3 20h18M5 16l5-5 4 3 6-9M14 5h6v6"></path></svg>
+<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">03</span><h4>EVOLUTION <span>進化</span></h4></div>
+<div class="studio-mvv-value-body">
+<p class="studio-mvv-statement">可能性を、拓く。</p>
+<div class="studio-mvv-copy xen-prose-container"><p class="xen-description">現状に満足せず、新しい技術・発想・表現を磨き続ける。</p></div>
+</div>
+</li>
+<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="M12 3c2 5 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-6 0 3 2 3 3 4 2-3 1-6 0-9z"></path></svg>
+<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">04</span><h4>PASSION <span>情熱</span></h4></div>
+<div class="studio-mvv-value-body">
+<p class="studio-mvv-statement">創造を、絶やさない。</p>
+<div class="studio-mvv-copy xen-prose-container"><p class="xen-description">ものづくりへの情熱を原動力に、持続可能な創作を続ける。</p></div>
+</div>
+</li>
+</ol>
+</section>
+</div>
 </div>
 </section>
 <section class="studio-section studio-contact" id="contact" aria-labelledby="studio-contact-title">
@@ -234,59 +293,7 @@ SOFTWARE.
 </div>
 </section>
 </main>
-<!-- Formal MVV preserved verbatim from main 71fb227. Inert source archive; display summaries above do not replace the official wording. -->
-<template id="studio-formal-mvv-archive">
-<section aria-labelledby="studio-mission-title" class="studio-section studio-mvv-panel" data-mvv-panel="mission" id="mission" tabindex="-1">
-<h2 class="cp-page-label" id="studio-mission-title"><span>MISSION</span></h2><p class="mvv-definition">存在意義</p>
-<p class="studio-mvv-statement">独創的な表現で、想いを社会に届く価値へ。</p>
-<div class="studio-mvv-copy xen-prose-container">
-<p class="xen-description">独自の感性と創造力を活かし、人々の想いや課題を形にする。表現の領域を超えて、受け取る人にとって意味のある価値を生み出す。</p>
-</div>
-</section>
-<section aria-labelledby="studio-vision-title" class="studio-section studio-mvv-panel" data-mvv-panel="vision" id="vision" tabindex="-1">
-<h2 class="cp-page-label" id="studio-vision-title"><span>VISION</span></h2><p class="mvv-definition">目指す未来</p>
-<p class="studio-mvv-statement">創造が、人々の心と社会を豊かにする未来。</p>
-<div class="studio-mvv-copy xen-prose-container">
-<p class="xen-description">新しい発想や表現が、人々の感情や暮らしに前向きな変化をもたらし、創造の価値が社会に広がる未来を目指す。</p>
-</div>
-</section>
-<section aria-labelledby="studio-values-title" class="studio-section studio-mvv-panel" data-mvv-panel="values" id="values" tabindex="-1">
-<h2 class="cp-page-label" id="studio-values-title"><span>VALUES</span></h2><p class="mvv-definition">4つの行動指針</p>
-<ol class="studio-mvv-list" role="list">
-<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="m4 12 5 5L20 6"></path><circle cx="12" cy="12" r="10"></circle></svg>
-<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">01</span><h4>CONTRIBUTION <span>貢献</span></h4></div>
-<div class="studio-mvv-value-body">
-<p class="studio-mvv-statement">価値で、応える。</p>
-<div class="studio-mvv-copy xen-prose-container">
-<p class="xen-description">相手の目的に向き合い、確かな成果と信頼を積み重ねる。</p>
-<p class="xen-description">受託制作では、顧客と合意した目的・品質・条件を優先し、長期的な信頼を大切にする。</p>
-</div>
-</div>
-</li>
-<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"></path></svg>
-<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">02</span><h4>ORIGINALITY <span>独創性</span></h4></div>
-<div class="studio-mvv-value-body">
-<p class="studio-mvv-statement">独自の答えを、創る。</p>
-<div class="studio-mvv-copy xen-prose-container"><p class="xen-description">自分自身の美学と相手の目的を掛け合わせ、既存の正解にとらわれない価値を生み出す。</p></div>
-</div>
-</li>
-<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="M3 20h18M5 16l5-5 4 3 6-9M14 5h6v6"></path></svg>
-<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">03</span><h4>EVOLUTION <span>進化</span></h4></div>
-<div class="studio-mvv-value-body">
-<p class="studio-mvv-statement">可能性を、拓く。</p>
-<div class="studio-mvv-copy xen-prose-container"><p class="xen-description">現状に満足せず、新しい技術・発想・表現を磨き続ける。</p></div>
-</div>
-</li>
-<li><svg aria-hidden="true" class="studio-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" viewbox="0 0 24 24"><path d="M12 3c2 5 6 6 6 11a6 6 0 0 1-12 0c0-3 2-5 3-6 0 3 2 3 3 4 2-3 1-6 0-9z"></path></svg>
-<div class="studio-mvv-value-label"><span aria-hidden="true" class="studio-mvv-number">04</span><h4>PASSION <span>情熱</span></h4></div>
-<div class="studio-mvv-value-body">
-<p class="studio-mvv-statement">創造を、絶やさない。</p>
-<div class="studio-mvv-copy xen-prose-container"><p class="xen-description">ものづくりへの情熱を原動力に、持続可能な創作を続ける。</p></div>
-</div>
-</li>
-</ol>
-</section>
-</template><footer class="xen-common-footer">
+<footer class="xen-common-footer">
   <div class="xen-footer-actions">
     <a class="xen-footer-action xen-footer-inquiry" href="./studio.html#contact">制作について相談する <span aria-hidden="true">↗</span></a>
     <a class="xen-footer-action" href="./price-list.html">料金一覧を見る｜PRICE LIST</a>
