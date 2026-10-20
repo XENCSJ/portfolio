@@ -24,13 +24,26 @@ function measure(){
  for(const [engine,type] of Object.entries({chromium,webkit})){
  let browser;try{browser=await type.launch({headless:true});}catch(e){results.push({engine,unavailable:e.message});continue;}
  for(const [w,h] of sizes){const p=await browser.newPage({viewport:{width:w,height:h}});let errors=[];p.on('pageerror',e=>errors.push(e.message));await p.route('**/*',r=>(r.request().url().startsWith(url)||r.request().url().startsWith('https://xencsj.github.io/portfolio/'))?r.continue():r.abort());await p.goto(process.env.FUSION_PUBLIC_URL||url+'/studio.html');await p.waitForTimeout(3500);
+ if(w===390){
+ const initial=await p.evaluate(()=>document.querySelector('.studio-fusion-sheen').getAnimations()[0]?.currentTime);await p.waitForTimeout(180);
+ const advanced=await p.evaluate(()=>document.querySelector('.studio-fusion-sheen').getAnimations()[0]?.currentTime);
+ if(!(advanced>initial))errors.push('Logo sweep did not advance');
+ const hrefs=await p.locator('.studio-fusion a').evaluateAll(es=>es.map(e=>e.href));
+ for(const href of hrefs){const response=await p.request.get(href);if(!response.ok())errors.push('Broken service link '+href);}
+ }
  const states=[];for(const time of [3500,5000,7000,9000,12000,17000]){await p.evaluate(t=>{for(const a of document.querySelector('.studio-fusion').getAnimations({subtree:true})){a.pause();a.currentTime=t}},time);states.push(await p.evaluate(measure));}
  const r={engine,w,h,...states[0],errors,animationOverlap:states.flatMap(x=>x.overlaps),animationOffscreen:states.flatMap(x=>x.offscreen)};delete r.boxes;results.push(r);
  if([[390,744],[430,840],[320,568],[768,1024],[1280,800],[844,390]].some(s=>s[0]===w&&s[1]===h))await p.screenshot({path:path.join(evidence,engine+'-'+w+'x'+h+'.png')});
- if(w===390){await p.goto(url+'/before.html');await p.waitForTimeout(3500);results.push({engine,before:await p.evaluate(measure)});await p.screenshot({path:path.join(evidence,engine+'-before.png')});}
+ if(w===390){
+ await p.emulateMedia({reducedMotion:'reduce'});
+ const reduced=await p.evaluate(()=>({count:document.querySelector('.studio-fusion').getAnimations({subtree:true}).length,opacity:getComputedStyle(document.querySelector('.studio-fusion-entry')).opacity}));
+ if(reduced.count||reduced.opacity!=='1')errors.push('Reduced motion did not settle');
+ await p.emulateMedia({reducedMotion:'no-preference'});
+ await p.goto(url+'/before.html');await p.waitForTimeout(3500);results.push({engine,before:await p.evaluate(measure)});await p.screenshot({path:path.join(evidence,engine+'-before.png')});}
  await p.close();}
  await browser.close();}
  fs.writeFileSync(path.join(evidence,'layout-results.json'),JSON.stringify(results,null,2));console.log(JSON.stringify(results.map(r=>({engine:r.engine,w:r.w,h:r.h,visible:r.copyVisible,bottom:r.copyBottom,overlaps:r.animationOverlap,offscreen:r.animationOffscreen,overflow:r.horizontalOverflow,errors:r.errors,unavailable:r.unavailable,before:r.before?{bottom:r.before.copyBottom,height:r.before.sceneHeight}:undefined})),null,2));
- const failures=results.filter(r=>r.unavailable||r.errors?.length||r.animationOverlap?.length||r.animationOffscreen?.length||r.horizontalOverflow||(r.w>=375&&r.h>=667&&!r.copyVisible));
+ const expectedCopy='XEN CSJは、独創性と社会貢献の融合を理念の中心に据えています。独自の感性と創造力を活かし、人々の想いや課題を形にする。表現の領域を超えて、受け取る人にとって意味のある価値を生み出すことを大切にしています。';
+ const failures=results.filter(r=>r.unavailable||r.errors?.length||r.animationOverlap?.length||r.animationOffscreen?.length||r.horizontalOverflow||(r.w&&(r.links!==10||r.copy!==expectedCopy||r.font!=='14px'||r.line!=='28px'))||(r.w>=375&&r.h>=667&&!r.copyVisible));
  if(failures.length){console.error('Layout checks failed:',failures.length);process.exitCode=1;}
  server.close();})().catch(e=>{console.error(e);server.close();process.exit(1)});
