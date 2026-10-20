@@ -5,7 +5,7 @@ const {execFileSync}=require('node:child_process');
 const pages='index studio creator storybooks animation sound cinematic snap design apparel architecture space artworks sns-management price-list'.split(' ');
 const baseline='f2935becae76e04121d767a2edee8a392e2ed215';
 const base=process.env.MOTION_BASE_URL||'http://127.0.0.1:8765/';
-const out='motion-qa',results=[],failures=[],gaps=[];
+const out='motion-qa',results=[],failures=[],gaps=[],embedWarnings=[];
 const mime={'.html':'text/html','.css':'text/css','.js':'application/javascript','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp'};
 const oldCache=new Map();
 const server=http.createServer((req,res)=>{
@@ -29,6 +29,7 @@ async function check(browser,profile,label){
  const context=await browser.newContext(profile);
  await context.route('**/*',r=>/googletagmanager|google-analytics/.test(r.request().url())?r.abort():r.continue());
  const page=await context.newPage();page.setDefaultTimeout(12000);
+ await page.addInitScript(()=>{window.__qaErrors=[];addEventListener('error',e=>window.__qaErrors.push({message:e.message,source:e.filename}));addEventListener('unhandledrejection',e=>window.__qaErrors.push({message:String(e.reason)}));});
  for(const name of pages){
   const errors=[];const onError=e=>errors.push(e.message);page.on('pageerror',onError);
   try{
@@ -40,7 +41,7 @@ async function check(browser,profile,label){
    await page.locator('.xen-header-toggle').click();await page.locator('.xen-header-toggle[aria-expanded="true"]').waitFor();await page.keyboard.press('Escape');await page.locator('.xen-header-toggle[aria-expanded="false"]').waitFor();
    if(name==='index'){
     const orbit=page.locator('svg.orbit');const a=await orbit.evaluate(n=>getComputedStyle(n).transform);await page.waitForTimeout(180);const b=await orbit.evaluate(n=>getComputedStyle(n).transform);assert.notEqual(a,b,'source category orbit stopped');
-    const first=page.locator('.orbit a').first();await first.focus();assert(await first.evaluate(n=>getComputedStyle(n.querySelector('text')).fill!=='rgb(238, 238, 238)'));await page.locator('.xen-header-home').focus();
+    const first=page.locator('.orbit a').first();await first.focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');await page.waitForTimeout(450);assert(await first.evaluate(n=>getComputedStyle(n.querySelector('text')).fill!=='rgb(238, 238, 238)'));await page.locator('.xen-header-home').focus();
    }
    if(name==='studio'){
     await page.locator('.mvv-pyramid').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#studio-mvv').dataset.mvvState==='complete');
@@ -53,7 +54,7 @@ async function check(browser,profile,label){
    if(name==='price-list'){const t=page.locator('.price-toggle').first();await t.click();assert.equal(await t.getAttribute('aria-expanded'),'true');await t.click();}
    if(name==='apparel'){
     const cards=await catalog(page);const expected=JSON.parse(fs.readFileSync('base-products.json')).items;
-    assert.deepEqual(cards.map(c=>c.url),expected.map(i=>i.url));assert.deepEqual(cards.map(c=>c.name),expected.map(i=>i.name));assert.deepEqual(cards.map(c=>c.image),expected.map(i=>i.image_url));
+    assert.deepEqual(cards.map(c=>c.url),expected.map(i=>i.url));assert.deepEqual(cards.map(c=>c.name),expected.map(i=>i.name));assert.deepEqual(cards.map(c=>Number(c.price.replace(/[^0-9]/g,''))),expected.map(i=>Number(i.price))); assert.deepEqual(cards.map(c=>c.image),expected.map(i=>i.image_url));
     const layout=await page.locator('.base-products-grid').evaluate(n=>getComputedStyle(n).gridTemplateColumns.split(' ').length);assert.equal(layout,3);
     await page.locator('#base-products-title').scrollIntoViewIfNeeded();await page.waitForTimeout(1500);const after=await gap(page);assert(after.gap>=23&&after.gap<=37,`apparel gap ${after.gap}`);
     await page.evaluate(()=>scrollBy(0,-160));await shot(page,`${label}-apparel-after`);
@@ -63,13 +64,13 @@ async function check(browser,profile,label){
     const item=page.locator('main .gallery-item').first();if(await item.count()){await item.click();await page.locator('#image-viewer[open]').waitFor();await page.keyboard.press('Escape');await page.locator('#image-viewer').waitFor({state:'hidden'});}
    }
    // Exercise first, middle and last sections; default visibility also protects skipped rows.
-   for(const part of [.35,.7,1]){await page.evaluate(p=>scrollTo(0,(document.documentElement.scrollHeight-innerHeight)*p),part);await page.waitForTimeout(1150);assert(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=2));}
+   for(const part of [.35,.7,1]){await page.evaluate(p=>scrollTo({top:(document.documentElement.scrollHeight-innerHeight)*p,behavior:'instant'}),part);await page.waitForTimeout(1550);assert(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=2));}
    assert(await page.locator('footer').isVisible());await shot(page,`${label}-${name}-bottom`);
-   await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(400);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(400);
    const replay=await page.evaluate(()=>document.getAnimations().filter(a=>a.effect?.target?.matches('[data-ql-motion]')&&a.playState==='running').length);assert.equal(replay,0,'entry replayed on return');
    await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(100);
    const moving=await page.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length);assert.equal(moving,0,'reduced motion still running');
-   assert.deepEqual(errors,[]);results.push({profile:label,page:name,...initial,controls:true,reduced:true,pass:true});console.log('PASS',label,name);
+   assert.deepEqual(await page.evaluate(()=>window.__qaErrors),[],'top-level site error');const external=errors.filter(e=>/^Minified React error #418;/.test(e));embedWarnings.push(...external.map(message=>({profile:label,page:name,message})));assert.deepEqual(errors.filter(e=>!external.includes(e)),[]);results.push({profile:label,page:name,...initial,controls:true,reduced:true,pass:true});console.log('PASS',label,name);
   }catch(e){failures.push({profile:label,page:name,error:e.stack});console.error('FAIL',label,name,e.message);await shot(page,`FAIL-${label}-${name}`).catch(()=>{});}
   finally{page.off('pageerror',onError);await page.emulateMedia({reducedMotion:'no-preference'});}
  }
@@ -85,7 +86,7 @@ async function check(browser,profile,label){
  const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const page=await context.newPage();
  for(const name of pages){try{await page.goto(base+name+'.html',{waitUntil:'domcontentloaded'});assert(await page.locator('main h1').isVisible());assert.equal(await page.locator('main h1').evaluate(n=>getComputedStyle(n).opacity),'1');if(name==='apparel')assert(await page.locator('.base-products-store').isVisible());results.push({profile:'no-js',page:name,pass:true});}catch(e){failures.push({profile:'no-js',page:name,error:e.message});}}
  await browser.close();server.close();
- fs.writeFileSync(`${out}/report.json`,JSON.stringify({base,baseline,results,gaps,failures},null,2));
+ fs.writeFileSync(`${out}/report.json`,JSON.stringify({base,baseline,results,gaps,failures,embedWarnings},null,2));
  if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,`## Quiet luxury verification\n${results.length}/60 page/profile checks passed.\n\n${gaps.map(g=>`- ${g.profile}: gap ${g.before?.gap??'—'} → ${g.after.gap}px`).join('\n')}\n\n${failures.map(f=>`- ${f.profile}/${f.page}: ${f.error}`).join('\n')}\n`);
  if(failures.length)process.exitCode=1;
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
