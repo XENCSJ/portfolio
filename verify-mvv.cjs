@@ -104,7 +104,7 @@ const server=http.createServer((req,res)=>{
    assert.equal(await root.getAttribute('data-mvv-state'),'complete');
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
    await page.locator('#contact-consultation-toggle').click();
-   assert.equal(await page.locator('#contact-consultation-panel').isVisible(),true);
+   await page.locator('#contact-consultation-panel').waitFor({state:'visible'});
    await page.reload();
    await page.locator('.mvv-pyramid').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>document.querySelector('#studio-mvv').dataset.mvvState==='complete');
