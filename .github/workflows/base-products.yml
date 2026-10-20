@@ -2,7 +2,8 @@ name: Refresh BASE products
 
 on:
   schedule:
-    - cron: '23 * * * *'
+    # UTC 03/09/15/21 = JST 12/18/00/06. GitHub may start late.
+    - cron: '0 3,9,15,21 * * *'
   workflow_dispatch:
   push:
     branches: [main]
