@@ -20,8 +20,8 @@ const server=http.createServer((req,res)=>{
 });
 const layout=()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,
   nodes:[...document.querySelectorAll('header,footer,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].map(e=>{
-    const r=e.getBoundingClientRect(),fixed=getComputedStyle(e).position==='fixed';
-    return [e.tagName,e.id,r.x+(fixed?0:scrollX),r.y+(fixed?0:scrollY),r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
+    const r=e.getBoundingClientRect(),viewportCoordinates=getComputedStyle(e).position==='fixed'||!e.getClientRects().length;
+    return [e.tagName,e.id,r.x+(viewportCoordinates?0:scrollX),r.y+(viewportCoordinates?0:scrollY),r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
   })});
 (async()=>{
   await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
@@ -61,6 +61,7 @@ const layout=()=>({width:document.documentElement.scrollWidth,height:document.do
       assert.equal(url.searchParams.get('autoplay'),'1');assert.equal(url.searchParams.has('mute'),false);
       if(name!=='creator'){
         const r=await frame.boundingBox();assert.equal(r.width,bounds.width);assert.equal(r.height,bounds.height);
+        await target.evaluate(()=>scrollTo(0,0));
         assert.deepEqual(await target.evaluate(layout),shots.after,'playback preserves outside layout');
       }else{
         await target.getByRole('button',{name:'閉じる ×'}).click();assert.equal(await frame.count(),0);
