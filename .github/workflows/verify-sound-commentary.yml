@@ -70,10 +70,18 @@ jobs:
                 });
                 assert.equal(metrics.align,'left');assert.equal(metrics.whiteSpace,'normal');
                 assert(metrics.fontSize>=14&&metrics.fontSize<=16);
-                assert(Math.abs(metrics.lineHeight/metrics.fontSize-1.85)<.01);
+                assert(Math.abs(metrics.lineHeight/metrics.fontSize-1.8)<.01);
                 assert(!metrics.overflow&&metrics.fits,JSON.stringify(metrics));
-                assert.equal(metrics.margin,'0px');assert.equal(metrics.paragraphs,1);
+                assert.equal(metrics.margin,'0px');assert.equal(metrics.paragraphs,2);
+                assert.equal(await prose.locator('p + p').evaluate(e=>getComputedStyle(e).marginTop),'18px');
+                assert(width>=700||metrics.fontSize===14);
+                assert(await prose.evaluate(e=>Math.abs(e.getBoundingClientRect().left-e.closest('.sound-section').getBoundingClientRect().left)<1));
                 await snap('open');
+                for(const section of await page.locator('main > section').all()){
+                  await section.scrollIntoViewIfNeeded();await page.waitForTimeout(700);
+                }
+                await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(500);
+                await page.screenshot({path:`${out}/SOUND-${engine}-${width}-full.png`,fullPage:true});
                 await activate(lyricsButton);await done();
                 assert(await prose.isVisible());assert(await lyrics.locator('.sound-song-lyrics').isVisible());
                 await activate(aboutButton);await done();
