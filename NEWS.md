@@ -1,63 +1,48 @@
-# NEWS management
+# 新規作品とNEWSの自動連動
 
-INDEX is generated from `news-events.json`. Show the newest four date/category groups, then `news-pinned.json`. The fixed article is exactly the approved 2026-10-20 announcement; the generator never writes its file and validation rejects accidental changes. Historical NEWS remains in `news-events.json`, `news-archive.json`, and the untouched migration copy `news-legacy.json`.
+## 運用
 
-## Publication and automation
+作品ページへ通常の作品枠を追加してmainへ反映すると、GitHub Pagesの公開成功後に `Update verified NEWS` が作品を検出します。`works.json` を自動同期し、既存のINDEX NEWS欄・アーカイブを生成して、もう一度Pagesを更新します。NEWSの個別編集や `news-content.json` への手作業の二重登録は不要です。
 
-`Update verified NEWS` runs after a successful `pages-build-deployment` on main. It reads GitHub deployment success statuses, examines the exact deployed Git tree, and uses the successful publication timestamp in JST. Commit timestamps and file modification times are never publication dates. Failed deployments and unpublished branches are excluded.
+- 通常の作品カード（`.work` / `.sound-song`）、DESIGNの `.design-project`、建築の `.arch-project`、SPACEの `.project-group`、独立したギャラリー画像を自動検出。
+- APPARELは掲載中の `base-products.json` 商品ID、CREATORの最新YouTubeは `youtube-latest.json` 動画IDを検出。
+- INDEX・STUDIO・CREATOR・SNS MANAGEMENT・PRICE LISTを含む全15ページを検査。サービス説明・プロフィール写真・価格表の変更は作品追加として数えません。
+- 独自構造の新しい作品枠は、その枠に `data-work-id="category:permanent-name"` と必要に応じて `data-work-title="作品名"` を付けます。新しい構造を追加する場合は `sync_works.py` の検出対象も拡張してください。HTMLの任意の変更の意味を推測する方式ではありません。
+- 自動付与された `data-work-id` と `id` は同じ作品の修正・差し替え時に維持します。新しい作品を既存カードからコピーする場合は `data-work-id` と `id` を削除するか、新しい一意な値に変更してください。同一IDを二つ作ると検査が失敗します。
+- 解説・タイトル・配色・並び順・画像リンク・動画リンクの修正はIDを保持し、公開日時を更新せず、NEWS件数を増やしません。
+- 下書きは作品枠に `data-work-status="draft"`、非公開は `private`、終了は `archived` を指定。NEWSから除外します。静的HTMLの実際の表示も隠す場合は `hidden` を併用してください（秘密情報のアクセス制御ではありません）。`published` または属性の省略で公開。下書きからの初回公開だけ新着になり、再公開では日付を更新しません。
+- 作品枠を削除した場合は台帳をarchivedに変更し、対応する新着を除外。台帳のID履歴を削除しないでください。
 
-SNAP and ARTWORKS: add image files and gallery links normally. Pure additions are detected automatically. An uploaded but unlinked image does not count. Stable paths and Git blob identities prevent reorders, re-adding known assets and identical copies from creating new NEWS. Changes to existing image paths do not count. Additions accompanied by removals are held in `news-state.json` → `pending`; confirm new works via the managed registration below. The initial state conservatively recognizes all existing image paths and hashes, so previously uploaded but never displayed old files also require registration.
+## データと日付
 
-The workflow groups same-day/category additions, preserves earlier content identities, regenerates only the marked NEWS block in INDEX, commits only NEWS files, and explicitly requests a Pages build. A NEWS-only deployment has no content delta and stops without another commit. Conflicts with concurrent main changes fail safely; rerun the workflow after resolving them. No force push is used.
+`works.json` は一元化した自動生成台帳です。固有ID、タイトル、カテゴリー、リンク、公開状態、初回公開日時、公開成功の証拠、既知のコンテンツIDを保持します。生成元は実際に成功したPagesデプロイのHTMLと商品・動画JSONです。失敗したデプロイ、未公開ブランチ、未公開のmain差分には日付を付けません。
 
-## Managed registration for other categories
+新着の日付は **XEN CSJサイトで初めて公開に成功した日時（JST）** です。配信サービスの楽曲発売日・外部動画の初公開日とは区別します。既存の歴史記事に記録された確認済みの外部公開日はそのまま維持します。
 
-DESIGN, APPAREL, ARCHITECTURE, SPACE, SOUND, CINEMATIC, ANIMATION, STORYBOOKS and YOUTUBE have differing work structures, so do not guess from image or iframe changes. Add a record to `news-content.json` in the same commit as a genuinely new work:
+移行前から掲載されている作品には `baseline: true` を設定し、新着を一斉に作りません。確認できない過去の初回公開日時は `publishedAt: null` とし、推測しません。
 
-```json
-[
-  {
-    "id": "cinematic-example-stable-id",
-    "status": "published",
-    "category": "CINEMATIC",
-    "page": "cinematic.html",
-    "marker": "UNIQUE_VIDEO_ID_IN_THE_PAGE",
-    "contentIds": ["youtube:UNIQUE_VIDEO_ID_IN_THE_PAGE"],
-    "countKnown": true,
-    "releaseDate": "2026-10-10",
-    "releaseEvidence": "OFFICIAL_RELEASE_PAGE_URL"
-  }
-]
+『途中のままで』は、main追加コミット `8061a6a71d40fd0104676d54ec37a632c9983316` のPages成功記録により **2026-10-21 21:43:27 JST** と確認済みです。元の手動告知1件をこの日付・タイトル・種別 `NEW RELEASE` に修正し、重複登録しません。
+
+証拠: https://github.com/XENCSJ/portfolio/actions/runs/39601512901/job/119227293594
+
+## NEWS表示
+
+既存のHTML/CSS構造を利用し、通常記事4枠＋固定のリニューアル記事を維持します。新しい作品は作品ごとにタイトルと直接リンクを保持し、公開日時の降順に表示します。固定記事は既存どおり最下部です。以前の写真バッチや指定済みの記事置換は履歴として保持します。`NEW RELEASE` は既存の本文スロットで表示し、CSS・余白・アニメーションは変更していません。
+
+`news-events.json` と `news-archive.json` は生成履歴。`news-state.json`、`news-content.json`、`news-legacy.json` は旧方式の履歴で、現在の同期処理では使用・更新しません。`news-pinned.json` は固定記事です。
+
+## 検証・復旧
+
+```sh
+python news.py
+python -m unittest -v test_news.py test_sync_works.py
+python sync_works.py
+python news.py --check
+node --check xen-news.js
 ```
 
-Use a permanent work ID, not a timestamp. `marker` must identify that work in the deployed HTML (a unique video ID, image URL or HTML id). Multiple images of one work share one content ID; different works need different IDs. For a new version or replacement of the same work, retain its ID and do not add an announcement. For a photo batch, list the unique photo IDs. Optional `anchor` begins with `#`; optional `title` supplies a concise announcement. Use `countKnown:false` when the work count cannot be confirmed. SNAP/ARTWORKS/DESIGN and other site additions receive the successful deployment date. SOUND/CINEMATIC/ANIMATION/YOUTUBE require an editor-verified `releaseDate` (YYYY-MM-DD, JST) and `releaseEvidence`; the generator refuses to substitute the site-addition date. For any category, a supplied verified original release date takes priority. The work must still exist in a successful deployment before registration. Dates later than site publication are rejected. Never enter guessed dates. Preserve completed registrations to avoid reuse of IDs.
+公開履歴を使った実同期はGitHub Actionsの `Update verified NEWS` → Run workflow、または認証済み環境の `python sync_works.py --refresh`（`GITHUB_REPOSITORY`、`GH_TOKEN` が必要）。APIトークンをHTMLやJSONに保存しません。
 
-Independent important announcements require an editor-verified event in `news-events.json`, with a permanent ID, evidence and a verified date. Do not edit the fixed article. Run `python news.py` after intentional event edits.
+生成済みNEWSの不一致で同期が止まらないよう、検査ジョブは生成を先に実行します。同期は成功したデプロイを順番に追跡し、NEWSだけの公開には新規コミットを作りません。mainの同時更新があった場合は上書きせず停止し、次の公開成功イベントで再実行します。
 
-## Requested YouTube article replacement (2026-10-20 JST)
-
-The homepage slot previously occupied by `legacy-2` now displays `legacy-4`, using `replacesEventId: "legacy-2"` on the replacement event. Its actual YouTube publication date was confirmed in the expanded video description as **2026-09-03**, and its link is `https://youtu.be/Df4ekWvuGng`. This explicit substitution preserves the other three visible articles and the fifth renewal article even though the replacement's release date is older than another archived video. It is not a second pinned article: future NEWS still displaces the oldest selected slot normally. The original notice remains only in the historical registry/archive. The generator applies the substitution on every run and deduplicates the already registered replacement video. Dates and other historical notices are unchanged.
-
-## Verification and recovery
-
-- `python -m unittest -v test_news.py`
-- `python news.py --check`
-- `node --check xen-news.js`
-- `Update verified NEWS` → Run workflow reconciles successful deployments after an interrupted run. It uses the same evidence and deduplication rules.
-
-Generated HTML works without JavaScript; `xen-news.js` only adds a scroll reveal. CSS is scoped to NEWS, has visible keyboard focus, touch-sized links and reduced-motion support. No third-party NEWS API or browser-side credentials are used.
-
-## Initial audit (2026-10-20 JST)
-
-| Date | Category | Verified addition |
-| --- | --- | --- |
-| 2026-10-19 | ARTWORKS | 7 new gallery works |
-| 2026-10-16 | SNAP | 11 + 2 + 141 = 154 photos, grouped into one item |
-| 2025-07-16 / 2025-11-04 / 2025-11-05 | CINEMATIC | 4 videos, original YouTube release dates; outside latest four |
-| 2026-10-10 | YOUTUBE | Verified Puroland publication notice |
-| 2026-09-24 | YOUTUBE | Verified Study With Me publication notice |
-| 2026-10-20 | WEBSITE | Fixed renewal notice |
-
-`news-audit.json` and event evidence contain the reviewed commit IDs and observed successful deployment timestamps. SOUND Spotify album additions reuse already listed works; recent copy, layout, rearrangement and removal changes on other pages were excluded. Older release notices retain their previously verified original release dates. No unverifiable historical dates were invented.
-
-The fixed title is exactly `ホームページリニューアル`. A normal record may not use the fixed ID or pinned state. The 2026-10-20 audit corrected the earlier CINEMATIC site-addition dates using official YouTube metadata; `news-release-audit.json` retains all 19 checked release timestamps.
+テストの追加・修正・非公開作品はメモリ上のfixtureのみです。公開HTML・台帳・アーカイブには残しません。
