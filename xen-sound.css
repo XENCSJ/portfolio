@@ -80,8 +80,8 @@ body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
 body#top.sound-page main .sound-song {
   margin: 0;
   padding: clamp(32px, 5vw, 64px) clamp(16px, 4vw, 48px);
-  background: #080808;
-  color: #eeeae3;
+  background: #fff;
+  color: #171719;
   text-align: center;
 }
 body#top.sound-page main .sound-song-cover {
@@ -94,7 +94,7 @@ body#top.sound-page main .sound-song-cover {
 body#top.sound-page main .sound-song-title {
   margin: 30px 0 10px;
   padding: 0;
-  color: #f4efe5;
+  color: #171719;
   font-size: clamp(22px, 4.8vw, 30px);
   font-weight: 500;
   line-height: 1.65;
@@ -103,7 +103,7 @@ body#top.sound-page main .sound-song-title {
 }
 body#top.sound-page main .sound-song-credit {
   margin: 0;
-  color: #c5b18c;
+  color: #82704d;
   font-size: 12px;
   line-height: 1.8;
   letter-spacing: .08em;
@@ -127,7 +127,7 @@ body#top.sound-page main .sound-lyric-section h4 {
   justify-content: center;
   gap: 16px;
   margin: 0 0 16px;
-  color: #c5b18c;
+  color: #82704d;
   font-size: 11px;
   font-weight: 400;
   line-height: 1.8;
@@ -139,12 +139,12 @@ body#top.sound-page main .sound-lyric-section h4::after {
   content: "";
   width: clamp(24px, 5vw, 52px);
   height: 1px;
-  background: #c5b18c;
+  background: #82704d;
   opacity: .3;
 }
 body#top.sound-page main .sound-lyric-section p {
   margin: 0;
-  color: #eeeae3;
+  color: #333;
   font-size: clamp(14px, 3.8vw, 16px);
   font-weight: 400;
   line-height: 2.15;
