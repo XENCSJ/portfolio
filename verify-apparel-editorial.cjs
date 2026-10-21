@@ -32,7 +32,10 @@ const server = http.createServer((req,res) => {
       await page.goto(base+'apparel.html',{waitUntil:'domcontentloaded'});
       await page.waitForSelector('.base-product');
       const editorial = page.locator('.apparel-editorial');
-      await editorial.locator('img').evaluateAll(images=>Promise.all(images.map(image=>image.decode())));
+      for(const image of await editorial.locator('img').all()) {
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate(img=>img.decode());
+      }
       assert.equal(await editorial.locator('img').count(),5);
       assert.equal(await page.locator('.base-product').count(),6);
       assert.deepEqual(await page.locator('.base-product-link').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
