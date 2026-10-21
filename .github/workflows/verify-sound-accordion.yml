@@ -1,0 +1,124 @@
+name: Verify SOUND lyrics accordion
+on:
+  push:
+    branches: [work/sound-lyrics-accordion-20261021]
+permissions:
+  contents: read
+jobs:
+  desktop-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Prepare focused browser checks
+        run: |
+          cat > verify-accordion.cjs <<'JS'
+          const { chromium, webkit } = require('playwright');
+          const fs = require('fs');
+          const assert = require('node:assert/strict');
+          const url = process.env.TEST_URL || 'http://127.0.0.1:8765/sound.html';
+          const phase = url.startsWith('http://127') ? 'local' : 'published';
+          const out = 'accordion-evidence';
+          fs.mkdirSync(out, {recursive:true});
+          (async()=>{
+           const results=[];
+           for (const [engine,type,widths] of [['chromium',chromium,[1440,390]],['webkit',webkit,[390,320]]]) {
+            const browser=await type.launch();
+            for (const width of widths) {
+             const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<700,hasTouch:width<700});
+             const page=await context.newPage();
+             const errors=[];page.on('pageerror',e=>errors.push(e.message));
+             await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(url).origin?r.continue():r.abort());
+             await page.goto(url,{waitUntil:'networkidle'});
+             const details=page.locator('.sound-lyrics-accordion');
+             const summary=details.locator('summary');
+             const sections=page.locator('.sound-lyric-section');
+             const done=()=>page.waitForFunction(()=>document.querySelector('.sound-lyrics-accordion').getAnimations().length===0);
+             const activate=()=>width<700?summary.tap():summary.click();
+             await summary.scrollIntoViewIfNeeded();
+             assert.equal(await summary.innerText(),'歌詞を見る');
+             assert.equal(await details.getAttribute('open'),null);
+             assert(!(await sections.first().isVisible()));
+             const closed=await details.evaluate(e=>e.getBoundingClientRect().height);
+             assert(closed>=44);
+             await page.locator('#tochu-no-mamade').screenshot({path:`${out}/${phase}-${engine}-${width}-closed.png`});
+             await activate();
+             assert.equal(await summary.innerText(),'歌詞を閉じる');
+             await done();
+             assert.equal(await sections.count(),8);
+             assert.equal(await page.locator('.sound-song-lyrics br').count(),36);
+             const original=fs.readFileSync('sound.html','utf8').match(/<div class="sound-song-lyrics"[^>]*>([\s\S]*?)<\/div>/)[1];
+             const expectedText=original.replace(/<[^>]*>/g,'').replace(/\s/g,'');
+             const actualText=await page.locator('.sound-song-lyrics').textContent();
+             assert.equal(actualText.replace(/\s/g,''),expectedText);
+             for (const section of await sections.all()) assert(await section.isVisible());
+             const metrics=await details.evaluate(d=>({
+              naturalHeight:Math.abs(d.getBoundingClientRect().height-(d.querySelector('summary').getBoundingClientRect().height+d.querySelector('.sound-lyrics-panel').getBoundingClientRect().height))<2,
+              overflow:document.documentElement.scrollWidth>innerWidth,
+              centered:[...d.querySelectorAll('.sound-lyric-section p')].every(p=>getComputedStyle(p).textAlign==='center'),
+              fits:[...d.querySelectorAll('.sound-lyric-section p')].every(p=>p.scrollWidth<=p.clientWidth)
+             }));
+             assert(metrics.naturalHeight&&!metrics.overflow&&metrics.centered&&metrics.fits,JSON.stringify(metrics));
+             await summary.scrollIntoViewIfNeeded();
+             await page.screenshot({path:`${out}/${phase}-${engine}-${width}-open.png`});
+             const expandedHeight=await details.evaluate(e=>e.getBoundingClientRect().height);
+             await activate();await done();
+             assert.equal(await summary.innerText(),'歌詞を見る');
+             assert.equal(await details.getAttribute('open'),null);
+             assert(!(await sections.first().isVisible()));
+             assert(Math.abs(await details.evaluate(e=>e.getBoundingClientRect().height)-closed)<2);
+             // Reverse a real click/tap while the expansion is still in progress.
+             await activate();await activate();await done();
+             assert.equal(await details.getAttribute('open'),null);
+             await summary.press('Enter');await done();
+             assert.equal(await summary.getAttribute('aria-expanded'),'true');
+             await summary.press('Space');await done();
+             assert.equal(await summary.getAttribute('aria-expanded'),'false');
+             await page.emulateMedia({reducedMotion:'reduce'});
+             await activate();await done();assert(await sections.last().isVisible());
+             await activate();assert.equal(await details.getAttribute('open'),null);
+             assert.deepEqual(errors,[]);
+             results.push({phase,engine,width,closedHeight:closed,expandedHeight,initiallyHidden:true,openClose:true,rapidToggle:true,keyboard:true,reducedMotion:true,lyricsUnchanged:true,...metrics});
+             await context.close();
+            }
+            await browser.close();
+           }
+           fs.writeFileSync(`${out}/${phase}-results.json`,JSON.stringify(results,null,2));
+           console.log(JSON.stringify(results,null,2));
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+      - name: Verify local desktop and touch layouts
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/accordion-http.log 2>&1 &
+          node verify-accordion.cjs
+      - name: Wait for authorized Pages publication
+        run: |
+          python3 - <<'PY'
+          import time,urllib.request
+          for attempt in range(90):
+              try:
+                  req=urllib.request.Request('https://xencsj.github.io/portfolio/sound.html?accordion-check='+str(time.time()),headers={'Cache-Control':'no-cache'})
+                  text=urllib.request.urlopen(req,timeout=20).read().decode()
+                  if 'xen-sound.js?v=20261021-lyrics-accordion' in text:
+                      print('Published accordion detected');break
+              except Exception as error:
+                  print(type(error).__name__)
+              time.sleep(10)
+          else:
+              raise SystemExit('Publication not detected')
+          PY
+      - name: Verify published desktop and touch layouts
+        env:
+          TEST_URL: https://xencsj.github.io/portfolio/sound.html
+        run: node verify-accordion.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sound-accordion-evidence
+          path: accordion-evidence/
+          retention-days: 7
