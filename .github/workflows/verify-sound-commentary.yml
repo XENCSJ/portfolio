@@ -33,6 +33,8 @@ jobs:
                 const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<700,hasTouch:width<700});
                 const page=await context.newPage();
                 const errors=[];page.on('pageerror',e=>errors.push(e.message));
+                // External music embeds are outside this focused commentary check.
+                await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(url).origin?r.continue():r.abort());
                 await page.goto(url,{waitUntil:'networkidle'});
                 const about=page.locator('.sound-about-accordion');
                 const aboutButton=about.locator('summary');
