@@ -17,6 +17,13 @@ body.xen-curated.apparel-page .apparel-media-caption span{display:block;font-siz
 @media(max-width:360px){body.xen-curated.apparel-page .product-caption{padding-inline:6px;font-size:9px;letter-spacing:0}}
 @media(prefers-reduced-motion:reduce){body.xen-curated.apparel-page .image-gallery.trio .gallery-visual img{transition:none;transform:none!important}}
 
-/* The brand visual is followed by a compact store heading, not a section-size gap. */
-body#top.xen-noir.apparel-page main .brand-visual { margin-bottom:0; }
-body#top.xen-noir.apparel-page main > .base-products { margin-top:clamp(24px,3vw,36px); }
+/* Restored editorial sequence: natural image heights, no inter-image gutters. */
+body#top.xen-noir.apparel-page main > .apparel-editorial { margin-block:0; padding:0; min-height:0; }
+body#top.xen-noir.apparel-page .apparel-editorial .brand-visual { margin:0; }
+body#top.xen-noir.apparel-page .apparel-editorial-image { display:block; position:relative; min-width:0; margin:0; padding:0; border:0; background:transparent; }
+body#top.xen-noir.apparel-page .apparel-editorial-image img { display:block; width:100%; height:auto; max-width:100%; object-fit:contain; }
+body#top.xen-noir.apparel-page .apparel-editorial-trio { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; align-items:start; margin:0; padding:0; }
+body#top.xen-noir.apparel-page main > .apparel-editorial + .base-products { margin-top:clamp(24px,3vw,36px); }
+@media(max-width:650px) {
+  body#top.xen-noir.apparel-page main > .apparel-editorial { margin-inline:calc(-1 * clamp(18px,4vw,56px)); }
+}
