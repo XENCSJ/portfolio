@@ -381,5 +381,20 @@
         "publishedAt": "2026-10-15T18:41:03.000Z"
       }
     }
+  },
+  {
+    "id": "sound-tochu-no-mamade-announcement",
+    "date": "2026-10-22",
+    "category": "SOUND",
+    "title": "楽曲『途中のままで』を掲載しました。",
+    "url": "./sound.html#tochu-no-mamade",
+    "contentIds": [
+      "sound:tochu-no-mamade"
+    ],
+    "countKnown": true,
+    "evidence": {
+      "page": "https://xencsj.github.io/portfolio/sound.html#tochu-no-mamade",
+      "announcement": "Owner-requested NEWS announcement dated 2026-10-22 JST. The date identifies this announcement, not a music distribution release date. The song jacket, credits, commentary and lyrics were verified on the public page."
+    }
   }
 ]
