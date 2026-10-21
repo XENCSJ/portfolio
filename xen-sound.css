@@ -121,26 +121,16 @@ body#top.sound-page main .sound-lyric-section {
 body#top.sound-page main .sound-lyric-section + .sound-lyric-section {
   margin-top: clamp(32px, 5vw, 44px);
 }
-body#top.sound-page main .sound-lyric-section h4 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 0 0 16px;
-  color: #82704d;
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 1.8;
-  letter-spacing: .12em;
-  text-align: center;
+/* Structure labels are source metadata, never public lyrics. No text matching. */
+body#top.sound-page main .sound-song-lyrics .sound-lyric-section > h4,
+body#top.sound-page main .sound-song-lyrics [data-lyric-label] {
+  display: none !important;
 }
-body#top.sound-page main .sound-lyric-section h4::before,
-body#top.sound-page main .sound-lyric-section h4::after {
-  content: "";
-  width: clamp(24px, 5vw, 52px);
-  height: 1px;
-  background: #82704d;
-  opacity: .3;
+body#top.sound-page main .sound-song-lyrics .sound-lyric-section > h4::before,
+body#top.sound-page main .sound-song-lyrics .sound-lyric-section > h4::after,
+body#top.sound-page main .sound-song-lyrics [data-lyric-label]::before,
+body#top.sound-page main .sound-song-lyrics [data-lyric-label]::after {
+  content: none !important;
 }
 body#top.sound-page main .sound-lyric-section p {
   margin: 0;
