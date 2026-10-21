@@ -31,11 +31,14 @@ jobs:
               const browser = await browserType.launch({ headless: true });
               for (const width of sizes) {
                 const page = await browser.newPage({ viewport: { width, height: width > 700 ? 1000 : 900 }, deviceScaleFactor: 1, isMobile: width < 700, hasTouch: width < 700 });
-                // Local layout checks do not need third-party players or analytics.
-                await page.route('**/*', route => route.request().url().startsWith('http://127.0.0.1:8765/') ? route.continue() : route.abort());
-                await page.goto('http://127.0.0.1:8765/sound.html', { waitUntil: 'networkidle' });
+                // Verify the published SOUND page; third-party players and analytics are unnecessary.
+                await page.route('**/*', route => route.request().url().startsWith('https://xencsj.github.io/portfolio/') ? route.continue() : route.abort());
+                await page.goto('https://xencsj.github.io/portfolio/sound.html', { waitUntil: 'networkidle' });
                 await page.locator('#tochu-no-mamade').scrollIntoViewIfNeeded();
                 await page.waitForFunction(() => getComputedStyle(document.querySelector('#j-pop')).opacity === '1');
+                const credit = await page.locator('.sound-song-credit').evaluate(el => { const s = getComputedStyle(el); const r = document.createRange(); r.selectNodeContents(el); const lines = [...r.getClientRects()]; return { text: el.textContent, centered: s.textAlign === 'center', fontSize: s.fontSize, color: s.color, lineCount: lines.length, textFits: el.scrollWidth <= el.clientWidth && lines.every(b => b.left >= -1 && b.right <= innerWidth + 1), bodyBackground: getComputedStyle(document.body).backgroundColor }; });
+                assert.equal(credit.text, '作詞・作曲・編曲・歌唱：XEN');
+                assert(credit.centered && credit.textFits && credit.lineCount === 1, JSON.stringify(credit));
                 const actual = await page.locator('.sound-lyric-section').evaluateAll(sections => sections.map(s => ({ label: s.querySelector('h4').textContent, stanzas: [...s.querySelectorAll('p')].map(p => p.innerText) })));
                 assert.deepEqual(actual, expected);
                 assert.equal(await page.locator('#tochu-no-mamade button, #tochu-no-mamade details, #tochu-no-mamade summary').count(), 0);
@@ -67,7 +70,9 @@ jobs:
                 await page.screenshot({ path: `${out}/${engine}-${width}-top.png` });
                 await page.emulateMedia({ reducedMotion: 'reduce' });
                 assert(await page.locator('.sound-lyric-section').last().isVisible());
-                results.push({ engine, width, ...metrics, lyricsMatch: true, allSectionsVisible: true });
+                await page.locator('.sound-song-credit').scrollIntoViewIfNeeded();
+                await page.screenshot({ path: `${out}/${engine}-${width}-credit.png` });
+                results.push({ engine, width, credit, ...metrics, lyricsMatch: true, allSectionsVisible: true });
                 await page.close();
               }
               await browser.close();
@@ -90,7 +95,6 @@ jobs:
           ]
           
           JSON
-          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/sound-http.log 2>&1 &
           CODEX_PRIMARY_RUNTIME_NODE_MODULES="$GITHUB_WORKSPACE/node_modules" node verify-sound.cjs
       - uses: actions/upload-artifact@v4
         if: always()
