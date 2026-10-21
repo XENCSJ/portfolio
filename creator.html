@@ -121,6 +121,18 @@ body#top.creator-page .cp-career .cp-related-link a{color:#fff;text-decoration-t
 </style><link rel="stylesheet" href="./xen-typesetting.css?v=20261019-phrase2">
 <link rel="stylesheet" href="./xen-latest-videos.css?v=20261019-1">
 <link rel="stylesheet" href="./xen-cinema.css?v=20261021-premium2">
+<style id="xen-creator-white-play-icon">
+/* CREATOR only: a white triangle, with the existing size and position. */
+body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
+  border:0;
+  background:transparent;
+  color:#fff;
+  transition:opacity 240ms ease;
+}
+@media (prefers-reduced-motion:reduce) {
+  body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon { transition:none; }
+}
+</style>
 <script defer src="./xen-cinema.js?v=20261021-one-tap1"></script>
 <script src="./xen-latest-videos.js?v=20261021-premium1" defer></script>
 <link rel="stylesheet" href="./xen-prose.css?v=20261019-body14">
