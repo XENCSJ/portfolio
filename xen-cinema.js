@@ -47,14 +47,17 @@
   function loadAPI() {
     if (window.YT?.Player) return Promise.resolve(window.YT);
     if (!apiPromise) apiPromise = new Promise(resolve => {
+      // An API request can stall without firing onerror. Do not call that success.
+      const timeout = setTimeout(() => resolve(null),15000);
       const previous = window.onYouTubeIframeAPIReady;
       window.onYouTubeIframeAPIReady = () => {
+        clearTimeout(timeout);
         try { previous?.(); } finally { resolve(window.YT); }
       };
       const script = document.createElement('script');
       script.src = 'https://www.youtube.com/iframe_api';script.async = true;
       // The native iframe remains usable if the optional monitoring API fails.
-      script.onerror = () => resolve(null);
+      script.onerror = () => { clearTimeout(timeout);resolve(null); };
       document.head.append(script);
     });
     return apiPromise;
@@ -72,33 +75,85 @@
     url.searchParams.set('controls','1');
     url.searchParams.set('enablejsapi','1');
     if (/^https?:$/.test(location.protocol)) url.searchParams.set('origin',location.origin);
-    // Never introduce muted playback or retry a blocked autoplay attempt.
-    frame.src = url.href;
+    // Never mute the player or overwrite the user's volume preference.
     frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
     frame.allowFullscreen = true;
     frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    frame.dataset.playbackStatus = 'requested';
+    frame.dataset.apiStatus = 'loading';
+    frame.src = url.href;
     let loaded = false;
     let failed = false;
+    let started = false;
+    let startTimeout;
     const timeout = setTimeout(() => { if (!loaded) fail(); },20000);
     function fail() {
       clearTimeout(timeout);
+      clearTimeout(startTimeout);
       if (failed || !frame.isConnected) return;
       failed = true;
+      frame.dataset.playbackStatus = 'error';
       onFailure?.(frame);
     }
     frame.addEventListener('load', () => { loaded = true;clearTimeout(timeout); },{once:true});
     frame.addEventListener('error',fail,{once:true});
     // Appending the iframe happens synchronously in the original click handler.
-    // Monitoring is optional and must never delay that first playback request.
+    // autoplay=1 is the first request. Once the API is ready, explicitly honour
+    // the same user's click if the player has not started/buffered. The previous
+    // implementation only monitored onReady, leaving a cued player idle.
+    // This cannot override Safari/other browsers' audible-autoplay restrictions.
     loadAPI().then(api => {
-      if (!api || !frame.isConnected || failed) return;
+      if (!frame.isConnected || failed) return;
+      if (!api) {
+        frame.dataset.apiStatus = 'unavailable';
+        frame.dataset.playbackStatus = 'unconfirmed';
+        return;
+      }
       new api.Player(frame, {events:{
-        onReady: () => { loaded = true;clearTimeout(timeout); },
+        onReady: event => {
+          if (!frame.isConnected || failed) return;
+          loaded = true;clearTimeout(timeout);
+          frame.dataset.apiStatus = 'ready';
+          const state = event.target.getPlayerState();
+          frame.dataset.playbackState = String(state);
+          if (state === 1) {
+            started = true;frame.dataset.playbackStatus = 'playing';
+          } else if (state === 3) frame.dataset.playbackStatus = 'buffering';
+          else if (state === 2) frame.dataset.playbackStatus = 'paused';
+          else if (state === 0) frame.dataset.playbackStatus = 'ended';
+          else {
+            frame.dataset.playbackStatus = 'requested';
+            event.target.playVideo();
+          }
+          startTimeout = setTimeout(() => {
+            if (frame.isConnected && !started && !failed && frame.dataset.autoplayBlocked !== 'true' && !['paused','ended'].includes(frame.dataset.playbackStatus))
+              frame.dataset.playbackStatus = 'unconfirmed';
+          },15000);
+        },
         onError: fail,
-        onStateChange: event => { frame.dataset.playbackState = String(event.data); },
-        onAutoplayBlocked: () => { frame.dataset.autoplayBlocked = 'true'; }
+        onStateChange: event => {
+          if (!frame.isConnected || failed) return;
+          frame.dataset.playbackState = String(event.data);
+          if (event.data === 1) {
+            started = true;clearTimeout(startTimeout);
+            delete frame.dataset.autoplayBlocked;
+            frame.dataset.playbackStatus = 'playing';
+          } else if (event.data === 2) frame.dataset.playbackStatus = 'paused';
+          else if (event.data === 0) frame.dataset.playbackStatus = 'ended';
+          else if (event.data === 3) frame.dataset.playbackStatus = 'buffering';
+        },
+        onAutoplayBlocked: () => {
+          clearTimeout(startTimeout);
+          frame.dataset.autoplayBlocked = 'true';
+          frame.dataset.playbackStatus = 'blocked';
+          // Keep native controls accessible. Do not loop, mute or fake a click.
+        }
       }});
-    }).catch(() => { /* Preserve the official player and its normal controls. */ });
+    }).catch(() => {
+      frame.dataset.apiStatus = 'unavailable';
+      if (!started && !failed) frame.dataset.playbackStatus = 'unconfirmed';
+      // Preserve the official player and its normal controls.
+    });
     return frame;
   }
   function enhance(root = document) {
@@ -135,5 +190,12 @@
     });
   }
   window.XENCinema = {enhance, decorate, createFrame, thumbnail};
+  // Begin downloading the API on intent, without creating a player or playing
+  // audio. createFrame still inserts its iframe in the original click handler.
+  for (const name of ['pointerover','focusin','pointerdown']) {
+    document.addEventListener(name,event => {
+      if (event.target instanceof Element && event.target.closest('.xen-cinema-cover,.xen-latest-play')) loadAPI();
+    },{passive:true});
+  }
   enhance();
 })();
