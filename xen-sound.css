@@ -75,3 +75,84 @@ body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
 .sound-service-unverified { opacity: .72; }
 .sound-service-unverified .sound-service-status { color: #6b6b6b; }
 .sound-service-logo img { max-width: 100%; object-fit: contain; }
+
+/* One self-contained J-POP release; existing catalogue layouts are unchanged. */
+body#top.sound-page main .sound-song {
+  margin: 0;
+  padding: clamp(32px, 5vw, 64px) clamp(16px, 4vw, 48px);
+  background: #080808;
+  color: #eeeae3;
+  text-align: center;
+}
+body#top.sound-page main .sound-song-cover {
+  display: block;
+  width: min(100%, 380px);
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+body#top.sound-page main .sound-song-title {
+  margin: 30px 0 10px;
+  padding: 0;
+  color: #f4efe5;
+  font-size: clamp(22px, 4.8vw, 30px);
+  font-weight: 500;
+  line-height: 1.65;
+  letter-spacing: .08em;
+  text-align: center;
+}
+body#top.sound-page main .sound-song-credit {
+  margin: 0;
+  color: #c5b18c;
+  font-size: 12px;
+  line-height: 1.8;
+  letter-spacing: .08em;
+  text-align: center;
+}
+body#top.sound-page main .sound-song-lyrics {
+  width: 100%;
+  max-width: 640px;
+  margin: 44px auto 0;
+}
+body#top.sound-page main .sound-lyric-section {
+  margin: 0;
+  padding: 0;
+}
+body#top.sound-page main .sound-lyric-section + .sound-lyric-section {
+  margin-top: clamp(32px, 5vw, 44px);
+}
+body#top.sound-page main .sound-lyric-section h4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 0 16px;
+  color: #c5b18c;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: .12em;
+  text-align: center;
+}
+body#top.sound-page main .sound-lyric-section h4::before,
+body#top.sound-page main .sound-lyric-section h4::after {
+  content: "";
+  width: clamp(24px, 5vw, 52px);
+  height: 1px;
+  background: #c5b18c;
+  opacity: .3;
+}
+body#top.sound-page main .sound-lyric-section p {
+  margin: 0;
+  color: #eeeae3;
+  font-size: clamp(14px, 3.8vw, 16px);
+  font-weight: 400;
+  line-height: 2.15;
+  letter-spacing: .035em;
+  text-align: center;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
+  text-wrap: wrap;
+}
+body#top.sound-page main .sound-lyric-section p + p { margin-top: 20px; }
