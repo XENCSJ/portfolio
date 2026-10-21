@@ -21,7 +21,6 @@
       "SNAP (111).JPEG": "3e2e0f2426c46980373e4df7b07cc1cc9472fc20",
       "SNAP (112).JPEG": "5fbad92d8d2cd1fb272645c7af701cc77b15214b",
       "SNAP (113).JPEG": "7af8a2c5d8becfb5a97afab8cdb2e5be7d7ca202",
-      "SNAP (114).JPEG": "1c8b0385394fea790429c663b27f0e04e6f129ef",
       "SNAP (115).JPEG": "0deb9804d099dcd74604d2e6d1df65cbe760a406",
       "SNAP (116).JPEG": "3f1c703bcc66123f7eae9e52d891f97385c6d8b4",
       "SNAP (117).JPEG": "cecac23dd2fc40e1f1bdf1cc9419612146d8248d",
@@ -45,7 +44,6 @@
       "SNAP (133).JPEG": "6abc39c33ef40e9ac165dd2ef3397036a5c3fd63",
       "SNAP (134).JPEG": "9d8b1eeb8ba2f782ba82b65c67c7c987df44cfd9",
       "SNAP (135).JPEG": "c15d9b7844fef1292aec412ecd8699b43727acd0",
-      "SNAP (136).JPEG": "e4f153bed8c064300fa5203961f5fa82ac9555ff",
       "SNAP (137).JPEG": "4cfa6fcfa42198b8793a1584f5b9e133b778c837",
       "SNAP (138).JPEG": "5c42062352ec3bdffc417ce9370ef428c2af0416",
       "SNAP (139).JPEG": "ee0b5cc8dcbd04cfa4e96f33523f0c45b12f4c4c",
@@ -73,7 +71,6 @@
       "SNAP (203).JPEG": "f45ba23d3fdcb4750c80aa0f4a62bf4fa04be910",
       "SNAP (204).JPEG": "8765ff08f6c116a8d81c43d57ff6a31c92050903",
       "SNAP (205).JPEG": "b0788e0240cf6c7f458d16fb3b03d7a77b8f25ec",
-      "SNAP (206).JPEG": "8f48cf870dad809c6e6a25e4f51dcc3df0071fb6",
       "SNAP (207).JPEG": "2757df6788686650bcf0940ca1706652a642ba84",
       "SNAP (208).JPEG": "1e85741c069b4d399d1361fa19441629c635884a",
       "SNAP (209).JPEG": "1f9754f6bd33fd6edaf58390bc7f4ed653417b66",
@@ -86,7 +83,6 @@
       "SNAP (215).JPEG": "6c7e11ebcee6285518731e9c1552fe2f49056027",
       "SNAP (216).JPEG": "bbc3d33aad4cf879faec6087e24890fdb069d530",
       "SNAP (217).JPEG": "dee84df1643dbe241c846e5c89374dfb756f847f",
-      "SNAP (218).JPEG": "1316790b58696eb5082381e0a2f365e6f9cef552",
       "SNAP (219).JPEG": "c7b79a62b077093680595d746efb4fcd7828a884",
       "SNAP (22).JPEG": "107097e2013b1ca47f26ce0b4456636afcab5153",
       "SNAP (220).JPEG": "fc8e975c652b538d91419cf4323647dc6faa8f4a",
@@ -156,7 +152,6 @@
       "SNAP (75).JPEG": "b48344a7fcb346e65b0304f68f3fa8e20b5fcd19",
       "SNAP (76).JPEG": "bbdd0342947b9e16c030c13b72eb847cfbc8bd69",
       "SNAP (77).JPEG": "0ae658001de07f4b9a92b35d636b84dfca6598a7",
-      "SNAP (78).JPEG": "9351fc98dcb942577a2547e91d2c540f22fdb863",
       "SNAP (79).JPEG": "1eee0f541e5446333835c1dff85cdd09359f07ef",
       "SNAP (8).jpg": "328f63322efe7b604b806b8d49db6a2677a0aadf",
       "SNAP (80).JPEG": "8581d9c1407ae96895d9b26d4dda1722149d2eed",
@@ -1236,7 +1231,13 @@
     "ffde72b1c3af4d413c92237ddcd27571ce8962bf"
   ],
   "processed": [
-    "9a28d4a0a8abe0e43f435c33b9d3be4781db5435"
+    "9a28d4a0a8abe0e43f435c33b9d3be4781db5435",
+    "0ae17fe948bd88a58c0fe288201a037e46d4148f"
   ],
-  "pending": []
+  "pending": [],
+  "lastPublication": {
+    "sha": "0ae17fe948bd88a58c0fe288201a037e46d4148f",
+    "publishedAt": "2026-10-21T09:09:18Z",
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39574481152/job/119136803177"
+  }
 }
