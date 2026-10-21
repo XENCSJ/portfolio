@@ -1,0 +1,100 @@
+name: Verify Tochu no Mamade responsive lyrics
+on:
+  push:
+    branches: [work/verify-sound-tochu-20261021]
+permissions:
+  contents: read
+jobs:
+  responsive-lyrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Verify exact lyrics and desktop/mobile layouts
+        run: |
+          cat > verify-sound.cjs <<'JS'
+          const { chromium, webkit } = require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES + '/playwright');
+          const fs = require('fs');
+          const assert = require('assert/strict');
+          const source = JSON.parse(fs.readFileSync(__dirname + '/lyrics-source.json', 'utf8'));
+          const expected = source.map(s => ({ label: '[' + s.label + ']', stanzas: s.stanzas.map(a => a.join('\n')) }));
+          const out = __dirname + '/verification';
+          fs.mkdirSync(out, { recursive: true });
+          (async () => {
+            const results = [];
+            for (const [engine, browserType, sizes] of [['chromium', chromium, [1440, 375, 320]], ['webkit', webkit, [430, 375]]]) {
+              const browser = await browserType.launch({ headless: true });
+              for (const width of sizes) {
+                const page = await browser.newPage({ viewport: { width, height: width > 700 ? 1000 : 900 }, deviceScaleFactor: 1, isMobile: width < 700, hasTouch: width < 700 });
+                // Local layout checks do not need third-party players or analytics.
+                await page.route('**/*', route => route.request().url().startsWith('http://127.0.0.1:8765/') ? route.continue() : route.abort());
+                await page.goto('http://127.0.0.1:8765/sound.html', { waitUntil: 'networkidle' });
+                await page.locator('#tochu-no-mamade').scrollIntoViewIfNeeded();
+                await page.waitForFunction(() => getComputedStyle(document.querySelector('#j-pop')).opacity === '1');
+                const actual = await page.locator('.sound-lyric-section').evaluateAll(sections => sections.map(s => ({ label: s.querySelector('h4').textContent, stanzas: [...s.querySelectorAll('p')].map(p => p.innerText) })));
+                assert.deepEqual(actual, expected);
+                assert.equal(await page.locator('#tochu-no-mamade button, #tochu-no-mamade details, #tochu-no-mamade summary').count(), 0);
+                const metrics = await page.locator('#tochu-no-mamade').evaluate(song => {
+                  const cover = song.querySelector('img');
+                  const paragraphs = [...song.querySelectorAll('.sound-lyric-section p')];
+                  return {
+                    coverLoaded: cover.complete && cover.naturalWidth > 0,
+                    overflow: document.documentElement.scrollWidth > innerWidth,
+                    paragraphs: paragraphs.length,
+                    centered: paragraphs.every(p => getComputedStyle(p).textAlign === 'center'),
+                    fontSize: getComputedStyle(paragraphs[0]).fontSize,
+                    lineHeight: getComputedStyle(paragraphs[0]).lineHeight,
+                    textFits: paragraphs.every(p => p.scrollWidth <= p.clientWidth),
+                    unclipped: [...song.querySelectorAll('.sound-song-lyrics, .sound-lyric-section')].every(el => getComputedStyle(el).overflowY === 'visible' && getComputedStyle(el).maxHeight === 'none'),
+                    children: [...song.children].map(e => e.className),
+                    rect: {width: song.getBoundingClientRect().width, height: song.getBoundingClientRect().height}
+                  };
+                });
+                assert(metrics.coverLoaded && !metrics.overflow && metrics.centered && metrics.textFits && metrics.unclipped, JSON.stringify(metrics));
+                assert.deepEqual(metrics.children, ['sound-song-cover', 'sound-song-title', 'sound-song-credit', 'sound-song-lyrics']);
+                // Every section must remain visible when scrolled into view, including Outro.
+                for (const stanza of await page.locator('.sound-lyric-section').all()) {
+                  await stanza.scrollIntoViewIfNeeded();
+                  assert(await stanza.isVisible());
+                }
+                await page.locator('#tochu-no-mamade').screenshot({ path: `${out}/${engine}-${width}-full.png` });
+                await page.locator('#j-pop-title').scrollIntoViewIfNeeded();
+                await page.screenshot({ path: `${out}/${engine}-${width}-top.png` });
+                await page.emulateMedia({ reducedMotion: 'reduce' });
+                assert(await page.locator('.sound-lyric-section').last().isVisible());
+                results.push({ engine, width, ...metrics, lyricsMatch: true, allSectionsVisible: true });
+                await page.close();
+              }
+              await browser.close();
+            }
+            fs.writeFileSync(`${out}/result.json`, JSON.stringify(results, null, 2));
+            console.log(JSON.stringify(results, null, 2));
+          })().catch(e => { console.error(e); process.exit(1); });
+          
+          JS
+          cat > lyrics-source.json <<'JSON'
+          [
+            {"label":"Verse 1","stanzas":[["終電あとの交差点","行き先もなく歩いてた","昔より増えたものより","置いてきたものを覚えてる"],["欲しかったものを手にしても","なぜか満たされない夜がある","あの頃なら笑ったような","弱さも今じゃ連れて歩く"]]},
+            {"label":"Pre-Chorus 1","stanzas":[["誰かの正解をなぞるほど","器用にはなれなかった","間違えながら選んだ今日を","嫌いにはなりたくない"]]},
+            {"label":"Chorus 1","stanzas":[["まだ途中のままでいい","完成なんてしなくていい","思い通りじゃない日々にも","ちゃんと僕はいたから"],["失くしたものを追うよりも","残ったものを抱えていたい","何者にもなれない夜は","名前のないまま歩いてゆこう"]]},
+            {"label":"Verse 2","stanzas":[["久しぶりに通った道","小さな店はなくなってた","変わらないと思っていたものほど","静かに姿を変えてゆく"],["写真の中で笑う僕は","未来を何も知らなくて","教えてやりたいこともあるけど","知らないままでいい気もした"]]},
+            {"label":"Pre-Chorus 2","stanzas":[["叶わなかった約束も","離れていった人たちも","忘れることが答えじゃなく","思い出せるならそれでいい"]]},
+            {"label":"Chorus 2","stanzas":[["まだ途中のままでいい","昨日より強くなくていい","立ち止まったこの時間にも","きっと意味はあるから"],["幸せなんて言葉より","帰り道で笑えたこと","そんな小さな瞬間だけを","なくさないように生きてゆく"]]},
+            {"label":"Bridge","stanzas":[["朝焼け前の街はまだ","昨日の顔を残してる","急いで答えを出さなくても","時間は勝手に流れてく"]]},
+            {"label":"Outro","stanzas":[["いつか最後に振り返って","綺麗だったと言えなくても","悪くなかったと思えたら","それくらいがちょうどいい"]]}
+          ]
+          
+          JSON
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/sound-http.log 2>&1 &
+          CODEX_PRIMARY_RUNTIME_NODE_MODULES="$GITHUB_WORKSPACE/node_modules" node verify-sound.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sound-tochu-responsive-evidence
+          path: verification/
+          retention-days: 7
