@@ -1,5 +1,19 @@
 [
   {
+    "id": "news-2026-10-22-sound",
+    "date": "2026-10-22",
+    "category": "SOUND",
+    "publishedAt": "",
+    "url": "./sound.html#tochu-no-mamade",
+    "contentIds": [
+      "sound:tochu-no-mamade"
+    ],
+    "countKnown": true,
+    "count": 1,
+    "title": "楽曲『途中のままで』を掲載しました。",
+    "body": ""
+  },
+  {
     "id": "news-2026-10-19-artworks",
     "date": "2026-10-19",
     "category": "ARTWORKS",
