@@ -13,10 +13,10 @@
 
 /* Native details still works without JavaScript; enhance both open and close. */
 (() => {
-  document.querySelectorAll('.sound-page .sound-lyrics-accordion').forEach(details => {
-    const summary = details.querySelector('summary');
-    const panel = details.querySelector('.sound-lyrics-panel');
-    if (!summary || !panel || !panel.querySelector('.sound-song-lyrics')) return;
+  document.querySelectorAll('.sound-page :is(.sound-accordion, .sound-lyrics-accordion)').forEach(details => {
+    const summary = details.querySelector(':scope > summary');
+    const panel = details.querySelector(':scope > .sound-accordion-panel, :scope > .sound-lyrics-panel');
+    if (!summary || !panel) return;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let expanded = details.open;
     let animation = null;

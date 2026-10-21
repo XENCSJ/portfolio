@@ -147,12 +147,12 @@ body#top.sound-page main .sound-lyric-section p {
 }
 body#top.sound-page main .sound-lyric-section p + p { margin-top: 20px; }
 
-/* The release lyrics keep their original typography inside a native disclosure. */
-body#top.sound-page main .sound-lyrics-accordion {
+/* Shared disclosure design for song commentary and lyrics, including legacy markup. */
+body#top.sound-page main :is(.sound-accordion, .sound-lyrics-accordion) {
   margin: 24px auto 0;
   max-width: 640px;
 }
-body#top.sound-page main .sound-lyrics-toggle {
+body#top.sound-page main :is(.sound-accordion-toggle, .sound-lyrics-toggle) {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,22 +171,22 @@ body#top.sound-page main .sound-lyrics-toggle {
   cursor: pointer;
   touch-action: manipulation;
 }
-.sound-lyrics-toggle::-webkit-details-marker { display: none; }
-.sound-lyrics-toggle:focus-visible { outline: 2px solid #82704d; outline-offset: 4px; }
-.sound-lyrics-label-close,
-.sound-lyrics-accordion[open] .sound-lyrics-label-open { display: none; }
-.sound-lyrics-accordion[open] .sound-lyrics-label-close { display: inline; }
-.sound-lyrics-accordion[data-expanded="false"] .sound-lyrics-label-open { display: inline; }
-.sound-lyrics-accordion[data-expanded="false"] .sound-lyrics-label-close { display: none; }
-.sound-lyrics-panel { display: flow-root; }
-.sound-lyrics-icon {
+:is(.sound-accordion-toggle, .sound-lyrics-toggle)::-webkit-details-marker { display: none; }
+:is(.sound-accordion-toggle, .sound-lyrics-toggle):focus-visible { outline: 2px solid #82704d; outline-offset: 4px; }
+:is(.sound-accordion-label-close, .sound-lyrics-label-close),
+:is(.sound-accordion, .sound-lyrics-accordion)[open] :is(.sound-accordion-label-open, .sound-lyrics-label-open) { display: none; }
+:is(.sound-accordion, .sound-lyrics-accordion)[open] :is(.sound-accordion-label-close, .sound-lyrics-label-close) { display: inline; }
+:is(.sound-accordion, .sound-lyrics-accordion)[data-expanded="false"] :is(.sound-accordion-label-open, .sound-lyrics-label-open) { display: inline; }
+:is(.sound-accordion, .sound-lyrics-accordion)[data-expanded="false"] :is(.sound-accordion-label-close, .sound-lyrics-label-close) { display: none; }
+:is(.sound-accordion-panel, .sound-lyrics-panel) { display: flow-root; }
+:is(.sound-accordion-icon, .sound-lyrics-icon) {
   position: relative;
   width: 10px;
   height: 10px;
   flex: 0 0 10px;
 }
-.sound-lyrics-icon::before,
-.sound-lyrics-icon::after {
+:is(.sound-accordion-icon, .sound-lyrics-icon)::before,
+:is(.sound-accordion-icon, .sound-lyrics-icon)::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -195,9 +195,41 @@ body#top.sound-page main .sound-lyrics-toggle {
   height: 1px;
   background: currentColor;
 }
-.sound-lyrics-icon::after { transform: rotate(90deg); transition: transform .3s ease; }
-.sound-lyrics-accordion[open] .sound-lyrics-icon::after { transform: rotate(0); }
-.sound-lyrics-accordion[data-expanded="false"] .sound-lyrics-icon::after { transform: rotate(90deg); }
+:is(.sound-accordion-icon, .sound-lyrics-icon)::after { transform: rotate(90deg); transition: transform .3s ease; }
+:is(.sound-accordion, .sound-lyrics-accordion)[open] :is(.sound-accordion-icon, .sound-lyrics-icon)::after { transform: rotate(0); }
+:is(.sound-accordion, .sound-lyrics-accordion)[data-expanded="false"] :is(.sound-accordion-icon, .sound-lyrics-icon)::after { transform: rotate(90deg); }
 @media (prefers-reduced-motion: reduce) {
-  .sound-lyrics-icon::after { transition: none; }
+  :is(.sound-accordion-icon, .sound-lyrics-icon)::after { transition: none; }
+}
+
+/* Commentary prose is continuous, left aligned, and naturally wraps on every release. */
+body#top.sound-page main .sound-about-accordion + .sound-lyrics-accordion,
+body#top.sound-page main .sound-about-accordion + .sound-accordion {
+  margin-top: 8px;
+}
+body#top.sound-page main .song-description {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 18px 0 8px;
+  color: #333;
+  font-size: clamp(14px, 3.6vw, 16px);
+  font-weight: 400;
+  line-height: 1.85;
+  letter-spacing: .02em;
+  text-align: left;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-break: strict;
+  text-wrap: wrap;
+}
+body#top.sound-page main .song-description p {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
 }
