@@ -20,7 +20,8 @@ const server=http.createServer((req,res)=>{
 });
 const layout=()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,
   nodes:[...document.querySelectorAll('header,footer,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].map(e=>{
-    const r=e.getBoundingClientRect();return [e.tagName,e.id,r.x+scrollX,r.y+scrollY,r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
+    const r=e.getBoundingClientRect(),fixed=getComputedStyle(e).position==='fixed';
+    return [e.tagName,e.id,r.x+(fixed?0:scrollX),r.y+(fixed?0:scrollY),r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
   })});
 (async()=>{
   await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
@@ -66,6 +67,8 @@ const layout=()=>({width:document.documentElement.scrollWidth,height:document.do
         await covers.last().press('Space');assert.equal(await frame.count(),1);
       }
       results.push({engine,width,page:name,videos:count,layoutIdentical:true,keyboardActivation:true,playback:'iframe request only; media mocked'});
+      fs.writeFileSync('cinema-qa/results.json',JSON.stringify(results,null,2));
+      console.log(engine,width,name,'layout identical');
       await context.close();
     }}finally{await browser.close();}
   }
