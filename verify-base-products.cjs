@@ -38,6 +38,10 @@ const fixture = {
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
       assert.equal(await page.locator('.base-product').count(), 6);
+      assert.equal(await page.locator('.base-product-brand').count(), 6);
+      assert.equal(await page.locator('.base-product-cta').count(), 6);
+      assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
+      assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /商品を見る/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
       assert.equal(await page.locator('#base-products-title').evaluate(el => getComputedStyle(el).textAlign), 'center');
       assert.equal(await page.locator('#base-products-title .section-ja').evaluate(el => getComputedStyle(el).display), 'block');

@@ -1,21 +1,41 @@
-/* APPAREL's live catalog, scoped to keep the existing galleries untouched. */
+/* APPAREL only. Product values remain owned by the existing BASE JSON feed. */
 body#top.apparel-page #base-products-title{display:block;text-align:center}
 body#top.apparel-page #base-products-title .section-ja{display:block;margin:10px 0 0;font-size:12px;font-weight:400;letter-spacing:.12em;color:#b8b8be}
-body#top.apparel-page .base-products-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 24px}
-body#top.apparel-page .base-product{min-width:0;margin:0}
-body#top.apparel-page .base-product-link{display:block;height:100%;color:#fff}
-body#top.apparel-page .base-product-visual{position:relative;display:grid;place-items:center;aspect-ratio:1;overflow:hidden;background:#111}
-body#top.apparel-page .base-product-placeholder{color:#a18c64;letter-spacing:.24em;font-size:20px}
-body#top.apparel-page .base-product-visual img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;background:#111;transition:transform .4s ease}
-body#top.apparel-page .base-product-copy{padding:16px 0 0;text-align:left}
-body#top.apparel-page .base-product-name{margin:0;font-size:14px;font-weight:400;line-height:1.7;letter-spacing:.03em;overflow-wrap:anywhere;color:#eee;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:3.4em}
-body#top.apparel-page .base-product-price{margin:8px 0 0;font-size:15px;line-height:1.6;color:#c9b58b}
-body#top.apparel-page .base-product-tax{margin-left:8px;font-size:10px;color:#b5b5b5}
-body#top.apparel-page .base-product-state{display:inline-block;margin-top:8px;color:#bcbcbc;font-size:10px;letter-spacing:.1em}
+body#top.apparel-page .base-products-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 24px;align-items:stretch}
+body#top.apparel-page .base-product{min-width:0;margin:0;background:#000}
+body#top.apparel-page .base-product-link{display:flex;flex-direction:column;height:100%;color:#fff;text-decoration:none}
+body#top.apparel-page .base-product-visual{position:relative;display:grid;place-items:center;aspect-ratio:1;flex-shrink:0;overflow:hidden;background:#111}
+body#top.apparel-page .base-product-placeholder{color:#b8b8be;letter-spacing:.24em;font-size:20px}
+body#top.apparel-page .base-product-visual img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;background:#111;transition:transform .65s cubic-bezier(.22,.68,0,1)}
+body#top.apparel-page .base-product-copy{display:flex;flex:1;flex-direction:column;align-items:stretch;padding:18px 0 0;text-align:left}
+body#top.apparel-page .base-product-brand{display:block;margin:0 0 10px;font-size:10px;font-weight:400;letter-spacing:.22em;line-height:1.4;color:#b8b8be}
+body#top.apparel-page .base-product-name{flex:1;display:block;margin:0;min-height:3.2em;font-size:16px;font-weight:400;line-height:1.6;letter-spacing:.025em;overflow-wrap:anywhere;word-break:normal;color:#fff}
+body#top.apparel-page .base-product-price{margin:12px 0 0;font-size:14px;font-variant-numeric:tabular-nums;line-height:1.6;color:#eee}
+body#top.apparel-page .base-product-tax{display:inline-block;margin-left:4px;font-size:10px;color:#b8b8be;white-space:nowrap}
+body#top.apparel-page .base-product-state{display:block;margin-top:8px;color:#bcbcbc;font-size:10px;letter-spacing:.1em}
+body#top.apparel-page .base-product-cta{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:18px;padding:11px 8px;border:1px solid rgba(255,255,255,.72);background:transparent;color:#fff;font-size:12px;line-height:1.6;letter-spacing:.06em;transition:background-color .25s ease,color .25s ease,border-color .25s ease}
 body#top.apparel-page .base-products-status{color:#b8b8be;font-size:13px;line-height:1.8}
 body#top.apparel-page .base-products-status[hidden]{display:none}
 body#top.apparel-page .base-products-store{display:inline-block;margin-top:30px;color:#c9b58b;border-bottom:1px solid #6d6048;padding-bottom:7px;font-size:12px;letter-spacing:.06em}
-body#top.apparel-page .base-product-link:focus-visible{outline:2px solid #c9b58b;outline-offset:5px}
-@media(max-width:650px){body#top.apparel-page .base-products-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 8px}body#top.apparel-page .base-product-name{font-size:11px}body#top.apparel-page .base-product-price{font-size:12px}body#top.apparel-page .base-product-copy{padding-top:10px}body#top.apparel-page .base-product-tax{display:block;margin-left:0;font-size:9px}}
-@media(hover:hover) and (prefers-reduced-motion:no-preference){body#top.apparel-page .base-product-link:hover img{transform:scale(1.025)}}
-@media(prefers-reduced-motion:reduce){body#top.apparel-page .base-product-visual img{transition:none}}
+body#top.apparel-page .base-product-link:focus-visible{outline:2px solid #fff;outline-offset:5px}
+body#top.apparel-page .base-product-link:focus-visible .base-product-cta{background:#fff;color:#000;border-color:#fff}
+/* Keep the three established editorial images and names, in normal flow below each image.
+   Price and purchase destinations await verified BASE matches; never borrow another item's data. */
+body#top.xen-noir.apparel-page .apparel-editorial-trio{align-items:stretch}
+body#top.xen-noir.apparel-page .apparel-editorial-trio .product-caption{position:static;inset:auto;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:90px;padding:16px clamp(8px,1.6vw,22px) 20px;background:#000;color:#fff;text-align:left;pointer-events:auto;line-height:1.6}
+body#top.xen-noir.apparel-page .apparel-editorial-trio .product-caption>span{font-size:10px;letter-spacing:.22em;color:#b8b8be}
+body#top.xen-noir.apparel-page .apparel-editorial-trio .product-caption>strong{font-size:16px;font-weight:400;letter-spacing:.025em;overflow-wrap:anywhere}
+@media(max-width:650px){
+  body#top.apparel-page .base-products-grid{gap:28px 8px}
+  body#top.apparel-page .base-product-copy{padding-top:12px}
+  body#top.apparel-page .base-product-brand{margin-bottom:8px;font-size:10px}
+  body#top.apparel-page .base-product-name{font-size:12px;line-height:1.7;letter-spacing:0}
+  body#top.apparel-page .base-product-price{font-size:12px;margin-top:10px}
+  body#top.apparel-page .base-product-tax{display:block;margin-left:0;font-size:10px}
+  body#top.apparel-page .base-product-cta{margin-top:14px;padding:10px 3px;font-size:11px;letter-spacing:0}
+  body#top.xen-noir.apparel-page .apparel-editorial-trio .product-caption{gap:8px;min-height:86px;padding:12px 8px 16px}
+  body#top.xen-noir.apparel-page .apparel-editorial-trio .product-caption>strong{font-size:12px;line-height:1.7;letter-spacing:0}
+}
+@media(hover:hover) and (pointer:fine){body#top.apparel-page .base-product-link:hover .base-product-cta{background:#fff;color:#000;border-color:#fff}}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){body#top.apparel-page .base-product-link:hover img{transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){body#top.apparel-page .base-product-visual img,body#top.apparel-page .base-product-cta{transition:none;transform:none}}

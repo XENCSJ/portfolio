@@ -60,17 +60,20 @@
       visual.append(img);
     }
     const copy = element('div', 'base-product-copy');
+    copy.append(element('span', 'base-product-brand', 'XEN'));
     const name = element('h3', 'base-product-name', item.name);
     name.title = item.name;
     copy.append(name);
     const price = element('p', 'base-product-price', item.price === null ? '価格はストアでご確認ください' : yen.format(item.price));
-    if (item.price !== null) price.append(element('span', 'base-product-tax', '税込'));
+    if (item.price !== null) price.append(element('span', 'base-product-tax', '（税込）'));
     copy.append(price);
     if (!item.available) {
       const label = item.sales_status === 'item_waiting_for_sale' ? 'COMING SOON' :
         item.sales_status === 'item_end_of_sale' ? '販売終了' : 'SOLD OUT';
       copy.append(element('span', 'base-product-state', label));
     }
+    // The whole card is one accessible link; do not nest an interactive button.
+    copy.append(element('span', 'base-product-cta', item.available ? '購入する →' : '商品を見る →'));
     link.append(visual, copy);
     article.append(link);
     return article;
