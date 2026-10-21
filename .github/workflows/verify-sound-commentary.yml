@@ -1,0 +1,103 @@
+name: Verify SOUND song commentary
+on:
+  push:
+    branches: [work/sound-commentary-qa-20261021]
+permissions:
+  contents: read
+jobs:
+  published-layouts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Verify published commentary and independent lyrics
+        run: |
+          mkdir -p sound-commentary-evidence
+          cat > /tmp/verify-commentary.cjs <<'JS'
+          const { chromium, webkit } = require(process.cwd()+'/node_modules/playwright');
+          const fs=require('node:fs');
+          const assert=require('node:assert/strict');
+          const url='https://xencsj.github.io/portfolio/sound.html';
+          const out='sound-commentary-evidence';
+          const expected=fs.readFileSync('sound.html','utf8').match(/<div class="song-description"><p>(.*?)<\/p>/)[1];
+          (async()=>{
+            const results=[];
+            for(const [engine,type,widths] of [['chromium',chromium,[1440,390]],['webkit',webkit,[390,320]]]){
+              const browser=await type.launch();
+              for(const width of widths){
+                const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<700,hasTouch:width<700});
+                const page=await context.newPage();
+                const errors=[];page.on('pageerror',e=>errors.push(e.message));
+                await page.goto(url,{waitUntil:'networkidle'});
+                const about=page.locator('.sound-about-accordion');
+                const aboutButton=about.locator('summary');
+                const lyrics=page.locator('.sound-lyrics-accordion');
+                const lyricsButton=lyrics.locator('summary');
+                const prose=page.locator('.song-description');
+                const done=()=>page.waitForFunction(()=>[...document.querySelectorAll('.sound-about-accordion,.sound-lyrics-accordion')].every(e=>e.getAnimations().length===0));
+                const activate=el=>width<700?el.tap():el.click();
+                const label=async el=>(await el.innerText()).replace(/\s/g,'');
+                const snap=async state=>{
+                  await page.locator('#tochu-no-mamade').screenshot({path:`${out}/SOUND-${engine}-${width}-${state}.png`});
+                };
+                assert.equal(await about.count(),1);
+                assert.equal(await about.getAttribute('open'),null);
+                assert.equal(await lyrics.getAttribute('open'),null);
+                assert.equal(await label(aboutButton),'楽曲解説を見る');
+                assert.equal(await label(lyricsButton),'歌詞を見る');
+                assert(!(await prose.isVisible()));
+                await aboutButton.scrollIntoViewIfNeeded();
+                const closedHeight=await about.evaluate(e=>e.getBoundingClientRect().height);
+                assert(closedHeight>=44);
+                await snap('closed');
+                await activate(aboutButton);await done();
+                assert.equal(await label(aboutButton),'楽曲解説を閉じる');
+                assert.equal(await lyrics.getAttribute('open'),null);
+                assert.equal(await prose.textContent(),expected);
+                assert.equal(await prose.locator('br').count(),0);
+                const metrics=await prose.evaluate(e=>{
+                  const style=getComputedStyle(e), p=e.querySelector('p'), r=document.createRange();
+                  r.selectNodeContents(p);
+                  const box=e.getBoundingClientRect();
+                  return {align:style.textAlign,whiteSpace:style.whiteSpace,fontSize:parseFloat(style.fontSize),lineHeight:parseFloat(style.lineHeight),overflow:document.documentElement.scrollWidth>innerWidth,fits:[...r.getClientRects()].every(r=>r.left>=box.left-1&&r.right<=box.right+1),margin:getComputedStyle(p).marginTop,paragraphs:e.querySelectorAll('p').length};
+                });
+                assert.equal(metrics.align,'left');assert.equal(metrics.whiteSpace,'normal');
+                assert(metrics.fontSize>=14&&metrics.fontSize<=16);
+                assert(Math.abs(metrics.lineHeight/metrics.fontSize-1.85)<.01);
+                assert(!metrics.overflow&&metrics.fits,JSON.stringify(metrics));
+                assert.equal(metrics.margin,'0px');assert.equal(metrics.paragraphs,1);
+                await snap('open');
+                await activate(lyricsButton);await done();
+                assert(await prose.isVisible());assert(await lyrics.locator('.sound-song-lyrics').isVisible());
+                await activate(aboutButton);await done();
+                assert.equal(await about.getAttribute('open'),null);
+                assert(await lyrics.locator('.sound-song-lyrics').isVisible());
+                await activate(lyricsButton);await done();
+                assert.equal(await lyrics.getAttribute('open'),null);
+                await aboutButton.press('Enter');await done();assert(await prose.isVisible());
+                await aboutButton.press('Space');await done();assert.equal(await about.getAttribute('open'),null);
+                await page.emulateMedia({reducedMotion:'reduce'});
+                await activate(aboutButton);await done();assert(await prose.isVisible());
+                await activate(aboutButton);await done();assert.equal(await about.getAttribute('open'),null);
+                assert.deepEqual(errors,[]);
+                results.push({engine,width,initiallyClosed:true,independentToggles:true,keyboard:true,reducedMotion:true,copyUnchanged:true,closedHeight,...metrics});
+                await context.close();
+              }
+              await browser.close();
+            }
+            fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));
+            console.log(JSON.stringify(results,null,2));
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node /tmp/verify-commentary.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sound-commentary-evidence
+          path: sound-commentary-evidence/
+          retention-days: 7
