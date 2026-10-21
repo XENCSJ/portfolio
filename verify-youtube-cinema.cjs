@@ -64,7 +64,7 @@ const layout=()=>({width:document.documentElement.scrollWidth,height:document.do
         await target.evaluate(()=>scrollTo(0,0));
         assert.deepEqual(await target.evaluate(layout),shots.after,'playback preserves outside layout');
       }else{
-        await target.getByRole('button',{name:'閉じる ×'}).click();assert.equal(await frame.count(),0);
+        await target.getByRole('button',{name:'閉じる ×'}).click();await frame.waitFor({state:'detached'});
         await covers.last().press('Space');assert.equal(await frame.count(),1);
       }
       results.push({engine,width,page:name,videos:count,layoutIdentical:true,keyboardActivation:true,playback:'iframe request only; media mocked'});
