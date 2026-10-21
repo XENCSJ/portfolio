@@ -55,7 +55,13 @@ const fixture = {
       assert.equal(columns, 3);
       const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
       assert.equal(rows.length, 2);
-      assert.equal(await page.locator('iframe').count(), 3);
+      assert.equal(await page.locator('.video-container').count(), 3);
+      assert.equal(await page.locator('.video-container > template[data-xen-youtube]').count(), 3);
+      assert.equal(await page.locator('.video-container > .xen-cinema-cover').count(), 3);
+      assert.equal(await page.locator('.video-container > iframe').count(), 0, 'YouTube loads only after a gesture');
+      assert.deepEqual(await page.locator('template[data-xen-youtube]').evaluateAll(nodes => nodes.map(n =>
+        new URL(n.content.querySelector('iframe').src).pathname.split('/').pop())),
+        ['OvsxT_ngrWg','PQs_Ii2_hI8','yBNfm0PbP4Y']);
       assert.equal(await page.getByText('XEN APPAREL STOREはこちら', {exact:true}).count(), 0);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       assert.deepEqual(errors, []);

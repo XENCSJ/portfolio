@@ -6,6 +6,7 @@
   const grid = section.querySelector('.xen-latest-grid');
   let dialog, playerSlot, fallback, lastTrigger;
   function openVideo(video, trigger) {
+    if (dialog?.open) return;
     // YouTube requires a player viewport >=200x200. Keep 16:9 on small devices.
     if (!('HTMLDialogElement' in window) || window.innerWidth < 374 || video.embeddable === false || video.madeForKids === true) {
       window.location.assign(video.url);
@@ -31,13 +32,14 @@
     }
     lastTrigger = trigger;
     fallback.href = video.url;
-    const frame = document.createElement('iframe');
-    frame.title = video.title;
-    // Autoplay is requested only as the direct result of a user's play click.
-    frame.src = `https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&playsinline=1&rel=0`;
-    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-    frame.allowFullscreen = true;
-    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    const frame = window.XENCinema.createFrame(
+      `https://www.youtube-nocookie.com/embed/${video.id}?rel=0`, video.title,
+      null, failedFrame => {
+        failedFrame.remove();
+        fallback.textContent = '動画を読み込めませんでした。YouTube で見る ↗';
+        fallback.focus({preventScroll:true});
+      });
+    fallback.textContent = '再生できない場合は YouTube で見る ↗';
     playerSlot.replaceChildren(frame);
     dialog.showModal();
   }
@@ -65,10 +67,10 @@
         const button = document.createElement('button'); button.className = 'xen-latest-play'; button.type = 'button';
         button.setAttribute('aria-label', `${video.title} を再生`);
         const img = document.createElement('img'); img.src = video.thumbnail; img.alt = ''; img.width = 640; img.height = 360; img.loading = 'lazy'; img.decoding = 'async';
-        const icon = document.createElement('span'); icon.setAttribute('aria-hidden', 'true');
-        const svg = document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.setAttribute('viewBox','0 0 30 30');
-        const path = document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('d','M10 5 L26 15 L10 25 Z'); svg.append(path); icon.append(svg);
-        button.append(img, icon); button.addEventListener('click', () => openVideo(video, button));
+        button.append(img);
+        window.XENCinema.decorate(button);
+        window.XENCinema.thumbnail(img,video.id);
+        button.addEventListener('click', () => openVideo(video, button));
         const title = document.createElement('h3'); title.className = 'xen-latest-title';
         const link = document.createElement('a'); link.href = video.url; link.textContent = video.title; link.title = video.title; link.target = '_blank'; link.rel = 'noopener';
         title.append(link); li.append(button, title); fragment.append(li);

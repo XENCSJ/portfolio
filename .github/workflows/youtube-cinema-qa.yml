@@ -1,0 +1,36 @@
+name: YouTube cinema layout verification
+on:
+  pull_request:
+    paths:
+      - 'xen-cinema.*'
+      - 'xen-latest-videos.js'
+      - 'storybooks.html'
+      - 'animation.html'
+      - 'cinematic.html'
+      - 'sound.html'
+      - 'apparel.html'
+      - 'creator.html'
+      - 'verify-youtube-cinema.cjs'
+      - '.github/workflows/youtube-cinema-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: git fetch --depth 1 origin 5b69d1a111408dd80f503cad2cc322968800d446
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node --check xen-cinema.js && node verify-youtube-cinema.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: youtube-cinema-layout-evidence
+          path: cinema-qa/
+          retention-days: 14

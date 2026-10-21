@@ -33,7 +33,12 @@ const origin = 'https://xencsj.github.io/portfolio/';
       assert.equal(await page.locator('.base-products-store').getAttribute('href'),'https://xen.official.ec/');
       assert.ok(await page.locator('.base-products-store').evaluate(el=>el.getBoundingClientRect().top >= document.querySelector('[data-base-grid]').getBoundingClientRect().bottom));
       assert.equal(await page.locator('.image-gallery.trio').count(),0);
-      assert.equal(await page.locator('.video-container iframe').count(),3);
+      assert.equal(await page.locator('.video-container > template[data-xen-youtube]').count(),3);
+      assert.equal(await page.locator('.video-container > .xen-cinema-cover').count(),3);
+      assert.equal(await page.locator('.video-container > iframe').count(),0);
+      assert.deepEqual(await page.locator('template[data-xen-youtube]').evaluateAll(nodes => nodes.map(n =>
+        new URL(n.content.querySelector('iframe').src).pathname.split('/').pop())),
+        ['OvsxT_ngrWg','PQs_Ii2_hI8','yBNfm0PbP4Y']);
       assert.equal(await page.locator('.apparel-media .gallery-item').count(),2);
       assert.equal(await page.locator('.xen-header').count(),1);
       assert.equal(await page.locator('footer').count(),1);
