@@ -41,14 +41,14 @@ jobs:
              const done=()=>page.waitForFunction(()=>document.querySelector('.sound-lyrics-accordion').getAnimations().length===0);
              const activate=()=>width<700?summary.tap():summary.click();
              await summary.scrollIntoViewIfNeeded();
-             assert.equal(await summary.innerText(),'歌詞を見る');
+             assert.equal((await summary.innerText()).trim(),'歌詞を見る');
              assert.equal(await details.getAttribute('open'),null);
              assert(!(await sections.first().isVisible()));
              const closed=await details.evaluate(e=>e.getBoundingClientRect().height);
              assert(closed>=44);
              await page.locator('#tochu-no-mamade').screenshot({path:`${out}/${phase}-${engine}-${width}-closed.png`});
              await activate();
-             assert.equal(await summary.innerText(),'歌詞を閉じる');
+             assert.equal((await summary.innerText()).trim(),'歌詞を閉じる');
              await done();
              assert.equal(await sections.count(),8);
              assert.equal(await page.locator('.sound-song-lyrics br').count(),36);
@@ -68,7 +68,7 @@ jobs:
              await page.screenshot({path:`${out}/${phase}-${engine}-${width}-open.png`});
              const expandedHeight=await details.evaluate(e=>e.getBoundingClientRect().height);
              await activate();await done();
-             assert.equal(await summary.innerText(),'歌詞を見る');
+             assert.equal((await summary.innerText()).trim(),'歌詞を見る');
              assert.equal(await details.getAttribute('open'),null);
              assert(!(await sections.first().isVisible()));
              assert(Math.abs(await details.evaluate(e=>e.getBoundingClientRect().height)-closed)<2);
