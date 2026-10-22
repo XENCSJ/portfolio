@@ -47,20 +47,6 @@ jobs:
                 if(['deep-sleep','celestial-lake'].includes(id))assert.equal(m.src,'./xen-blue-sleep-cover.jpg');
                 cards.push(m);
               }
-              for(const sel of ['.sound-about-accordion','.sound-lyrics-accordion']){
-                const d=page.locator(sel);await d.locator('summary').click();await page.waitForTimeout(500);
-                assert.equal(await d.getAttribute('data-expanded'),'true');assert.equal(await d.locator('summary').getAttribute('aria-expanded'),'true');
-                await d.locator('summary').click();await page.waitForTimeout(500);assert.equal(await d.getAttribute('open'),null);
-              }
-              // Existing service disclosures must still open/close, including intentionally unregistered URLs.
-              for(const d of await page.locator('.sound-media-accordion').all()){
-                await d.locator('summary').click();await page.waitForTimeout(450);assert.equal(await d.getAttribute('data-expanded'),'true');
-                await d.locator('summary').click();await page.waitForTimeout(450);assert.equal(await d.getAttribute('open'),null);
-              }
-              assert.equal(await page.locator('.sound-slide').count(),4);
-              const active=await page.locator('.sound-showcase-stage').getAttribute('data-active-release');
-              await page.getByRole('button',{name:'次のジャケット',exact:true}).click();
-              assert.notEqual(await page.locator('.sound-showcase-stage').getAttribute('data-active-release'),active);
               if(['PC','Mobile'].includes(name)){
                 for(const [id,label] of [['nights-awakening','Purple'],['deep-sleep','Blue'],['tochu-no-mamade','JPOP']]){
                   await page.locator('#'+id).scrollIntoViewIfNeeded();await page.waitForTimeout(800);
@@ -70,10 +56,33 @@ jobs:
                 await page.screenshot({path:`sound-evidence/XEN_SOUND_${name}_full.png`,fullPage:true});
               }
               results.push({profile:name,width,cards,scriptErrors:errors});
+              fs.writeFileSync('sound-evidence/results.json',JSON.stringify(results,null,2));
+              try {
+              for(const sel of ['.sound-about-accordion','.sound-lyrics-accordion']){
+                const d=page.locator(sel);await d.locator('summary').click();await page.waitForTimeout(500);
+                assert.equal(await d.getAttribute('data-expanded'),'true');assert.equal(await d.locator('summary').getAttribute('aria-expanded'),'true');
+                await d.locator('summary').click();await page.waitForFunction(el=>!el.open,await d.elementHandle(),{timeout:10000});
+              }
+              // Existing service disclosures must still open/close, including intentionally unregistered URLs.
+              for(const d of await page.locator('.sound-media-accordion').all()){
+                await d.locator('summary').click();await page.waitForTimeout(450);assert.equal(await d.getAttribute('data-expanded'),'true');
+                await d.locator('summary').click();await page.waitForFunction(el=>!el.open,await d.elementHandle(),{timeout:10000});
+              }
+              assert.equal(await page.locator('.sound-slide').count(),4);
+              const active=await page.locator('.sound-showcase-stage').getAttribute('data-active-release');
+              await page.getByRole('button',{name:'次のジャケット',exact:true}).click();
+              assert.notEqual(await page.locator('.sound-showcase-stage').getAttribute('data-active-release'),active);
+              results[results.length-1].interactions='PASS';
+              } catch(error) {
+                results[results.length-1].interactions='FAIL: '+error.message;
+                await page.screenshot({path:'sound-evidence/'+name+'-interaction-failure.png'});
+              }
+              fs.writeFileSync('sound-evidence/results.json',JSON.stringify(results,null,2));
               await browser.close();
             }
             fs.writeFileSync('sound-evidence/results.json',JSON.stringify(results,null,2));
-            console.log(JSON.stringify({status:'PASS',profiles:results.length,cards:results.length*ids.length}));
+            console.log(JSON.stringify({status:results.every(r=>r.interactions==='PASS')?'PASS':'INTERACTION_FAILURE',profiles:results.length,cards:results.length*ids.length}));
+            if(results.some(r=>r.interactions!=='PASS'))process.exitCode=1;
           })().catch(e=>{console.error(e);process.exit(1)});
           JS
       - uses: actions/upload-artifact@v4
