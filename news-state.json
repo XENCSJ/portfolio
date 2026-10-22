@@ -173,28 +173,18 @@
       "SNAP (99).JPEG": "9dd786046676d495f00658785cc0b199d06220e3"
     },
     "ARTWORKS": {
-      "ARTWORKS (1).jpg": "983dcff96c786b132a5e115d0b91b0310f08a699",
       "ARTWORKS (1).png": "bbdfb3b8404f984f1d0829a723038fcbf139b94c",
       "ARTWORKS (10).jpg": "726114c782537666d272e2bc653fd0071aa361cc",
       "ARTWORKS (11).jpg": "48c0313fb2c52b4cdf474d2c439329ba6042932a",
       "ARTWORKS (12).jpg": "b556637200e313ba134e080b9976231f709a562a",
       "ARTWORKS (13).jpg": "a94ea3d66a2adeec0526e07ec7d10403f4f039bb",
       "ARTWORKS (14).jpg": "57f7c6a778a2711c1f92fa9880f8f75edfe3fc16",
-      "ARTWORKS (15).jpg": "8540da434eca15ef72b86fa70e05936bd04b5308",
-      "ARTWORKS (16).jpg": "6d24fd907525bd117b3df492532e2807bc88e8dd",
-      "ARTWORKS (17).jpg": "9b5fc994516fc24ec5a7dfd6fc45c75063be03a4",
       "ARTWORKS (2).jpg": "5af663a0d5bf657438d6e79283519c063d9966be",
-      "ARTWORKS (2).png": "86bbac4754a4be444f41ce123d228e1c3e1958f3",
       "ARTWORKS (3).jpg": "a4fcd3b4553278b1f2d1f9389e9ed5913d243d5e",
-      "ARTWORKS (3).png": "45f5a39f2c5ddd909a747ae07d9d5dbde0a733dc",
       "ARTWORKS (4).jpg": "19a733bacc3fb1e8b547f131789ec3ec3f6ccb7d",
-      "ARTWORKS (4).png": "b27fb121e00712c5d975c2737bb3416c0ada14c2",
       "ARTWORKS (5).jpg": "3d2fa54d4fd663c53cef3b6dd572157143a8714d",
-      "ARTWORKS (5).png": "5848b78c6eedf27f14667eb1fb5e3d7e9a2d5001",
-      "ARTWORKS (6).jpg": "9bcb4983eec80dbe1971df82e656cb553b143d2c",
       "ARTWORKS (6).png": "e17df0c83b481e29da6a32cd1ca1d17f6ea46839",
       "ARTWORKS (7).jpg": "83a1b29473cfd62d0b4533efa6aab62d3e7612ec",
-      "ARTWORKS (7).png": "7107e8e9eaee882dd4f19014a990c114d5bbf825",
       "ARTWORKS (8).jpg": "54c26fd9e9cfe806fb27087cafad50985da74e8b",
       "ARTWORKS (9).jpg": "f1d5db00556c4591e5380aa524f51d76590ba44b",
       "xen-artwork-20261019-01.jpg": "a71368ab093b4e49ad95afca891c75f8b0dd9e78",
@@ -1229,12 +1219,13 @@
   "processed": [
     "9a28d4a0a8abe0e43f435c33b9d3be4781db5435",
     "0ae17fe948bd88a58c0fe288201a037e46d4148f",
-    "177a6180ac4542aeb0845c916b523a32c2d57814"
+    "177a6180ac4542aeb0845c916b523a32c2d57814",
+    "f8a31d075a5f0d31393cef8e53d113f3b225bb55"
   ],
   "pending": [],
   "lastPublication": {
-    "sha": "177a6180ac4542aeb0845c916b523a32c2d57814",
-    "publishedAt": "2026-10-21T17:40:36Z",
-    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39645677350/job/119380958875"
+    "sha": "f8a31d075a5f0d31393cef8e53d113f3b225bb55",
+    "publishedAt": "2026-10-22T19:21:00Z",
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39839113431/job/120035565421"
   }
 }
