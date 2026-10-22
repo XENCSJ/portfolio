@@ -45,3 +45,11 @@ body#top.apparel-page .base-product-link{flex:1;height:auto}
 body#top.apparel-page .base-product-design-link{display:block;min-height:44px;padding:12px 0 0;font-size:12px;line-height:1.8;color:#c9b58b;text-decoration:underline;text-underline-offset:5px;overflow-wrap:anywhere}
 body#top.apparel-page .base-product-design-link:focus-visible{outline:2px solid #c9b58b;outline-offset:4px}
 @media(max-width:650px){body#top.apparel-page .base-product-design-link{font-size:10px;line-height:1.8}}
+
+/* Preserve the official jewelry images, with no crop, tint or hover enlargement. */
+body#top.apparel-page #base-product-156850693 .base-product-visual,
+body#top.apparel-page #base-product-156850693 .base-product-visual img,
+body#top.apparel-page #base-product-156851036 .jewelry-visual,
+body#top.apparel-page #base-product-156851036 .jewelry-visual img{background:#fff}
+body#top.apparel-page #base-product-156850693 .base-product-visual img,
+body#top.apparel-page #base-product-156851036 .jewelry-visual img{object-fit:contain;object-position:center;transform:none;filter:none}

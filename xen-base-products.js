@@ -7,6 +7,13 @@
   const roots = [root, ...related].filter(Boolean);
   const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo', 156849283: 'kuro-usagi' };
   const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
+  // APPAREL display choices are independent of the scheduled BASE feed.
+  const apparelExcludedIds = new Set([160058456]);
+  // Main images observed on the official BASE product pages on 2026-10-23 JST.
+  const apparelImages = {
+    156850693: './xen-apparel-signet-ring-base-20261023.jpg',
+    156851036: './xen-apparel-sculpted-choker-base-20261023.jpg'
+  };
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const secureURL = value => {
     try {
@@ -59,7 +66,7 @@
       img.width = 640;
       img.height = 640;
       img.addEventListener('error', () => { img.remove(); }, { once: true });
-      img.src = item.image_url;
+      img.src = !isRelated && apparelImages[item.id] ? apparelImages[item.id] : item.image_url;
       visual.append(img);
     }
     const copy = element('div', 'base-product-copy');
@@ -100,9 +107,9 @@
     summary.setAttribute('aria-expanded', 'false');
     const visual = element('span', 'jewelry-visual');
     const img = document.createElement('img');
-    img.src = `./xen-jewelry-${kind}-white.jpg`;
+    img.src = apparelImages[item.id] || `./xen-jewelry-${kind}-white.jpg`;
     img.alt = title;
-    img.width = img.height = kind === 'choker' ? 1254 : 1280;
+    img.width = img.height = 1280;
     img.loading = 'lazy';
     img.decoding = 'async';
     visual.append(img);
@@ -150,7 +157,7 @@
       validate(data);
       roots.forEach(section => {
         const isRelated = section.hasAttribute('data-related-product');
-        const items = isRelated ? data.items.filter(item => item.id === Number(section.dataset.relatedProduct)) : data.items;
+        const items = isRelated ? data.items.filter(item => item.id === Number(section.dataset.relatedProduct)) : data.items.filter(item => !apparelExcludedIds.has(item.id));
         const cards = document.createDocumentFragment();
         items.forEach(item => cards.append(card(item, isRelated)));
         section.querySelector('[data-base-grid]').replaceChildren(cards);
