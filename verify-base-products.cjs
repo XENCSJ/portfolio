@@ -40,23 +40,56 @@ const fixture = {
       await catalog.scrollIntoViewIfNeeded();
       assert.equal(await page.locator('.base-product').count(), displayedIds.length);
       assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length);
-      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length - 2);
-      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 2);
+      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length);
+      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 3);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
-      assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /商品を見る/);
+      assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /購入する/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
       assert.equal(await page.locator('#base-products-title').evaluate(el => getComputedStyle(el).textAlign), 'center');
       assert.equal(await page.locator('#base-products-title .section-ja').evaluate(el => getComputedStyle(el).display), 'block');
       assert.equal(await page.locator('.base-product-name img').count(), 0, 'Product names must be rendered as text');
       assert.equal(await page.locator('.base-product-state').innerText(), 'SOLD OUT');
       assert.match(await page.locator('.base-product-price').first().innerText(), /8,800/);
-      assert.equal(await page.locator('.base-product-link').first().getAttribute('href'), fixture.items[0].url);
+      assert.equal(await page.locator('.catalog-product > .base-product-cta').first().getAttribute('href'), fixture.items[0].url);
       assert.equal(await page.locator('.image-gallery.trio .gallery-item').count(), 0);
       assert.equal(await page.locator('.image-gallery.apparel-media .gallery-item').count(), 2);
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(columns, 3);
       const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
       assert.equal(rows.length, Math.ceil(displayedIds.length / columns));
+      const alignment = await page.locator('.catalog-product').evaluateAll(cards => {
+        const rect = element => { const r = element.getBoundingClientRect(); return {top:r.top, width:r.width, height:r.height}; };
+        return cards.map(card => ({
+          card:rect(card), visual:rect(card.querySelector('.base-product-visual')),
+          price:rect(card.querySelector(':scope > .base-product-price')),
+          button:rect(card.querySelector(':scope > .base-product-cta')),
+          links:rect(card.querySelector('.base-product-links')),
+          order:[...card.children].map(el => el.className)
+        }));
+      });
+      for (let offset=0; offset<alignment.length; offset+=3) {
+        const row = alignment.slice(offset, offset+3);
+        for (const card of row) {
+          assert.ok(Math.abs(card.visual.width-card.visual.height)<1, 'Square product images');
+          assert.equal(card.button.height,44);
+          assert.deepEqual(card.order,['base-product-visual','base-product-brand','base-product-name','base-product-price','base-product-cta','base-product-links']);
+          for (const key of ['price','button','links']) assert.ok(Math.abs(card[key].top-row[0][key].top)<1, `${key} must align within its row`);
+        }
+      }
+      assert.equal(await page.locator('#base-product-160058456').count(), 0);
+      assert.equal(await page.locator('.catalog-product > .base-product-cta').allTextContents().then(labels => labels.every(label => label === '購入する →')), true);
+      for (const id of [156850693,156851036,156851056]) {
+        const drawer = page.locator(`#base-product-${id} [data-jewelry]`);
+        const summary = drawer.locator('summary');
+        assert.equal(await summary.getAttribute('aria-expanded'),'false');
+        await summary.press('Enter');
+        assert.equal(await summary.getAttribute('aria-expanded'),'true');
+        assert.equal(await drawer.locator('.jewelry-panel').isVisible(),true);
+        assert.equal(await drawer.locator('.jewelry-store').getAttribute('href'),`https://xen.official.ec/items/${id}`);
+        await summary.press('Enter');
+        assert.equal(await summary.getAttribute('aria-expanded'),'false');
+      }
+
       assert.equal(await page.locator('.video-container').count(), 3);
       assert.equal(await page.locator('.video-container > template[data-xen-youtube]').count(), 3);
       assert.equal(await page.locator('.video-container > .xen-cinema-cover').count(), 3);

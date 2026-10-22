@@ -15,6 +15,8 @@
     156851036: './xen-apparel-sculpted-choker-base-20261023.jpg'
   };
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
+  const amount = new Intl.NumberFormat('en-US', { useGrouping: true, maximumFractionDigits: 0 });
+  const priceLabel = value => `¥${amount.format(value)}`;
   const secureURL = value => {
     try {
       const url = new URL(value);
@@ -47,7 +49,7 @@
     return node;
   }
   function card(item, isRelated = false) {
-    if (!isRelated && [156851036, 156851056].includes(item.id)) return jewelryCard(item);
+    if (!isRelated) return catalogCard(item);
     const article = element('article', 'base-product');
     if (!isRelated) article.id = `base-product-${item.id}`;
     const link = element('a', 'base-product-link');
@@ -93,45 +95,76 @@
     }
     return article;
   }
-  function jewelryCard(item) {
-    // Keep the approved artwork independent of the scheduled BASE catalog refresh.
+  function catalogCard(item) {
+    const sculpted = [156851036, 156851056].includes(item.id);
     const kind = item.id === 156851036 ? 'choker' : 'bangle';
-    const title = `K18 Sculpted ${kind === 'choker' ? 'Choker' : 'Bangle'}`;
-    const article = element('article', 'base-product jewelry-card');
+    // Preserve the approved display names, images and description for the two drawers.
+    const title = sculpted ? `K18 Sculpted ${kind === 'choker' ? 'Choker' : 'Bangle'}` : item.name;
+    const article = element('article', 'base-product catalog-product');
     article.id = `base-product-${item.id}`;
+    const visual = element('a', 'base-product-visual');
+    visual.href = item.url;
+    visual.target = '_blank';
+    visual.rel = 'noopener noreferrer';
+    visual.setAttribute('aria-label', `${title} 商品ページ（新しいタブで開く）`);
+    const imageURL = apparelImages[item.id] || (sculpted ? `./xen-jewelry-${kind}-white.jpg` : item.image_url);
+    const placeholder = element('span', 'base-product-placeholder', 'XEN');
+    placeholder.setAttribute('aria-hidden', 'true');
+    visual.append(placeholder);
+    if (imageURL) {
+      const img = document.createElement('img');
+      img.src = imageURL;
+      img.alt = title;
+      img.width = img.height = 640;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.addEventListener('error', () => { img.remove(); }, { once: true });
+      visual.append(img);
+    }
+    const brand = element('span', 'base-product-brand', 'XEN');
+    const name = element('h3', 'base-product-name', title);
+    name.title = title;
+    const price = element('p', 'base-product-price', item.price === null ? '価格はストアでご確認ください' : priceLabel(item.price));
+    if (item.price !== null) price.append(element('span', 'base-product-tax', '（税込）'));
+    if (!item.available) price.append(element('span', 'base-product-state', item.sales_status === 'item_waiting_for_sale' ? 'COMING SOON' : item.sales_status === 'item_end_of_sale' ? '販売終了' : 'SOLD OUT'));
+    const purchase = element('a', 'base-product-cta', '購入する →');
+    purchase.href = item.url;
+    purchase.target = '_blank';
+    purchase.rel = 'noopener noreferrer';
+    purchase.setAttribute('aria-label', `${title} 購入する（新しいタブで開く）`);
+    const links = element('div', 'base-product-links');
+    if (sculpted || item.id === 156850693) links.append(jewelryDetails(item, title));
+    if (designTargets[item.id]) {
+      const designLink = element('a', 'base-product-design-link', 'キャラクターデザインを見る →');
+      designLink.href = `./design.html#${designTargets[item.id]}`;
+      links.append(designLink);
+    }
+    article.append(visual, brand, name, price, purchase, links);
+    return article;
+  }
+  function jewelryDetails(item, title) {
     const details = element('details', 'jewelry-details');
     details.setAttribute('data-jewelry', '');
     const summary = document.createElement('summary');
     const panelId = `apparel-jewelry-${item.id}`;
     summary.setAttribute('aria-controls', panelId);
     summary.setAttribute('aria-expanded', 'false');
-    const visual = element('span', 'jewelry-visual');
-    const img = document.createElement('img');
-    img.src = apparelImages[item.id] || `./xen-jewelry-${kind}-white.jpg`;
-    img.alt = title;
-    img.width = img.height = 1280;
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    visual.append(img);
-    const copy = element('span', 'jewelry-copy');
-    copy.append(element('span', 'base-product-brand', 'XEN'));
-    copy.append(element('span', 'base-product-name jewelry-name', title));
     const action = element('span', 'jewelry-action', 'VIEW DETAILS ');
     const icon = element('span', 'jewelry-icon', '＋');
     icon.setAttribute('data-apparel-icon', '');
     icon.setAttribute('aria-hidden', 'true');
     action.append(icon);
-    copy.append(action);
-    summary.append(visual, copy);
+    summary.append(action);
     const panel = element('div', 'jewelry-panel');
     panel.id = panelId;
     const inner = element('div', 'jewelry-inner');
     inner.append(element('h3', 'jewelry-detail-title', title));
-    inner.append(element('p', 'jewelry-description', 'K18特有の深い黄金色と、滑らかな鏡面仕上げが、光の角度によって流れるような表情をつくり出します。'));
-    const price = element('p', 'base-product-price', item.price === null ? '価格はストアでご確認ください' : yen.format(item.price));
+    inner.append(element('p', 'jewelry-description', item.id === 156850693
+      ? 'K18イエローゴールドを使用した、XENのシンボル刻印入りシグネットリング。約10.6gの重量感とボリュームのあるフォルムが特徴です。'
+      : 'K18特有の深い黄金色と、滑らかな鏡面仕上げが、光の角度によって流れるような表情をつくり出します。'));
+    const price = element('p', 'base-product-price', item.price === null ? '価格はストアでご確認ください' : priceLabel(item.price));
     if (item.price !== null) price.append(element('span', 'base-product-tax', '（税込）'));
     inner.append(price);
-    if (!item.available) inner.append(element('span', 'base-product-state', item.sales_status === 'item_waiting_for_sale' ? 'COMING SOON' : item.sales_status === 'item_end_of_sale' ? '販売終了' : 'SOLD OUT'));
     const store = element('a', 'jewelry-store', 'ONLINE STORE ↗');
     store.href = item.url;
     store.target = '_blank';
@@ -140,8 +173,7 @@
     inner.append(store);
     panel.append(inner);
     details.append(summary, panel);
-    article.append(details);
-    return article;
+    return details;
   }
   async function load() {
     roots.forEach(section => section.setAttribute('aria-busy', 'true'));

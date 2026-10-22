@@ -53,3 +53,36 @@ body#top.apparel-page #base-product-156851036 .jewelry-visual,
 body#top.apparel-page #base-product-156851036 .jewelry-visual img{background:#fff}
 body#top.apparel-page #base-product-156850693 .base-product-visual img,
 body#top.apparel-page #base-product-156851036 .jewelry-visual img{object-fit:contain;object-position:center;transform:none;filter:none}
+
+/* Shared catalog rows align prices, purchase buttons and optional links at every width.
+   Subgrid grows the name row naturally; no product name is clipped or truncated. */
+body#top.apparel-page .base-products-grid{row-gap:0;align-items:stretch}
+body#top.apparel-page .catalog-product{display:flex;flex-direction:column;margin:0 0 36px;min-width:0;align-self:stretch}
+body#top.apparel-page .catalog-product>.base-product-visual{width:100%;aspect-ratio:1;min-width:0}
+body#top.apparel-page .catalog-product>.base-product-brand{margin:18px 0 10px}
+body#top.apparel-page .catalog-product>.base-product-name{flex:none;min-height:4.8em;margin:0;display:block;-webkit-line-clamp:unset;overflow:visible;white-space:normal;overflow-wrap:anywhere}
+body#top.apparel-page .catalog-product>.base-product-price{margin:12px 0 0;font-size:14px;line-height:1.6;font-weight:400;letter-spacing:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+body#top.apparel-page .catalog-product .base-product-tax{display:block;margin:2px 0 0;font-size:10px;line-height:1.6;font-weight:400}
+body#top.apparel-page .catalog-product>.base-product-cta{align-self:start;margin:18px 0 0;width:100%;height:44px;min-height:44px;padding:10px 4px;background:#000;border:1px solid #606060;color:#fff;font-size:12px;font-weight:400;line-height:1;letter-spacing:0;white-space:nowrap;text-align:center}
+body#top.apparel-page .catalog-product>.base-product-links{min-width:0;min-height:44px;margin-top:8px;--jewelry-gold:#C5A059}
+body#top.apparel-page .catalog-product .base-product-design-link{min-height:44px;padding:8px 0;font-size:11px;line-height:1.6;color:#C5A059}
+body#top.apparel-page .catalog-product .jewelry-action{font-size:11px;letter-spacing:0;white-space:nowrap;min-height:44px;padding:8px 0;color:#C5A059}
+body#top.apparel-page .catalog-product .base-product-cta:focus-visible,
+body#top.apparel-page .catalog-product>.base-product-visual:focus-visible{outline:2px solid #C5A059;outline-offset:4px}
+body#top.apparel-page .catalog-product .base-product-cta:hover{border-color:#C5A059;background:#000;color:#fff}
+body#top.apparel-page #base-product-156851036 .base-product-visual,
+body#top.apparel-page #base-product-156851056 .base-product-visual,
+body#top.apparel-page #base-product-156851036 .base-product-visual img,
+body#top.apparel-page #base-product-156851056 .base-product-visual img{background:#fff;object-fit:contain;object-position:center;transform:none;filter:none}
+@supports(grid-template-rows:subgrid){
+  body#top.apparel-page .catalog-product{display:grid;grid-template-rows:subgrid;grid-row:span 6;row-gap:0}
+}
+@media(max-width:650px){
+  body#top.apparel-page .catalog-product{margin-bottom:28px}
+  body#top.apparel-page .catalog-product>.base-product-brand{margin:12px 0 8px}
+  body#top.apparel-page .catalog-product>.base-product-name{min-height:5.1em}
+  body#top.apparel-page .catalog-product>.base-product-price{margin-top:10px;font-size:12px}
+  body#top.apparel-page .catalog-product>.base-product-cta{margin-top:14px;padding:10px 2px;font-size:11px}
+  body#top.apparel-page .catalog-product .base-product-design-link,
+  body#top.apparel-page .catalog-product .jewelry-action{font-size:10px}
+}
