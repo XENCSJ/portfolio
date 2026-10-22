@@ -76,6 +76,36 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <link rel="stylesheet" href="./xen-immersive.css?v=20261023-soft-reveal1">
 <script defer src="./xen-immersive.js?v=20261023-soft-reveal1"></script>
 <link rel="stylesheet" href="./xen-profile-k18.css?v=20261023-soft-reveal1">
+
+<style id="studio-text-soft-reveal">
+/* STUDIO text only. Logo and MVV retain their existing motion. */
+body#top.studio-page .studio-fusion .studio-fusion-drift {
+  animation:none!important;
+  transform:none;
+}
+body#top.studio-page .studio-fusion.is-running .studio-fusion-entry {
+  animation:studio-text-soft-in 700ms cubic-bezier(.22,1,.36,1) calc(var(--delay) - 1.1s) both;
+}
+body#top.studio-page .studio-fusion.is-paused .studio-fusion-entry {
+  animation-play-state:paused;
+}
+body#top.studio-page .studio-fusion .studio-fusion-item:focus-within .studio-fusion-entry {
+  animation:none;
+  opacity:1;
+  transform:none;
+}
+@keyframes studio-text-soft-in {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion:reduce) {
+  body#top.studio-page .studio-fusion .studio-fusion-entry {
+    animation:none!important;
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
 </head><body id="top" class="xen-noir detail-page video-page studio-page xen-polished xen-detail-unified xen-youtube-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN APPAREL STOREへ"><img src="./xen-header-cart.png" alt="" width="56" height="51"></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><span class="xen-menu-en" lang="en">ABOUT XEN</span><span class="xen-menu-ja" lang="ja">XENについて</span></h2><ul class="xen-menu-items"><li><a class="xen-menu-link " href="./studio.html" aria-current="page"><span class="xen-menu-en" lang="en">STUDIO</span><span class="xen-menu-ja" lang="ja">スタジオ</span></a></li><li><a class="xen-menu-link " href="./creator.html"><span class="xen-menu-en" lang="en">CREATOR</span><span class="xen-menu-ja" lang="ja">クリエイター</span></a></li></ul></section>
@@ -306,4 +336,51 @@ SOFTWARE.
   <p class="xen-footer-copyright">© XEN CREATIVE STUDIO JAPAN</p>
 </footer><script src="./xen-shared.js?v=20261017-official2" defer></script>
 
+
+<script id="studio-copy-soft-reveal">
+/* Supplement the shared reveal for standalone copy and newly opened contact panels. */
+document.addEventListener('DOMContentLoaded', () => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const nodes = document.querySelectorAll(
+    'body.studio-page #studio-services > p.studio-copy, ' +
+    'body.studio-page .studio-service-note > p.studio-copy, ' +
+    'body.studio-page #contact .contact-panel-inner'
+  );
+  if (reduced.matches || !('IntersectionObserver' in window)) return;
+  const active = new Map();
+  const observer = new IntersectionObserver(entries => {
+    entries.filter(entry => entry.isIntersecting).forEach((entry, index) => {
+      const node = entry.target;
+      observer.unobserve(node);
+      node.dataset.studioTextReveal = 'shown';
+      if (reduced.matches || document.hidden || !node.animate || node.contains(document.activeElement)) return;
+      const animation = node.animate([
+        {opacity:0, transform:'translateY(12px)'},
+        {opacity:1, transform:'translateY(0)'}
+      ], {duration:700, delay:Math.min(index, 3) * 100,
+        easing:'cubic-bezier(.22,1,.36,1)', fill:'backwards', iterations:1});
+      active.set(animation, node);
+      animation.finished.then(() => {
+        active.delete(animation);
+        animation.cancel();
+      }, () => active.delete(animation));
+    });
+  }, {threshold:0.05});
+  nodes.forEach(node => observer.observe(node));
+  const settle = () => {
+    active.forEach((node, animation) => animation.cancel());
+    active.clear();
+  };
+  reduced.addEventListener('change', () => {
+    if (reduced.matches) { observer.disconnect(); settle(); }
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) settle(); });
+  addEventListener('pagehide', settle);
+  document.addEventListener('focusin', event => {
+    active.forEach((node, animation) => {
+      if (node.contains(event.target)) { animation.cancel(); active.delete(animation); }
+    });
+  });
+}, {once:true});
+</script>
 </body></html>
