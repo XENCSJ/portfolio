@@ -1,0 +1,84 @@
+name: SOUND published cover verification
+on:
+  push:
+    branches: ['work/sound-published-qa-20261023']
+permissions:
+  contents: read
+jobs:
+  published:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Verify published SOUND and capture desktop and phone views
+        run: |
+          node <<'JS'
+          const {chromium,webkit}=require('playwright');
+          const fs=require('node:fs');const assert=require('node:assert/strict');
+          const url='https://xencsj.github.io/portfolio/sound.html';
+          const ids=['tochu-no-mamade','void-to-form','nova-pulse','nights-awakening','blue-sleep','deep-sleep','celestial-lake'];
+          const profiles=[['PC',chromium,1440,1000],['Mobile',webkit,390,844],['SmallMobile',chromium,375,812],['LargeMobile',chromium,430,932],['Tablet',chromium,768,1024]];
+          const results=[];fs.mkdirSync('sound-evidence',{recursive:true});
+          (async()=>{
+            for(const [name,engine,width,height] of profiles){
+              const browser=await engine.launch();
+              const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
+              const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+              const response=await page.goto(url,{waitUntil:'domcontentloaded'});assert.equal(response.status(),200);
+              await page.locator('link[href*="centered-covers"]').waitFor({state:'attached',timeout:20000});
+              assert.equal(await page.locator('.sound-card-heading,.sound-card-accent').count(),0);
+              const cards=[];
+              for(const id of ids){
+                const card=page.locator('#'+id),img=card.locator('.sound-song-cover');
+                await card.scrollIntoViewIfNeeded();
+                await img.evaluate(el=>el.complete?Promise.resolve():new Promise((resolve,reject)=>{el.onload=resolve;el.onerror=reject}));
+                const m=await card.evaluate(c=>{
+                  const i=c.querySelector('.sound-song-cover'),t=c.querySelector('.sound-song-title');const r=i.getBoundingClientRect(),b=c.getBoundingClientRect(),tr=t.getBoundingClientRect();
+                  return {id:c.id,src:i.getAttribute('src'),width:b.width,offset:r.x+r.width/2-b.x-b.width/2,ratio:r.width/r.height,naturalRatio:i.naturalWidth/i.naturalHeight,naturalWidth:i.naturalWidth,gap:tr.top-r.bottom,title:t.textContent,artist:c.querySelector('.sound-artist').textContent,titleCount:c.querySelectorAll('.sound-song-title').length,first:c.firstElementChild.className,labelled:c.getAttribute('aria-labelledby')===t.id,overflow:document.documentElement.scrollWidth>innerWidth+1};
+                });
+                assert.ok(Math.abs(m.offset)<1,JSON.stringify(m));assert.ok(Math.abs(m.ratio-m.naturalRatio)<.01,JSON.stringify(m));
+                assert.ok(m.naturalWidth>0);assert.ok(!m.overflow);assert.equal(m.first,'sound-cover-frame');assert.ok(m.labelled);assert.equal(m.titleCount,1);assert.equal(m.artist,'XEN');assert.ok(Math.abs(m.gap-19)<1);
+                if(['nights-awakening','deep-sleep','celestial-lake'].includes(id))assert.ok(Math.abs(m.ratio-1)<.001);
+                if(id==='nights-awakening')assert.equal(m.src,'./xen-purple-awake-cover.png');
+                if(['deep-sleep','celestial-lake'].includes(id))assert.equal(m.src,'./xen-blue-sleep-cover.jpg');
+                cards.push(m);
+              }
+              for(const sel of ['.sound-about-accordion','.sound-lyrics-accordion']){
+                const d=page.locator(sel);await d.locator('summary').click();await page.waitForTimeout(500);
+                assert.equal(await d.getAttribute('data-expanded'),'true');assert.equal(await d.locator('summary').getAttribute('aria-expanded'),'true');
+                await d.locator('summary').click();await page.waitForTimeout(500);assert.equal(await d.getAttribute('open'),null);
+              }
+              // Existing service disclosures must still open/close, including intentionally unregistered URLs.
+              for(const d of await page.locator('.sound-media-accordion').all()){
+                await d.locator('summary').click();await page.waitForTimeout(450);assert.equal(await d.getAttribute('data-expanded'),'true');
+                await d.locator('summary').click();await page.waitForTimeout(450);assert.equal(await d.getAttribute('open'),null);
+              }
+              assert.equal(await page.locator('.sound-slide').count(),4);
+              const active=await page.locator('.sound-showcase-stage').getAttribute('data-active-release');
+              await page.getByRole('button',{name:'次のジャケット',exact:true}).click();
+              assert.notEqual(await page.locator('.sound-showcase-stage').getAttribute('data-active-release'),active);
+              if(['PC','Mobile'].includes(name)){
+                for(const [id,label] of [['nights-awakening','Purple'],['deep-sleep','Blue'],['tochu-no-mamade','JPOP']]){
+                  await page.locator('#'+id).scrollIntoViewIfNeeded();await page.waitForTimeout(800);
+                  await page.locator('#'+id).screenshot({path:`sound-evidence/XEN_SOUND_${name}_${label}.png`});
+                }
+                for(const section of ['j-pop','edm-electronic','ambient-chill','listen-download']){await page.locator('#'+section).scrollIntoViewIfNeeded();await page.waitForTimeout(800)}
+                await page.screenshot({path:`sound-evidence/XEN_SOUND_${name}_full.png`,fullPage:true});
+              }
+              results.push({profile:name,width,cards,scriptErrors:errors});
+              await browser.close();
+            }
+            fs.writeFileSync('sound-evidence/results.json',JSON.stringify(results,null,2));
+            console.log(JSON.stringify({status:'PASS',profiles:results.length,cards:results.length*ids.length}));
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: SOUND-published-screenshots
+          path: sound-evidence/
+          retention-days: 14
