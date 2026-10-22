@@ -27,7 +27,7 @@ jobs:
             for(const [name,engine,width,height] of profiles){
               const browser=await engine.launch();
               const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
-              const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+              const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>console.log('REQUEST FAILED',r.url(),r.failure()?.errorText));page.on('response',r=>{if(r.status()>=400)console.log('HTTP',r.status(),r.url())});
               const response=await page.goto(url,{waitUntil:'domcontentloaded'});assert.equal(response.status(),200);
               await page.locator('link[href*="centered-covers"]').waitFor({state:'attached',timeout:20000});
               assert.equal(await page.locator('.sound-card-heading,.sound-card-accent').count(),0);
@@ -35,7 +35,7 @@ jobs:
               for(const id of ids){
                 const card=page.locator('#'+id),img=card.locator('.sound-song-cover');
                 await card.scrollIntoViewIfNeeded();
-                await img.evaluate(el=>el.complete?Promise.resolve():new Promise((resolve,reject)=>{el.onload=resolve;el.onerror=reject}));
+                await page.waitForFunction(id=>{const i=document.querySelector('#'+id+' .sound-song-cover');return i.complete&&i.naturalWidth>0},id,{timeout:30000}).catch(async error=>{await page.screenshot({path:'sound-evidence/'+name+'-load-failure.png'});throw error});
                 const m=await card.evaluate(c=>{
                   const i=c.querySelector('.sound-song-cover'),t=c.querySelector('.sound-song-title');const r=i.getBoundingClientRect(),b=c.getBoundingClientRect(),tr=t.getBoundingClientRect();
                   return {id:c.id,src:i.getAttribute('src'),width:b.width,offset:r.x+r.width/2-b.x-b.width/2,ratio:r.width/r.height,naturalRatio:i.naturalWidth/i.naturalHeight,naturalWidth:i.naturalWidth,gap:tr.top-r.bottom,title:t.textContent,artist:c.querySelector('.sound-artist').textContent,titleCount:c.querySelectorAll('.sound-song-title').length,first:c.firstElementChild.className,labelled:c.getAttribute('aria-labelledby')===t.id,overflow:document.documentElement.scrollWidth>innerWidth+1};
@@ -74,7 +74,7 @@ jobs:
             }
             fs.writeFileSync('sound-evidence/results.json',JSON.stringify(results,null,2));
             console.log(JSON.stringify({status:'PASS',profiles:results.length,cards:results.length*ids.length}));
-          })().catch(e=>{console.error(e);process.exitCode=1});
+          })().catch(e=>{console.error(e);process.exit(1)});
           JS
       - uses: actions/upload-artifact@v4
         if: always()
