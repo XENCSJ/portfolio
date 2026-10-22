@@ -285,6 +285,12 @@ body#top.sound-page main .sound-compact-player { height: 152px; min-height: 152p
 body#top.sound-page main .sound-media-accordion .video-container { margin-top: 12px; aspect-ratio: 16/9; }
 body#top.sound-page main .sound-direct-youtube { aspect-ratio: 16/9; height: auto; margin-top: 12px; }
 body#top.sound-page main .sound-media-accordion .sound-accordion-panel > a { display: block; margin: 0; padding: 10px 2px 2px; color: #666; font-size: 11px; line-height: 1.8; text-align: right; }
+/* Reusable list: any number of videos share one release-level disclosure. */
+body#top.sound-page main .sound-video-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 16px; }
+body#top.sound-page main .sound-video-item { min-width: 0; scroll-margin-top: 24px; }
+body#top.sound-page main .sound-video-title { margin: 0 0 8px; color: #333; font-size: 12px; font-weight: 500; line-height: 1.7; letter-spacing: .02em; text-align: left; }
+body#top.sound-page main .sound-video-item .video-container { width: 100%; height: auto; margin: 0; aspect-ratio: 16/9; }
+body#top.sound-page main .sound-video-item > .video-source { display: block; margin: 0; padding: 10px 2px 2px; color: #666; font-size: 11px; line-height: 1.8; text-align: right; }
 body#top.sound-page main .sound-release-card .song-description { font-size: 15px; line-height: 1.8; }
 body#top.sound-page main .sound-release-card .sound-song-lyrics { margin-top: 26px; }
 body#top.sound-page main .sound-showcase { --cover-size: clamp(205px, 54vw, 330px); margin: 32px auto 20px; width: 100%; overflow: hidden; }
