@@ -1,6 +1,19 @@
+/* Frameless facts and services; retain neutral separators and keyboard focus. */
+body#top.creator-page .cp-facts {
+  border: 0;
+  outline: none;
+}
+body#top.studio-page .studio-service-link {
+  outline: none;
+  border-color: var(--studio-line);
+}
+body#top.studio-page .studio-service-link:focus-visible {
+  outline: 2px solid var(--service-gold);
+  outline-offset: 3px;
+}
+
 /* CREATOR facts and STUDIO only. Keep the original box model and logo asset. */
-body#top.creator-page .cp-facts,
-body#top.studio-page :is(.studio-service-link, .mvv-detail) {
+body#top.studio-page .mvv-detail {
   border-color: #C5A059;
   outline: 1px solid #C5A059;
   outline-offset: -1px;
