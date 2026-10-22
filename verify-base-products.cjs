@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const origin = 'http://127.0.0.1:8765';
 const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
+const displayedIds = pinnedIds.filter(id => id !== 160058456);
 const fixture = {
   schema_version: 1, shop_url: 'https://xen.official.ec/', updated_at: '2026-10-20T10:00:00Z',
   items: Array.from({ length: pinnedIds.length }, (_, i) => ({
@@ -37,9 +38,9 @@ const fixture = {
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
-      assert.equal(await page.locator('.base-product').count(), pinnedIds.length);
-      assert.equal(await page.locator('.base-product-brand').count(), pinnedIds.length);
-      assert.equal(await page.locator('.base-product-cta').count(), pinnedIds.length - 2);
+      assert.equal(await page.locator('.base-product').count(), displayedIds.length);
+      assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length);
+      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length - 2);
       assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 2);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /商品を見る/);
@@ -55,7 +56,7 @@ const fixture = {
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(columns, 3);
       const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
-      assert.equal(rows.length, Math.ceil(pinnedIds.length / columns));
+      assert.equal(rows.length, Math.ceil(displayedIds.length / columns));
       assert.equal(await page.locator('.video-container').count(), 3);
       assert.equal(await page.locator('.video-container > template[data-xen-youtube]').count(), 3);
       assert.equal(await page.locator('.video-container > .xen-cinema-cover').count(), 3);
@@ -67,7 +68,7 @@ const fixture = {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       assert.deepEqual(errors, []);
       await catalog.screenshot({ path: `base-products-qa/catalog-${width}.png` });
-      results.push({ width, cards: pinnedIds.length, columns, horizontalOverflow: false, pageErrors: errors });
+      results.push({ width, cards: displayedIds.length, columns, horizontalOverflow: false, pageErrors: errors });
       assert.equal(await page.locator('#base-product-156849283 .base-product-design-link').getAttribute('href'), './design.html#kuro-usagi');
       // A reordered catalog must be rejected instead of replacing the approved selection.
       await page.unroute('**/base-products.json');

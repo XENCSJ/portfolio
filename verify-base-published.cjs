@@ -3,11 +3,13 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const expected = JSON.parse(fs.readFileSync('base-products.json', 'utf8'));
-const ids = [163232279,162561554,160058456,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
-const origin = 'https://xencsj.github.io/portfolio/';
+const ids = [163232279,162561554,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
+const visibleItems = expected.items.filter(item => ids.includes(item.id));
+const displayName = item => item.id === 156851036 ? 'K18 Sculpted Choker' : item.id === 156851056 ? 'K18 Sculpted Bangle' : item.name;
+const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfolio/';
 (async () => {
   fs.mkdirSync('base-products-qa', {recursive:true});
-  const browser = await chromium.launch({headless:true});
+  const browser = await chromium.launch({headless:true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? {executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE} : {})});
   try {
     const results = [];
     for (const width of [375,390,768,1440]) {
@@ -23,10 +25,22 @@ const origin = 'https://xencsj.github.io/portfolio/';
         const images = [...document.querySelectorAll('.base-product img')];
         return images.length === count && images.every(img => img.complete && img.naturalWidth > 0);
       }, ids.length);
-      assert.deepEqual(await page.locator('.base-product-link').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
-      assert.deepEqual(await page.locator('.base-product-name').allTextContents(), expected.items.map(i=>i.name));
+      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator('.base-product-link, .jewelry-store').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
+      assert.deepEqual(await page.locator('.base-product-name').allTextContents(), visibleItems.map(displayName));
       const prices = await page.locator('.base-product-price').allTextContents();
-      expected.items.forEach((item,i)=>assert.ok(prices[i].includes(new Intl.NumberFormat('ja-JP').format(item.price))));
+      visibleItems.forEach((item,i)=>assert.ok(prices[i].includes(new Intl.NumberFormat('ja-JP').format(item.price))));
+      assert.equal(await page.locator('#base-product-160058456').count(),0);
+      for (const [id,file] of [[156850693,'signet-ring'],[156851036,'sculpted-choker']]) {
+        const img=page.locator(`#base-product-${id} img`);
+        assert.equal(await img.getAttribute('src'),`./xen-apparel-${file}-base-20261023.jpg`);
+        assert.equal(await img.evaluate(e=>getComputedStyle(e).objectFit),'contain');
+        assert.equal(await img.evaluate(e=>getComputedStyle(e).objectPosition),'50% 50%');
+        const box=await img.boundingBox();assert.ok(Math.abs(box.width-box.height)<1);
+      }
+      const summary=page.locator('#base-product-156851036 summary');
+      await summary.click();assert.equal(await summary.getAttribute('aria-expanded'),'true');
+      assert.equal(await page.locator('#base-product-156851036 .jewelry-store').isVisible(),true);
+      await summary.press('Enter');assert.equal(await summary.getAttribute('aria-expanded'),'false');
       assert.equal(await page.locator('[data-base-grid]').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),3);
       assert.equal(await page.locator('.base-product').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().top))).size),Math.ceil(ids.length/3));
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
