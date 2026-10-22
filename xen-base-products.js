@@ -9,10 +9,10 @@
   const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
   // APPAREL display choices are independent of the scheduled BASE feed.
   const apparelExcludedIds = new Set([160058456]);
-  // Main images observed on the official BASE product pages on 2026-10-23 JST.
+  // User-supplied APPAREL images, 2026-10-23 JST. Versioned names avoid stale caches.
   const apparelImages = {
-    156850693: './xen-apparel-signet-ring-base-20261023.jpg',
-    156851036: './xen-apparel-sculpted-choker-base-20261023.jpg'
+    156850693: './xen-apparel-signet-ring-20261023-8a2ce834d1.jpg',
+    156851036: './xen-apparel-sculpted-choker-20261023-7605c8856a.jpg'
   };
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const amount = new Intl.NumberFormat('en-US', { useGrouping: true, maximumFractionDigits: 0 });
@@ -100,7 +100,8 @@
     const kind = item.id === 156851036 ? 'choker' : 'bangle';
     // Preserve the approved display names, images and description for the two drawers.
     const title = sculpted ? `K18 Sculpted ${kind === 'choker' ? 'Choker' : 'Bangle'}` : item.name;
-    const article = element('article', 'base-product catalog-product');
+    const jewelry = sculpted || item.id === 156850693;
+    const article = element('article', `base-product catalog-product${jewelry ? ' catalog-jewelry' : ''}`);
     article.id = `base-product-${item.id}`;
     const visual = element('a', 'base-product-visual');
     visual.href = item.url;
@@ -133,13 +134,14 @@
     purchase.rel = 'noopener noreferrer';
     purchase.setAttribute('aria-label', `${title} 購入する（新しいタブで開く）`);
     const links = element('div', 'base-product-links');
-    if (sculpted || item.id === 156850693) links.append(jewelryDetails(item, title));
+    if (jewelry) links.append(jewelryDetails(item, title));
     if (designTargets[item.id]) {
       const designLink = element('a', 'base-product-design-link', 'キャラクターデザインを見る →');
       designLink.href = `./design.html#${designTargets[item.id]}`;
       links.append(designLink);
     }
-    article.append(visual, brand, name, price, purchase, links);
+    // Keep purchase visible below the disclosure; preserve every other card's order.
+    article.append(visual, brand, name, price, ...(jewelry ? [links, purchase] : [purchase, links]));
     return article;
   }
   function jewelryDetails(item, title) {

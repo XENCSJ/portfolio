@@ -60,7 +60,7 @@ const fixture = {
       const alignment = await page.locator('.catalog-product').evaluateAll(cards => {
         const rect = element => { const r = element.getBoundingClientRect(); return {top:r.top, width:r.width, height:r.height}; };
         return cards.map(card => ({
-          card:rect(card), visual:rect(card.querySelector('.base-product-visual')),
+          id:card.id, card:rect(card), visual:rect(card.querySelector('.base-product-visual')),
           price:rect(card.querySelector(':scope > .base-product-price')),
           button:rect(card.querySelector(':scope > .base-product-cta')),
           links:rect(card.querySelector('.base-product-links')),
@@ -72,7 +72,8 @@ const fixture = {
         for (const card of row) {
           assert.ok(Math.abs(card.visual.width-card.visual.height)<1, 'Square product images');
           assert.equal(card.button.height,44);
-          assert.deepEqual(card.order,['base-product-visual','base-product-brand','base-product-name','base-product-price','base-product-cta','base-product-links']);
+          const jewelry = ['base-product-156850693','base-product-156851036','base-product-156851056'].includes(card.id);
+          assert.deepEqual(card.order,['base-product-visual','base-product-brand','base-product-name','base-product-price',...(jewelry ? ['base-product-links','base-product-cta'] : ['base-product-cta','base-product-links'])]);
           for (const key of ['price','button','links']) assert.ok(Math.abs(card[key].top-row[0][key].top)<1, `${key} must align within its row`);
         }
       }

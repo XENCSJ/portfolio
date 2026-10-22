@@ -86,3 +86,12 @@ body#top.apparel-page #base-product-156851056 .base-product-visual img{backgroun
   body#top.apparel-page .catalog-product .base-product-design-link,
   body#top.apparel-page .catalog-product .jewelry-action{font-size:10px}
 }
+
+/* K18 cards: full images and a compact details row above the shared purchase CTA. */
+body#top.apparel-page .catalog-jewelry>.base-product-name{min-height:3.2em}
+body#top.apparel-page .catalog-jewelry>.base-product-links{margin-top:8px}
+body#top.apparel-page .catalog-jewelry>.base-product-cta{margin-top:8px}
+@media(max-width:650px){
+  body#top.apparel-page .catalog-jewelry>.base-product-name{min-height:5.1em}
+  body#top.apparel-page .catalog-jewelry .jewelry-action{white-space:normal;overflow-wrap:anywhere}
+}
