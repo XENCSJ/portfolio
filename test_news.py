@@ -19,6 +19,8 @@ class NewsTests(unittest.TestCase):
             self.assertIn('lang="en">' + label + '</span>', markup)
             self.assertIn('href="' + record['url'] + '"', markup)
             self.assertEqual(record, before)
+            release = dict(record, type='NEW RELEASE')
+            self.assertIn('lang="en">' + label + '</span>', news.markup([release]))
 
     def test_requested_youtube_replacement_survives_regeneration(self):
         events = [e for e in news.read('news-events.json') if e['id'].startswith(('legacy-', 'historical-'))]

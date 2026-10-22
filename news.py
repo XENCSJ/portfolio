@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent
 JST = timezone(timedelta(hours=9))
 # Keep historical category IDs and URLs stable; translate labels only at render time.
 CATEGORY_TITLES = json.loads((ROOT / 'category-titles.json').read_text())
-CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE', 'WEBSITE')
+CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE', 'WEBSITE', 'CREATOR', 'STUDIO', 'INDEX', 'SNS-MANAGEMENT', 'PRICE-LIST')
 RELEASE_CATEGORIES = ('SOUND', 'CINEMATIC', 'ANIMATION', 'YOUTUBE')
 AUTO = ('SNAP', 'ARTWORKS')
 PIN_ID = 'website-renewal-20261020'
@@ -34,6 +34,7 @@ def groups(events, today=None):
     grouped, seen = {}, set()
     # First verified publication owns an ID, even if reintroduced later.
     for e in sorted(events, key=lambda e: (e['date'], e.get('publishedAt', ''), e['id'])):
+        if e.get('status', 'published') != 'published': continue
         if e['id'] == PIN_ID or e.get('pinned'): raise ValueError('Fixed article belongs only in news-pinned.json')
         date = e['date']
         if datetime.strptime(date, '%Y-%m-%d').date().isoformat() != date: raise ValueError('Invalid date')
@@ -45,8 +46,13 @@ def groups(events, today=None):
         fresh = {i for i in ids if (e['category'], i) not in seen}
         seen.update((e['category'], i) for i in ids)
         if not fresh: continue
-        key = (date, e['category'])
-        g = grouped.setdefault(key, {'id': 'news-' + date + '-' + e['category'].lower(), 'date': date, 'category': e['category'], 'publishedAt': '', 'url': e['url'], 'contentIds': set(), 'events': [], 'countKnown': True})
+        # Named new releases retain their own title and direct link. Historical
+        # photo batches keep their approved date/category grouping.
+        key = (date, e['category'], e.get('workId', ''))
+        group_id = 'news-' + date + '-' + e['category'].lower()
+        if e.get('workId'): group_id += '-' + hashlib.sha256(e['workId'].encode()).hexdigest()[:12]
+        g = grouped.setdefault(key, {'id': group_id, 'date': date, 'category': e['category'], 'publishedAt': '', 'url': e['url'], 'contentIds': set(), 'events': [], 'countKnown': True})
+        if e.get('type'): g['type'] = e['type']
         g['contentIds'].update(fresh)
         g['events'].append(e)
         g['countKnown'] = g['countKnown'] and e.get('countKnown', True)
@@ -94,6 +100,7 @@ def select(events, pin, today=None):
         if item['id'] in seen: continue
         selected.append(item); seen.add(item['id'])
         if len(selected) == 4: break
+    selected.sort(key=lambda g: (g['date'], g['publishedAt'], g['id']), reverse=True)
     return selected + [dict(pin, pinned=True)]
 
 class Gallery(HTMLParser):
@@ -155,7 +162,10 @@ def markup(items):
         esc = lambda v: html.escape(str(v), quote=True)
         pin = PIN_SVG if e.get('pinned') else ''
         body = '<span class="xen-news-body">' + esc(e['body']) + '</span>' if e.get('body') else ''
-        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(CATEGORY_TITLES.get(e["category"].lower(), {}).get("en", e["category"]))}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
+        # Reuse the existing category/body slots; no new layout or CSS.
+        label = CATEGORY_TITLES.get(e['category'].lower(), {}).get('en', e['category'])
+        if e.get('type') and not body: body = '<span class="xen-news-body" lang="en">' + esc(e['type']) + '</span>'
+        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(label)}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
     return '\n'.join(rows)
 
 def generate(check=False):
@@ -245,5 +255,7 @@ def refresh():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--refresh', action='store_true'); parser.add_argument('--check', action='store_true'); args = parser.parse_args()
-    if args.refresh: refresh()
+    if args.refresh:
+        from sync_works import refresh as refresh_works
+        refresh_works()
     else: print(json.dumps(generate(args.check), ensure_ascii=False, indent=2))
