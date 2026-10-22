@@ -14,7 +14,7 @@ Publication check: compare lyric paragraph text and `<br>` positions with the or
 
 ## Song commentary and shared disclosures
 
-All song commentary uses the same disclosure design and independent animation as lyrics. Keep this order: cover, title, credit, commentary disclosure, lyrics disclosure. Do not add an empty disclosure or invent missing commentary.
+All song commentary uses the same disclosure design and independent animation as lyrics. Keep this order: card title, gold rule, cover, repeated title, artist, credit when registered, Spotify disclosure, YouTube disclosure, commentary disclosure, lyrics disclosure. Do not add an empty disclosure or invent missing commentary.
 
 Use this structure for each new commentary, replacing `unique-song-about-panel` with a unique ID and inserting the approved prose:
 
@@ -36,3 +36,11 @@ Use this structure for each new commentary, replacing `unique-song-about-panel` 
 - Preserve every word and punctuation mark. Join commentary paragraphs into one continuous paragraph without manual `<br>` tags, blank lines, or extra whitespace. These rules apply only to commentary, never to lyrics.
 - `.song-description` supplies left alignment, responsive 14–16px type, 1.85 line height, natural wrapping, and no paragraph spacing. The shared script accepts both this structure and existing lyric markup.
 - Verify both open/close labels and plus/minus icons, independent disclosure states, keyboard operation, reduced motion, no-JavaScript native behavior, and no horizontal overflow at PC and phone widths.
+
+## Release cards and slideshow (2026-10-23)
+
+Every `.sound-release-card` owns its title, unchanged artwork, `data-spotify-url` and `data-youtube-url`. Keep both `.sound-media-accordion` rows even when the URL is empty; their panels stay empty without placeholders. Adding a verified URL on the card populates an empty panel through `xen-sound-catalog.js`. Keep links and player destinations synchronized when changing an existing URL.
+
+Register a verified jacket with `data-slideshow="true"`. The slideshow reads cards directly, shuffles complete cycles, avoids consecutive repeats, starts at five-second intervals and supports swipe, arrows, pause, visibility pause and reduced motion. Images use contain inside square frames, never cropping or stretching. Cards for NIGHT'S AWAKENING, Deep Sleep and Celestial Lake retain their existing video thumbnails and are excluded from the jacket slideshow until formal jackets are supplied.
+
+Spotify links from the slideshow come only from the matching card. Blank URLs never navigate. Do not add listening buttons, embeds or availability messages to the slideshow.

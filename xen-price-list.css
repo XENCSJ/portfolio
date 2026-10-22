@@ -127,3 +127,29 @@ body.price-list-page .contents-return { display: table; margin: 20px 0 0 auto; p
 .price-list-page .price-status-no{color:#777}
 .price-list-page .price-status-note{display:block;font-size:13px;line-height:1.8;color:#666;margin-top:3px}
 @media(max-width:600px){.price-list-page .price-detail-content dl>div{grid-template-columns:82px minmax(0,1fr);gap:12px}}
+
+/* Descriptive category cards. Fee data and all detail panels remain untouched. */
+body#top.price-list-page main .price-category-nav { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin: 18px 0 8px; }
+body#top.price-list-page main .price-category-nav a { grid-template-columns: 24px minmax(0,1fr) 16px; align-items: start; gap: 10px; min-height: 140px; padding: 20px 15px; background: #111; border: 1px solid #bba16b45; border-radius: 3px; color: #f6f4ef; font-size: 14px; line-height: 1.7; transition: border-color .25s, background .25s; }
+body#top.price-list-page main .price-category-nav .price-nav-number { padding-top: 2px; color: #c6a76b; font-size: 12px; }
+body#top.price-list-page main .price-category-nav .price-nav-arrow { padding-top: 2px; color: #c6a76b; }
+body#top.price-list-page main .price-category-nav .price-nav-label { font-weight: 500; }
+body#top.price-list-page main .price-category-nav .price-nav-description { display: block; margin-top: 8px; color: #c4c4c4; font-size: 12px; line-height: 1.7; font-weight: 400; letter-spacing: 0; }
+body#top.price-list-page main .price-category-nav a:hover { background: #191814; border-color: #c6a76b; }
+.price-list-page .price-category-number { color: #9b7c42; }
+.price-list-page .price-table thead th { background: #faf9f6; color: #68645c; border-color: #dcd5c7; }
+.price-list-page .price-table .price-fee { font-size: 16px; font-weight: 600; color: #2b2418; line-height: 1.7; }
+.price-list-page .price-summary-row { border-color: #e4e0d7; }
+.price-list-page .price-toggle { font-weight: 500; }
+.price-list-page .price-toggle-icon { color: #a78950; }
+.price-list-page .price-table .price-time { color: #777; }
+@media(max-width:1023px) { body#top.price-list-page main .price-category-nav { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) {
+ body#top.price-list-page main .price-category-nav { grid-template-columns: 1fr; gap: 10px; }
+ body#top.price-list-page main .price-category-nav a { min-height: 100px; padding: 17px 15px; }
+ .price-list-page .price-table .price-fee { font-size: 14px; }
+ .price-list-page .price-table col.price-col-time { width: 44px; }
+ .price-list-page .price-table col.price-col-fee { width: 132px; }
+ .price-list-page .price-table .price-toggle { font-size: 14px; }
+ .price-list-page .price-detail-content dl { font-size: 14px; }
+}
