@@ -384,18 +384,51 @@
   },
   {
     "id": "sound-tochu-no-mamade-announcement",
-    "date": "2026-10-22",
+    "date": "2026-10-21",
     "category": "SOUND",
-    "title": "楽曲『途中のままで』を掲載しました。",
+    "title": "途中のままで",
     "url": "./sound.html#tochu-no-mamade",
     "contentIds": [
       "sound:tochu-no-mamade"
     ],
     "countKnown": true,
-    "evidence": {
-      "page": "https://xencsj.github.io/portfolio/sound.html#tochu-no-mamade",
-      "announcement": "Owner-requested NEWS announcement dated 2026-10-22 JST. The date identifies this announcement, not a music distribution release date. The song jacket, credits, commentary and lyrics were verified on the public page."
-    }
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39601512901/job/119227293594",
+    "workId": "sound:tochu-no-mamade",
+    "publishedAt": "2026-10-21T12:43:27Z",
+    "type": "NEW RELEASE",
+    "status": "published"
+  },
+  {
+    "id": "work-0c17ca41e8fcb6308981",
+    "workId": "artworks:1ff01f211b522f04ea87",
+    "date": "2026-10-23",
+    "publishedAt": "2026-10-22T20:40:03Z",
+    "category": "ARTWORKS",
+    "title": "白背景の黄色い花",
+    "type": "NEW RELEASE",
+    "url": "./artworks.html#work-0c17ca41e8fcb630",
+    "status": "published",
+    "contentIds": [
+      "image:xen-artwork-20261023-yellow-flowers.png"
+    ],
+    "countKnown": true,
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39850671725/job/120076000894"
+  },
+  {
+    "id": "work-cab632e866cecee451f0",
+    "workId": "base:156849283",
+    "date": "2026-10-23",
+    "publishedAt": "2026-10-22T20:57:15Z",
+    "category": "APPAREL",
+    "title": "くろうさぎ",
+    "type": "NEW RELEASE",
+    "url": "./apparel.html#base-products-title",
+    "status": "published",
+    "contentIds": [
+      "base:156849283"
+    ],
+    "countKnown": true,
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39853055973/job/120084466322"
   },
   {
     "id": "pages-c01680bd2b3f000291ff600f998ebaf85a460825-artworks",
