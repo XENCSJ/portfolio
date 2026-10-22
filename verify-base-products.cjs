@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const origin = 'http://127.0.0.1:8765';
-const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299,156849283];
+const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
 const fixture = {
   schema_version: 1, shop_url: 'https://xen.official.ec/', updated_at: '2026-10-20T10:00:00Z',
   items: Array.from({ length: pinnedIds.length }, (_, i) => ({

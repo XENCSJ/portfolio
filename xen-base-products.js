@@ -6,7 +6,7 @@
   if (!root && !related.length) return;
   const roots = [root, ...related].filter(Boolean);
   const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo', 156849283: 'kuro-usagi' };
-  const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283];
+  const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const secureURL = value => {
     try {

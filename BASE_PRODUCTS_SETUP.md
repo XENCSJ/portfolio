@@ -24,12 +24,15 @@ Fetch all public-product pages using `offset += 100` until a page has fewer than
 5. 157787639
 6. 157783299
 7. 156849283 (くろうさぎ; added at owner request on 2026-10-23 JST)
+8. 156850693 (XEN K18 SIGNET RING; added at owner request on 2026-10-23 JST)
+9. 156851036 (XEN K18 SCULPTED CHOKER; added at owner request on 2026-10-23 JST)
+10. 156851056 (XEN K18 SCULPTED BANGLE; added at owner request on 2026-10-23 JST)
 
 Newer products never replace this selection. Changing the selected IDs requires owner approval. Missing/hidden selected products, missing prices/images, malformed responses and API failures abort the update and preserve the complete previous JSON. Sold-out selected products stay in position and receive a status label. A successful empty response does not clear the catalog.
 
 The initial six records were checked against the official BASE product pages on 2026-10-21 JST, with `source: BASE official product pages`; unknown creation dates remain null. A successful authenticated refresh replaces them with verified API data and sets `source: BASE API v2`. The first HTTP-200 refresh must be verified separately; bootstrap data is not evidence of API success.
 
-`base-products.json` contains only public display fields. The browser never receives credentials. The frontend checks all seven IDs and their order before rendering and uses safe text insertion. Both desktop and mobile use three columns and three rows, square product images, and two-line clamped product names. The former LOGO T-SHIRT / LOGO HOODIE / BUCKET HAT cards and duplicate store CTA were removed. The brand visual, APPAREL FILMS, media, header, footer and animation assets are unchanged. The single store link sits below the catalog.
+`base-products.json` contains only public display fields. The browser never receives credentials. The frontend checks all ten IDs and their order before rendering and uses safe text insertion. Both desktop and mobile use three columns and four rows, square product images, and two-line clamped product names. The former LOGO T-SHIRT / LOGO HOODIE / BUCKET HAT cards and duplicate store CTA were removed. The brand visual, APPAREL FILMS, media, header, footer and animation assets are unchanged. The single store link sits below the catalog.
 
 ## Failure handling and verification
 
@@ -66,3 +69,7 @@ References:
 ## KURO USAGI addition (2026-10-23 JST)
 
 The seventh product uses the supplied official URL, verified name, ¥13,000 price and official product image. Its creation date remains null until the authenticated refresh supplies it. Existing six records are retained; the mixed source label describes this bootstrap accurately. DESIGN adds the same animated APPAREL COLLECTION disclosure as the other characters, with links in both directions.
+
+## Jewelry additions (2026-10-23 JST)
+
+The selected catalog now includes the requested K18 SIGNET RING, K18 SCULPTED CHOKER and K18 SCULPTED BANGLE after the existing seven items. Their initial names, prices, images and shop links were verified against the official product pages; creation dates remain null until API refresh. The next successful refresh preserves all ten IDs in the same order. DESIGN's jewelry section links directly to the ring, choker and K18 SCULPTED BANGLE (156851056). All three jewelry products are included in APPAREL as requested.

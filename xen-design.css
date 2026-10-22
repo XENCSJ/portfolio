@@ -123,3 +123,12 @@ body.design-page.detail-page main h1 .page-title-ja {
 @media(prefers-reduced-motion:reduce) {
   .design-page .design-visuals .gallery-item:hover { transform:none; }
 }
+
+/* Direct official-store links for the three jewelry products. */
+.design-page .design-jewelry-shop { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:760px;margin:30px 0 0 auto; }
+.design-page .design-jewelry-shop a { display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;padding:14px 0;color:#252529;text-decoration:none;border-bottom:1px solid #dedee3;font-size:11px;line-height:1.7;letter-spacing:.04em; }
+.design-page .design-jewelry-shop a>span:first-child { min-width:0;overflow-wrap:anywhere; }
+.design-page .design-jewelry-shop small { display:block;margin-top:5px;color:#737379;font-size:11px;letter-spacing:0; }
+.design-page .design-jewelry-shop a:focus-visible { outline:2px solid #897348;outline-offset:5px; }
+.design-page .design-jewelry-shop a:hover { color:#897348; }
+@media(max-width:600px) { .design-page .design-jewelry-shop { grid-template-columns:minmax(0,1fr);gap:0; } }
