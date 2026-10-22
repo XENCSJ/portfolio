@@ -22,13 +22,14 @@
       node.classList.add('ql-seen');
       if (!allowed()) return;
       const kind = targets.get(node);
+      const softItem = node.matches('.creator-page .cp-facts > div, .studio-page .studio-service-grid > li');
       // Cap a visible group at four beats. Later rows get their own clock.
-      const delay = Math.min(index,3) * 100;
+      const delay = (softItem ? index : Math.min(index,3)) * 100;
       const frames = kind === 'line' ? [{transform:'scaleX(0)',opacity:0},{transform:'scaleX(1)',opacity:1}] :
         kind === 'mask' ? [{opacity:0,clipPath:'inset(0 0 5% 0)'},{opacity:1,clipPath:'inset(0)'}] :
         kind === 'image' || kind === 'fade' ? [{opacity:0},{opacity:1}] :
         [{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}];
-      animate(node,frames,{duration:kind === 'image' || kind === 'mask' ? 1000 : 850,delay});
+      animate(node,frames,{duration:softItem ? 700 : kind === 'image' || kind === 'mask' ? 1000 : 850,delay});
       // Scale is contained within an existing image frame, never a whole card or player.
       if ((kind === 'image' || kind === 'mask') && !node.closest('.brand-visual')) {
         const image = node.querySelector('img');
@@ -36,15 +37,20 @@
           animate(image,[{transform:'scale(1.025)'},{transform:'scale(1)'}],{duration:1100,delay});
         }
       }
-      if (node.matches('.studio-service-grid > li')) node.querySelectorAll('svg > *').forEach(shape => {
-        if (!shape.getTotalLength) return;
-        const length=shape.getTotalLength();
-        if(length>0) animate(shape,[{strokeDasharray:`${length} ${length}`,strokeDashoffset:length},{strokeDasharray:`${length} ${length}`,strokeDashoffset:0}],{duration:900,delay});
-      });
+
     };
     const observer = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
       const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top || a.boundingClientRect.left-b.boundingClientRect.left);
-      visible.forEach((entry,index)=>{observer.unobserve(entry.target);enter(entry.target,index);});
+      const groupCounts = new Map();
+      visible.forEach((entry,index)=>{
+        const node = entry.target;
+        if (node.matches('.creator-page .cp-facts > div, .studio-page .studio-service-grid > li')) {
+          const group = node.parentElement;
+          index = groupCounts.get(group) || 0;
+          groupCounts.set(group,index + 1);
+        }
+        observer.unobserve(node);enter(node,index);
+      });
     }, {threshold:0,rootMargin:'0px 0px -12px 0px'}) : null;
     function refresh() {
       const candidates = new Map();
