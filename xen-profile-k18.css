@@ -1,0 +1,47 @@
+/* CREATOR facts and STUDIO only. Keep the original box model and logo asset. */
+body#top.creator-page .cp-facts,
+body#top.studio-page :is(.studio-service-link, .mvv-detail) {
+  border-color: #C5A059;
+  outline: 1px solid #C5A059;
+  outline-offset: -1px;
+}
+
+/* The logo stays at its original position; only its surface light moves. */
+body#top.studio-page .studio-fusion-logo-enter,
+body#top.studio-page .studio-fusion-logo-drift {
+  animation: none;
+  transform: none;
+}
+
+@supports ((mask-image: url('')) or (-webkit-mask-image: url(''))) {
+  body#top.studio-page .studio-fusion-logo-drift {
+    background: linear-gradient(135deg, #8C6A32 0%, #C5A059 25%, #D4AF6A 52%, #C5A059 76%, #8C6A32 100%);
+  }
+  body#top.studio-page .studio-fusion-logo-drift::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(135deg, transparent 39%, #F0D99C33 46%, #F0D99C99 50%, #F0D99C33 54%, transparent 61%);
+    background-size: 300% 300%;
+    background-position: 100% 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    body#top.studio-page .studio-fusion.is-running .studio-fusion-logo-drift::after {
+      animation: xen-k18-metallic-sweep 7s linear infinite;
+    }
+    body#top.studio-page .studio-fusion.is-paused .studio-fusion-logo-drift::after {
+      animation-play-state: paused;
+    }
+  }
+}
+@keyframes xen-k18-metallic-sweep {
+  0%, 15% { background-position: 100% 100%; }
+  85%, 100% { background-position: 0% 0%; }
+}
+@media (prefers-reduced-motion: reduce), print {
+  body#top.studio-page .studio-fusion-logo-drift::after {
+    display: none;
+    animation: none;
+  }
+}

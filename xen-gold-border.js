@@ -5,7 +5,7 @@
   if (!page || page.dataset.goldTraceReady || !page.classList.contains('detail-page')) return;
   const candidates = {
     'studio-page': '.studio-service-link, .mvv-detail',
-    'creator-page': '.cp-facts, .cp-field-detail, .support-shell',
+    'creator-page': '.cp-field-detail, .support-shell',
     'storybooks-page': '.work',
     'animation-page': '.work',
     'sound-page': '.sound-release-card',
