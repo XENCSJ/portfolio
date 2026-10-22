@@ -10,6 +10,8 @@ SNAP and ARTWORKS: add image files and gallery links normally. Pure additions ar
 
 The workflow groups same-day/category additions, preserves earlier content identities, regenerates only the marked NEWS block in INDEX, commits only NEWS files, and explicitly requests a Pages build. A NEWS-only deployment has no content delta and stops without another commit. Conflicts with concurrent main changes fail safely; rerun the workflow after resolving them. No force push is used.
 
+Pending groups are reported as workflow warnings and in the job summary, including on a no-change run. A green workflow alone does not mean every newly published work has reached NEWS. When a pending item is verified as a genuine addition, promote that exact record into `news-events.json` without its `reason`, preserving its original deployment timestamp, evidence and content IDs; remove only the resolved record from `news-state.json` and regenerate. The 2026-10-23 yellow-flower addition was reconciled this way after its addition and two unrelated removals were verified in PR #42.
+
 ## Managed registration for other categories
 
 DESIGN, APPAREL, ARCHITECTURE, SPACE, SOUND, CINEMATIC, ANIMATION, STORYBOOKS and YOUTUBE have differing work structures, so do not guess from image or iframe changes. Add a record to `news-content.json` in the same commit as a genuinely new work:

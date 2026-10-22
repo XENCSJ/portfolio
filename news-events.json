@@ -396,5 +396,16 @@
       "page": "https://xencsj.github.io/portfolio/sound.html#tochu-no-mamade",
       "announcement": "Owner-requested NEWS announcement dated 2026-10-22 JST. The date identifies this announcement, not a music distribution release date. The song jacket, credits, commentary and lyrics were verified on the public page."
     }
+  },
+  {
+    "id": "pages-6ca2f73d03031b7a94e074e5a1ba3971cd748267-artworks",
+    "category": "ARTWORKS",
+    "date": "2026-10-23",
+    "publishedAt": "2026-10-22T20:40:03Z",
+    "url": "./artworks.html",
+    "contentIds": [
+      "image:xen-artwork-20261023-yellow-flowers.png"
+    ],
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39850671725/job/120076000894"
   }
 ]

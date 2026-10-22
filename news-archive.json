@@ -1,5 +1,19 @@
 [
   {
+    "id": "news-2026-10-23-artworks",
+    "date": "2026-10-23",
+    "category": "ARTWORKS",
+    "publishedAt": "2026-10-22T20:40:03Z",
+    "url": "./artworks.html",
+    "contentIds": [
+      "image:xen-artwork-20261023-yellow-flowers.png"
+    ],
+    "countKnown": true,
+    "count": 1,
+    "title": "新しいアートワークを1作品追加しました。",
+    "body": ""
+  },
+  {
     "id": "news-2026-10-22-sound",
     "date": "2026-10-22",
     "category": "SOUND",
