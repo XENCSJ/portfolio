@@ -22,7 +22,8 @@
       '.sns-metrics','.sns-fit','.base-product','.xen-latest-item','.apparel-editorial-image',
       '#base-products-title','.xen-news-heading','.xen-news-item','.xen-news-card','.news-card',
       '.index-link','.about > *','.xen-footer-actions > a','.xen-footer-top','.xen-footer-copyright',
-      '.home-page .orbit a','[data-soft-reveal-demo]'
+      // INDEX orbit labels have a dedicated clockwise, opacity-only entrance.
+      '[data-soft-reveal-demo]'
     ].join(',');
     let suspended = false;
     const canAnimate = () => !reduced.matches && !document.hidden && !suspended;
