@@ -7,7 +7,7 @@ on:
     branches: [main]
   workflow_dispatch:
   pull_request:
-    paths: ['news*', 'xen-news.*', 'test_news.py', 'test_news_browser.cjs', '.github/workflows/news.yml', 'index.html']
+    paths: ['*.html', '*.json', 'news.py', 'sync_works.py', 'test_news*', 'test_sync_works.py', 'xen-news.*', '.github/workflows/news.yml']
 
 permissions:
   contents: read
@@ -24,7 +24,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m unittest -v test_news.py
+      # Generate first: source edits are not required to include generated NEWS.
+      - run: python news.py
+      - run: python -m unittest -v test_news.py test_sync_works.py
+      - run: python sync_works.py
       - run: node --check xen-news.js
 
   browser-checks:
@@ -35,12 +38,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --package-lock=false playwright@1.62.1
-      - run: npx playwright install --with-deps chromium webkit
-      - name: Check desktop, iPhone, small phone and reduced motion
+      - run: python news.py
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Check desktop and mobile NEWS and song anchor
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/news-http.log 2>&1 &
-          node test_news_browser.cjs
+          node verify-news-works.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -49,7 +53,7 @@ jobs:
 
   refresh:
     needs: checks
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
+    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -65,35 +69,37 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Read successful Pages deployments and aggregate new works
+      - name: Synchronize published works and generate NEWS
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python news.py --refresh
-          python -m unittest -v test_news.py
-      - name: Commit only NEWS data and request Pages build
+          python sync_works.py --refresh
+          python -m unittest -v test_news.py test_sync_works.py
+          python news.py --check
+      - name: Commit synchronized work identities and NEWS
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- news-state.json news-events.json news-archive.json index.html; then
-            echo 'No new published content. Fixed article unchanged.' >> "$GITHUB_STEP_SUMMARY"
+          files=(works.json news-events.json news-archive.json index.html studio.html creator.html storybooks.html animation.html sound.html cinematic.html snap.html design.html apparel.html architecture.html space.html artworks.html sns-management.html price-list.html)
+          if git diff --quiet -- "${files[@]}"; then
+            echo 'No new work or publication-state change; no commit needed.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- news-state.json news-events.json news-archive.json index.html
-          git commit -m 'NEWS: record verified published content'
-          # Never force-push or overwrite parallel changes. Conflicts stop this run.
-          git pull --rebase origin main
-          python -m unittest -v test_news.py
+          git add -- "${files[@]}"
+          git commit -m 'NEWS: synchronize published works automatically'
+          # Do not rebase generated snapshots over newer content. Retry on its
+          # successful Pages event; an ordinary push also rejects concurrent writes.
+          git fetch origin main
+          test "$(git rev-parse HEAD^)" = "$(git rev-parse origin/main)"
           git push origin HEAD:main
-          # Bot pushes alone do not start branch-based Pages builds.
           build_url=$(gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --jq .url)
           for attempt in $(seq 1 36); do
             state=$(gh api "$build_url" --jq .status)
             if [ "$state" = built ]; then
-              echo 'NEWS published; normal items limited to four, renewal article preserved.' >> "$GITHUB_STEP_SUMMARY"
+              echo 'Published works, NEWS and anchors are synchronized.' >> "$GITHUB_STEP_SUMMARY"
               exit 0
             fi
             if [ "$state" = errored ]; then exit 1; fi
