@@ -210,7 +210,7 @@ def main():
         items = normalize(fetch_products(os.environ.get("BASE_API_TOKEN", "")))
         changed = save_products(items, public_count=len(items))
         message = (f"BASE v2 HTTP 200: verified {len(items)} unique public products across all pages; "
-                   f"displaying the 6 selected products in fixed order; data {'updated' if changed else 'unchanged'}.")
+                   f"displaying the {len(PINNED_IDS)} selected products in fixed order; data {'updated' if changed else 'unchanged'}.")
         print(message)
         if os.environ.get("GITHUB_STEP_SUMMARY"):
             with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
