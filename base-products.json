@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "selection": "fixed",
-  "source": "BASE API v2 + BASE official product pages",
+  "source": "BASE API v2",
   "shop_url": "https://xen.official.ec/",
-  "updated_at": "2026-10-22T22:40:11Z",
+  "updated_at": "2026-10-22T22:57:37Z",
   "public_count": 75,
   "items": [
     {
@@ -78,11 +78,11 @@
     },
     {
       "id": 156850693,
-      "name": "XEN K18 SIGNET RING｜18K YELLOW GOLD",
+      "name": "XEN K18 SIGNET RING",
       "price": 378000,
       "url": "https://xen.official.ec/items/156850693",
-      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/6ffdd5af26f015114d827a8e6269f529.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
-      "created_at": null,
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/a93467725505202379d1bdd1dc8328a6.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+      "created_at": "2026-09-09T18:51:07Z",
       "available": true,
       "sales_status": "item_now_on_sale"
     },
@@ -91,8 +91,8 @@
       "name": "XEN K18 SCULPTED CHOKER",
       "price": 2180000,
       "url": "https://xen.official.ec/items/156851036",
-      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/35ff7c9753a1d23edd97dd3b61801806.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
-      "created_at": null,
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/00f65bb9369aa3b65de378a562a59f32.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+      "created_at": "2026-09-09T19:07:45Z",
       "available": true,
       "sales_status": "item_now_on_sale"
     },
@@ -101,8 +101,8 @@
       "name": "XEN K18 SCULPTED BANGLE",
       "price": 748000,
       "url": "https://xen.official.ec/items/156851056",
-      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/7ef7c7ead2c4f94c4d0d3886e7db65c9.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
-      "created_at": null,
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/7ef7c7ead2c4f94c4d0d3886e7db65c9.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+      "created_at": "2026-09-09T19:09:05Z",
       "available": true,
       "sales_status": "item_now_on_sale"
     }
