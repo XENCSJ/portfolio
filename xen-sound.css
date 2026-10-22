@@ -255,14 +255,23 @@ body#top.sound-page main .sound-release-card {
   border: 1px solid #e9e7e2; background: #fff; border-radius: 2px;
   min-width: 0; align-self: start;
 }
-body#top.sound-page main .sound-card-heading {
-  margin: 0; padding: 0; color: #222; text-align: center;
-  font-size: clamp(15px, 2vw, 18px); font-weight: 500; line-height: 1.7; letter-spacing: .08em;
+/* Every card starts with its centered artwork; the sole title follows it.
+   Keep intrinsic image proportions, including future non-square jackets. */
+body#top.sound-page main .sound-release-card .sound-cover-frame {
+  display: grid; place-items: center; width: min(100%, 380px);
+  margin: 0 auto; background: #fff;
 }
-body#top.sound-page main .sound-card-accent { width: 30px; height: 1px; background: #b49a65; margin: 13px auto 23px; }
-body#top.sound-page main .sound-cover-frame { aspect-ratio: 1; width: min(100%, 380px); margin: auto; background: #fff; }
-body#top.sound-page main .sound-release-card .sound-song-cover { width: 100%; height: 100%; aspect-ratio: auto; object-fit: contain; }
-body#top.sound-page main .sound-release-card .sound-song-title { margin: 19px 0 3px; font-size: clamp(16px, 2vw, 20px); line-height: 1.7; letter-spacing: .05em; }
+body#top.sound-page main .sound-release-card .sound-song-cover {
+  display: block; width: 100%; height: auto; margin: 0 auto;
+  aspect-ratio: auto; object-fit: contain;
+}
+body#top.sound-page main .sound-release-card .sound-song-title {
+  display: block; margin: 19px 0 3px; padding: 0;
+  background: transparent; border: 0; border-radius: 0;
+  font-size: clamp(16px, 2vw, 20px); line-height: 1.7; letter-spacing: .05em;
+}
+body#top.sound-page main .sound-release-card .sound-song-title::before,
+body#top.sound-page main .sound-release-card .sound-song-title::after { content: none; }
 body#top.sound-page main .sound-release-card .sound-artist { margin: 0; color: #666; font-size: 12px; letter-spacing: .2em; line-height: 1.8; }
 body#top.sound-page main .sound-release-card .sound-song-credit { margin: 8px 0 0; font-size: clamp(10px, 2.5vw, 12px); letter-spacing: .02em; }
 body#top.sound-page main .sound-release-card .sound-about-accordion { width: 100%; margin-inline: 0; }
