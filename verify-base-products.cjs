@@ -4,10 +4,10 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const origin = 'http://127.0.0.1:8765';
-const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299];
+const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299,156849283];
 const fixture = {
   schema_version: 1, shop_url: 'https://xen.official.ec/', updated_at: '2026-10-20T10:00:00Z',
-  items: Array.from({ length: 6 }, (_, i) => ({
+  items: Array.from({ length: pinnedIds.length }, (_, i) => ({
     id: pinnedIds[i], name: i === 0 ? '<img src=x onerror=alert(1)> XEN & テスト商品' : `XEN テスト商品 ${i+1}`,
     price: i === 4 ? null : 8800 + i * 1000,
     url: `https://xen.official.ec/items/${pinnedIds[i]}`,
@@ -37,9 +37,9 @@ const fixture = {
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
-      assert.equal(await page.locator('.base-product').count(), 6);
-      assert.equal(await page.locator('.base-product-brand').count(), 6);
-      assert.equal(await page.locator('.base-product-cta').count(), 6);
+      assert.equal(await page.locator('.base-product').count(), pinnedIds.length);
+      assert.equal(await page.locator('.base-product-brand').count(), pinnedIds.length);
+      assert.equal(await page.locator('.base-product-cta').count(), pinnedIds.length);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /商品を見る/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
@@ -54,7 +54,7 @@ const fixture = {
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(columns, 3);
       const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
-      assert.equal(rows.length, 2);
+      assert.equal(rows.length, Math.ceil(pinnedIds.length / columns));
       assert.equal(await page.locator('.video-container').count(), 3);
       assert.equal(await page.locator('.video-container > template[data-xen-youtube]').count(), 3);
       assert.equal(await page.locator('.video-container > .xen-cinema-cover').count(), 3);
@@ -66,7 +66,8 @@ const fixture = {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       assert.deepEqual(errors, []);
       await catalog.screenshot({ path: `base-products-qa/catalog-${width}.png` });
-      results.push({ width, cards: 6, columns, horizontalOverflow: false, pageErrors: errors });
+      results.push({ width, cards: pinnedIds.length, columns, horizontalOverflow: false, pageErrors: errors });
+      assert.equal(await page.locator('#base-product-156849283 .base-product-design-link').getAttribute('href'), './design.html#kuro-usagi');
       // A reordered catalog must be rejected instead of replacing the approved selection.
       await page.unroute('**/base-products.json');
       const reordered = structuredClone(fixture);
@@ -91,6 +92,24 @@ const fixture = {
       await page.reload();
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
       assert.equal(await page.locator('.base-product').count(), 0);
+      // The added character shares the real disclosure and catalog renderer.
+      await page.unroute('**/base-products.json');
+      await page.route('**/base-products.json', route => route.fulfill({json:fixture}));
+      await page.goto(origin + '/design.html#kuro-usagi');
+      const disclosure = page.locator('#kuro-usagi [data-design-apparel]');
+      const toggle = disclosure.locator('summary');
+      await toggle.scrollIntoViewIfNeeded();
+      assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+      await toggle.press('Enter');
+      assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
+      const related = disclosure.locator('.base-product-link');
+      await related.waitFor({state:'visible'});
+      assert.equal(await related.getAttribute('href'), 'https://xen.official.ec/items/156849283');
+      assert.equal(await disclosure.locator('.design-apparel-page-link').getAttribute('href'), './apparel.html#base-product-156849283');
+      await toggle.press('Enter');
+      assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      assert.deepEqual(errors, []);
       await page.close();
     }
     fs.writeFileSync('base-products-qa/results.json', JSON.stringify(results, null, 2));

@@ -1,4 +1,4 @@
-"""Refresh six explicitly selected BASE products without changing their order."""
+"""Refresh the explicitly selected BASE products without changing their order."""
 from __future__ import annotations
 
 import argparse
@@ -14,7 +14,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 
 PAGE_SIZE = 100
-PINNED_IDS = (163232279, 162561554, 160058456, 159175661, 157787639, 157783299)
+PINNED_IDS = (163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283)
 API_URL = "https://apiv2.thebase.com/api/items?visible=true&order=created&sort=desc&limit=100&offset=0"
 SHOP_URL = "https://xen.official.ec/"
 PUBLIC_URL = "https://xencsj.github.io/portfolio/base-products.json"

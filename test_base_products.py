@@ -35,14 +35,14 @@ class ProductsTest(unittest.TestCase):
         self.assertNotIn("stock", items[0])
         self.assertEqual(len(items), 6)
 
-    def test_all_pages_sorted_before_six_are_saved(self):
+    def test_all_pages_sorted_before_selected_are_saved(self):
         opener = Mock()
         # The newest product is deliberately on the second page.
         older = [product(n, created_at="2026-01-01T00:00:00Z") for n in range(1, 101)]
         newer = [product(101), product(102, visible=False), product(1)] + [product(n) for n in sync.PINNED_IDS]
         opener.open.side_effect = [io.BytesIO(json.dumps(page).encode()) for page in [older, newer]]
         items = sync.normalize(sync.fetch_products("TEST-ONLY-TOKEN", opener))
-        self.assertEqual(len(items), 107)
+        self.assertEqual(len(items), 101 + len(sync.PINNED_IDS))
         self.assertEqual(items[0]["id"], sync.PINNED_IDS[0])
         urls = [call.args[0].full_url for call in opener.open.call_args_list]
         self.assertTrue(urls[0].endswith("offset=0"))
@@ -51,7 +51,7 @@ class ProductsTest(unittest.TestCase):
             path = Path(tmp)/"base-products.json"
             sync.save_products(items, path)
             data = json.loads(path.read_text())
-            self.assertEqual(data["public_count"], 107)
+            self.assertEqual(data["public_count"], 101 + len(sync.PINNED_IDS))
             self.assertEqual([item["id"] for item in data["items"]], list(sync.PINNED_IDS))
 
     def test_exact_page_requires_empty_final_page(self):
@@ -174,7 +174,7 @@ class ProductsTest(unittest.TestCase):
         items = selected_products() + sync.normalize([product(999999999)])
         self.assertEqual([x['id'] for x in sync.select_products(items[::-1])], list(sync.PINNED_IDS))
 
-    def test_incomplete_selected_data_preserves_all_six(self):
+    def test_incomplete_selected_data_preserves_all_selected(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)/'base-products.json'
             sync.save_products(selected_products(), path)
