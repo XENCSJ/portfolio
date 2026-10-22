@@ -2,9 +2,10 @@
 (() => {
   'use strict';
   const root = document.querySelector('[data-base-products]');
-  if (!root) return;
-  const grid = root.querySelector('[data-base-grid]');
-  const status = root.querySelector('[data-base-status]');
+  const related = [...document.querySelectorAll('[data-related-product]')];
+  if (!root && !related.length) return;
+  const roots = [root, ...related].filter(Boolean);
+  const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo' };
   const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299];
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const secureURL = value => {
@@ -38,8 +39,9 @@
     if (text) node.textContent = text;
     return node;
   }
-  function card(item) {
+  function card(item, isRelated = false) {
     const article = element('article', 'base-product');
+    if (!isRelated) article.id = `base-product-${item.id}`;
     const link = element('a', 'base-product-link');
     link.href = item.url;
     link.target = '_blank';
@@ -73,13 +75,18 @@
       copy.append(element('span', 'base-product-state', label));
     }
     // The whole card is one accessible link; do not nest an interactive button.
-    copy.append(element('span', 'base-product-cta', item.available ? '購入する →' : '商品を見る →'));
+    copy.append(element('span', 'base-product-cta', !isRelated && item.available ? '購入する →' : '商品を見る →'));
     link.append(visual, copy);
     article.append(link);
+    if (!isRelated && designTargets[item.id]) {
+      const designLink = element('a', 'base-product-design-link', 'キャラクターデザインを見る →');
+      designLink.href = `./design.html#${designTargets[item.id]}`;
+      article.append(designLink);
+    }
     return article;
   }
   async function load() {
-    root.setAttribute('aria-busy', 'true');
+    roots.forEach(section => section.setAttribute('aria-busy', 'true'));
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 12000);
@@ -90,17 +97,34 @@
         data = await response.json();
       } finally { clearTimeout(timer); }
       validate(data);
-      const cards = document.createDocumentFragment();
-      data.items.forEach(item => cards.append(card(item)));
-      grid.replaceChildren(cards);
-      status.hidden = true;
+      roots.forEach(section => {
+        const isRelated = section.hasAttribute('data-related-product');
+        const items = isRelated ? data.items.filter(item => item.id === Number(section.dataset.relatedProduct)) : data.items;
+        const cards = document.createDocumentFragment();
+        items.forEach(item => cards.append(card(item, isRelated)));
+        section.querySelector('[data-base-grid]').replaceChildren(cards);
+        section.querySelector('[data-base-status]').hidden = true;
+      });
+      // Product anchors are inserted after the initial document navigation.
+      if (root && /^#base-product-\d+$/.test(location.hash)) {
+        const target = document.getElementById(location.hash.slice(1));
+        if (target && root.contains(target)) target.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
     } catch (_) {
       // Never erase already rendered cards on a failed refresh.
-      if (!grid.children.length) {
-        status.hidden = false;
-        status.textContent = '商品情報を読み込めませんでした。公式ストアでご覧ください。';
-      }
-    } finally { root.setAttribute('aria-busy', 'false'); }
+      roots.forEach(section => {
+        if (!section.querySelector('[data-base-grid]').children.length) {
+          const status = section.querySelector('[data-base-status]');
+          status.hidden = false;
+          status.textContent = '商品情報を読み込めませんでした。';
+          const fallback = element('a', 'base-products-fallback', '公式ストアで見る →');
+          fallback.href = 'https://xen.official.ec/';
+          fallback.target = '_blank';
+          fallback.rel = 'noopener noreferrer';
+          status.append(document.createTextNode(' '), fallback);
+        }
+      });
+    } finally { roots.forEach(section => section.setAttribute('aria-busy', 'false')); }
   }
   load();
 })();

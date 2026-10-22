@@ -1,0 +1,44 @@
+/* Character sheets remain the primary artwork; products appear only on request. */
+body.design-page .design-turnaround { background:#fff; }
+body.design-page .design-turnaround .gallery-item { margin-inline:auto; }
+body.design-page .design-turnaround .gallery-item img { width:100%;height:auto;object-fit:contain; }
+body.design-page .design-apparel { max-width:760px;margin:32px 0 0 auto;border-block:1px solid #dedee3;overflow-anchor:none; }
+body.design-page .design-apparel summary { display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:94px;padding:22px 0;list-style:none;cursor:pointer; }
+body.design-page .design-apparel summary::-webkit-details-marker { display:none; }
+body.design-page .design-apparel summary::marker { content:''; }
+body.design-page .design-apparel summary:focus-visible { outline:2px solid #897348;outline-offset:5px; }
+body.design-page .design-apparel-heading { display:block;min-width:0;font-size:12px;line-height:1.6;letter-spacing:.13em;color:#252529; }
+body.design-page .design-apparel-subtitle { display:block;margin-top:5px;font-size:11px;line-height:1.8;letter-spacing:.06em;color:#737379; }
+body.design-page .design-apparel-action { display:inline-flex;align-items:center;gap:8px;flex-shrink:0;font-size:12px;line-height:1.8;letter-spacing:.01em;color:#55555c; }
+body.design-page [data-apparel-icon] { width:1em;text-align:center;font-size:17px;font-weight:400; }
+body.design-page .design-apparel-inner { padding:4px 0 28px; }
+body.design-page .design-apparel .base-product { min-width:0;max-width:620px;margin:0 auto;background:transparent; }
+body.design-page .design-apparel .base-product-link { display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:28px;color:#202024;text-decoration:none; }
+body.design-page .design-apparel .base-product-visual { position:relative;display:grid;place-items:center;aspect-ratio:1;overflow:hidden;background:#f6f6f6; }
+body.design-page .design-apparel .base-product-placeholder { font-size:20px;letter-spacing:.24em;color:#777; }
+body.design-page .design-apparel .base-product-visual img { position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;background:#f6f6f6; }
+body.design-page .design-apparel .base-product-copy { min-width:0;text-align:left; }
+body.design-page .design-apparel .base-product-brand { display:block;margin-bottom:10px;font-size:10px;line-height:1.4;letter-spacing:.22em;color:#777780; }
+body.design-page .design-apparel .base-product-name { margin:0;font-size:16px;font-weight:400;line-height:1.8;letter-spacing:.025em;overflow-wrap:anywhere;color:#252529; }
+body.design-page .design-apparel .base-product-price { margin:12px 0 0;font-size:14px;line-height:1.8;font-variant-numeric:tabular-nums;color:#44444a; }
+body.design-page .design-apparel .base-product-tax { display:inline-block;margin-left:4px;font-size:11px;white-space:nowrap;color:#737379; }
+body.design-page .design-apparel .base-product-state { display:block;margin-top:8px;font-size:10px;color:#666; }
+body.design-page .design-apparel .base-product-cta { display:flex;align-items:center;justify-content:center;min-height:44px;margin-top:20px;padding:11px 8px;border:1px solid #bfc0c5;background:transparent;font-size:12px;line-height:1.6;letter-spacing:.06em;transition:background-color .25s,color .25s; }
+body.design-page .design-apparel .base-product-link:is(:hover,:focus-visible) .base-product-cta { background:#202024;color:#fff; }
+body.design-page .design-apparel-page-link { display:table;min-height:44px;margin:16px 0 0 auto;padding:12px 0;font-size:12px;line-height:1.7;color:#62626a;text-decoration:underline;text-underline-offset:5px; }
+body.design-page .design-apparel .base-products-status { font-size:12px;line-height:1.8;color:#62626a; }
+body.design-page .design-apparel .base-products-status a { text-decoration:underline;text-underline-offset:4px; }
+body.design-page .design-apparel .base-products-status[hidden] { display:none; }
+@media(max-width:600px) {
+  body.design-page .design-apparel { margin-top:26px; }
+  body.design-page .design-apparel summary { gap:10px;min-height:86px;padding:20px 0; }
+  body.design-page .design-apparel-heading { font-size:10px;letter-spacing:.1em; }
+  body.design-page .design-apparel-action { gap:5px;font-size:11px;letter-spacing:0; }
+  body.design-page .design-apparel .base-product { max-width:300px; }
+  body.design-page .design-apparel .base-product-link { grid-template-columns:minmax(0,1fr);gap:20px; }
+  body.design-page .design-apparel .base-product-visual { width:100%;max-width:280px;margin-inline:auto; }
+  body.design-page .design-apparel .base-product-cta { margin-top:16px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body.design-page .design-apparel .base-product-cta { transition:none; }
+}

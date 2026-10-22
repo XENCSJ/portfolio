@@ -39,3 +39,9 @@ body#top.xen-noir.apparel-page .apparel-editorial-trio .product-caption>strong{f
 @media(hover:hover) and (pointer:fine){body#top.apparel-page .base-product-link:hover .base-product-cta{background:#fff;color:#000;border-color:#fff}}
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){body#top.apparel-page .base-product-link:hover img{transform:scale(1.025)}}
 @media(prefers-reduced-motion:reduce){body#top.apparel-page .base-product-visual img,body#top.apparel-page .base-product-cta{transition:none;transform:none}}
+/* Character links are siblings of the existing purchase link, never nested inside it. */
+body#top.apparel-page .base-product{display:flex;flex-direction:column;scroll-margin-top:110px}
+body#top.apparel-page .base-product-link{flex:1;height:auto}
+body#top.apparel-page .base-product-design-link{display:block;min-height:44px;padding:12px 0 0;font-size:12px;line-height:1.8;color:#c9b58b;text-decoration:underline;text-underline-offset:5px;overflow-wrap:anywhere}
+body#top.apparel-page .base-product-design-link:focus-visible{outline:2px solid #c9b58b;outline-offset:4px}
+@media(max-width:650px){body#top.apparel-page .base-product-design-link{font-size:10px;line-height:1.8}}
