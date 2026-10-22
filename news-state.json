@@ -186,8 +186,6 @@
       "ARTWORKS (8).jpg": "54c26fd9e9cfe806fb27087cafad50985da74e8b",
       "ARTWORKS (9).jpg": "f1d5db00556c4591e5380aa524f51d76590ba44b",
       "xen-artwork-20261019-01.jpg": "a71368ab093b4e49ad95afca891c75f8b0dd9e78",
-      "xen-artwork-20261019-02.jpg": "b4ebbcb10da93e1c11be042524c5513577d1897c",
-      "xen-artwork-20261019-03.jpg": "938c01db76a5520c5ac064c6bb2bc8676366979c",
       "xen-artwork-20261019-04.jpg": "aafea976fd236a47b5e54c2a4a785aacff71c116",
       "xen-artwork-20261019-05.jpg": "c921afdac890853ff7c715a102948d2e57cefc8a",
       "xen-artwork-20261019-06.jpg": "b136c1beed312fb23f2d24c1258e4afd3c163fe7",
@@ -225,9 +223,8 @@
       "xen-artwork-20261023-31.jpg": "8673db1fba532893b40a707984d4d4fb28337322",
       "xen-artwork-20261023-32.jpg": "8c44835e67a0da3ea48d2cc4977835272cbc2dd4",
       "xen-artwork-20261023-33.jpg": "dac2c86453e19cbc0ceec484d083029cdcc498d3",
+      "xen-artwork-20261023-red-clover.jpg": "b92f6bc95743b191081d541ef2f74e3a6ebe18f8",
       "xen-artwork-20261023-sketch-01.jpg": "25f31f102a93436908d3d5635176b3d045625a75",
-      "xen-artwork-20261023-sketch-02.jpg": "43a56d8f38b7f1524bd059c54a464a26c0c79ff8",
-      "xen-artwork-20261023-sketch-03.jpg": "91d033040d4aebe9f08a3e28d24065341fa7789c",
       "xen-artwork-20261023-sketch-04.jpg": "92bbf8bcac8c5b93405b46df96feb4ff052676b2",
       "xen-artwork-20261023-sketch-05.jpg": "2e774e54a1ec15ae4004a64c3aba6f0f2eb6421b",
       "xen-artwork-20261023-sketch-06.jpg": "11c235e030c490345044960e9edaff96ffdea6bd",
@@ -622,6 +619,7 @@
     "xen-artwork-20261023-31.jpg",
     "xen-artwork-20261023-32.jpg",
     "xen-artwork-20261023-33.jpg",
+    "xen-artwork-20261023-red-clover.jpg",
     "xen-artwork-20261023-sketch-01.jpg",
     "xen-artwork-20261023-sketch-02.jpg",
     "xen-artwork-20261023-sketch-03.jpg",
@@ -1189,6 +1187,7 @@
     "b6ab0abf5a8436933889c78d28b8f35e61977b9c",
     "b6dbdacb5d6a72664eee352fff6921346ce87149",
     "b8641df21fef941ccfc82fbd6f7a5999b44a3490",
+    "b92f6bc95743b191081d541ef2f74e3a6ebe18f8",
     "b9cdc500a5fc980d20632abd2b96344a62b0c38e",
     "ba51271ada23c9dbd68aac85683ce373f6b90dca",
     "ba5cbd401a37d328e906be29444f95741e7c1c21",
@@ -1353,7 +1352,8 @@
     "f8a31d075a5f0d31393cef8e53d113f3b225bb55",
     "6ca2f73d03031b7a94e074e5a1ba3971cd748267",
     "c01680bd2b3f000291ff600f998ebaf85a460825",
-    "6e082e890e8654dcc421c0e1327158be4ed1853f"
+    "6e082e890e8654dcc421c0e1327158be4ed1853f",
+    "5b8fb725314b773d73d332ff2a714f707f5c68c3"
   ],
   "pending": [
     {
@@ -1367,11 +1367,23 @@
       ],
       "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39850671725/job/120076000894",
       "reason": "同じ公開で削除も検出。差し替えの可能性があるため管理登録で確認。"
+    },
+    {
+      "id": "pages-5b8fb725314b773d73d332ff2a714f707f5c68c3-artworks",
+      "category": "ARTWORKS",
+      "date": "2026-10-23",
+      "publishedAt": "2026-10-22T22:49:33Z",
+      "url": "./artworks.html",
+      "contentIds": [
+        "image:xen-artwork-20261023-red-clover.jpg"
+      ],
+      "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39867562680/job/120133827635",
+      "reason": "同じ公開で削除も検出。差し替えの可能性があるため管理登録で確認。"
     }
   ],
   "lastPublication": {
-    "sha": "6e082e890e8654dcc421c0e1327158be4ed1853f",
-    "publishedAt": "2026-10-22T21:29:23Z",
-    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39857413946/job/120099602846"
+    "sha": "5b8fb725314b773d73d332ff2a714f707f5c68c3",
+    "publishedAt": "2026-10-22T22:49:33Z",
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39867562680/job/120133827635"
   }
 }
