@@ -7,7 +7,7 @@ const {execFileSync} = require('node:child_process');
 const assert = require('node:assert/strict');
 const out = 'apparel-editorial-qa';
 const expected = JSON.parse(fs.readFileSync('base-products.json','utf8'));
-const ids = [163232279,162561554,160058456,159175661,157787639,157783299];
+const ids = [163232279,162561554,160058456,159175661,157787639,157783299,156849283];
 const mime = {'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.png':'image/png','.jpeg':'image/jpeg','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml'};
 const before = new Map(['apparel.html','xen-apparel-seamless.css'].map(name => [name,execFileSync('git',['show',`64b75904b9cceb618339ddcb6c276ede42580d78:${name}`])]));
 const server = http.createServer((req,res) => {
@@ -38,7 +38,7 @@ const server = http.createServer((req,res) => {
         await image.evaluate(img=>img.decode());
       }
       assert.equal(await editorial.locator('img').count(),5);
-      assert.equal(await page.locator('.base-product').count(),6);
+      assert.equal(await page.locator('.base-product').count(),ids.length);
       assert.deepEqual(await page.locator('.base-product-link').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
       assert.deepEqual(await page.locator('.apparel-editorial-trio [data-apparel-product]').evaluateAll(nodes=>nodes.map(n=>n.dataset.apparelProduct)),['tshirt','hoodie','hat']);
       // Four purchase locations stay unlinked until the official product match is certain.
@@ -54,8 +54,8 @@ const server = http.createServer((req,res) => {
       assert.equal(layout.columns,3);assert(layout.overflow<=1);assert(layout.loaded);assert(layout.uncropped);
       assert(Math.abs(layout.brandToHoodie)<1);assert(Math.abs(layout.hoodieToTrio)<1);assert(layout.trioToStore>=23&&layout.trioToStore<=37);
       assert.deepEqual(await page.locator('.base-product-name').allTextContents(),expected.items.map(item=>item.name));
-      assert.equal(await page.locator('.base-product-brand').count(),6);
-      assert.equal(await page.locator('.base-product-cta').count(),6);
+      assert.equal(await page.locator('.base-product-brand').count(),ids.length);
+      assert.equal(await page.locator('.base-product-cta').count(),ids.length);
       const cards = await page.locator('.base-product').evaluateAll(nodes=>nodes.map(node=>{
         const image=node.querySelector('.base-product-visual').getBoundingClientRect();
         const name=node.querySelector('.base-product-name').getBoundingClientRect();
@@ -80,7 +80,7 @@ const server = http.createServer((req,res) => {
         await old.evaluate(()=>scrollTo(0,document.querySelector('#base-products-title').getBoundingClientRect().top+scrollY-510));
         await old.screenshot({path:`${out}/before-390.jpg`,type:'jpeg',quality:90});await old.close();
       }
-      results.push({width,...layout,catalog:6,purchaseLinks:'pending official image/ID verification during BASE maintenance'});
+      results.push({width,...layout,catalog:ids.length,purchaseLinks:'pending official image/ID verification during BASE maintenance'});
       await context.close();
     }
     fs.writeFileSync(`${out}/results.json`,JSON.stringify({base,results},null,2));

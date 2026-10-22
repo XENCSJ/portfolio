@@ -22,7 +22,7 @@ const server=http.createServer((req,res)=>{
 async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:85});}
 async function gap(page){return page.evaluate(()=>{const a=document.querySelector('.brand-visual').getBoundingClientRect(),b=document.querySelector('#base-products-title').getBoundingClientRect();return {gap:b.top-a.bottom,width:a.width,height:a.height,viewport:innerWidth};});}
 async function catalog(page){
- await page.waitForFunction(()=>document.querySelectorAll('.base-product').length===6);
+ await page.waitForFunction(count=>document.querySelectorAll('.base-product').length===count, JSON.parse(fs.readFileSync('base-products.json')).items.length);
  return page.locator('.base-product').evaluateAll(nodes=>nodes.map(n=>({url:n.querySelector('a').href,name:n.querySelector('h3').textContent,price:n.querySelector('.base-product-price').textContent,image:n.querySelector('img')?.src})));
 }
 async function check(browser,profile,label){
