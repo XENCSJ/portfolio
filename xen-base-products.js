@@ -5,8 +5,8 @@
   const related = [...document.querySelectorAll('[data-related-product]')];
   if (!root && !related.length) return;
   const roots = [root, ...related].filter(Boolean);
-  const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo' };
-  const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299];
+  const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo', 156849283: 'kuro-usagi' };
+  const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283];
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const secureURL = value => {
     try {

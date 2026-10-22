@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const expected = JSON.parse(fs.readFileSync('base-products.json', 'utf8'));
-const ids = [163232279,162561554,160058456,159175661,157787639,157783299];
+const ids = [163232279,162561554,160058456,159175661,157787639,157783299,156849283];
 const origin = 'https://xencsj.github.io/portfolio/';
 (async () => {
   fs.mkdirSync('base-products-qa', {recursive:true});
@@ -15,20 +15,20 @@ const origin = 'https://xencsj.github.io/portfolio/';
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
       await page.goto(origin+'apparel.html?verify='+Date.now(), {waitUntil:'domcontentloaded'});
-      await page.waitForFunction(() => document.querySelectorAll('.base-product').length === 6);
+      await page.waitForFunction(count => document.querySelectorAll('.base-product').length === count, ids.length);
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
       for (const img of await catalog.locator('img').all()) await img.scrollIntoViewIfNeeded();
-      await page.waitForFunction(() => {
+      await page.waitForFunction(count => {
         const images = [...document.querySelectorAll('.base-product img')];
-        return images.length === 6 && images.every(img => img.complete && img.naturalWidth > 0);
-      });
+        return images.length === count && images.every(img => img.complete && img.naturalWidth > 0);
+      }, ids.length);
       assert.deepEqual(await page.locator('.base-product-link').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
       assert.deepEqual(await page.locator('.base-product-name').allTextContents(), expected.items.map(i=>i.name));
       const prices = await page.locator('.base-product-price').allTextContents();
       expected.items.forEach((item,i)=>assert.ok(prices[i].includes(new Intl.NumberFormat('ja-JP').format(item.price))));
       assert.equal(await page.locator('[data-base-grid]').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),3);
-      assert.equal(await page.locator('.base-product').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().top))).size),2);
+      assert.equal(await page.locator('.base-product').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().top))).size),Math.ceil(ids.length/3));
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
       assert.equal(await page.locator('.base-products-store').getAttribute('href'),'https://xen.official.ec/');
       assert.ok(await page.locator('.base-products-store').evaluate(el=>el.getBoundingClientRect().top >= document.querySelector('[data-base-grid]').getBoundingClientRect().bottom));
@@ -44,7 +44,7 @@ const origin = 'https://xencsj.github.io/portfolio/';
       assert.equal(await page.locator('footer').count(),1);
       assert.deepEqual(errors,[]);
       await catalog.screenshot({path:`base-products-qa/published-${width}.png`});
-      results.push({width,cards:6,columns:3,rows:2,imagesLoaded:6,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,films:3,pageErrors:errors});
+      results.push({width,cards:ids.length,columns:3,rows:Math.ceil(ids.length/3),imagesLoaded:ids.length,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,films:3,pageErrors:errors});
       await page.close();
     }
     // Confirm that every destination and the one shop link return successful pages.

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "selection": "fixed",
-  "source": "BASE API v2",
+  "source": "BASE API v2 + BASE official product page (156849283)",
   "shop_url": "https://xen.official.ec/",
-  "updated_at": "2026-10-20T20:34:50Z",
+  "updated_at": "2026-10-22T20:42:53.453428Z",
   "public_count": 75,
   "items": [
     {
@@ -63,6 +63,16 @@
       "url": "https://xen.official.ec/items/157783299",
       "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
       "created_at": "2026-09-16T11:39:59Z",
+      "available": true,
+      "sales_status": "item_now_on_sale"
+    },
+    {
+      "id": 156849283,
+      "name": "くろうさぎ",
+      "price": 13000,
+      "url": "https://xen.official.ec/items/156849283",
+      "image_url": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?im=Resize%2Cwidth%3D1280%2Ctype%3Dnormal&imformat=generic&q=90",
+      "created_at": null,
       "available": true,
       "sales_status": "item_now_on_sale"
     }
