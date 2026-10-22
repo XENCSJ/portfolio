@@ -1,4 +1,4 @@
-/* QUIET LUXURY × PRECISION MOTION. Static content is the baseline. */
+/* Shared Soft Fade Up Reveal. Static content remains the default. */
 :root { --ql-ease:cubic-bezier(.22,.68,0,1); --ql-hover:280ms; --ql-gold:#c6a15b; }
 @view-transition { navigation:auto; }
 ::view-transition-old(root) { animation:ql-page-out 300ms ease both; }
@@ -8,17 +8,11 @@
 /* One entry owner. Never hide content until a JS class is applied. */
 body#top main { animation:none; }
 body#top .reveal, body#top .xen-reveal { opacity:1;transform:none; }
-[data-ql-motion="line"] { transform-origin:center; }
 body#top.home-page .hero::before { content:none; }
 body#top.home-page .center-logo { animation:none; }
 body#top.home-page .logo-final { /* Approved Fade & Focus retained in xen-index-assembly.css. */ }
 body#top .xen-menu:not([hidden]) { animation:ql-nav-in 300ms var(--ql-ease); }
 @keyframes ql-nav-in { from { opacity:0; } to { opacity:1; } }
-/* Draw existing lines themselves; no traveling light or decorative overlays. */
-body#top :is(.series-title,.section-heading,.cp-section-heading,.sns-section-heading).ql-seen::after {
-  animation:ql-line 900ms var(--ql-ease) both;transform-origin:center;
-}
-@keyframes ql-line { from { transform:scaleX(0); } to { transform:scaleX(1); } }
 body#top :is(.base-product-link,.studio-service-link,.creator-connect-links a,.price-card,.index-link,.xen-footer-action,.contact-toggle,.price-toggle) {
   transition:color var(--ql-hover) ease,border-color var(--ql-hover) ease,background-color var(--ql-hover) ease,translate var(--ql-hover) var(--ql-ease);
 }
@@ -37,4 +31,26 @@ body#top .base-product-visual img { transition:transform 300ms var(--ql-ease); }
  @view-transition { navigation:none; }
  ::view-transition-old(root),::view-transition-new(root) { animation:none; }
  body#top [data-ql-motion],body#top [data-ql-motion]::after,body#top .xen-menu { animation:none!important;transition:none!important;translate:none!important; }
+}
+
+/* Remove card frames only. Heading rules, gold text/icons and control focus rings stay intact. */
+body#top:is(.home-page,.detail-page) :is(.work,.cinematic-work,.sound-release-card,.gallery-description-card,
+ .design-description,.arch-project,.space-feature,.sns-metrics,.sns-process-list > li,
+ .sns-fit,.price-category-nav > a,.price-card,.price-overview,.studio-service-link,
+ .mvv-detail,.support-shell,.base-product,.cp-field-entry,.cp-field-detail,.cp-facts,.cp-facts > div) {
+ border:0; box-shadow:none;
+}
+body#top.creator-page .cp-facts { border:0; outline:0; }
+body#top.creator-page .cp-facts > div:nth-child(n) { border:0; }
+body#top.creator-page .cp-editorial-index { border:0; }
+body#top.apparel-page :is(.base-product-copy,.base-product-visual,.work .thumb,.work .video-container) {
+ border:0; box-shadow:none;
+}
+/* Old decorative frame pseudo-elements are no longer used for content cards. */
+body#top :is(.work,.sound-release-card,.gallery-description-card,.design-description,
+ .arch-project,.space-feature,.base-product).detail-frame::before,
+body#top :is(.work,.sound-release-card,.gallery-description-card,.design-description,
+ .arch-project,.space-feature,.base-product).detail-frame::after { content:none; }
+@media print {
+ body#top [data-ql-motion] { opacity:1!important; transform:none!important; animation:none!important; }
 }

@@ -1,11 +1,3 @@
-/* CREATOR facts and STUDIO only. Keep the original box model and logo asset. */
-body#top.creator-page .cp-facts,
-body#top.studio-page :is(.studio-service-link, .mvv-detail) {
-  border-color: #C5A059;
-  outline: 1px solid #C5A059;
-  outline-offset: -1px;
-}
-
 /* The logo stays at its original position; only its surface light moves. */
 body#top.studio-page .studio-fusion-logo-enter,
 body#top.studio-page .studio-fusion-logo-drift {

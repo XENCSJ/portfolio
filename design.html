@@ -60,8 +60,6 @@ body.detail-page .contents-return:hover { color:#171719; }
 body.price-list-page main .section > h2[id],body.design-page main .design-project { scroll-margin-top:16px; }
 body.price-list-page main .section > h2:target,body.design-page main .design-project:target h2 { color:#171719; }
 @media(max-width:650px) { .xen-contents .contents-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.xen-contents a.contents-link { min-height:70px;padding:10px;gap:7px;font-size:12px;grid-template-columns:17px minmax(0,1fr) 8px; }body.detail-page main .xen-contents { margin:24px 0 32px;padding-top:18px; } }
-@media(prefers-reduced-motion:no-preference) { .xen-contents .contents-entered { animation:contents-enter .65s var(--xen-ease,ease-out) var(--contents-delay,0ms) backwards; } }
-@keyframes contents-enter { from { opacity:0;transform:translateY(8px); }to { opacity:1;transform:none; } }
 @media(prefers-reduced-motion:reduce) { .xen-contents *,.contents-return { animation:none!important;transition:none!important; } }
 
 .xen-contents .design-contents-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
@@ -100,10 +98,8 @@ body.price-list-page main .section > h2:target,body.design-page main .design-pro
 
 
 <link rel="stylesheet" href="./xen-page-titles.css?v=20261020-title-layout">
-<link rel="stylesheet" href="./xen-immersive.css?v=20261021-quiet-luxury">
-<script defer src="./xen-immersive.js?v=20261021-quiet-luxury"></script>
-<link rel="stylesheet" href="./xen-gold-border.css?v=20261023-1" />
-<script defer src="./xen-gold-border.js?v=20261023-1"></script>
+<link rel="stylesheet" href="./xen-immersive.css?v=20261023-soft-reveal1">
+<script defer src="./xen-immersive.js?v=20261023-soft-reveal1"></script>
 <link rel="stylesheet" href="./xen-design-apparel.css?v=20261023-collection1">
 <script defer src="./xen-base-products.js?v=20261023-kuro-usagi1"></script>
 <script defer src="./xen-design-apparel.js?v=20261023-collection1"></script>
@@ -252,13 +248,4 @@ body.price-list-page main .section > h2:target,body.design-page main .design-pro
   </div>
   <a class="xen-footer-top" href="#top">Back to Top</a>
   <p class="xen-footer-copyright">© XEN CREATIVE STUDIO JAPAN</p>
-</footer><script src="./xen-shared.js?v=20261017-official2" defer></script><dialog data-gallery-enhanced class="image-viewer" id="image-viewer" aria-label="作品画像の拡大表示"><button class="viewer-close" type="button" aria-label="閉じる">×</button><img alt=""><p class="viewer-caption"></p><div class="viewer-controls"><button class="viewer-prev" type="button" aria-label="前の作品">←</button><span class="viewer-counter" aria-live="polite"></span><button class="viewer-next" type="button" aria-label="次の作品">→</button></div><a class="viewer-original" target="_blank" rel="noopener noreferrer">元の画像を開く</a></dialog><script id="contents-motion-script">
-(() => {
- const preference=matchMedia('(prefers-reduced-motion: reduce)');
- if(preference.matches || !('IntersectionObserver' in window)) return;
- const items=[...document.querySelectorAll('.contents-grid > li')];
- const observer=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{if(isIntersecting){if(!preference.matches)target.classList.add('contents-entered');observer.unobserve(target);}}),{threshold:.05});
- items.forEach((item,index)=>{item.style.setProperty('--contents-delay',`${Math.min(index%3*60,120)}ms`);observer.observe(item);});
- preference.addEventListener('change',event=>{if(event.matches){observer.disconnect();items.forEach(item=>item.classList.remove('contents-entered'));}});
-})();
-</script></body></html>
+</footer><script src="./xen-shared.js?v=20261017-official2" defer></script><dialog data-gallery-enhanced class="image-viewer" id="image-viewer" aria-label="作品画像の拡大表示"><button class="viewer-close" type="button" aria-label="閉じる">×</button><img alt=""><p class="viewer-caption"></p><div class="viewer-controls"><button class="viewer-prev" type="button" aria-label="前の作品">←</button><span class="viewer-counter" aria-live="polite"></span><button class="viewer-next" type="button" aria-label="次の作品">→</button></div><a class="viewer-original" target="_blank" rel="noopener noreferrer">元の画像を開く</a></dialog></body></html>

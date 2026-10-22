@@ -1,147 +1,33 @@
-<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>*{box-sizing:border-box}body{margin:0;background:#050505;color:#eee7d9;font-family:Arial,"Noto Sans JP",sans-serif}main{max-width:1080px;margin:auto;padding:40px 24px}h1{font-size:clamp(24px,4vw,38px);font-weight:400;letter-spacing:.05em;margin:12px 0}p{font-size:13px;line-height:1.9;color:#b7b0a2}small,.eyebrow{font-size:10px;letter-spacing:.16em;color:#c9a85c}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:28px}.card{padding:28px;background:#0b0b0d;border:1px solid #33302a;position:relative;min-height:210px}.card h2{font-size:19px;font-weight:400;line-height:1.5;margin:28px 0 12px}.card p{margin:0}.wide{grid-column:span 2;min-height:160px}.tall{grid-row:span 2;min-height:450px;border-radius:18px}.rounded{border-radius:12px}.wide p{max-width:620px}.mobile-view{width:390px;max-width:100%;height:730px;border:1px solid #36322a;border-radius:18px;background:#050505}.controls{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}button,select{font:inherit;font-size:13px;color:#e9d8ad;background:#12110e;border:1px solid #76633c;padding:12px 16px;border-radius:3px;cursor:pointer}button:focus-visible,select:focus-visible{outline:2px solid #f4d992;outline-offset:3px}details{margin-top:20px}summary{cursor:pointer;padding:12px 0;font-size:13px;color:#dbbf86}.mobile-section{margin-top:48px;border-top:1px solid #322d22;padding-top:28px}@media(max-width:650px){main{padding:28px 20px}.grid{grid-template-columns:1fr;gap:18px}.wide{grid-column:auto}.tall{grid-row:auto;min-height:360px}.card{padding:24px}.mobile-section{display:none}}/* Gold Border Tracing — loaded only by the 14 detail pages. */
-:root {
-  --gold-trace-duration: 7s;
-  --gold-trace-base: #8c7442;
-  --gold-trace-main: #c9a85c;
-  --gold-trace-highlight: #f4d992;
-}
-/* Keep the original border widths in the box model; replace only their paint. */
-[data-gold-trace-active] { border-color: transparent !important; }
-[data-gold-trace-position] { position: relative !important; }
-body [data-gold-trace-active] > svg.xen-gold-trace {
-  position: absolute; display: block; max-width: none; max-height: none;
-  margin: 0; padding: 0; border: 0; overflow: hidden;
-  pointer-events: none; user-select: none; z-index: 2;
-  background: transparent; transform: none; opacity: 1;
-}
-/* viewBox and CSS size are identical, so no stroke scaling override is needed. */
-.xen-gold-trace path {
-  fill: none; stroke-linejoin: round;
-  stroke-linecap: round; pointer-events: none;
-}
-.xen-gold-trace .gold-trace-base { stroke: var(--gold-trace-base); stroke-width: 1; opacity: .62; }
-.xen-gold-trace .gold-trace-glow { stroke: var(--gold-trace-highlight); stroke-width: 4; opacity: .12; }
-.xen-gold-trace .gold-trace-tail { stroke: var(--gold-trace-main); stroke-width: 1.15; opacity: .8; }
-.xen-gold-trace .gold-trace-head { stroke: var(--gold-trace-highlight); stroke-width: 1.25; opacity: .95; }
-.xen-gold-trace .gold-trace-moving {
-  stroke-dasharray: 120 880;
-  animation: xen-gold-border-trace var(--gold-trace-duration, 7s) linear infinite;
-}
-.xen-gold-trace .gold-trace-head { stroke-dasharray: 35 965; }
-@keyframes xen-gold-border-trace { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1000; } }
-@media (prefers-reduced-motion: reduce) {
-  .xen-gold-trace .gold-trace-moving { animation: none !important; display: none; }
-}
-@media print { .xen-gold-trace .gold-trace-moving { display: none; animation: none; } }
-</style><body class="detail-page gold-trace-preview"><main><span class="eyebrow">XEN CSJ / MOTION PREVIEW</span><h1>Gold Border Tracing</h1><p>落ち着いたゴールドの輪郭に、シャンパンゴールドの光が7秒で一周します。<br>下記は形状確認用のサンプルです。実ページは上の選択欄で切り替えられます。</p><div class="grid"><article class="card rounded" data-gold-trace-demo><small>01 / STANDARD</small><h2>標準カード</h2><p>固定枠線と、途切れず周回する光。</p><details><summary>内容を開く ＋</summary><p>高さが変わっても、光の軌道は新しい外周に追従します。文字やリンクの操作を妨げません。</p></details></article><article class="card wide" data-gold-trace-demo><small>02 / WIDE</small><h2>横長カード</h2><p>辺の長さが違っても、四辺・四隅を一定の速度で移動。開始点と終了点がつながる閉じたSVGパスを使います。</p></article><article class="card tall" data-gold-trace-demo><small>03 / PORTRAIT</small><h2>縦長カード</h2><p>角丸にも沿う光。<br>発光は枠線の近くに抑えています。</p></article><article class="card" data-gold-trace-demo><small>04 / COLLECTION</small><h2>並列カード A</h2><p>幅や高さを変えずに、装飾だけを重ねます。</p></article><article class="card rounded" data-gold-trace-demo><small>05 / COLLECTION</small><h2>並列カード B</h2><p>複数カードも共通の7秒周期で動作。</p></article><article class="card wide" data-gold-trace-demo><small>06 / CONTINUITY</small><h2>静かな光の循環</h2><p>画面幅に合わせて外周を調整。端末の「視差効果を減らす」等の設定時は、固定のゴールド枠線だけを表示します。</p></article></div></main><script>/* Gold Border Tracing. Explicit card allowlist; no gallery/media-wide decoration. */
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>XEN — Soft Fade Up Reveal preview</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#dedede;color:#222;font:13px system-ui}header{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 18px;background:#fff}h1{font-size:14px;margin:0 12px 0 0}button,select{font:inherit;padding:6px}main{overflow:auto;padding:14px;display:flex;justify-content:center}iframe{flex:none;border:0;background:#000;width:390px;height:800px}details{padding:8px 18px;background:#fff}pre{white-space:pre-wrap;max-height:300px;overflow:auto}#status{font-size:12px}</style>
+<header><h1>Soft Fade Up Reveal</h1><label>ページ <select id="page"><option value="apparel">APPAREL</option><option value="creator">CREATOR</option><option value="index">INDEX</option><option value="studio">STUDIO</option><option value="storybooks">STORYBOOKS</option><option value="animation">ANIMATION</option><option value="sound">SOUND</option><option value="cinematic">CINEMATIC</option><option value="snap">SNAP</option><option value="design">DESIGN</option><option value="architecture">ARCHITECTURE</option><option value="space">SPACE</option><option value="artworks">ARTWORKS</option><option value="sns-management">SNS MANAGEMENT</option><option value="price-list">PRICE LIST</option></select></label><label>幅 <select id="width"><option>390</option><option>320</option><option>768</option><option>1280</option></select></label><button id="top">先頭</button><button id="products">商品</button><button id="films">動画</button><button id="fields">活動領域</button><button id="inspect">現在の画面を検査</button><button id="audit">全15ページ検査</button><span id="status" role="status">読み込み中</span></header>
+<main><iframe id="preview" title="公開サイトのレスポンシブ表示" src="./apparel.html?qa=soft-reveal1"></iframe></main><details open><summary>検証結果</summary><pre id="results"></pre></details>
+<script>
 (() => {
-  'use strict';
-  const page = document.body;
-  if (!page || page.dataset.goldTraceReady || !page.classList.contains('detail-page')) return;
-  const candidates = {
-    'studio-page': '.studio-service-link, .mvv-detail',
-    'creator-page': '.cp-facts, .cp-field-detail, .support-shell',
-    'storybooks-page': '.work',
-    'animation-page': '.work',
-    'sound-page': '.sound-release-card',
-    'cinematic-page': '.cinematic-work',
-    'snap-page': '.gallery-description-card',
-    'design-page': '.design-description',
-    'apparel-page': '.base-product, .work',
-    'architecture-page': '.arch-project',
-    'space-page': '.space-feature',
-    'artworks-page': '.gallery-description-card',
-    'sns-management-page': '.sns-metrics, .sns-process-list > li, .sns-fit',
-    'price-list-page': '.price-category-nav > a',
-    'gold-trace-preview': '[data-gold-trace-demo]'
-  };
-  const key = Object.keys(candidates).find(name => page.classList.contains(name));
-  if (!key) return; // INDEX is excluded by both body type and the page allowlist.
-  page.dataset.goldTraceReady = 'true';
-  const selector = candidates[key], ns = 'http://www.w3.org/2000/svg';
-  const records = new Map();
-
-  // Composite ancestor backgrounds: transparent cards on black are eligible;
-  // white/light cards are never recolored or decorated.
-  function isDark(node) {
-    let rgb = [0, 0, 0], remaining = 1;
-    for (let el = node; el && remaining > .001; el = el.parentElement) {
-      const values = getComputedStyle(el).backgroundColor.match(/[\d.]+/g);
-      if (!values || values.length < 3) continue;
-      const alpha = values.length > 3 ? Number(values[3]) : 1;
-      rgb = rgb.map((n, i) => n + Number(values[i]) * alpha * remaining);
-      remaining *= 1 - alpha;
-    }
-    rgb = rgb.map(n => n + 255 * remaining);
-    return Math.max(...rgb) < 90;
-  }
-  const number = n => Number.parseFloat(n) || 0;
-  function radius(value, w, h, inset) {
-    const parts = value.split(/\s+/);
-    const px = (v, size) => v.endsWith('%') ? number(v) * size / 100 : number(v);
-    return [Math.max(0, px(parts[0], w) - inset), Math.max(0, px(parts[1] || parts[0], h) - inset)];
-  }
-  function outline(w, h, style) {
-    const i = 1.5, x = i, y = i, right = w - i, bottom = h - i;
-    const radii = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius'].map(k => radius(style[k], w, h, i));
-    radii.forEach(r => { if (!r[0] || !r[1]) { r[0] = 0; r[1] = 0; } });
-    const [tl,tr,br,bl] = radii;
-    const scale = Math.min(1, (w-2*i)/(tl[0]+tr[0]||1), (w-2*i)/(bl[0]+br[0]||1), (h-2*i)/(tl[1]+bl[1]||1), (h-2*i)/(tr[1]+br[1]||1));
-    radii.forEach(r => { r[0] *= scale; r[1] *= scale; });
-    const arc = (r, endX, endY) => r[0] && r[1] ? `A${r[0]} ${r[1]} 0 0 1 ${endX} ${endY}` : '';
-    return `M${x+tl[0]} ${y}H${right-tr[0]}${arc(tr,right,y+tr[1])}V${bottom-br[1]}${arc(br,right-br[0],bottom)}H${x+bl[0]}${arc(bl,x,bottom-bl[1])}V${y+tl[1]}${arc(tl,x+tl[0],y)}Z`;
-  }
-  function measure(el, record, box) {
-    const s = getComputedStyle(el);
-    const width = box ? box.inlineSize : el.offsetWidth;
-    const height = box ? box.blockSize : el.offsetHeight;
-    if (width < 4 || height < 4) return;
-    const d = outline(width, height, s);
-    const signature = `${width}|${height}|${d}`;
-    if (record.signature === signature) return;
-    record.signature = signature;
-    record.svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-    Object.assign(record.svg.style, {width:`${width}px`,height:`${height}px`,left:`${-number(s.borderLeftWidth)}px`,top:`${-number(s.borderTopWidth)}px`});
-    record.paths.forEach(path => path.setAttribute('d', d));
-  }
-  // ResizeObserver follows real border-box sizes, including expanding disclosures.
-  // No per-frame JS, interval, scroll handler or layout-changing wrapper.
-  const resize = 'ResizeObserver' in window ? new ResizeObserver(entries => {
-    for (const entry of entries) {
-      const record = records.get(entry.target);
-      if (record) measure(entry.target, record, entry.borderBoxSize?.[0]);
-    }
-  }) : null;
-  function attach(el) {
-    if (records.has(el) || !isDark(el)) return;
-    const s = getComputedStyle(el);
-    const svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('class','xen-gold-trace'); svg.setAttribute('aria-hidden','true');
-    svg.setAttribute('focusable','false'); svg.setAttribute('preserveAspectRatio','none');
-    // Existing icon reveal scans svg > *. A group keeps its animation away
-    // from these paths, without altering the site's original reveal code.
-    const group = document.createElementNS(ns,'g'); svg.appendChild(group);
-    const paths = ['base','glow','tail','head'].map(type => {
-      const path = document.createElementNS(ns,'path');
-      path.setAttribute('class',`gold-trace-${type}${type === 'base' ? '' : ' gold-trace-moving'}`);
-      path.setAttribute('pathLength','1000'); group.appendChild(path); return path;
-    });
-    if (s.position === 'static') el.setAttribute('data-gold-trace-position','');
-    el.setAttribute('data-gold-trace-active','');
-    const record = {svg,paths}; records.set(el,record); el.appendChild(svg);
-    measure(el,record); resize?.observe(el,{box:'border-box'});
-  }
-  document.querySelectorAll(selector).forEach(attach);
-  if (!resize) {
-    const refresh = () => records.forEach((r,el) => measure(el,r));
-    window.addEventListener('resize',refresh,{passive:true});
-    document.addEventListener('toggle',refresh,true);
-  }
-  // BASE replaces its product list asynchronously. Observe that one list only.
-  const products = key === 'apparel-page' && document.querySelector('.base-products-grid');
-  if (products) new MutationObserver(() => {
-    records.forEach((r,el) => {if (!el.isConnected) {resize?.unobserve(el);records.delete(el);}});
-    products.querySelectorAll('.base-product').forEach(attach);
-  }).observe(products,{childList:true});
+ 'use strict';
+ const frame=document.querySelector('#preview'),page=document.querySelector('#page'),width=document.querySelector('#width'),status=document.querySelector('#status'),out=document.querySelector('#results');
+ const pages=[...page.options].map(x=>x.value);
+ function view(){frame.style.width=width.value+'px';frame.src='./'+page.value+'.html?qa=soft-reveal1';status.textContent='読み込み中';}
+ function inspect(){
+  const d=frame.contentDocument,w=frame.contentWindow;
+  const cards=[...d.querySelectorAll('.base-product,.work,.sound-release-card,.studio-service-link,.mvv-detail,.cp-facts,.cp-facts > div,.cp-field-entry,.cp-field-detail,.gallery-description-card,.design-description,.arch-project,.space-feature,.sns-metrics,.sns-process-list > li,.sns-fit,.price-category-nav > a,.price-card,.support-shell')];
+  const framed=cards.filter(n=>{const s=w.getComputedStyle(n);return ['Top','Right','Bottom','Left'].some(k=>parseFloat(s['border'+k+'Width'])>0&&s['border'+k+'Style']!=='none')}).map(n=>n.className);
+  return {page:page.value,width:w.innerWidth,overflow:d.documentElement.scrollWidth>w.innerWidth,oldTraceNodes:d.querySelectorAll('.xen-gold-trace,[data-gold-trace-active]').length,oldResources:[...d.querySelectorAll('script[src],link[href]')].filter(n=>/xen-gold-border/.test(n.src||n.href)).length,revealTargets:d.querySelectorAll('[data-ql-motion="soft-fade-up"]').length,cardCount:cards.length,framedCards:framed,profileFacts:d.querySelectorAll('.cp-facts > div').length,creativeFields:d.querySelectorAll('.cp-field-entry').length,profileColumns:d.querySelector('.cp-facts')?w.getComputedStyle(d.querySelector('.cp-facts')).gridTemplateColumns:null,products:d.querySelectorAll('.base-product').length,videos:[...d.querySelectorAll('.video-container')].map(n=>{const r=n.getBoundingClientRect();return {ratio:r.height?Number((r.width/r.height).toFixed(3)):null}})};
+ }
+ frame.addEventListener('load',()=>{status.textContent=page.value+' · '+width.value+'px';});
+ page.addEventListener('change',view);width.addEventListener('change',()=>{frame.style.width=width.value+'px';status.textContent=page.value+' · '+width.value+'px';});
+ function jump(selector){frame.contentDocument.querySelector(selector)?.scrollIntoView({block:'start',behavior:'instant'});}
+ document.querySelector('#top').onclick=()=>frame.contentWindow.scrollTo({top:0,behavior:'instant'});
+ document.querySelector('#products').onclick=()=>jump('.base-products');document.querySelector('#films').onclick=()=>jump('.work');document.querySelector('#fields').onclick=()=>jump('.cp-fields-section');
+ document.querySelector('#inspect').onclick=()=>out.textContent=JSON.stringify(inspect(),null,2);
+ document.querySelector('#audit').onclick=async()=>{
+  const result=[];document.querySelector('#audit').disabled=true;
+  try{for(const size of [1280,390,320])for(const name of pages){
+   width.value=String(size);page.value=name;
+   await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Load timeout: '+name)),20000);frame.addEventListener('load',()=>{clearTimeout(timer);resolve();},{once:true});view();});
+   await new Promise(resolve=>setTimeout(resolve,900));
+   const row=inspect();result.push(row);out.textContent=JSON.stringify(result,null,2);status.textContent=result.length+'/45';
+  }}catch(error){status.textContent=error.message;}finally{document.querySelector('#audit').disabled=false;}
+ };
 })();
-</script></body></html>
+</script></html>
