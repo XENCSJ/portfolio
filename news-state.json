@@ -174,7 +174,6 @@
     },
     "ARTWORKS": {
       "ARTWORKS (1).png": "bbdfb3b8404f984f1d0829a723038fcbf139b94c",
-      "ARTWORKS (10).jpg": "726114c782537666d272e2bc653fd0071aa361cc",
       "ARTWORKS (11).jpg": "48c0313fb2c52b4cdf474d2c439329ba6042932a",
       "ARTWORKS (12).jpg": "b556637200e313ba134e080b9976231f709a562a",
       "ARTWORKS (13).jpg": "a94ea3d66a2adeec0526e07ec7d10403f4f039bb",
@@ -183,7 +182,6 @@
       "ARTWORKS (3).jpg": "a4fcd3b4553278b1f2d1f9389e9ed5913d243d5e",
       "ARTWORKS (4).jpg": "19a733bacc3fb1e8b547f131789ec3ec3f6ccb7d",
       "ARTWORKS (5).jpg": "3d2fa54d4fd663c53cef3b6dd572157143a8714d",
-      "ARTWORKS (6).png": "e17df0c83b481e29da6a32cd1ca1d17f6ea46839",
       "ARTWORKS (7).jpg": "83a1b29473cfd62d0b4533efa6aab62d3e7612ec",
       "ARTWORKS (8).jpg": "54c26fd9e9cfe806fb27087cafad50985da74e8b",
       "ARTWORKS (9).jpg": "f1d5db00556c4591e5380aa524f51d76590ba44b",
@@ -193,7 +191,8 @@
       "xen-artwork-20261019-04.jpg": "aafea976fd236a47b5e54c2a4a785aacff71c116",
       "xen-artwork-20261019-05.jpg": "c921afdac890853ff7c715a102948d2e57cefc8a",
       "xen-artwork-20261019-06.jpg": "b136c1beed312fb23f2d24c1258e4afd3c163fe7",
-      "xen-artwork-20261019-07.jpg": "d08049a3894d516a0ddf29e42bc6671d0af2be92"
+      "xen-artwork-20261019-07.jpg": "d08049a3894d516a0ddf29e42bc6671d0af2be92",
+      "xen-artwork-20261023-yellow-flowers.png": "f1e8a242e6f72f8bf152df2e12c5e8f5acd940d7"
     }
   },
   "seenPaths": [
@@ -547,6 +546,7 @@
     "xen-artwork-20261019-06.jpg",
     "xen-artwork-20261019-07-thumb.jpg",
     "xen-artwork-20261019-07.jpg",
+    "xen-artwork-20261023-yellow-flowers.png",
     "xen-header-cart.png",
     "xen-header-logo.png",
     "xen-header-symbol.png",
@@ -1181,6 +1181,7 @@
     "f1d20158402612d2d02fe168ec38aae7e4a496f6",
     "f1d5db00556c4591e5380aa524f51d76590ba44b",
     "f1e0f1ffe9d01319ab394f1acef0d3d7e69b3ad5",
+    "f1e8a242e6f72f8bf152df2e12c5e8f5acd940d7",
     "f21034d18b5585a5ef9bd5c1e5ad70beb72d1304",
     "f27abaf89fbd9ea5078763741e7f67b00cb44a73",
     "f34931e5522ea9db9df9e03cdb3dfd2a4662d4e8",
@@ -1220,12 +1221,26 @@
     "9a28d4a0a8abe0e43f435c33b9d3be4781db5435",
     "0ae17fe948bd88a58c0fe288201a037e46d4148f",
     "177a6180ac4542aeb0845c916b523a32c2d57814",
-    "f8a31d075a5f0d31393cef8e53d113f3b225bb55"
+    "f8a31d075a5f0d31393cef8e53d113f3b225bb55",
+    "6ca2f73d03031b7a94e074e5a1ba3971cd748267"
   ],
-  "pending": [],
+  "pending": [
+    {
+      "id": "pages-6ca2f73d03031b7a94e074e5a1ba3971cd748267-artworks",
+      "category": "ARTWORKS",
+      "date": "2026-10-23",
+      "publishedAt": "2026-10-22T20:40:03Z",
+      "url": "./artworks.html",
+      "contentIds": [
+        "image:xen-artwork-20261023-yellow-flowers.png"
+      ],
+      "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39850671725/job/120076000894",
+      "reason": "同じ公開で削除も検出。差し替えの可能性があるため管理登録で確認。"
+    }
+  ],
   "lastPublication": {
-    "sha": "f8a31d075a5f0d31393cef8e53d113f3b225bb55",
-    "publishedAt": "2026-10-22T19:21:00Z",
-    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39839113431/job/120035565421"
+    "sha": "6ca2f73d03031b7a94e074e5a1ba3971cd748267",
+    "publishedAt": "2026-10-22T20:40:03Z",
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39850671725/job/120076000894"
   }
 }
