@@ -25,9 +25,9 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
         const images = [...document.querySelectorAll('.base-product img')];
         return images.length === count && images.every(img => img.complete && img.naturalWidth > 0);
       }, ids.length);
-      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator('.base-product-link, .jewelry-store').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
+      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator(':scope > .base-product-cta').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
       assert.deepEqual(await page.locator('.base-product-name').allTextContents(), visibleItems.map(displayName));
-      const prices = await page.locator('.base-product-price').allTextContents();
+      const prices = await page.locator('.catalog-product > .base-product-price').allTextContents();
       visibleItems.forEach((item,i)=>assert.ok(prices[i].includes(new Intl.NumberFormat('ja-JP').format(item.price))));
       assert.equal(await page.locator('#base-product-160058456').count(),0);
       for (const [id,file] of [[156850693,'signet-ring'],[156851036,'sculpted-choker']]) {
@@ -37,10 +37,22 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
         assert.equal(await img.evaluate(e=>getComputedStyle(e).objectPosition),'50% 50%');
         const box=await img.boundingBox();assert.ok(Math.abs(box.width-box.height)<1);
       }
-      const summary=page.locator('#base-product-156851036 summary');
-      await summary.click();assert.equal(await summary.getAttribute('aria-expanded'),'true');
-      assert.equal(await page.locator('#base-product-156851036 .jewelry-store').isVisible(),true);
-      await summary.press('Enter');assert.equal(await summary.getAttribute('aria-expanded'),'false');
+      for(const id of [156850693,156851036,156851056]) {
+        const summary=page.locator(`#base-product-${id} summary`);
+        await summary.click();assert.equal(await summary.getAttribute('aria-expanded'),'true');
+        assert.equal(await page.locator(`#base-product-${id} .jewelry-store`).isVisible(),true);
+        await summary.press('Enter');assert.equal(await summary.getAttribute('aria-expanded'),'false');
+      }
+      const positions=await page.locator('.catalog-product').evaluateAll(cards=>cards.map(card=>{
+        const box=el=>{const r=el.getBoundingClientRect();return {top:r.top,width:r.width,height:r.height};};
+        return {image:box(card.querySelector('.base-product-visual')),price:box(card.querySelector(':scope > .base-product-price')),button:box(card.querySelector(':scope > .base-product-cta')),links:box(card.querySelector('.base-product-links'))};
+      }));
+      for(let i=0;i<positions.length;i+=3) for(const item of positions.slice(i,i+3)) {
+        assert.ok(Math.abs(item.image.width-item.image.height)<1);
+        assert.equal(item.button.height,44);
+        for(const key of ['price','button','links']) assert.ok(Math.abs(item[key].top-positions[i][key].top)<1,`${key} alignment`);
+      }
+      assert.equal(await page.locator('.catalog-product > .base-product-cta').allTextContents().then(labels=>labels.every(label=>label==='購入する →')),true);
       assert.equal(await page.locator('[data-base-grid]').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),3);
       assert.equal(await page.locator('.base-product').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().top))).size),Math.ceil(ids.length/3));
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
@@ -58,7 +70,7 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
       assert.equal(await page.locator('footer').count(),1);
       assert.deepEqual(errors,[]);
       await catalog.screenshot({path:`base-products-qa/published-${width}.png`});
-      results.push({width,cards:ids.length,columns:3,rows:Math.ceil(ids.length/3),imagesLoaded:ids.length,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,films:3,pageErrors:errors});
+      results.push({width,cards:ids.length,columns:3,rows:Math.ceil(ids.length/3),imagesLoaded:ids.length,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,alignedRows:true,drawers:3,films:3,pageErrors:errors});
       await page.close();
     }
     // Confirm that every destination and the one shop link return successful pages.

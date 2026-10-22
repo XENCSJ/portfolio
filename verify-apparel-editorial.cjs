@@ -28,7 +28,7 @@ const server = http.createServer((req,res) => {
   const browser = await chromium.launch({...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? {executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE} : {})});
   const results = [];
   try {
-    for(const width of [375,390,430,1440]) {
+    for(const width of [375,390,430,768,1440]) {
       const context = await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',hasTouch:width<650,isMobile:width<650});
       await context.route(/googletagmanager|google-analytics/,r=>r.abort());
       const page = await context.newPage();
@@ -41,7 +41,7 @@ const server = http.createServer((req,res) => {
       }
       assert.equal(await editorial.locator('img').count(),5);
       assert.equal(await page.locator('.base-product').count(),ids.length);
-      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator('.base-product-link, .jewelry-store').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
+      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator(':scope > .base-product-cta').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
       assert.deepEqual(await page.locator('.apparel-editorial-trio [data-apparel-product]').evaluateAll(nodes=>nodes.map(n=>n.dataset.apparelProduct)),['tshirt','hoodie','hat']);
       // Four purchase locations stay unlinked until the official product match is certain.
       assert.equal(await page.locator('[data-apparel-product]').count(),4);
@@ -57,7 +57,7 @@ const server = http.createServer((req,res) => {
       assert(Math.abs(layout.brandToHoodie)<1);assert(Math.abs(layout.hoodieToTrio)<1);assert(layout.trioToStore>=23&&layout.trioToStore<=37);
       assert.deepEqual(await page.locator('.base-product-name').allTextContents(),visibleItems.map(displayName));
       assert.equal(await page.locator('.base-product-brand').count(),ids.length);
-      assert.equal(await page.locator('.base-product-cta').count(),ids.length-2);
+      assert.equal(await page.locator('.base-product-cta').count(),ids.length);
       const cards = await page.locator('.base-product').evaluateAll(nodes=>nodes.map(node=>{
         const image=node.querySelector('.base-product-visual, .jewelry-visual').getBoundingClientRect();
         const name=node.querySelector('.base-product-name').getBoundingClientRect();
@@ -65,7 +65,7 @@ const server = http.createServer((req,res) => {
         return {belowImage:name.top>=image.bottom,buttonHeight:cta.height,buttonWidth:cta.width,overflow:node.scrollWidth>node.clientWidth+1};
       }));
       assert(cards.every(c=>c.belowImage&&c.buttonHeight>=44&&c.buttonWidth>=44&&!c.overflow));
-      const prices=await page.locator('.base-product-price').allTextContents();
+      const prices=await page.locator('.catalog-product > .base-product-price').allTextContents();
       visibleItems.forEach((item,index)=>assert(prices[index].includes(item.price.toLocaleString('ja-JP'))&&prices[index].includes('（税込）')));
       const captions=await page.locator('.apparel-editorial-trio figure').evaluateAll(nodes=>nodes.map(node=>node.querySelector('figcaption').getBoundingClientRect().top>=node.querySelector('img').getBoundingClientRect().bottom));
       assert(captions.every(Boolean));
