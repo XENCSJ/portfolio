@@ -39,7 +39,8 @@ const fixture = {
       await catalog.scrollIntoViewIfNeeded();
       assert.equal(await page.locator('.base-product').count(), pinnedIds.length);
       assert.equal(await page.locator('.base-product-brand').count(), pinnedIds.length);
-      assert.equal(await page.locator('.base-product-cta').count(), pinnedIds.length);
+      assert.equal(await page.locator('.base-product-cta').count(), pinnedIds.length - 2);
+      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 2);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /商品を見る/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
