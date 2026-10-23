@@ -49,13 +49,15 @@
   const releases = cards.filter(card => card.dataset.slideshow === 'true' && card.querySelector('.sound-song-cover'));
   if (!root || !releases.length) return;
   const stage = root.querySelector('.sound-showcase-stage');
-  const indicators = root.querySelector('.sound-slide-dots');
-  const pause = root.querySelector('.sound-slide-pause');
+  if (!stage) return;
+  const status = root.querySelector('.sound-showcase-status');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let timer, paused = false, hovered = false, suppressClickUntil = 0;
+  const comparing = root.hasAttribute('data-comparison');
+  let timer, hovered = false, suppressClickUntil = 0;
+  // Keep the existing shuffled sequence and five-second automatic cadence.
   const shuffle = (avoid, edge = 'first') => {
     const values = releases.map((_, i) => i);
-    for (let i = values.length - 1; i > 0; i--) {
+    if (!comparing) for (let i = values.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [values[i], values[j]] = [values[j], values[i]];
     }
@@ -67,77 +69,119 @@
     return values;
   };
   let history = shuffle(), position = 0;
-  const slides = releases.map((card, i) => {
+  // A shuffle boundary must not ask one DOM element to occupy both side slots.
+  function extend() {
+    const batch = shuffle(history.at(-1));
+    if (releases.length > 2 && batch[0] === history.at(-2)) {
+      const j = batch.findIndex(v => v !== history.at(-1) && v !== history.at(-2));
+      [batch[0], batch[j]] = [batch[j], batch[0]];
+    }
+    if (releases.length > 2 && batch[1] === history.at(-1)) {
+      const j = batch.findIndex((v, i) => i > 1 && v !== history.at(-1));
+      [batch[1], batch[j]] = [batch[j], batch[1]];
+    }
+    history.push(...batch);
+  }
+  const fragment = document.createDocumentFragment();
+  const slides = releases.map(card => {
     const url = spotifyURL(card.dataset.spotifyUrl);
     const slide = document.createElement(url ? 'a' : 'div');
     slide.className = 'sound-slide'; slide.dataset.releaseId = card.id;
     if (url) { slide.href = url.href; slide.target = '_blank'; slide.rel = 'noopener noreferrer'; }
+    const art = document.createElement('div'); art.className = 'sound-slide-art';
     const img = card.querySelector('.sound-song-cover').cloneNode(true);
-    img.className = ''; img.loading = 'eager';
-    slide.append(img);stage.append(slide);
-    const dot = document.createElement('button');dot.type = 'button';
-    dot.setAttribute('aria-label', card.querySelector('h3').textContent + 'を表示');
-    dot.addEventListener('click', () => {
-      let next = history.indexOf(i, position);
-      if (next < 0) { history.push(...shuffle(history.at(-1))); next = history.indexOf(i, position); }
-      position = next;render();schedule();
-    });
-    indicators.append(dot);
-    return {slide, dot};
+    img.className = ''; img.loading = 'eager'; img.draggable = false;
+    art.append(img);slide.append(art);fragment.append(slide);
+    return slide;
   });
-  const syncPause = () => {
-    pause.textContent = paused || reduced.matches ? '▷' : 'Ⅱ';
-    pause.setAttribute('aria-label', paused || reduced.matches ? 'スライドショーを再生' : 'スライドショーを一時停止');
-    pause.disabled = reduced.matches;
-  };
+  // Build completely before replacing the visible static fallback.
+  stage.replaceChildren(fragment);
   function schedule() {
     clearTimeout(timer);
-    if (releases.length > 1 && !paused && !hovered && !reduced.matches && !document.hidden && !root.matches(':focus-within'))
-      timer = setTimeout(() => move(1), 5000);
+    if (!comparing && releases.length > 1 && !hovered && !reduced.matches && !document.hidden &&
+        !root.matches(':focus-within') && !root.classList.contains('is-entering'))
+      timer = setTimeout(() => move(1, false), 5000);
   }
-  function render() {
-    if (position + 1 >= history.length) history.push(...shuffle(history.at(-1)));
+  function render(manual = false) {
+    if (position + 1 >= history.length) extend();
     const active = history[position];
     const previous = position > 0 ? history[position - 1] : history.at(releases.length - 1);
     const next = history[position + 1];
-    slides.forEach(({slide, dot}, i) => {
+    slides.forEach((slide, i) => {
       const state = i === active ? 'active' : i === previous ? 'previous' : i === next ? 'next' : 'away';
-      slide.dataset.position = state;slide.setAttribute('aria-hidden', String(i !== active));
-      if (slide.tagName === 'A') slide.tabIndex = i === active ? 0 : -1;
-      dot.setAttribute('aria-current', String(i === active));
+      slide.dataset.position = state;
+      slide.setAttribute('aria-hidden', String(state === 'away'));
+      slide.tabIndex = state === 'away' ? -1 : 0;
+      const title = releases[i].querySelector('h3').textContent;
+      if (state === 'active' && slide.tagName === 'A') {
+        slide.removeAttribute('role'); slide.setAttribute('aria-label', title + 'をSpotifyで聴く');
+      } else {
+        slide.setAttribute('role', state === 'active' ? 'group' : 'button');
+        slide.setAttribute('aria-label', title + (state === 'active' ? ' — 表示中' : 'を中央に表示'));
+      }
     });
     stage.dataset.activeRelease = releases[active].id;
+    if (status) {
+      status.setAttribute('aria-live', manual ? 'polite' : 'off');
+      status.textContent = releases[active].querySelector('h3').textContent;
+    }
   }
-  function move(direction) {
+  function move(direction, manual = true) {
+    root.dispatchEvent(new Event('sound:beforechange'));
     if (direction < 0 && position === 0) {
-      const earlier = shuffle(history[0], 'last');history.unshift(...earlier);position += earlier.length;
+      // Reuse the visible previous jacket, then extend navigation into a new batch.
+      const previous = history[releases.length - 1];
+      const earlier = shuffle();
+      earlier.splice(earlier.indexOf(previous), 1);earlier.push(previous);
+      if (releases.length > 2 && earlier.at(-2) === history[0]) {
+        const j = earlier.findIndex((v, i) => i < earlier.length - 2 && v !== history[0]);
+        [earlier[j], earlier[earlier.length - 2]] = [earlier[earlier.length - 2], earlier[j]];
+      }
+      history.unshift(...earlier);position += earlier.length;
     }
     position += direction;
-    render();
-    // Bound history while preserving previous navigation and the current shuffle.
+    render(manual);
     if (position > releases.length * 4) { history.splice(0, releases.length * 2);position -= releases.length * 2; }
     schedule();
   }
-  root.querySelector('.sound-slide-prev').addEventListener('click', () => move(-1));
-  root.querySelector('.sound-slide-next').addEventListener('click', () => move(1));
-  pause.addEventListener('click', () => { paused = !paused;syncPause();schedule(); });
+  function activateSide(target, event) {
+    const slide = target.closest('.sound-slide');
+    if (!slide || !stage.contains(slide)) return;
+    if (slide.dataset.position === 'previous' || slide.dataset.position === 'next') {
+      event.preventDefault();move(slide.dataset.position === 'previous' ? -1 : 1);
+    }
+  }
   stage.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault();move(e.key === 'ArrowLeft' ? -1 : 1); }
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();move(e.key === 'ArrowLeft' ? -1 : 1);
+    } else if (e.key === 'Enter' || e.key === ' ') activateSide(e.target, e);
   });
   let start = null;
-  stage.addEventListener('pointerdown', e => { start = {x:e.clientX, y:e.clientY}; });
-  stage.addEventListener('pointerup', e => {
-    if (!start) return;
-    const dx=e.clientX-start.x, dy=e.clientY-start.y;start=null;
-    if (Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)*1.4) { suppressClickUntil=Date.now()+500;move(dx<0 ? 1 : -1); }
+  stage.addEventListener('pointerdown', e => {
+    if (!e.isPrimary || e.button !== 0) { start = null; return; }
+    start = {x:e.clientX, y:e.clientY, id:e.pointerId};
   });
-  stage.addEventListener('pointercancel', () => { start=null; });
-  stage.addEventListener('click', e => { if (Date.now()<suppressClickUntil) { e.preventDefault();e.stopPropagation(); } }, true);
+  // Passive tracking and pan-y preserve native page scrolling on touch screens.
+  window.addEventListener('pointerup', e => {
+    if (!start || e.pointerId !== start.id) return;
+    const dx=e.clientX-start.x, dy=e.clientY-start.y;start=null;
+    if (Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)*1.4) {
+      suppressClickUntil=Date.now()+500;move(dx<0 ? 1 : -1);
+    }
+  }, {passive:true});
+  window.addEventListener('pointercancel', () => { start=null; }, {passive:true});
+  stage.addEventListener('click', e => {
+    if (Date.now()<suppressClickUntil) { e.preventDefault();e.stopPropagation();return; }
+    activateSide(e.target, e);
+  });
+  stage.addEventListener('dragstart', e => e.preventDefault());
   root.addEventListener('pointerenter', e => { if (e.pointerType==='mouse') { hovered=true;schedule(); } });
   root.addEventListener('pointerleave', () => { hovered=false;schedule(); });
   root.addEventListener('focusin', schedule);
   root.addEventListener('focusout', () => setTimeout(schedule, 0));
+  root.addEventListener('sound:reschedule', schedule);
   document.addEventListener('visibilitychange', schedule);
-  reduced.addEventListener('change', () => { syncPause();schedule(); });
-  root.hidden=false;render();syncPause();schedule();
+  reduced.addEventListener('change', schedule);
+  root.hidden=false;render();schedule();
 })();

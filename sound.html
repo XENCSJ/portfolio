@@ -58,7 +58,7 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 </style>
 <link rel="stylesheet" href="./xen-youtube.css?v=20261021-quiet-luxury">
 <link rel="stylesheet" href="./xen-ui.css?v=20261017-compact-motion-8510c61">
-<link rel="stylesheet" href="./xen-sound.css?v=20261023-hide-pause">
+<link rel="stylesheet" href="./xen-sound.css?v=20261024-clean-carousel">
 <style id="tochu-song-description-spacing">
 body#top.sound-page main #tochu-about-panel .song-description p + p { margin-top: 12px; }
 </style>
@@ -128,9 +128,11 @@ body.sound-page main .sound-category-nav .sound-category-links a:last-child { bo
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><a class="xen-menu-link xen-menu-category-link" href="./price-list.html"><span class="xen-menu-en" lang="en">PRICE LIST</span><span class="xen-menu-ja" lang="ja">料金一覧</span></a></h2></section>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><a class="xen-menu-link xen-menu-category-link" href="./studio.html#contact"><span class="xen-menu-en" lang="en">CONTACT</span><span class="xen-menu-ja" lang="ja">制作相談</span></a></h2></section>
 </nav></header><main id="main-content">
-<section class="hero reveal"><h1 class="xen-page-title"><span class="title-en">MUSIC</span><span class="page-title-ja" lang="ja">楽曲制作</span></h1><section class="sound-showcase" aria-label="楽曲ジャケット" aria-roledescription="カルーセル" hidden>
-<div class="sound-showcase-stage" tabindex="0" aria-label="左右の矢印キーでジャケットを切り替え"></div>
-<div class="sound-showcase-controls"><button type="button" class="sound-slide-prev" aria-label="前のジャケット">‹</button><span class="sound-slide-dots" aria-label="表示中のジャケット"></span><button type="button" class="sound-slide-next" aria-label="次のジャケット">›</button><button type="button" class="sound-slide-pause" aria-label="スライドショーを一時停止">Ⅱ</button></div>
+<section class="hero reveal"><h1 class="xen-page-title"><span class="title-en">MUSIC</span><span class="page-title-ja" lang="ja">楽曲制作</span></h1><section class="sound-showcase" aria-label="楽曲ジャケット" aria-roledescription="カルーセル">
+<div class="sound-showcase-stage" tabindex="0" aria-label="左右スワイプ、左右ジャケットのタップ、左右の矢印キーでジャケットを切り替え"><div class="sound-slide" data-position="previous"><div class="sound-slide-art"><img  src="./xen-blue-sleep-cover.jpg" width="640" height="640" alt="BLUE SLEEP — XEN ジャケット" loading="eager" decoding="async"></div></div>
+<div class="sound-slide" data-position="active"><div class="sound-slide-art"><img  src="./xen-tochu-no-mamade-cover.jpg" width="1237" height="1271" alt="途中のままで — XEN ジャケット" loading="eager" decoding="async"></div></div>
+<div class="sound-slide" data-position="next"><div class="sound-slide-art"><img  src="./xen-hikari-no-arika-cover.jpg" width="1237" height="1271" alt="ひかりのありか — XEN ジャケット" loading="eager" decoding="async"></div></div>
+</div><span class="sound-showcase-status" aria-live="off" aria-atomic="true"></span>
 </section><nav class="sound-category-nav" aria-label="ジャンル別の楽曲へのリンク">
 <details class="sound-category-drawer"><summary aria-controls="j-pop-song-links"><span><span class="sound-category-en">01｜J-POP / POP</span><span class="sound-category-ja" lang="ja">J-POP・ポップス</span></span><span aria-hidden="true">↓</span></summary><div class="sound-category-links" id="j-pop-song-links"><a href="#tochu-no-mamade">途中のままで</a><a href="#hikari-no-arika">ひかりのありか</a><a href="#atarashii-rinkaku">新しい輪郭</a><a href="#sora-ni-tokeru">空に溶ける</a></div></details>
 <details class="sound-category-drawer"><summary aria-controls="edm-song-links"><span><span class="sound-category-en">02｜EDM / ELECTRONIC</span><span class="sound-category-ja" lang="ja">EDM・エレクトロニック</span></span><span aria-hidden="true">↓</span></summary><div class="sound-category-links" id="edm-song-links"><a href="#void-to-form">VOID TO FORM</a><a href="#nova-pulse">NOVA PULSE</a><a href="#nights-awakening">NIGHT&#x27;S AWAKENING</a></div></details>
@@ -406,7 +408,12 @@ body.sound-page main .sound-category-nav .sound-category-links a:last-child { bo
 <details class="sound-accordion sound-media-accordion" data-service="youtube"><summary class="sound-accordion-toggle" aria-controls="sora-ni-tokeru-youtube-panel"><span class="sound-service-label">YouTube（準備中）</span><span class="sound-accordion-icon" aria-hidden="true"></span></summary><div class="sound-accordion-panel" id="sora-ni-tokeru-youtube-panel"><p class="sound-empty" data-service-placeholder>リンクは準備中です。</p></div></details>
 <details class="sound-accordion sound-about-accordion">
 <summary aria-controls="sora-ni-tokeru-about-panel" class="sound-accordion-toggle"><span class="sound-accordion-label-open">楽曲解説を見る</span><span class="sound-accordion-label-close">楽曲解説を閉じる</span><span aria-hidden="true" class="sound-accordion-icon"></span></summary>
-<div class="sound-accordion-panel" id="sora-ni-tokeru-about-panel"><div class="song-description"><p>夕暮れの海岸線を舞台に、恋人と過ごす何気ない時間の美しさと、二度と同じ形では訪れない瞬間の儚さを描く。</p><p>青から茜へ、そして夜へと移り変わる空の色に、ふたりの時間を重ねた楽曲。</p></div></div>
+<div class="sound-accordion-panel" id="sora-ni-tokeru-about-panel"><div class="song-description">
+<p>青が茜に溶け、茜が夜へと消えていく。</p>
+<p>夕暮れの空がゆっくりと色を変えるように、何気ない日々も少しずつ過去になっていく。</p>
+<p>何でもない会話も、隣にいる温もりも、いつか振り返ればかけがえのない記憶になる。</p>
+<p>移ろいゆく空のグラデーションに、言葉にならない感情と、二度と戻らない時間を重ねた、一瞬の美しさと儚さを描く楽曲。</p>
+</div></div>
 </details><details class="sound-lyrics-accordion">
 <summary aria-controls="sora-ni-tokeru-lyrics-panel" class="sound-lyrics-toggle"><span class="sound-lyrics-label-open">歌詞を見る</span><span class="sound-lyrics-label-close">歌詞を閉じる</span><span aria-hidden="true" class="sound-lyrics-icon"></span></summary>
 <div class="sound-lyrics-panel" id="sora-ni-tokeru-lyrics-panel"><div aria-label="空に溶ける 歌詞全文" class="sound-song-lyrics"><section class="sound-lyric-section">
@@ -518,5 +525,5 @@ body.sound-page main .sound-category-nav .sound-category-links a:last-child { bo
 </footer><script src="./xen-shared.js?v=20261023-image-only1" defer></script>
 
 
-<script src="./xen-sound-catalog.js?v=20261024-two-releases" defer></script><script src="./xen-sound.js?v=20261023-catalog" defer></script>
+<script src="./xen-sound-catalog.js?v=20261024-clean-carousel" defer></script><script src="./xen-sound.js?v=20261023-catalog" defer></script>
 </body></html>
