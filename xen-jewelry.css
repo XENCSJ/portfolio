@@ -1,4 +1,4 @@
-/* Only the two Sculpted jewelry cards. The existing page grids and themes remain. */
+/* Shared jewelry drawers. The existing page grids and themes remain. */
 body#top .jewelry-card {
   --jewelry-gold:#C5A059;
   min-width:0;align-self:start;margin:0;border:0;box-shadow:none;background:transparent;
@@ -51,3 +51,10 @@ body#top .jewelry-store {
 @media(prefers-reduced-motion:reduce) {
   body#top .jewelry-details,body#top .jewelry-details * { animation:none!important;transition:none!important; }
 }
+
+/* Lapis launch: untouched source image and no purchase destination until confirmed. */
+body#top #lapis-lazuli-ring { scroll-margin-top:110px; }
+body#top .jewelry-material { display:block;margin:0 0 12px;font-size:11px;line-height:1.8;letter-spacing:.03em;overflow-wrap:anywhere; }
+body#top.apparel-page #lapis-lazuli-ring > .base-product-visual { padding:0;border:0;cursor:pointer;background:#fff; }
+body#top.apparel-page #lapis-lazuli-ring > .base-product-visual img { background:#fff;object-fit:contain;object-position:center;transform:none;filter:none; }
+body#top.apparel-page #lapis-lazuli-ring > .base-product-cta:disabled { color:#b8b8be;border-color:#404040;cursor:default; }

@@ -194,18 +194,22 @@
         const items = isRelated ? data.items.filter(item => item.id === Number(section.dataset.relatedProduct)) : data.items.filter(item => !apparelExcludedIds.has(item.id));
         const cards = document.createDocumentFragment();
         items.forEach(item => cards.append(card(item, isRelated)));
-        section.querySelector('[data-base-grid]').replaceChildren(cards);
+        const grid = section.querySelector('[data-base-grid]');
+        // Unreleased local designs have no BASE ID, price or purchase URL.
+        // Keep these cards across feed refreshes without adding them to BASE data.
+        const localCards = [...grid.children].filter(node => node.hasAttribute('data-catalog-static'));
+        grid.replaceChildren(cards, ...localCards);
         section.querySelector('[data-base-status]').hidden = true;
       });
       // Product anchors are inserted after the initial document navigation.
-      if (root && /^#base-product-\d+$/.test(location.hash)) {
+      if (root && /^#(?:base-product-\d+|lapis-lazuli-ring)$/.test(location.hash)) {
         const target = document.getElementById(location.hash.slice(1));
         if (target && root.contains(target)) target.scrollIntoView({ behavior: 'instant', block: 'start' });
       }
     } catch (_) {
       // Never erase already rendered cards on a failed refresh.
       roots.forEach(section => {
-        if (!section.querySelector('[data-base-grid]').children.length) {
+        if (!section.querySelector('[data-base-grid] > :not([data-catalog-static])')) {
           const status = section.querySelector('[data-base-status]');
           status.hidden = false;
           status.textContent = '商品情報を読み込めませんでした。';

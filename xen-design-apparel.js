@@ -11,10 +11,14 @@
     const panel = details.querySelector('.design-apparel-panel,.jewelry-panel');
     const label = summary.querySelector('[data-apparel-label]');
     const icon = summary.querySelector('[data-apparel-icon]');
+    const triggers = [...document.querySelectorAll('[data-jewelry-trigger]')]
+      .filter(trigger => trigger.dataset.jewelryTrigger === details.id);
+    triggers.forEach(trigger => trigger.addEventListener('click', () => summary.click()));
     let intendedOpen = details.open;
     let animation = null;
     const update = () => {
       summary.setAttribute('aria-expanded', String(intendedOpen));
+      triggers.forEach(trigger => trigger.setAttribute('aria-expanded', String(intendedOpen)));
       if (label) label.textContent = intendedOpen ? 'アパレルを閉じる' : 'アパレルを見る';
       icon.textContent = intendedOpen ? '−' : '＋';
       if (jewelry) {
