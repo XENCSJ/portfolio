@@ -4,7 +4,6 @@
   if (viewer && typeof viewer.showModal === 'function') {
     const works = Array.from(document.querySelectorAll('.gallery-item'));
     const preview = viewer.querySelector('img');
-    const caption = viewer.querySelector('.viewer-caption');
     const original = viewer.querySelector('.viewer-original');
     const counter = viewer.querySelector('.viewer-counter');
     const enhanced = viewer.hasAttribute('data-gallery-enhanced');
@@ -58,7 +57,7 @@
       status.textContent = '画像を読み込んでいます…';
       preview.src = work.href;
       preview.alt = work.querySelector('img').alt;
-      caption.textContent = preview.alt;
+      // Keep the description on the image for assistive technology only.
       original.href = work.href;
       counter.textContent = `${index + 1} / ${activeWorks.length}`;
     };

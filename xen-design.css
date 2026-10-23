@@ -65,13 +65,6 @@ body.design-page.detail-page main h1 .page-title-ja {
   display:block;width:100%;height:auto;max-width:100%;object-fit:contain;
   transform:none;filter:none;
 }
-.design-page .design-visuals .gallery-item::after {
-  content:attr(data-gallery-label);position:absolute;inset:auto 14px 14px auto;
-  max-width:calc(100% - 28px);padding:9px 12px;background:#fffffff0;color:#242428;
-  font-size:11px;line-height:1.6;opacity:0;pointer-events:none;
-  transition:opacity 280ms ease,transform 280ms ease;transform:translateY(4px);
-}
-.design-page .design-visuals .gallery-item:focus-visible::after { opacity:1;transform:none; }
 .design-page .design-clinic,.design-page .design-character-board { grid-template-columns:repeat(2,minmax(0,1fr)); }
 .design-page .design-wide { grid-column:1/-1; }
 .design-page .design-character { max-width:1040px;margin-inline:auto; }
@@ -91,7 +84,6 @@ body.design-page.detail-page main h1 .page-title-ja {
 @media(hover:hover) and (pointer:fine) {
   .design-page .design-category-nav a:hover { color:#000; }
   .design-page .design-category-nav a:hover::after { transform:scaleX(1); }
-  .design-page .design-visuals .gallery-item:hover::after { opacity:1;transform:none; }
 }
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
   /* Scale the entire composition, rather than cropping its edges. */

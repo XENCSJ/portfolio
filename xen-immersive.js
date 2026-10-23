@@ -81,9 +81,6 @@
       new MutationObserver(refresh).observe(grid,{childList:true,subtree:true});
     });
     document.addEventListener('toggle',refresh,true);
-    document.querySelectorAll('.xen-tile-gallery .gallery-item').forEach(link => {
-      link.dataset.galleryLabel=link.querySelector('img')?.alt || '';
-    });
     body.addEventListener('focusin',event => {
       for (const [animation,node] of active) if (node.contains(event.target)) {animation.cancel(); active.delete(animation);}
       for (const node of targets) if (node.contains(event.target)) {seen.add(node); observer?.unobserve(node);}

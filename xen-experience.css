@@ -42,7 +42,6 @@ body.xen-polished.detail-page main h1 .page-title-ja { font-size:12px;font-weigh
 .xen-viewer-open,.xen-viewer-open body { overflow:hidden; }
 /* Preserve the in-flow 3:4 spacer from xen-gallery.css, including during motion. */
 body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item > img { transition:transform 700ms var(--xen-ease),filter var(--xen-hover); }
-body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item::after { content:attr(data-gallery-label);position:absolute;inset:auto 0 0;z-index:1;padding:28px 12px 12px;background:linear-gradient(transparent,#0008);color:#fff;font-size:10px;line-height:1.5;letter-spacing:.05em;opacity:0;pointer-events:none;transition:opacity var(--xen-hover); }
 .xen-polished.architecture-page .image-gallery:not(.xen-tile-gallery) { align-items:center; }
 .xen-polished.architecture-page .image-gallery:not(.xen-tile-gallery) img { object-fit:contain;transform:none; }
 .xen-polished.apparel-page main { max-width:1120px; }
@@ -90,7 +89,6 @@ body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item::after { co
  .xen-polished .video-container .play:hover,.xen-polished .video-container .thumb:hover .play { background:#fff;box-shadow:0 0 0 7px #ffffff20; }
  .xen-polished .work:hover { transform:none; }
  .xen-polished .gallery-item:hover img { transform:none;filter:brightness(.98); }
- body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item:hover::after { opacity:1; }
 }
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
  body.xen-gallery-page.xen-polished .xen-tile-gallery > .gallery-item:hover > img { transform:scale(1.025); }
