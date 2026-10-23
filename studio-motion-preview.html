@@ -12,7 +12,7 @@
 </header><div id="viewport"><iframe id="preview" title="STUDIO アニメーションプレビュー" width="390" height="844"></iframe></div>
 <script>
 const preview=document.getElementById('preview'),width=document.getElementById('width'),frame=document.getElementById('frame'),result=document.getElementById('result');let set=1,serial=0;
-function show(){preview.width=width.value;preview.height=width.value==='1440'?'900':'844';preview.src='./studio-logo-review.html?xen-studio-set='+set+(frame.value!==''?'&xen-studio-frame='+frame.value:'')+'&preview='+ ++serial;document.querySelectorAll('[data-set]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.set)===set)));}
+function show(){preview.width=width.value;preview.height=width.value==='1440'?'900':'844';preview.src='./studio.html?xen-studio-set='+set+(frame.value!==''?'&xen-studio-frame='+frame.value:'')+'&preview='+ ++serial;document.querySelectorAll('[data-set]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.set)===set)));}
 document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{set=Number(b.dataset.set);show()});document.getElementById('replay').onclick=()=>{frame.value='';show()};width.onchange=show;frame.onchange=show;
 document.getElementById('check').onclick=async()=>{
  const button=document.getElementById('check');button.disabled=true;result.textContent='検証中…';const rows=[];const names=['original','sequential-trace','soft-reveal','reverse-trace','dual-reveal'];

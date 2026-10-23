@@ -47,3 +47,7 @@ Static checks confirm byte-identical existing files except the two STUDIO
 asset references, all 23 source paths and original timings, evenodd clipping,
 and unchanged SVG dimensions and artwork. Rendered results are recorded in the
 completion report. Viewport simulation is not a physical device/Safari test.
+
+## Completed pre-activation verification
+
+The published isolated review passed all 15 cases: all five sets at 390, 430 and 1440 CSS pixels. Logo and surrounding link geometry stayed stable; completed surfaces matched across all sets, were visible and static, and had no horizontal overflow. Selection bucket, rejected uint32 boundary, all forced sets, invalid override and crypto failure tests passed. Reduced-motion, missing CSS and initialization-error controller branches settled to the completed logo. Physical phones and Safari have not been tested.
