@@ -1,0 +1,37 @@
+/* SHOP only: reuse existing product cards, image dimensions and page gutters. */
+body#top.shop-page main > .base-products { margin-top: 20px; }
+body#top.shop-page .shop-sr-only {
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;border:0;
+}
+body#top.shop-page .shop-tabs {
+  display:flex;justify-content:center;align-items:center;gap:clamp(20px,5vw,44px);
+  margin:0 0 28px;padding:0;flex-wrap:nowrap;
+}
+body#top.shop-page .shop-tabs[hidden],
+body#top.shop-page .catalog-product[hidden] { display:none!important; }
+body#top.shop-page .shop-tab {
+  position:relative;min-height:44px;padding:10px 2px;border:0;border-radius:0;
+  background:#000;color:#fff;font:inherit;font-size:12px;letter-spacing:.14em;
+  line-height:1.6;white-space:nowrap;cursor:pointer;
+}
+body#top.shop-page .shop-tab::after {
+  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:transparent;
+}
+body#top.shop-page .shop-tab[aria-selected="true"] { color:#C5A059; }
+body#top.shop-page .shop-tab[aria-selected="true"]::after { background:#C5A059; }
+body#top.shop-page .shop-tab:focus-visible,
+body#top.shop-page #shop-products:focus-visible { outline:2px solid #C5A059;outline-offset:4px; }
+body#top.shop-page .base-products-store { margin-top:0; }
+body#top.shop-page .catalog-product > .base-product-name { min-height:3.2em; }
+body#top.shop-page .catalog-product[data-shop-category="apparel"] > .base-product-name { min-height:1.7em; }
+body#top.shop-page .catalog-product .jewelry-action { flex-wrap:wrap; }
+body#top.shop-page .catalog-product .jewelry-icon { margin-left:auto; }
+@media(max-width:650px) {
+  body#top.shop-page .shop-tabs { margin-bottom:22px;gap:24px; }
+  body#top.shop-page .shop-tab { font-size:11px;letter-spacing:.1em; }
+  body#top.shop-page .catalog-product > .base-product-name { min-height:5.1em; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body#top.shop-page .catalog-product { animation:none!important;transition:none!important;transform:none!important; }
+}

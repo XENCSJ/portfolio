@@ -5,15 +5,15 @@ const fs = require('node:fs');
 const path = require('node:path');
 const origin = 'http://127.0.0.1:8765';
 const pinnedIds = [163232279,162561554,160058456,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
-const displayedIds = pinnedIds.filter(id => id !== 160058456);
+const displayedIds = [157787639,157783299,156849283,156850693,156851036,156851056];
 const fixture = {
   schema_version: 1, shop_url: 'https://xen.official.ec/', updated_at: '2026-10-20T10:00:00Z',
   items: Array.from({ length: pinnedIds.length }, (_, i) => ({
-    id: pinnedIds[i], name: i === 0 ? '<img src=x onerror=alert(1)> XEN & テスト商品' : `XEN テスト商品 ${i+1}`,
+    id: pinnedIds[i], name: i === 5 ? '<img src=x onerror=alert(1)> XEN & テスト商品' : `XEN テスト商品 ${i+1}`,
     price: i === 4 ? null : 8800 + i * 1000,
     url: `https://xen.official.ec/items/${pinnedIds[i]}`,
     image_url: i === 3 ? null : 'https://xen.official.ec/test-products/image.jpg',
-    available: i !== 1, sales_status: 'item_now_on_sale'
+    available: i !== 5, sales_status: 'item_now_on_sale'
   }))
 };
 (async () => {
@@ -46,11 +46,11 @@ const fixture = {
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /購入する/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
       assert.equal(await page.locator('#base-products-title').evaluate(el => getComputedStyle(el).textAlign), 'center');
-      assert.equal(await page.locator('#base-products-title .section-ja').evaluate(el => getComputedStyle(el).display), 'block');
+      assert.equal(await page.locator('[role=tab]').count(), 3);
       assert.equal(await page.locator('.base-product-name img').count(), 0, 'Product names must be rendered as text');
       assert.equal(await page.locator('.base-product-state').innerText(), 'SOLD OUT');
-      assert.match(await page.locator('.base-product-price').first().innerText(), /8,800/);
-      assert.equal(await page.locator('.catalog-product > .base-product-cta').first().getAttribute('href'), fixture.items[0].url);
+      assert.match(await page.locator('.base-product-price').first().innerText(), /価格はストアでご確認ください/);
+      assert.equal(await page.locator('.catalog-product > .base-product-cta').first().getAttribute('href'), fixture.items[4].url);
       assert.equal(await page.locator('.image-gallery.trio .gallery-item').count(), 0);
       assert.equal(await page.locator('.image-gallery.apparel-media .gallery-item').count(), 2);
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
