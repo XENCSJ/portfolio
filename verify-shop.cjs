@@ -25,17 +25,17 @@ if(process.env.SHOP_IMAGE_CACHE)for(const item of catalog.items.filter(i=>ids.sl
 await page.goto(origin+'apparel.html',{waitUntil:'domcontentloaded'});
 await page.waitForSelector('.catalog-product');
 const visible=()=>page.locator('.catalog-product:visible');
-assert.equal(await visible().count(),6);
-assert.deepEqual(await visible().evaluateAll(es=>es.map(e=>Number(e.id.replace('base-product-','')))),ids);
-assert.deepEqual(await page.locator('.catalog-product>.base-product-cta').evaluateAll(es=>es.map(e=>e.href)),ids.map(id=>`https://xen.official.ec/items/${id}`));
+assert.equal(await visible().count(),7);
+assert.deepEqual(await page.locator('.catalog-product:not([data-catalog-static])').evaluateAll(es=>es.map(e=>Number(e.id.replace('base-product-','')))),ids);
+assert.deepEqual(await page.locator('.catalog-product:not([data-catalog-static])>.base-product-cta').evaluateAll(es=>es.map(e=>e.href)),ids.map(id=>`https://xen.official.ec/items/${id}`));
 for(const id of ids){const item=catalog.items.find(i=>i.id===id);assert.ok((await page.locator(`#base-product-${id}>.base-product-price`).innerText()).includes(item.price.toLocaleString('en-US')));}
 assert.equal(await page.locator('[data-base-grid]').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),3);
 const layout=await visible().evaluateAll(es=>es.map(e=>({y:e.getBoundingClientRect().top,img:e.querySelector('.base-product-visual').getBoundingClientRect().toJSON(),price:e.querySelector(':scope>.base-product-price').getBoundingClientRect().top,button:e.querySelector(':scope>.base-product-cta').getBoundingClientRect().toJSON()})));
-for(let i=0;i<6;i+=3)for(const a of layout.slice(i,i+3)){assert.ok(Math.abs(a.img.width-a.img.height)<1);assert.ok(Math.abs(a.price-layout[i].price)<1);assert.ok(Math.abs(a.button.y-layout[i].button.y)<1);assert.ok(a.button.height>=44);}
+for(let i=0;i<layout.length;i+=3)for(const a of layout.slice(i,i+3)){assert.ok(Math.abs(a.img.width-a.img.height)<1);assert.ok(Math.abs(a.price-layout[i].price)<1);assert.ok(Math.abs(a.button.y-layout[i].button.y)<1);assert.ok(a.button.height>=44);}
 await page.getByRole('tab',{name:'APPAREL',exact:true}).click();assert.equal(await visible().count(),3);
 assert.equal(await page.locator('.catalog-jewelry:visible').count(),0);
 await page.getByRole('tab',{name:'APPAREL',exact:true}).press('ArrowRight');
-assert.equal(await page.getByRole('tab',{name:'JEWELRY'}).getAttribute('aria-selected'),'true');assert.equal(await visible().count(),3);
+assert.equal(await page.getByRole('tab',{name:'JEWELRY'}).getAttribute('aria-selected'),'true');assert.equal(await visible().count(),4);
 assert.equal(await page.getByRole('tab',{name:'JEWELRY'}).evaluate(e=>getComputedStyle(e).color),'rgb(197, 160, 89)');
 assert.equal(await page.getByRole('tab',{name:'JEWELRY'}).evaluate(e=>getComputedStyle(e,'::after').backgroundColor),'rgb(197, 160, 89)');
 for(const id of ids.slice(3)){
@@ -45,27 +45,34 @@ assert.ok(await page.locator(`#base-product-${id} .jewelry-description`).isVisib
 assert.equal(await page.evaluate(()=>[...document.querySelectorAll('.catalog-product:not([hidden]),.jewelry-inner')].filter(e=>e.getBoundingClientRect().width).some(e=>e.scrollWidth>e.clientWidth+1)),false);
 await summary.press('Enter');assert.equal(await summary.getAttribute('aria-expanded'),'false');
 }
+assert.equal(await page.locator('#lapis-lazuli-ring>.base-product-price').innerText(),'価格未定');
+assert.equal(await page.locator('#lapis-lazuli-ring>.base-product-cta').isDisabled(),true);
+await page.locator('#lapis-lazuli-ring>.base-product-visual').click();
+assert.equal(await page.locator('#apparel-lapis-details').getAttribute('open'),'');
+assert.ok(await page.locator('#apparel-lapis-details .jewelry-description').isVisible());
+await page.locator('#apparel-lapis-details summary').click();
+assert.equal(await page.locator('#apparel-lapis-details').getAttribute('open'),null);
 // Existing nodes and disclosure state survive category changes.
 await page.locator('#base-product-156850693 summary').click();
 await page.getByRole('tab',{name:'APPAREL',exact:true}).click();await page.getByRole('tab',{name:'JEWELRY'}).click();
 assert.equal(await page.locator('#base-product-156850693 summary').getAttribute('aria-expanded'),'true');await page.locator('#base-product-156850693 summary').click();
-await page.getByRole('tab',{name:'JEWELRY'}).press('Home');assert.equal(await visible().count(),6);
+await page.getByRole('tab',{name:'JEWELRY'}).press('Home');assert.equal(await visible().count(),7);
 assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
 assert.equal(await visible().evaluateAll(es=>es.some(e=>e.scrollWidth>e.clientWidth+1)),false);
 assert.deepEqual(errors,[]);
 // Screenshot actual loaded assets only; never substitute fixture imagery.
 await page.locator('.catalog-product img').evaluateAll(es=>{es.forEach(e=>e.loading='eager');return Promise.all(es.map(e=>e.decode().catch(()=>null)));});
 const imageCount=await page.locator('.catalog-product img').evaluateAll(es=>es.filter(e=>e.complete&&e.naturalWidth>0).length);
-await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`${out}/shop-${width}.png`});
-results.push({width,categories:[6,3,3],columns:3,drawerChecks:3,horizontalOverflow:false,keyboard:true,alignedRows:true,imagesLoaded:imageCount,errors});
+await page.locator('h1').click();await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`${out}/shop-${width}.png`});
+results.push({width,categories:[7,3,4],columns:3,drawerChecks:4,horizontalOverflow:false,keyboard:true,alignedRows:true,imagesLoaded:imageCount,errors});
 if(width===390){
 await page.emulateMedia({reducedMotion:'no-preference'});
 await page.getByRole('tab',{name:'JEWELRY'}).click();
 const timings=await visible().evaluateAll(es=>es.flatMap(e=>e.getAnimations().map(a=>a.effect.getTiming())));
 assert.ok(timings.length>0);assert.ok(timings.every(t=>t.duration===400&&t.easing==='ease-out'));
 await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>[...document.querySelectorAll('.catalog-product')].every(e=>e.getAnimations().length===0));
-for(let i=0;i<9;i++)await page.getByRole('tab',{name:['ALL','APPAREL','JEWELRY'][i%3],exact:true}).click();assert.equal(await visible().count(),3);
-await page.reload();await page.waitForSelector('.catalog-product');assert.equal(await visible().count(),6);
+for(let i=0;i<9;i++)await page.getByRole('tab',{name:['ALL','APPAREL','JEWELRY'][i%3],exact:true}).click();assert.equal(await visible().count(),4);
+await page.reload();await page.waitForSelector('.catalog-product');assert.equal(await visible().count(),7);
 }
 await page.close();
 }
