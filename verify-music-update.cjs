@@ -2,13 +2,15 @@
 const {chromium,webkit,devices}=require(process.env.PLAYWRIGHT_PACKAGE||'playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),{execFileSync}=require('node:child_process');
 const baseline='738d011e26d60e05ab9461e82492154c25593c9e';
+// Keep the historical geometry reference available in shallow CI checkouts.
+try { execFileSync('git',['cat-file','-e',baseline],{stdio:'ignore'}); } catch { execFileSync('git',['fetch','--depth=1','origin',baseline],{stdio:'inherit'}); }
 const out=process.env.MUSIC_QA_OUT||'music-update-qa';fs.mkdirSync(out,{recursive:true});
 const paragraphs=['青が茜に溶け、茜が夜へと消えていく。','夕暮れの空がゆっくりと色を変えるように、何気ない日々も少しずつ過去になっていく。','何でもない会話も、隣にいる温もりも、いつか振り返ればかけがえのない記憶になる。','移ろいゆく空のグラデーションに、言葉にならない感情と、二度と戻らない時間を重ねた、一瞬の美しさと儚さを描く楽曲。'];
 const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml','.json':'application/json'};
 const cache=new Map();
 const server=http.createServer((req,res)=>{let n=decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1);const old=n.startsWith('_before/');if(old)n=n.slice(8);const file=path.resolve(n);if(!file.startsWith(process.cwd()+path.sep)||!fs.existsSync(file)){res.writeHead(404);res.end();return}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');if(old&&/\.(html|css|js)$/.test(n)){if(!cache.has(n))cache.set(n,execFileSync('git',['show',`${baseline}:${n}`]));res.end(cache.get(n))}else fs.createReadStream(file).pipe(res)});
 const results=[];
-async function geometry(page){return page.locator('.sound-slide[data-position="active"],.sound-slide[data-position="previous"],.sound-slide[data-position="next"]').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{position:n.dataset.position,width:r.width,height:r.height,left:r.left,top:r.top,opacity:getComputedStyle(n).opacity}}).sort((a,b)=>a.position.localeCompare(b.position)));}
+async function geometry(page){return page.locator('.sound-slide[data-position="active"],.sound-slide[data-position="previous"],.sound-slide[data-position="next"]').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{position:n.dataset.position,width:r.width,height:r.height,left:r.left+scrollX,top:r.top+scrollY,opacity:getComputedStyle(n).opacity}}).sort((a,b)=>a.position.localeCompare(b.position)));}
 async function assertions(page){assert(await page.locator('.sound-slide[data-position="active"]').isVisible());assert.equal(await page.locator('.sound-slide:not([data-position="away"])').count(),3);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
 async function run(engine,options,label){const b=await engine.launch();const c=await b.newContext(options);await c.addInitScript(()=>{Math.random=()=>.42});await c.route('**/*',r=>r.request().url().startsWith('http://127.0.0.1:')?r.continue():r.abort());const p=await c.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));const base='http://127.0.0.1:8765/';
 try{
