@@ -38,9 +38,9 @@ const fixture = {
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
-      assert.equal(await page.locator('.base-product').count(), displayedIds.length + 1);
-      assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length + 1);
-      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length + 1);
+      assert.equal(await page.locator('.base-product').count(), displayedIds.length + 2);
+      assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length + 2);
+      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length + 2);
       assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 4);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /購入する/);
@@ -56,7 +56,7 @@ const fixture = {
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(columns, 3);
       const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
-      assert.equal(rows.length, Math.ceil((displayedIds.length + 1) / columns));
+      assert.equal(rows.length, Math.ceil((displayedIds.length + 2) / columns));
       const alignment = await page.locator('.catalog-product').evaluateAll(cards => {
         const rect = element => { const r = element.getBoundingClientRect(); return {top:r.top, width:r.width, height:r.height}; };
         return cards.map(card => ({
@@ -102,7 +102,7 @@ const fixture = {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       assert.deepEqual(errors, []);
       await catalog.screenshot({ path: `base-products-qa/catalog-${width}.png` });
-      results.push({ width, cards: displayedIds.length + 1, columns, horizontalOverflow: false, pageErrors: errors });
+      results.push({ width, cards: displayedIds.length + 2, columns, horizontalOverflow: false, pageErrors: errors });
       assert.equal(await page.locator('#base-product-156849283 .base-product-design-link').getAttribute('href'), './design.html#kuro-usagi');
       const lapis = page.locator('#lapis-lazuli-ring');
       assert.equal(await lapis.count(), 1);

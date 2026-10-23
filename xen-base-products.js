@@ -259,6 +259,11 @@
         // Keep these cards across feed refreshes without adding them to BASE data.
         const localCards = [...grid.children].filter(node => node.hasAttribute('data-catalog-static'));
         grid.replaceChildren(cards, ...localCards);
+        // Locally verified collection products keep their position without changing the BASE feed.
+        localCards.forEach(card => {
+          const after = document.getElementById(`base-product-${card.dataset.afterProduct}`);
+          if (after && grid.contains(after)) after.after(card);
+        });
         section.querySelector('[data-base-status]').hidden = true;
         if (!isRelated) initializeShop(section);
       });

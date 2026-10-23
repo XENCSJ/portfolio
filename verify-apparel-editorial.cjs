@@ -62,7 +62,7 @@ const server = http.createServer((req,res) => {
       assert.equal(await page.locator('.shop-tabs').count(),1);
       assert.equal(await page.locator('.apparel-editorial-trio').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),3);
       assert.equal(await page.locator('#shop-tab-all').getAttribute('aria-selected'),'true');
-      for(const [category,count] of [['apparel',6],['jewelry',4],['all',10]]) {
+      for(const [category,count] of [['apparel',7],['jewelry',4],['all',11]]) {
         await page.locator(`[data-shop-filter="${category}"]`).click();
         assert.equal(await page.locator('.catalog-product:visible').count(),count);
         assert.equal(await page.locator(`[data-shop-filter="${category}"]`).getAttribute('aria-selected'),'true');
@@ -78,14 +78,14 @@ const server = http.createServer((req,res) => {
         return {belowImage:name.top>=image.bottom,buttonHeight:cta.height,buttonWidth:cta.width,overflow:node.scrollWidth>node.clientWidth+1};
       }));
       assert(cards.every(c=>c.belowImage&&c.buttonHeight>=44&&c.buttonWidth>=44&&!c.overflow));
-      const prices=await page.locator('.catalog-product > .base-product-price').allTextContents();
+      const prices=await page.locator('.catalog-product:not([data-catalog-static]) > .base-product-price').allTextContents();
       visibleItems.forEach((item,index)=>assert(prices[index].includes(item.price.toLocaleString('ja-JP'))&&prices[index].includes('（税込）')));
       const captions=await page.locator('.apparel-editorial-trio figure').evaluateAll(nodes=>nodes.map(node=>node.querySelector('figcaption').getBoundingClientRect().top>=node.querySelector('img').getBoundingClientRect().bottom));
       assert(captions.every(Boolean));
       await page.locator('.base-products-store').scrollIntoViewIfNeeded();
       await page.locator('.base-product img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>null))));
       for(const img of await page.locator('.base-product img,.apparel-editorial-trio img,.apparel-media img').all()) {await img.scrollIntoViewIfNeeded();await img.evaluate(i=>i.decode());}
-      assert.equal(await page.locator('.base-product img').count(),10);
+      assert.equal(await page.locator('.base-product img').count(),11);
       await page.locator('[data-base-products]').screenshot({path:`${out}/catalog-${width}.jpg`,type:'jpeg',quality:92});
       await page.evaluate(()=>scrollTo(0,0));
       await page.screenshot({path:`${out}/top-${width}.jpg`,type:'jpeg',quality:92});
@@ -110,7 +110,7 @@ const server = http.createServer((req,res) => {
       }
       await page.locator('.xen-header-toggle').click();assert(await page.locator('.xen-menu').isVisible());
       await page.keyboard.press('Escape');assert(!(await page.locator('.xen-menu').isVisible()));
-      results.push({width,filters:[10,6,4],menu:true,videoActivation:true,...layout,catalog:ids.length+1,purchaseLinks:'nine verified BASE destinations; editorial visual matches remain pending'});
+      results.push({width,filters:[11,7,4],menu:true,videoActivation:true,...layout,catalog:ids.length+2,purchaseLinks:'nine feed destinations plus verified graphic sweatshirt; editorial visual matches remain pending'});
       await context.close();
     }
     fs.writeFileSync(`${out}/results.json`,JSON.stringify({base,results},null,2));
