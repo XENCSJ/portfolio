@@ -78,7 +78,7 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 <style id="xen-shop-title-spacing">
 /* Match ARCHITECTURE's 980px container / 32px gutters for the intro only.
    The shared page-title rules retain top padding, typography and gold divider. */
-body#top.shop-page main > :is(.hero, .lead) {
+body#top.shop-page main#main-content > :is(.hero, .lead) {
   width: auto !important;
   max-width: none !important;
   margin-inline: max(calc((100% - 916px) / 2), calc(32px - clamp(18px, 4vw, 56px))) !important;
@@ -88,7 +88,7 @@ body#top.shop-page.xen-noir.apparel-page main > .lead { margin-top: 26px; }
    without adding its separator or section heading to SHOP. */
 body#top.shop-page.xen-noir.apparel-page main > .apparel-editorial { margin-top: 64px; }
 @media (max-width: 650px) {
-  body#top.shop-page main > :is(.hero, .lead) {
+  body#top.shop-page main#main-content > :is(.hero, .lead) {
     margin-inline: calc(18px - clamp(18px, 4vw, 56px)) !important;
   }
 }
