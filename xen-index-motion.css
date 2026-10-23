@@ -1,0 +1,58 @@
+/* Only derivative entrances. The ORIGINAL styles, artwork and geometry stay intact. */
+html[data-xen-index-set]:not([data-xen-index-set="original"]):not([data-xen-index-state="playing"]) body#top.home-page .orbit > a {
+  animation: none;
+}
+html[data-xen-index-set]:not([data-xen-index-set="original"]) body#top.home-page .logo-stage {
+  cursor: default;
+}
+body#top.home-page .logo-stage .xen-set-trace {
+  position:absolute; inset:0; width:100%; height:100%; pointer-events:none;
+  overflow:hidden; opacity:0;
+}
+body#top.home-page .xen-set-trace .xen-set-line {stroke-dasharray:1;stroke-dashoffset:1}
+body#top.home-page .xen-set-trace .xen-set-fill {opacity:0}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-xen-index-state="playing"] body#top.home-page .logo-stage .center-logo {
+    animation:xen-set-solid var(--xen-set-duration) linear 1 !important;
+  }
+  html[data-xen-index-state="playing"] body#top.home-page .xen-set-trace {
+    animation:xen-set-envelope var(--xen-set-duration) linear 1;
+  }
+  html[data-xen-index-state="playing"] body#top.home-page .xen-set-line {
+    animation:xen-set-draw var(--xen-draw-duration) cubic-bezier(.42,0,.58,1) var(--xen-draw-delay) 1 both;
+  }
+  html[data-xen-index-state="playing"] body#top.home-page .xen-set-fill {
+    animation:xen-set-fill .48s cubic-bezier(.4,0,.2,1) var(--xen-fill-delay) 1 both;
+  }
+  html[data-xen-index-state="playing"] body#top.home-page .orbit > a {
+    animation:xen-set-text var(--xen-text-duration,.55s) cubic-bezier(.22,1,.36,1) var(--xen-text-delay,0s) 1 backwards;
+  }
+  html[data-xen-index-set="soft-reveal"][data-xen-index-state="playing"] body#top.home-page .logo-stage .center-logo {
+    animation-name:xen-set-soft-solid !important;
+  }
+  html[data-xen-index-set="soft-reveal"][data-xen-index-state="playing"] body#top.home-page .xen-set-line {
+    stroke-dashoffset:0;
+    animation:xen-set-soft-line 1.8s cubic-bezier(.4,0,.2,1) .1s 1 both;
+  }
+  html[data-xen-index-set="reverse-trace"][data-xen-index-state="playing"] body#top.home-page .xen-set-line {
+    animation-name:xen-set-draw-reverse;
+  }
+  html[data-xen-index-state="playing"] body#top.home-page .orbit > a:focus-visible {
+    animation:none;
+  }
+}
+@keyframes xen-set-draw {from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes xen-set-draw-reverse {from{stroke-dashoffset:-1}to{stroke-dashoffset:0}}
+@keyframes xen-set-fill {from{opacity:0}to{opacity:1}}
+@keyframes xen-set-text {from{opacity:0}to{opacity:1}}
+@keyframes xen-set-soft-line {from{opacity:0}to{opacity:1}}
+@keyframes xen-set-solid {0%,78%{opacity:0}92%,100%{opacity:1}}
+@keyframes xen-set-soft-solid {0%,28%{opacity:0}90%,100%{opacity:1}}
+@keyframes xen-set-envelope {0%{opacity:0}9%,92%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion: reduce) {
+  body#top.home-page .logo-stage .xen-set-trace {display:none!important}
+  html[data-xen-index-set] body#top.home-page .orbit > a,
+  html[data-xen-index-set] body#top.home-page .logo-stage .center-logo {
+    animation:none!important;opacity:1!important;
+  }
+}
