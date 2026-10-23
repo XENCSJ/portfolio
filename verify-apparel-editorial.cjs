@@ -3,7 +3,6 @@ const {chromium} = require('playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
-const {execFileSync} = require('node:child_process');
 const assert = require('node:assert/strict');
 const out = 'apparel-editorial-qa';
 const expected = JSON.parse(fs.readFileSync('base-products.json','utf8'));
@@ -11,15 +10,12 @@ const ids = [163232279,162561554,159175661,157787639,157783299,156849283,1568506
 const visibleItems = expected.items.filter(item => ids.includes(item.id));
 const displayName = item => item.id === 156851036 ? 'K18 Sculpted Choker' : item.id === 156851056 ? 'K18 Sculpted Bangle' : item.name;
 const mime = {'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.png':'image/png','.jpeg':'image/jpeg','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml'};
-const before = new Map(['apparel.html','xen-apparel-seamless.css'].map(name => [name,execFileSync('git',['show',`64b75904b9cceb618339ddcb6c276ede42580d78:${name}`])]));
 const server = http.createServer((req,res) => {
   let name = decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1);
-  const old = name.startsWith('_before/');
-  if(old) name = name.slice(8);
   const file = path.resolve(name);
   if(!file.startsWith(process.cwd()+path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {res.writeHead(404);res.end();return;}
   res.setHeader('Content-Type',mime[path.extname(name).toLowerCase()] || 'application/octet-stream');
-  if(old && before.has(name)) res.end(before.get(name)); else fs.createReadStream(file).pipe(res);
+  fs.createReadStream(file).pipe(res);
 });
 (async () => {
   fs.mkdirSync(out,{recursive:true});
@@ -39,22 +35,35 @@ const server = http.createServer((req,res) => {
         await image.scrollIntoViewIfNeeded();
         await image.evaluate(img=>img.decode());
       }
-      assert.equal(await editorial.locator('img').count(),5);
+      assert.equal(await editorial.locator('img').count(),2);
+      assert.equal(await page.locator('.apparel-editorial-trio img').count(),3);
       assert.equal(await page.locator('.base-product:not([data-catalog-static])').count(),ids.length);
       assert.deepEqual(await page.locator('[data-base-grid] > .base-product:not([data-catalog-static])').locator(':scope > .base-product-cta').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
       assert.deepEqual(await page.locator('.apparel-editorial-trio [data-apparel-product]').evaluateAll(nodes=>nodes.map(n=>n.dataset.apparelProduct)),['tshirt','hoodie','hat']);
       // Four purchase locations stay unlinked until the official product match is certain.
       assert.equal(await page.locator('[data-apparel-product]').count(),4);
       assert.equal(await page.locator('[data-apparel-product][href]').count(),0);
-      const layout = await editorial.evaluate(el=>{
-        const brand=el.querySelector('.brand-visual').getBoundingClientRect();
-        const back=el.querySelector('.apparel-hoodie-back').getBoundingClientRect();
-        const trio=el.querySelector('.apparel-editorial-trio').getBoundingClientRect();
-        const store=document.querySelector('[data-base-products]').getBoundingClientRect();
-        return {brandToHoodie:back.top-brand.bottom,hoodieToTrio:trio.top-back.bottom,storeBeforeEditorial:store.bottom<=el.getBoundingClientRect().top,columns:getComputedStyle(el.querySelector('.apparel-editorial-trio')).gridTemplateColumns.split(' ').length,overflow:document.documentElement.scrollWidth-innerWidth,uncropped:[...el.querySelectorAll('img')].every(img=>Math.abs(img.getBoundingClientRect().width/img.getBoundingClientRect().height-img.naturalWidth/img.naturalHeight)<.005),loaded:[...el.querySelectorAll('img')].every(img=>img.naturalWidth>0)};
+      const layout = await page.evaluate(()=>{
+        const rect=s=>document.querySelector(s).getBoundingClientRect();
+        const hero=rect('main>.hero'), concept=rect('main>.lead');
+        const brand=rect('.brand-visual'),back=rect('.apparel-hoodie-back');
+        const grid=rect('#shop-products'),trio=rect('.apparel-editorial-trio');
+        const tabs=rect('.shop-tabs'),films=rect('.apparel-films-heading');
+        const buttons=[...document.querySelectorAll('.shop-tab')].map(e=>e.getBoundingClientRect());
+        const images=[...document.querySelectorAll('.apparel-editorial img')];
+        const width=document.body.getBoundingClientRect().width;
+        return {brandToHoodie:back.top-brand.bottom,sequence:hero.bottom<=concept.top&&concept.bottom<=brand.top&&back.bottom<=grid.top&&grid.bottom<=trio.top&&trio.bottom<=tabs.top&&tabs.bottom<=films.top,titleCentered:Math.abs(hero.left+hero.width/2-width/2)<1,tabsCentered:Math.abs((buttons[0].left+buttons[2].right)/2-width/2)<1,tabsHorizontal:buttons.every(r=>Math.abs(r.top-buttons[0].top)<1),tabsEqualGap:Math.abs((buttons[1].left-buttons[0].right)-(buttons[2].left-buttons[1].right))<1,columns:getComputedStyle(document.querySelector('#shop-products')).gridTemplateColumns.split(' ').length,overflow:document.documentElement.scrollWidth-innerWidth,uncropped:images.every(img=>Math.abs(img.clientWidth/img.clientHeight-img.naturalWidth/img.naturalHeight)<.005),loaded:images.every(img=>img.naturalWidth>0)};
       });
       assert.equal(layout.columns,3);assert(layout.overflow<=1);assert(layout.loaded);assert(layout.uncropped);
-      assert(Math.abs(layout.brandToHoodie)<1);assert(Math.abs(layout.hoodieToTrio)<1);assert(layout.storeBeforeEditorial);
+      assert(Math.abs(layout.brandToHoodie)<1);assert(layout.sequence);assert(layout.titleCentered);
+      assert(layout.tabsCentered&&layout.tabsHorizontal&&layout.tabsEqualGap);
+      assert.equal(await page.locator('.shop-tabs').count(),1);
+      for(const [category,count] of [['apparel',6],['jewelry',4],['all',10]]) {
+        await page.locator(`[data-shop-filter="${category}"]`).click();
+        assert.equal(await page.locator('.catalog-product:visible').count(),count);
+        assert.equal(await page.locator(`[data-shop-filter="${category}"]`).getAttribute('aria-selected'),'true');
+        if(category!=='all')assert(await page.locator('.catalog-product:visible').evaluateAll((cards,cat)=>cards.every(card=>card.dataset.shopCategory===cat),category));
+      }
       assert.deepEqual(await page.locator('.base-product:not([data-catalog-static]) .base-product-name').allTextContents(),visibleItems.map(displayName));
       assert.equal(await page.locator('.base-product:not([data-catalog-static]) .base-product-brand').count(),ids.length);
       assert.equal(await page.locator('.base-product:not([data-catalog-static]) .base-product-cta').count(),ids.length);
@@ -71,18 +80,22 @@ const server = http.createServer((req,res) => {
       assert(captions.every(Boolean));
       await page.locator('.base-products-store').scrollIntoViewIfNeeded();
       await page.locator('.base-product img').evaluateAll(images=>Promise.all(images.map(image=>image.decode().catch(()=>null))));
+      for(const img of await page.locator('.base-product img,.apparel-editorial-trio img,.apparel-media img').all()) {await img.scrollIntoViewIfNeeded();await img.evaluate(i=>i.decode());}
+      assert.equal(await page.locator('.base-product img').count(),10);
       await page.locator('[data-base-products]').screenshot({path:`${out}/catalog-${width}.jpg`,type:'jpeg',quality:92});
+      await page.evaluate(()=>scrollTo(0,0));
+      await page.screenshot({path:`${out}/top-${width}.jpg`,type:'jpeg',quality:92});
       await page.screenshot({path:`${out}/after-${width}-full.jpg`,fullPage:true,type:'jpeg',quality:85});
       await page.evaluate(()=>scrollTo(0,document.querySelector('.apparel-editorial-trio').getBoundingClientRect().top+scrollY-510));
       await page.screenshot({path:`${out}/after-${width}.jpg`,type:'jpeg',quality:90});
       assert.equal(await page.locator('#base-products-title').evaluate(n=>getComputedStyle(n).textAlign),'center');
-      if(width===390) {
-        const old = await context.newPage();await old.goto('http://127.0.0.1:8766/_before/apparel.html');await old.waitForSelector('.base-product');
-        await old.locator('#base-products-title').scrollIntoViewIfNeeded();
-        await old.evaluate(()=>scrollTo(0,document.querySelector('#base-products-title').getBoundingClientRect().top+scrollY-510));
-        await old.screenshot({path:`${out}/before-390.jpg`,type:'jpeg',quality:90});await old.close();
-      }
-      results.push({width,...layout,catalog:ids.length+1,purchaseLinks:'nine verified BASE destinations; editorial visual matches remain pending'});
+      await page.locator('#shop-tab-all').click();
+      await page.screenshot({path:`${out}/controls-${width}.jpg`,type:'jpeg',quality:92});
+      await page.getByRole('button',{name:'XEN COLLECTION 2023 | APPAREL を再生',exact:true}).click();
+      assert.equal(await page.locator('.video-container iframe[src*="OvsxT_ngrWg"]').count(),1);
+      await page.locator('.xen-header-toggle').click();assert(await page.locator('.xen-menu').isVisible());
+      await page.keyboard.press('Escape');assert(!(await page.locator('.xen-menu').isVisible()));
+      results.push({width,filters:[10,6,4],menu:true,videoActivation:true,...layout,catalog:ids.length+1,purchaseLinks:'nine verified BASE destinations; editorial visual matches remain pending'});
       await context.close();
     }
     fs.writeFileSync(`${out}/results.json`,JSON.stringify({base,results},null,2));
