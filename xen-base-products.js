@@ -14,6 +14,10 @@
     156850693: './xen-apparel-signet-ring-20261023-8a2ce834d1.jpg',
     156851036: './xen-apparel-sculpted-choker-20261023-7605c8856a.jpg'
   };
+  // DESIGN artwork is curated independently of the scheduled BASE product feed.
+  const relatedImages = {
+    157783299: './xen-design-takoleo-back-20261024-ef9126a3be.jpeg'
+  };
   const yen = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
   const amount = new Intl.NumberFormat('en-US', { useGrouping: true, maximumFractionDigits: 0 });
   const priceLabel = value => `¥${amount.format(value)}`;
@@ -60,7 +64,8 @@
     const placeholder = element('span', 'base-product-placeholder', 'XEN');
     placeholder.setAttribute('aria-hidden', 'true');
     visual.append(placeholder);
-    if (item.image_url) {
+    const imageURL = relatedImages[item.id] || item.image_url;
+    if (imageURL) {
       const img = document.createElement('img');
       img.alt = ''; // The adjacent product name labels the same link.
       img.loading = 'lazy';
@@ -68,7 +73,7 @@
       img.width = 640;
       img.height = 640;
       img.addEventListener('error', () => { img.remove(); }, { once: true });
-      img.src = !isRelated && apparelImages[item.id] ? apparelImages[item.id] : item.image_url;
+      img.src = imageURL;
       visual.append(img);
     }
     const copy = element('div', 'base-product-copy');
