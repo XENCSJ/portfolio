@@ -459,5 +459,112 @@
       "image:xen-artwork-20261023-sketch-10.jpg"
     ],
     "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39857413946/job/120099602846"
+  },
+  {
+    "id": "design-xen-graphic-collection-first-publication",
+    "date": "2026-10-24",
+    "publishedAt": "2026-10-23T22:34:34Z",
+    "category": "DESIGN",
+    "title": "『脚下照顧』『日日是好日』『善因善果』『STATE OF MIND』を掲載しました。",
+    "url": "./design.html#xen-graphic-collection",
+    "contentIds": [
+      "design:graphic-kyakka-shoko",
+      "design:graphic-nichinichi-kore-kojitsu",
+      "design:graphic-zenin-zenka",
+      "design:graphic-state-of-mind"
+    ],
+    "countKnown": true,
+    "evidence": {
+      "type": "verified-site-work-publication",
+      "publications": [
+        {
+          "sha": "4816826612e96fc687f99722bee1d9ba7f1c0782",
+          "deploymentId": 7290217434,
+          "publishedAt": "2026-10-23T22:34:34Z",
+          "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/40034358635/job/120690436724"
+        }
+      ],
+      "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
+    }
+  },
+  {
+    "id": "sound-atarashii-rinkaku-sora-ni-tokeru-first-publication",
+    "date": "2026-10-24",
+    "publishedAt": "2026-10-23T20:08:29Z",
+    "category": "SOUND",
+    "title": "楽曲『新しい輪郭』『空に溶ける』を掲載しました。",
+    "url": "./sound.html#atarashii-rinkaku",
+    "contentIds": [
+      "sound:atarashii-rinkaku",
+      "sound:sora-ni-tokeru"
+    ],
+    "countKnown": true,
+    "evidence": {
+      "type": "verified-site-work-publication",
+      "publications": [
+        {
+          "sha": "36b640e93a688670b76d378731eaea4dfe79f10b",
+          "deploymentId": 7287716466,
+          "publishedAt": "2026-10-23T20:08:29Z",
+          "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/40016662669/job/120630934463"
+        }
+      ],
+      "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
+    }
+  },
+  {
+    "id": "sound-hikari-no-arika-first-publication",
+    "date": "2026-10-23",
+    "publishedAt": "2026-10-23T03:50:08Z",
+    "category": "SOUND",
+    "title": "楽曲『ひかりのありか』を掲載しました。",
+    "url": "./sound.html#hikari-no-arika",
+    "contentIds": [
+      "sound:hikari-no-arika"
+    ],
+    "countKnown": true,
+    "evidence": {
+      "type": "verified-site-work-publication",
+      "publications": [
+        {
+          "sha": "35c84ffecce59778169a24b46591c876bb92fde0",
+          "deploymentId": 7269719513,
+          "publishedAt": "2026-10-23T03:50:08Z",
+          "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39896985634/job/120229827015"
+        }
+      ],
+      "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
+    }
+  },
+  {
+    "id": "design-k18-signet-rings-first-publication",
+    "date": "2026-10-23",
+    "publishedAt": "2026-10-23T01:21:38Z",
+    "category": "DESIGN",
+    "title": "K18シグネットリング2作品を掲載しました。",
+    "url": "./design.html#k18-signet-ring",
+    "contentIds": [
+      "design:k18-signet-ring",
+      "design:lapis-lazuli-ring"
+    ],
+    "countKnown": true,
+    "evidence": {
+      "type": "verified-site-work-publication",
+      "publications": [
+        {
+          "sha": "a1a2d0ad27d290f9406c09509476026447c61319",
+          "deploymentId": 7267586959,
+          "publishedAt": "2026-10-23T01:07:30Z",
+          "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39882080348/job/120181779461"
+        },
+        {
+          "sha": "0d137304fc05bfc8d7d2b1fffb1df23445ea3692",
+          "deploymentId": 7267778129,
+          "publishedAt": "2026-10-23T01:21:38Z",
+          "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39883383424/job/120186175570"
+        }
+      ],
+      "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
+    }
   }
 ]

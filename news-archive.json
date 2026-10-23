@@ -1,5 +1,66 @@
 [
   {
+    "id": "news-2026-10-24-design",
+    "date": "2026-10-24",
+    "category": "DESIGN",
+    "publishedAt": "2026-10-23T22:34:34Z",
+    "url": "./design.html#xen-graphic-collection",
+    "contentIds": [
+      "design:graphic-kyakka-shoko",
+      "design:graphic-nichinichi-kore-kojitsu",
+      "design:graphic-state-of-mind",
+      "design:graphic-zenin-zenka"
+    ],
+    "countKnown": true,
+    "count": 4,
+    "title": "『脚下照顧』『日日是好日』『善因善果』『STATE OF MIND』を掲載しました。",
+    "body": ""
+  },
+  {
+    "id": "news-2026-10-24-sound",
+    "date": "2026-10-24",
+    "category": "SOUND",
+    "publishedAt": "2026-10-23T20:08:29Z",
+    "url": "./sound.html#atarashii-rinkaku",
+    "contentIds": [
+      "sound:atarashii-rinkaku",
+      "sound:sora-ni-tokeru"
+    ],
+    "countKnown": true,
+    "count": 2,
+    "title": "楽曲『新しい輪郭』『空に溶ける』を掲載しました。",
+    "body": ""
+  },
+  {
+    "id": "news-2026-10-23-sound",
+    "date": "2026-10-23",
+    "category": "SOUND",
+    "publishedAt": "2026-10-23T03:50:08Z",
+    "url": "./sound.html#hikari-no-arika",
+    "contentIds": [
+      "sound:hikari-no-arika"
+    ],
+    "countKnown": true,
+    "count": 1,
+    "title": "楽曲『ひかりのありか』を掲載しました。",
+    "body": ""
+  },
+  {
+    "id": "news-2026-10-23-design",
+    "date": "2026-10-23",
+    "category": "DESIGN",
+    "publishedAt": "2026-10-23T01:21:38Z",
+    "url": "./design.html#k18-signet-ring",
+    "contentIds": [
+      "design:k18-signet-ring",
+      "design:lapis-lazuli-ring"
+    ],
+    "countKnown": true,
+    "count": 2,
+    "title": "K18シグネットリング2作品を掲載しました。",
+    "body": ""
+  },
+  {
     "id": "news-2026-10-23-artworks",
     "date": "2026-10-23",
     "category": "ARTWORKS",
