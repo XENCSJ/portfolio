@@ -98,7 +98,7 @@
   function catalogCard(item) {
     const sculpted = [156851036, 156851056].includes(item.id);
     const kind = item.id === 156851036 ? 'choker' : 'bangle';
-    // Preserve the approved display names, images and description for the two drawers.
+    // Preserve the approved jewelry display names and images.
     const title = sculpted ? `K18 Sculpted ${kind === 'choker' ? 'Choker' : 'Bangle'}` : item.name;
     const jewelry = sculpted || item.id === 156850693;
     const article = element('article', `base-product catalog-product${jewelry ? ' catalog-jewelry' : ''}`);
@@ -135,48 +135,23 @@
     purchase.rel = 'noopener noreferrer';
     purchase.setAttribute('aria-label', `${title} 購入する（新しいタブで開く）`);
     const links = element('div', 'base-product-links');
-    if (jewelry) links.append(jewelryDetails(item, title));
+    if (jewelry) links.append(jewelryDesignLink(item, title));
     if (designTargets[item.id]) {
       const designLink = element('a', 'base-product-design-link', 'キャラクターデザインを見る →');
       designLink.href = `./design.html#${designTargets[item.id]}`;
       links.append(designLink);
     }
-    // Keep purchase visible below the disclosure; preserve every other card's order.
+    // Keep purchase visible below the DESIGN link; preserve every other card's order.
     article.append(visual, brand, name, price, ...(jewelry ? [links, purchase] : [purchase, links]));
     return article;
   }
-  function jewelryDetails(item, title) {
-    const details = element('details', 'jewelry-details');
-    details.setAttribute('data-jewelry', '');
-    const summary = document.createElement('summary');
-    const panelId = `apparel-jewelry-${item.id}`;
-    summary.setAttribute('aria-controls', panelId);
-    summary.setAttribute('aria-expanded', 'false');
-    const action = element('span', 'jewelry-action', 'VIEW DETAILS ');
-    const icon = element('span', 'jewelry-icon', '＋');
-    icon.setAttribute('data-apparel-icon', '');
-    icon.setAttribute('aria-hidden', 'true');
-    action.append(icon);
-    summary.append(action);
-    const panel = element('div', 'jewelry-panel');
-    panel.id = panelId;
-    const inner = element('div', 'jewelry-inner');
-    inner.append(element('h3', 'jewelry-detail-title', title));
-    inner.append(element('p', 'jewelry-description', item.id === 156850693
-      ? 'K18イエローゴールドを使用した、XENのシンボル刻印入りシグネットリング。約10.6gの重量感とボリュームのあるフォルムが特徴です。'
-      : 'K18特有の深い黄金色と、滑らかな鏡面仕上げが、光の角度によって流れるような表情をつくり出します。'));
-    const price = element('p', 'base-product-price', item.price === null ? '価格はストアでご確認ください' : priceLabel(item.price));
-    if (item.price !== null) price.append(element('span', 'base-product-tax', '（税込）'));
-    inner.append(price);
-    const store = element('a', 'jewelry-store', 'ONLINE STORE ↗');
-    store.href = item.url;
-    store.target = '_blank';
-    store.rel = 'noopener noreferrer';
-    store.setAttribute('aria-label', `${title} ONLINE STORE（新しいタブで開く）`);
-    inner.append(store);
-    panel.append(inner);
-    details.append(summary, panel);
-    return details;
+  function jewelryDesignLink(item, title) {
+    const targets = { 156850693: 'k18-signet-ring', 156851036: 'product', 156851056: 'product' };
+    const target = targets[item.id];
+    const link = element('a', 'base-product-design-link', '詳細を見る →');
+    link.href = `./design.html#${target}`;
+    link.setAttribute('aria-label', `${title} の詳細を見る（DESIGNページ）`);
+    return link;
   }
   function initializeShop(section) {
     if (!section.hasAttribute('data-shop-catalog')) return;

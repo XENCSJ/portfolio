@@ -41,7 +41,7 @@ const fixture = {
       assert.equal(await page.locator('.base-product').count(), displayedIds.length + 2);
       assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length + 2);
       assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length + 2);
-      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 4);
+      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 0);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /購入する/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
@@ -79,16 +79,18 @@ const fixture = {
       }
       assert.equal(await page.locator('#base-product-160058456').count(), 0);
       assert.equal(await page.locator('.catalog-product:not([data-catalog-static]) > .base-product-cta').allTextContents().then(labels => labels.every(label => label === '購入する →')), true);
-      for (const id of [156850693,156851036,156851056]) {
-        const drawer = page.locator(`#base-product-${id} [data-jewelry]`);
-        const summary = drawer.locator('summary');
-        assert.equal(await summary.getAttribute('aria-expanded'),'false');
-        await summary.press('Enter');
-        assert.equal(await summary.getAttribute('aria-expanded'),'true');
-        assert.equal(await drawer.locator('.jewelry-panel').isVisible(),true);
-        assert.equal(await drawer.locator('.jewelry-store').getAttribute('href'),`https://xen.official.ec/items/${id}`);
-        await summary.press('Enter');
-        assert.equal(await summary.getAttribute('aria-expanded'),'false');
+      const jewelryTargets = {
+        'base-product-156850693': 'k18-signet-ring',
+        'base-product-156851036': 'product',
+        'base-product-156851056': 'product',
+        'lapis-lazuli-ring': 'lapis-lazuli-ring'
+      };
+      for (const [id, target] of Object.entries(jewelryTargets)) {
+        const link = page.locator(`#${id} .base-product-design-link`);
+        assert.equal(await link.innerText(), '詳細を見る →');
+        assert.equal(await link.getAttribute('href'), `./design.html#${target}`);
+        assert.equal(await link.getAttribute('target'), null, 'Keep DESIGN navigation in the same tab');
+        assert.equal(await page.locator(`#${id} details`).count(), 0);
       }
 
       assert.equal(await page.locator('.video-container').count(), 3);
@@ -108,11 +110,15 @@ const fixture = {
       assert.equal(await lapis.count(), 1);
       assert.equal(await lapis.locator('.base-product-price').innerText(), '価格未定');
       assert.equal(await lapis.locator('.base-product-cta').isDisabled(), true);
-      assert.equal(await lapis.locator('a[href]').count(), 0);
-      await lapis.locator('.base-product-visual').click();
-      assert.equal(await lapis.locator('summary').getAttribute('aria-expanded'), 'true');
-      await lapis.locator('summary').press('Enter');
-      assert.equal(await lapis.locator('.base-product-visual').getAttribute('aria-expanded'), 'false');
+      assert.equal(await lapis.locator('a[href]').count(), 2);
+      assert.equal(await lapis.locator('.base-product-visual').getAttribute('href'), './design.html#lapis-lazuli-ring');
+      for (const [id, target] of Object.entries(jewelryTargets)) {
+        await page.locator(`#${id} .base-product-design-link`).press('Enter');
+        await page.waitForURL(origin + `/design.html#${target}`);
+        assert.equal(await page.locator(`#${target}`).isVisible(), true);
+        await page.goBack();
+        await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
+      }
       // A reordered catalog must be rejected instead of replacing the approved selection.
       await page.unroute('**/base-products.json');
       const reordered = structuredClone(fixture);
