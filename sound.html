@@ -95,6 +95,13 @@ body#top.sound-page main #hikari-no-arika .sound-song-cover { width: 100%; heigh
 body#top.sound-page main #hikari-no-arika .sound-release-genre { margin: 6px 0 0; color: #666; font-size: 11px; line-height: 1.8; letter-spacing: .02em; overflow-wrap: anywhere; }
 body#top.sound-page main #hikari-about-panel .song-description p + p { margin-top: 12px; }
 </style>
+<style id="new-release-layout">
+/* New cards reuse the catalogue styling; preserve both original image files. */
+body#top.sound-page main .sound-new-release { margin-top: var(--sound-work-gap); }
+body#top.sound-page main .sound-new-release .sound-cover-frame { aspect-ratio: 1 / 1; }
+body#top.sound-page main .sound-new-release .sound-song-cover { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+body#top.sound-page main .sound-new-release .song-description p + p { margin-top: 12px; }
+</style>
 </head><body id="top" class="detail-page video-page xen-polished sound-page xen-detail-unified xen-youtube-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN SHOPへ"><img src="./xen-header-cart.png" alt="" width="56" height="51"></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><span class="xen-menu-en" lang="en">ABOUT XEN</span><span class="xen-menu-ja" lang="ja">XENについて</span></h2><ul class="xen-menu-items"><li><a class="xen-menu-link " href="./studio.html"><span class="xen-menu-en" lang="en">STUDIO</span><span class="xen-menu-ja" lang="ja">スタジオ</span></a></li><li><a class="xen-menu-link " href="./creator.html"><span class="xen-menu-en" lang="en">CREATOR</span><span class="xen-menu-ja" lang="ja">クリエイター</span></a></li></ul></section>
@@ -198,7 +205,6 @@ body#top.sound-page main #hikari-about-panel .song-description p + p { margin-to
 <article class="work sound-song sound-release-card" id="hikari-no-arika" aria-labelledby="hikari-no-arika-title" data-spotify-url="" data-youtube-url="" data-slideshow="true">
 <div class="sound-cover-frame"><img class="sound-song-cover" src="./xen-hikari-no-arika-cover.jpg" width="1237" height="1271" alt="ひかりのありか — XEN ジャケット" loading="lazy" decoding="async"></div>
 <h3 class="sound-song-title" id="hikari-no-arika-title">ひかりのありか</h3><p class="sound-artist">XEN</p>
-<p class="sound-song-credit" lang="en">2nd Single</p>
 <p class="sound-release-genre" lang="ja">作詞・作曲・編曲・歌唱：XEN</p>
 <!-- Official release URLs have not been provided. Add verified URLs to this card when available. -->
 <details class="sound-accordion sound-media-accordion" data-service="spotify"><summary class="sound-accordion-toggle" aria-controls="hikari-no-arika-spotify-panel"><span>Spotifyで聴く</span><span class="sound-accordion-icon" aria-hidden="true"></span></summary><div class="sound-accordion-panel" id="hikari-no-arika-spotify-panel"></div></details>
@@ -296,6 +302,156 @@ body#top.sound-page main #hikari-about-panel .song-description p + p { margin-to
 </div>
 </details>
 </article>
+<article class="work sound-song sound-release-card sound-new-release" id="atarashii-rinkaku" aria-labelledby="atarashii-rinkaku-title" data-spotify-url="" data-youtube-url="" data-slideshow="true">
+<div class="sound-cover-frame"><img class="sound-song-cover" src="./xen-atarashii-rinkaku-cover.png" width="1254" height="1254" alt="新しい輪郭 — XEN ジャケット" loading="lazy" decoding="async"></div>
+<h3 class="sound-song-title" id="atarashii-rinkaku-title">新しい輪郭</h3><p class="sound-artist">XEN</p><p class="sound-song-credit">作詞・作曲・編曲・歌唱：XEN</p>
+<!-- Set this card's data-spotify-url and data-youtube-url to verified release URLs when available. -->
+<details class="sound-accordion sound-media-accordion" data-service="spotify"><summary class="sound-accordion-toggle" aria-controls="atarashii-rinkaku-spotify-panel"><span class="sound-service-label">Spotify（準備中）</span><span class="sound-accordion-icon" aria-hidden="true"></span></summary><div class="sound-accordion-panel" id="atarashii-rinkaku-spotify-panel"><p class="sound-empty" data-service-placeholder>リンクは準備中です。</p></div></details>
+<details class="sound-accordion sound-media-accordion" data-service="youtube"><summary class="sound-accordion-toggle" aria-controls="atarashii-rinkaku-youtube-panel"><span class="sound-service-label">YouTube（準備中）</span><span class="sound-accordion-icon" aria-hidden="true"></span></summary><div class="sound-accordion-panel" id="atarashii-rinkaku-youtube-panel"><p class="sound-empty" data-service-placeholder>リンクは準備中です。</p></div></details>
+<details class="sound-accordion sound-about-accordion">
+<summary aria-controls="atarashii-rinkaku-about-panel" class="sound-accordion-toggle"><span class="sound-accordion-label-open">楽曲解説を見る</span><span class="sound-accordion-label-close">楽曲解説を閉じる</span><span aria-hidden="true" class="sound-accordion-icon"></span></summary>
+<div class="sound-accordion-panel" id="atarashii-rinkaku-about-panel"><div class="song-description"><p>変わっていくことを恐れず、自分の好きなものや価値観を大切にしながら、新しい可能性を見つけていく楽曲。</p><p>誰かが決めた正解ではなく、自分の心が動く方向へ進むことを描く。</p></div></div>
+</details><details class="sound-lyrics-accordion">
+<summary aria-controls="atarashii-rinkaku-lyrics-panel" class="sound-lyrics-toggle"><span class="sound-lyrics-label-open">歌詞を見る</span><span class="sound-lyrics-label-close">歌詞を閉じる</span><span aria-hidden="true" class="sound-lyrics-icon"></span></summary>
+<div class="sound-lyrics-panel" id="atarashii-rinkaku-lyrics-panel"><div aria-label="新しい輪郭 歌詞全文" class="sound-song-lyrics"><section class="sound-lyric-section">
+<p>予定になかった道を選んで<br/>
+知らない街の灯りを見てた<br/>
+昨日までの当たり前が<br/>
+少し違って見える夜</p>
+<p>欲しいものなら増えていくのに<br/>
+手にした途端　次を探してる<br/>
+満たされないわけじゃない<br/>
+ただ　もっと知りたいだけ</p>
+<p>誰かが決めた正しさより<br/>
+この目で確かめていたい<br/>
+似合わないものを脱ぎ捨てて<br/>
+少しずつ輪郭が見えてくる</p>
+<p>何度だって　心が動く方へ<br/>
+まだ見ぬ景色に　触れていたい<br/>
+変わっていくことを恐れずに<br/>
+変えたくないものを抱いて</p>
+<p>どんな色に染まったとしても<br/>
+最後に選ぶのは自分だから<br/>
+名前のないこの感情に<br/>
+新しい輪郭を描こう</p>
+<p>気づけば増えた好きなもの<br/>
+その分だけ増えた選択肢<br/>
+ひとつに決める必要なんて<br/>
+最初からなかったのかも</p>
+<p>器用に生きてるように見えて<br/>
+譲れないことばかり増えてく<br/>
+遠回りに見える道にも<br/>
+それなりの理由がある</p>
+<p>昨日なら選ばなかった<br/>
+新しい扉を開けてみる<br/>
+何を残して　何を変えるか<br/>
+その答えはまだ決めなくていい</p>
+<p>何度だって　心が動く方へ<br/>
+見慣れた世界を塗り替えて<br/>
+正解ばかりを集めるより<br/>
+心に残る瞬間がいい</p>
+<p>誰かのようになれなくても<br/>
+誰かと違うことを誇らずに<br/>
+好きだと思えるものだけは<br/>
+いつまでも好きでいたい</p>
+<p>十年後に振り返れば<br/>
+今はどんな色に見えるだろう<br/>
+笑ってしまうような選択も<br/>
+どれも確かに選んだ道</p>
+<p>失くしたくないのは<br/>
+何かを欲しがるこの気持ち<br/>
+大人になるほど鮮やかに<br/>
+世界が見えたっていい</p>
+<p>何度だって　心が動く方へ<br/>
+まだ見ぬ景色に　触れていたい<br/>
+変わっていくことを恐れずに<br/>
+変えたくないものを抱いて</p>
+<p>いくつもの季節を重ねながら<br/>
+ひとつの答えに縛られずに<br/>
+好きなものを好きと言える<br/>
+そんな日々を選んでいたい</p>
+<p>新しい朝に　目を凝らして<br/>
+またひとつ　好きが増えていく</p>
+</section></div></div>
+</details>
+</article>
+<article class="work sound-song sound-release-card sound-new-release" id="sora-ni-tokeru" aria-labelledby="sora-ni-tokeru-title" data-spotify-url="" data-youtube-url="" data-slideshow="true">
+<div class="sound-cover-frame"><img class="sound-song-cover" src="./xen-sora-ni-tokeru-cover.jpg" width="2232" height="2293" alt="空に溶ける — XEN ジャケット" loading="lazy" decoding="async"></div>
+<h3 class="sound-song-title" id="sora-ni-tokeru-title">空に溶ける</h3><p class="sound-artist">XEN</p><p class="sound-song-credit">作詞・作曲・編曲・歌唱：XEN</p>
+<!-- Set this card's data-spotify-url and data-youtube-url to verified release URLs when available. -->
+<details class="sound-accordion sound-media-accordion" data-service="spotify"><summary class="sound-accordion-toggle" aria-controls="sora-ni-tokeru-spotify-panel"><span class="sound-service-label">Spotify（準備中）</span><span class="sound-accordion-icon" aria-hidden="true"></span></summary><div class="sound-accordion-panel" id="sora-ni-tokeru-spotify-panel"><p class="sound-empty" data-service-placeholder>リンクは準備中です。</p></div></details>
+<details class="sound-accordion sound-media-accordion" data-service="youtube"><summary class="sound-accordion-toggle" aria-controls="sora-ni-tokeru-youtube-panel"><span class="sound-service-label">YouTube（準備中）</span><span class="sound-accordion-icon" aria-hidden="true"></span></summary><div class="sound-accordion-panel" id="sora-ni-tokeru-youtube-panel"><p class="sound-empty" data-service-placeholder>リンクは準備中です。</p></div></details>
+<details class="sound-accordion sound-about-accordion">
+<summary aria-controls="sora-ni-tokeru-about-panel" class="sound-accordion-toggle"><span class="sound-accordion-label-open">楽曲解説を見る</span><span class="sound-accordion-label-close">楽曲解説を閉じる</span><span aria-hidden="true" class="sound-accordion-icon"></span></summary>
+<div class="sound-accordion-panel" id="sora-ni-tokeru-about-panel"><div class="song-description"><p>夕暮れの海岸線を舞台に、恋人と過ごす何気ない時間の美しさと、二度と同じ形では訪れない瞬間の儚さを描く。</p><p>青から茜へ、そして夜へと移り変わる空の色に、ふたりの時間を重ねた楽曲。</p></div></div>
+</details><details class="sound-lyrics-accordion">
+<summary aria-controls="sora-ni-tokeru-lyrics-panel" class="sound-lyrics-toggle"><span class="sound-lyrics-label-open">歌詞を見る</span><span class="sound-lyrics-label-close">歌詞を閉じる</span><span aria-hidden="true" class="sound-lyrics-icon"></span></summary>
+<div class="sound-lyrics-panel" id="sora-ni-tokeru-lyrics-panel"><div aria-label="空に溶ける 歌詞全文" class="sound-song-lyrics"><section class="sound-lyric-section">
+<p>海岸線をなぞるように<br/>
+西へと続く道をゆく<br/>
+窓に映った君の頬が<br/>
+少しずつ茜に染まる</p>
+<p>流れてきた懐かしい歌<br/>
+君が先に口ずさんで<br/>
+忘れていたその続きを<br/>
+僕もなんとなく思い出す</p>
+<p>傾く陽に追いつけず<br/>
+伸びてゆくふたりの影<br/>
+何も変わらないようで<br/>
+同じ色には戻れない</p>
+<p>空に溶けたい<br/>
+君と溶けたい<br/>
+青と茜のあわいに</p>
+<p>あと少しだけ<br/>
+あと少しだけ<br/>
+名前のない色を見ていたい</p>
+<p>ああ　消えゆく光さえ<br/>
+こんなに綺麗に見えるのは<br/>
+君が隣にいるから</p>
+<p>波打ち際の足跡が<br/>
+寄せる波にほどけてく<br/>
+君が振り向き笑うから<br/>
+僕もつられて笑ってた</p>
+<p>遠くの街に灯がともり<br/>
+空は静かに深くなる<br/>
+言いかけてやめた言葉も<br/>
+風の中なら悪くない</p>
+<p>いつか今日を思い出すとき<br/>
+何が心に残るだろう<br/>
+夕陽の色か　波の音か<br/>
+それとも君の笑い声か</p>
+<p>空に溶けたい<br/>
+君と溶けたい<br/>
+暮れてゆく空のあわいに</p>
+<p>もう少しだけ<br/>
+もう少しだけ<br/>
+この一瞬を見送らせて</p>
+<p>ああ　形を変えるものが<br/>
+こんなに綺麗に見えるのは<br/>
+戻れないと知ってるから</p>
+<p>夕陽は何も残さずに<br/>
+今日という日を閉じてゆく<br/>
+それでも君の横顔に<br/>
+まだ淡い光が残ってた</p>
+<p>明日もきっと晴れるだろう<br/>
+だけど今日とは違う空<br/>
+それでいいと思えたのは<br/>
+君が笑ってくれたから</p>
+<p>空に溶けたい<br/>
+君と溶けたい<br/>
+消えゆく色のその先へ</p>
+<p>あと少しだけ<br/>
+あと少しだけ<br/>
+ふたりの時間を重ねたい</p>
+<p>ああ　青から茜へ<br/>
+茜から夜へ変わるように<br/>
+僕らも色を重ねてゆこう</p>
+<p>空に溶けたい<br/>
+君と溶けたい<br/>
+この一瞬が消える前に</p>
+</section></div></div>
+</details>
+</article>
 </section>
 <section class="sound-section reveal" id="edm-electronic" aria-labelledby="edm-electronic-title"><span class="sound-anchor-alias" id="original-music" aria-hidden="true"></span><span class="sound-anchor-alias" id="electronic" aria-hidden="true"></span><h2 class="series-title" id="edm-electronic-title"><span class="sound-number">02</span><span>EDM / ELECTRONIC</span><span class="sound-section-ja" lang="ja">EDM・エレクトロニック</span></h2><div class="grid sound-album-grid"><article class="work sound-song sound-release-card" id="void-to-form" aria-labelledby="void-to-form-title" data-spotify-url="https://open.spotify.com/album/3gctpaDVfWyTIEOQqJCoJW" data-youtube-url="" data-slideshow="true">
 <div class="sound-cover-frame"><img class="sound-song-cover" src="./xen-void-to-form-cover.jpg" width="640" height="640" alt="VOID TO FORM — XEN ジャケット" loading="lazy" decoding="async"></div>
@@ -339,5 +495,5 @@ body#top.sound-page main #hikari-about-panel .song-description p + p { margin-to
 </footer><script src="./xen-shared.js?v=20261023-image-only1" defer></script>
 
 
-<script src="./xen-sound-catalog.js?v=20261023-catalog" defer></script><script src="./xen-sound.js?v=20261023-catalog" defer></script>
+<script src="./xen-sound-catalog.js?v=20261024-two-releases" defer></script><script src="./xen-sound.js?v=20261023-catalog" defer></script>
 </body></html>

@@ -19,13 +19,16 @@
     } catch { return null; }
   };
   cards.forEach(card => {
-    // Registering a URL on the card is sufficient; empty disclosures stay empty.
+    // A verified card URL replaces only its pending message, preserving existing players.
     ['spotify', 'youtube'].forEach(service => {
       const panel = card.querySelector(`[data-service="${service}"] .sound-accordion-panel`);
-      if (!panel || panel.children.length) return;
+      if (!panel || panel.querySelector(':scope > :not([data-service-placeholder])')) return;
       const value = card.dataset[service + 'Url'];
       const target = service === 'spotify' ? spotifyURL(value) : youtubeID(value);
       if (!target) return;
+      panel.querySelectorAll('[data-service-placeholder]').forEach(node => node.remove());
+      const label = panel.closest('details').querySelector('.sound-service-label');
+      if (label) label.textContent = service === 'spotify' ? 'Spotifyで聴く' : 'YouTubeで視聴';
       const iframe = document.createElement('iframe');
       iframe.src = service === 'spotify' ? `https://open.spotify.com/embed${target.pathname}` :
         `https://www.youtube-nocookie.com/embed/${target}?playsinline=1&controls=1`;
