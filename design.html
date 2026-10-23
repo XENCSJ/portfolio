@@ -105,19 +105,17 @@ body.price-list-page main .section > h2:target,body.design-page main .design-pro
 <script defer src="./xen-design-apparel.js?v=20261023-lapis1"></script>
 <link rel="stylesheet" href="./xen-jewelry.css?v=20261023-lapis1">
 <style id="design-jewelry-works">
-/* Ring works reuse the existing gallery, typography and independent jewelry drawers. */
+/* Ring works retain their gallery and typography with always-visible descriptions. */
 body#top.design-page .design-ring { --jewelry-gold:#C5A059;scroll-margin-top:110px; }
 body#top.design-page .design-ring-gallery { grid-template-columns:repeat(2,minmax(0,1fr));max-width:1000px;margin-inline:auto; }
 body#top.design-page .design-ring-gallery.is-single { grid-template-columns:minmax(0,1fr);max-width:560px; }
 body#top.design-page .design-ring .gallery-item img { height:auto;object-fit:contain;transform:none;filter:none; }
 body#top.design-page .design-ring-details { max-width:760px;margin:30px 0 0 auto; }
-body#top.design-page .design-ring-details > summary { border-block:1px solid #e9e9e9; }
-body#top.design-page .design-ring-details .jewelry-action { padding:14px 0; }
 body#top.design-page .design-ring-details .jewelry-inner { padding:24px 0 0; }
 body#top.design-page .design-ring-details .design-description { margin:0; }
 body#top.design-page .design-ring-details .design-description h3 { margin-bottom:18px; }
 body#top.design-page .design-ring-details .design-jewelry-shop { grid-template-columns:minmax(0,1fr);max-width:none;margin-top:24px; }
-@media(max-width:600px) { body#top.design-page .design-ring-gallery { grid-template-columns:minmax(0,1fr); } }
+body#top.design-page .design-ring-gallery .lapis-ring-image { width:65%;margin-inline:auto; }
 </style>
 
 </head><body id="top" class="detail-page xen-polished design-page xen-detail-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN SHOPへ"><img src="./xen-header-cart.png" alt="" width="56" height="51"></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
@@ -263,9 +261,7 @@ body#top.design-page .design-ring-details .design-jewelry-shop { grid-template-c
 <a class="gallery-item" href="./xen-design-k18-signet-ring-front-20261023.jpg" aria-label="XEN K18 SIGNET RING — 正面・斜めアングル、ZEN／XENシンボル／NEZの刻印を拡大" data-gallery-label="XEN K18 SIGNET RING — 正面・斜めアングル、ZEN／XENシンボル／NEZの刻印"><img alt="XEN K18 SIGNET RING — 正面・斜めアングル、ZEN／XENシンボル／NEZの刻印" decoding="async" height="1280" loading="lazy" src="./xen-design-k18-signet-ring-front-20261023.jpg" width="1280"/></a>
 <a class="gallery-item" href="./xen-design-k18-signet-ring-back-20261023.jpg" aria-label="XEN K18 SIGNET RING — 背面・内側アングル、K18刻印を拡大" data-gallery-label="XEN K18 SIGNET RING — 背面・内側アングル、K18刻印"><img alt="XEN K18 SIGNET RING — 背面・内側アングル、K18刻印" decoding="async" height="1280" loading="lazy" src="./xen-design-k18-signet-ring-back-20261023.jpg" width="1280"/></a>
 </div>
-<details class="jewelry-details design-ring-details" data-jewelry>
-<summary aria-controls="design-jewelry-156850693" aria-expanded="false"><span class="jewelry-action">VIEW DETAILS <span class="jewelry-icon" data-apparel-icon aria-hidden="true">＋</span></span></summary>
-<div class="jewelry-panel" id="design-jewelry-156850693"><div class="jewelry-inner">
+<div class="design-ring-details" id="design-jewelry-156850693"><div class="jewelry-inner">
 <div class="design-description xen-prose-container"><p class="jewelry-material">JEWELRY / RING</p><p class="jewelry-material">MATERIAL：K18 Yellow Gold</p>
 <h3>装飾を削ぎ落とし、象徴を身につける。</h3>
 <p class="xen-description">XEN K18 Signet Ringは、ブランドのアイデンティティをひとつの造形に凝縮したシグネットリングです。</p><p class="xen-description">リング正面には、XENを象徴する幾何学的なシンボルを配置。</p><p class="xen-description">直線と対角線が交差する構成は、秩序と独創性、静けさと力強さという異なる要素の共存を表現しています。</p><p class="xen-description">伝統的なシグネットリングの存在感を継承しながら、現代的なミニマリズムによって再構築しました。</p><p class="xen-description">身につける人の個性を主張しすぎることなく、その輪郭を静かに際立たせるジュエリーです。</p>
@@ -276,24 +272,20 @@ body#top.design-page .design-ring-details .design-jewelry-shop { grid-template-c
 
 </nav>
 </div></div>
-</details>
 <a class="contents-return" href="#design-contents">↑ 目次へ戻る</a></section>
 <section class="design-project design-ring" id="lapis-lazuli-ring" tabindex="-1" aria-labelledby="lapis-lazuli-ring-title">
 <div class="design-project-line" aria-hidden="true"></div>
 <div class="design-project-heading" data-design-reveal><p class="design-index"><span>10</span> / JEWELRY 03 / RING</p><h2 id="lapis-lazuli-ring-title">XEN K18 LAPIS LAZULI SIGNET RING</h2><p class="design-subtitle" lang="ja">K18 ラピスラズリ シグネットリング</p></div>
 <div class="design-visuals design-ring-gallery is-single" data-gallery-group>
-<a class="gallery-item" href="./xen-k18-lapis-lazuli-signet-ring-20261023.jpg" aria-label="XEN K18 LAPIS LAZULI SIGNET RINGを拡大" data-gallery-label="XEN K18 LAPIS LAZULI SIGNET RING"><img alt="XEN K18 LAPIS LAZULI SIGNET RING" decoding="async" height="1199" loading="lazy" src="./xen-k18-lapis-lazuli-signet-ring-20261023.jpg" width="1312"/></a>
+<a class="gallery-item lapis-ring-image" href="./xen-k18-lapis-lazuli-signet-ring-20261023.jpg" aria-label="XEN K18 LAPIS LAZULI SIGNET RINGを拡大" data-gallery-label="XEN K18 LAPIS LAZULI SIGNET RING"><img alt="XEN K18 LAPIS LAZULI SIGNET RING" decoding="async" height="1199" loading="lazy" src="./xen-k18-lapis-lazuli-signet-ring-20261023.jpg" width="1312"/></a>
 </div>
-<details class="jewelry-details design-ring-details" data-jewelry>
-<summary aria-controls="design-lapis-panel" aria-expanded="false"><span class="jewelry-action">VIEW DETAILS <span class="jewelry-icon" data-apparel-icon aria-hidden="true">＋</span></span></summary>
-<div class="jewelry-panel" id="design-lapis-panel"><div class="jewelry-inner">
+<div class="design-ring-details" id="design-lapis-panel"><div class="jewelry-inner">
 <div class="design-description xen-prose-container"><p class="jewelry-material">JEWELRY / RING</p><p class="jewelry-material">MATERIAL：K18 Yellow Gold / Lapis Lazuli</p>
 <h3>深い青に、創造の象徴を刻む。</h3>
 <p class="xen-description">XEN K18 Lapis Lazuli Signet Ringは、ラピスラズリの深い青とK18イエローゴールドの輝きを融合させたシグネットリングです。</p><p class="xen-description">鮮やかでありながら落ち着きを感じさせるラピスラズリ。その青を背景に、XENの幾何学的なシンボルを大胆に配置しました。</p><p class="xen-description">直線的なシンボルと、天然石が持つ不規則な模様。人工的な造形美と自然が生み出す表情を対比させることで、ひとつの作品に異なる美しさを共存させています。</p><p class="xen-description">華やかさの中に静けさを、力強さの中に繊細さを。</p><p class="xen-description">単なる装飾を超え、創造性と個性を象徴するジュエリーとしてデザインしました。</p>
 <h4>素材について</h4><p class="xen-description">K18イエローゴールドとラピスラズリを組み合わせた構成。黄金の温かみと天然石の深い青が、互いの色彩を際立たせます。</p></div>
 
 </div></div>
-</details>
 <a class="contents-return" href="#design-contents">↑ 目次へ戻る</a></section>
 <section class="design-project" id="phone-cases" tabindex="-1" aria-labelledby="phone-cases-title">
 <div class="design-project-line" aria-hidden="true"></div>
