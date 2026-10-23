@@ -1,0 +1,27 @@
+name: MUSIC update verification
+on:
+  push:
+    branches: [work/music-bloom-preview-20261024]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node --check xen-sound-catalog.js && node verify-music-update.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: music-update-browser-evidence
+          path: music-update-qa/
+          retention-days: 14

@@ -293,21 +293,16 @@ body#top.sound-page main .sound-video-item .video-container { width: 100%; heigh
 body#top.sound-page main .sound-video-item > .video-source { display: block; margin: 0; padding: 10px 2px 2px; color: #666; font-size: 11px; line-height: 1.8; text-align: right; }
 body#top.sound-page main .sound-release-card .song-description { font-size: 15px; line-height: 1.8; }
 body#top.sound-page main .sound-release-card .sound-song-lyrics { margin-top: 26px; }
+/* Shared final geometry. Entrance variants are confined to the comparison HTML. */
 body#top.sound-page main .sound-showcase { --cover-size: clamp(205px, 54vw, 330px); margin: 32px auto 20px; width: 100%; overflow: hidden; }
-body#top.sound-page main .sound-showcase[hidden] { display: none; }
-.sound-showcase-stage { position: relative; height: calc(var(--cover-size) + 28px); overflow: hidden; touch-action: pan-y; }
-.sound-slide { position: absolute; width: var(--cover-size); height: var(--cover-size); left: 50%; top: 10px; opacity: 0; transform: translateX(100%) scale(.75); transition: transform .8s cubic-bezier(.22,1,.36,1), opacity .8s ease; pointer-events: none; background: #fff; box-shadow: 0 8px 24px #0000000c; }
-.sound-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.sound-slide[data-position="active"] { transform: translateX(-50%) scale(1); opacity: 1; z-index: 3; pointer-events: auto; }
-.sound-slide[data-position="previous"] { transform: translateX(calc(-50% - var(--cover-size) * .85)) scale(.82); opacity: .42; z-index: 1; }
-.sound-slide[data-position="next"] { transform: translateX(calc(-50% + var(--cover-size) * .85)) scale(.82); opacity: .42; z-index: 1; }
-.sound-showcase-controls { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
-.sound-showcase-controls button { display: grid; place-items: center; width: 36px; height: 36px; border: 0; background: transparent; color: #897348; padding: 0; cursor: pointer; font-size: 23px; }
-.sound-showcase-controls .sound-slide-pause { display: none; }
-.sound-showcase-controls button:disabled { opacity: .3; cursor: default; }
-.sound-slide-dots { display: flex; }
-.sound-slide-dots button { width: 24px; font-size: 0; }
-.sound-slide-dots button::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #d5d0c5; }
-.sound-slide-dots button[aria-current="true"]::after { background: #9b7b3c; transform: scale(1.4); }
+.sound-showcase-stage { position: relative; height: calc(var(--cover-size) + 28px); overflow: hidden; touch-action: pan-y; perspective: 1100px; }
+.sound-slide { position: absolute; width: var(--cover-size); height: var(--cover-size); left: 50%; top: 10px; opacity: 0; transform: translate3d(100%,0,0) scale(.75); transition: transform .65s cubic-bezier(.22,1,.36,1), opacity .65s ease; pointer-events: none; background: #fff; box-shadow: 0 8px 24px #0000000c; transform-style: preserve-3d; }
+.sound-slide-art { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+.sound-slide img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.sound-slide[data-position="active"] { transform: translate3d(-50%,0,0) scale(1); opacity: 1; z-index: 3; pointer-events: auto; }
+.sound-slide[data-position="previous"] { transform: translate3d(calc(-50% - var(--cover-size) * .85),0,0) scale(.82); opacity: .42; z-index: 1; pointer-events: auto; cursor: pointer; }
+.sound-slide[data-position="next"] { transform: translate3d(calc(-50% + var(--cover-size) * .85),0,0) scale(.82); opacity: .42; z-index: 1; pointer-events: auto; cursor: pointer; }
+.sound-showcase :focus-visible { outline: 2px solid #897348; outline-offset: -3px; }
+.sound-showcase-status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media(max-width:700px) { body#top.sound-page main .sound-release-card .song-description { font-size: 14px; } }
 @media(prefers-reduced-motion:reduce) { .sound-slide { transition: none; } }
