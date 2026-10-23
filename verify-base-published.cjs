@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const expected = JSON.parse(fs.readFileSync('base-products.json', 'utf8'));
-const ids = [157787639,157783299,156849283,156850693,156851036,156851056];
+const ids = [163232279,162561554,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
 const visibleItems = expected.items.filter(item => ids.includes(item.id));
 const displayName = item => item.id === 156851036 ? 'K18 Sculpted Choker' : item.id === 156851056 ? 'K18 Sculpted Bangle' : item.name;
 const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfolio/';

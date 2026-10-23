@@ -8,7 +8,7 @@
   const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo', 156849283: 'kuro-usagi' };
   const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
   // SHOP display order is independent of the scheduled BASE feed and DESIGN cards.
-  const shopIds = [157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
+  const shopIds = [163232279, 162561554, 159175661, 157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
   // User-supplied APPAREL images, 2026-10-23 JST. Versioned names avoid stale caches.
   const apparelImages = {
     156850693: './xen-apparel-signet-ring-20261023-8a2ce834d1.jpg',
