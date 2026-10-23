@@ -1,0 +1,222 @@
+{
+  "approved_at": "2026-10-24",
+  "works": [
+    {
+      "key": "kyakka-shoko",
+      "number": "01",
+      "name": "脚下照顧",
+      "title": "脚下照顧｜CLOVER GRAPHIC T-SHIRT",
+      "product_id": 159175661,
+      "color": "#d5aa4e",
+      "catch": "幸運は、遠くにあるとは限らない。",
+      "summary": "足元を見つめ直し、今ある豊かさや小さな幸せに気づく。",
+      "concept": [
+        "禅語「脚下照顧（きゃっかしょうこ）」から着想を得た作品。",
+        "遠くの幸運や理想ばかりを追い求めるのではなく、今いる場所や自分自身を見つめ直すことの大切さを表現する。",
+        "四つ葉のクローバーを幸運の象徴として用い、身近な日常に存在する豊かさや小さな幸せへの気づきを促す。"
+      ],
+      "visual": "ブラックを基調に、ゴールドのクローバーとタイポグラフィを配置。フロントはクローバーと短いメッセージ、バックは大型のシンボル・ロゴ構成と英文を組み合わせ、袖にもXENロゴを配しています。",
+      "messages": [
+        [
+          "WHAT YOU SEEK MAY BE AT YOUR FEET.",
+          "探し求めているものは、足元にあるかもしれない。"
+        ],
+        [
+          "A FOUR-LEAF CLOVER IS RARE, BUT THE GROUND IS NEVER EMPTY.",
+          "四つ葉のクローバーは珍しいけれど、足元にはいつも何かがある。"
+        ],
+        [
+          "EVERY STEP HOLDS SOMETHING WE OVERLOOK.",
+          "一歩一歩の中に、私たちが見過ごしている何かがある。"
+        ],
+        [
+          "WHEN WE ARE IN A HURRY TO ARRIVE SOMEWHERE ELSE,",
+          "どこか別の場所へたどり着こうと急ぐときこそ、"
+        ],
+        [
+          "SLOW DOWN. LOOK AGAIN.",
+          "歩みを緩めて、もう一度見つめてみよう。"
+        ],
+        [
+          "WHAT MATTERS MAY ALREADY BE AT YOUR FEET.",
+          "大切なものは、すでに足元にあるのかもしれない。"
+        ],
+        [
+          "ENOUGH IS ALREADY HERE.",
+          "必要なものは、もうここにある。"
+        ]
+      ],
+      "copy": "脚下照顧｜CLOVER GRAPHIC T-SHIRT\n\n幸運は、遠くにあるとは限らない。\n\n禅の言葉「脚下照顧（きゃっかしょうこ）」から着想を得た、クローバーモチーフのグラフィックTシャツ。\n\n四つ葉のクローバーは珍しく、幸運の象徴とされています。しかし、足元にはいつも何かがあり、私たちが歩む一歩一歩の中にも、普段は気づかずに見過ごしている大切なものが隠れています。\n\n私たちは、まだ見ぬ幸せや理想を求め、どこか別の場所へたどり着こうと急ぐあまり、すでに自分の周りにある豊かさや、小さな幸せを見落としてしまうことがあります。\n\nだからこそ、少し立ち止まって、もう一度足元を見つめてみる。\n\n探し求めていたものも、本当に大切にすべきものも、実はすでに自分のすぐそばにあるのかもしれません。\n\n「ENOUGH IS ALREADY HERE.」\n\n必要なものは、もうここにある。\n\nそんなメッセージを、ブラックのボディに映えるゴールドのクローバーとタイポグラフィに込めました。\n\n遠くの幸運を追い求めるだけでなく、今ある幸せに気づくこと。\n\n日常の何気ない瞬間を大切にするための一着です。",
+      "images": [
+        {
+          "view": "front",
+          "src": "./xen-graphic-kyakka-shoko-front-20261024.jpg",
+          "sha256": "9c39f870c9e2dc77d771e5217b451421622e44874133ef1ac9a41955c6092152"
+        },
+        {
+          "view": "back",
+          "src": "./xen-graphic-kyakka-shoko-back-20261024.jpg",
+          "sha256": "d39461edc3c60529382fca32cb4e8db6fb420441f67daeb984281ed1a69fe9f8"
+        },
+        {
+          "view": "detail",
+          "src": "./xen-graphic-kyakka-shoko-detail-20261024.jpg",
+          "sha256": "c90f30b74b0b0e6f181cd2fc8dba7bffb52b48a0ec7c4d23ef6012682317147f"
+        }
+      ],
+      "url": "https://xen.official.ec/items/159175661"
+    },
+    {
+      "key": "nichinichi-kore-kojitsu",
+      "number": "02",
+      "name": "日日是好日",
+      "title": "日日是好日｜CLOVER GRAPHIC SWEATSHIRT",
+      "product_id": 160077299,
+      "color": "#abd5f0",
+      "catch": "何気ない今日が、かけがえのない一日になる。",
+      "summary": "特別な日を待つより、何気ない今日の喜びや美しさを見つめる。",
+      "concept": [
+        "禅語「日日是好日（にちにちこれこうじつ）」から着想を得た作品。",
+        "晴れの日も雨の日も、思い通りにいかない日も、それぞれの一日を大切に受け止めるという考え方を表現する。",
+        "特別な出来事を待つのではなく、何気ない日常の中にある喜びや美しさに気づくことをテーマとする。"
+      ],
+      "visual": "ブラックのスウェットに、淡いブルーのクローバーと大型タイポグラフィを組み合わせました。フロントの小さなクローバーとバックの大きなシンボル・ロゴ構成が、異なるスケールでメッセージを伝えます。袖にはXENロゴを配置しています。",
+      "messages": [
+        [
+          "GOOD THINGS ARE OFTEN HIDDEN IN ORDINARY MOMENTS.",
+          "素晴らしいことは、何気ない瞬間の中に隠れていることが多い。"
+        ],
+        [
+          "DON’T WAIT FOR THE PERFECT DAY.",
+          "完璧な一日を待たなくていい。"
+        ],
+        [
+          "LOOK CLOSER AT THE ONE IN FRONT OF YOU.",
+          "今、目の前にある一日を、もっとよく見つめてみよう。"
+        ],
+        [
+          "GOOD THINGS ARE EVERYWHERE.",
+          "素晴らしいことは、至るところにある。"
+        ]
+      ],
+      "copy": "日日是好日｜CLOVER GRAPHIC SWEATSHIRT\n\n何気ない今日が、かけがえのない一日になる。\n\n禅語「日日是好日（にちにちこれこうじつ）」から着想を得た、クローバーモチーフのグラフィックスウェット。\n\n素晴らしいことは、何気ない日常の中に隠れているもの。完璧な一日が訪れるのを待つのではなく、今、目の前にある一日をもう少し丁寧に見つめてみる。そうすれば、普段は見過ごしていた小さな喜びや美しさが、至るところにあると気づくかもしれません。\n\n晴れの日も雨の日も、思い通りにいかない日も、それぞれがかけがえのない一日。\n\nそんな想いを、ブラックのボディに映える淡いブルーのクローバーとタイポグラフィで表現しました。\n\n特別な日だけではなく、ありふれた毎日そのものを大切にするための一着です。",
+      "images": [
+        {
+          "view": "front",
+          "src": "./xen-graphic-nichinichi-kore-kojitsu-front-20261024.jpg",
+          "sha256": "d46a582a6cb77e10680f49218330baed02873557203aa3f9bcd1e7a16bef3f6a"
+        },
+        {
+          "view": "back",
+          "src": "./xen-graphic-nichinichi-kore-kojitsu-back-20261024.jpg",
+          "sha256": "a25d432db1a4bc2bc80963637e80097d1e82240aeb01acd8716d9993c8c9e915"
+        }
+      ],
+      "url": "https://xen.official.ec/items/160077299"
+    },
+    {
+      "key": "zenin-zenka",
+      "number": "03",
+      "name": "善因善果",
+      "title": "善因善果｜XEN GRAPHIC T-SHIRT",
+      "product_id": 162561554,
+      "color": "#ee3535",
+      "catch": "今日の行動が、明日の未来をつくる。",
+      "summary": "一つひとつの選択と小さな思いやりが、より良い未来につながる。",
+      "concept": [
+        "仏教の言葉「善因善果（ぜんいんぜんか）」から着想を得た作品。",
+        "すべての行動は何かしらの痕跡を残し、一つひとつの選択が未来を形づくる。",
+        "小さな親切や思いやりにも意味があり、その積み重ねがより良い未来へとつながっていくという思想を表現する。"
+      ],
+      "visual": "ブラックと鮮烈なレッドのコントラストを軸に、縦方向に伸びる抽象的なタイポグラフィと、大型のXENシンボル・ロゴ構成を展開。文字を引き伸ばした表現と整然としたロゴの配置を両面に使い分け、袖にもXENロゴを配しています。",
+      "messages": [
+        [
+          "GOOD ACTION LEAD TO GOOD REWARDS",
+          "善い行いは、善い結果へとつながる。"
+        ],
+        [
+          "EVERY ACTION LEAVES A TRACE.",
+          "すべての行動は、何かしらの痕跡を残す。"
+        ],
+        [
+          "EVERY CHOICE SHAPES THE FUTURE.",
+          "一つひとつの選択が、未来を形づくる。"
+        ],
+        [
+          "EVEN THE SMALLEST GOOD DEED MATTERS.",
+          "どんなに小さな善い行いにも、意味がある。"
+        ],
+        [
+          "GOOD ACTIONS CREATE GOOD FUTURES.",
+          "善い行いが、より良い未来をつくる。"
+        ]
+      ],
+      "copy": "善因善果｜XEN GRAPHIC T-SHIRT\n\n今日の行動が、明日の未来をつくる。\n\n仏教の言葉「善因善果（ぜんいんぜんか）」から着想を得た、グラフィックTシャツ。\n\n善い行いは、善い結果へとつながっていく。私たちのすべての行動は何かしらの痕跡を残し、一つひとつの選択が未来を形づくる。たとえ小さな親切や思いやりであっても、そこには確かな意味があり、その積み重ねがより良い未来を生み出していく。\n\n大きな成果や特別な行動だけが、人生を変えるわけではありません。\n\n誰かにかけた優しい言葉、困っている人に差し伸べた手、自分自身と誠実に向き合った時間。そうした何気ない行動の一つひとつが、やがて未来につながっていきます。\n\nすぐに結果が見えなくても、善い行いには意味がある。\n\nそんな想いを、ブラックのボディに映える鮮烈なレッドのタイポグラフィと、存在感のあるグラフィックに込めました。\n\n「GOOD ACTIONS CREATE GOOD FUTURES.」\n\n善い行いが、より良い未来をつくる。\n\n日々の選択を大切にし、自分自身の行動から未来を変えていくための一着です。",
+      "images": [
+        {
+          "view": "front",
+          "src": "./xen-graphic-zenin-zenka-front-20261024.jpg",
+          "sha256": "2affcb5a35ff40dfde92f0f2dfd712df746f507437654cc5fced4b8a8786dfa1"
+        },
+        {
+          "view": "back",
+          "src": "./xen-graphic-zenin-zenka-back-20261024.jpg",
+          "sha256": "ac6cebdd7100cc6bfe7e3664bf95a91c76943783635561d8d83e175ae6c8dff6"
+        }
+      ],
+      "url": "https://xen.official.ec/items/162561554"
+    },
+    {
+      "key": "state-of-mind",
+      "number": "04",
+      "name": "STATE OF MIND",
+      "title": "STATE OF MIND｜XEN GRAPHIC T-SHIRT",
+      "product_id": 163232279,
+      "color": "#9ee34c",
+      "catch": "心のあり方が変われば、世界の見え方も変わる。",
+      "summary": "自分の心と向き合い、日常に新しい美しさや価値を見いだす。",
+      "concept": [
+        "「STATE OF MIND（心のあり方）」をテーマとした作品。",
+        "心の平穏は周囲の環境ではなく、自分自身の内側から生まれる。",
+        "期待や思い込みを手放し、今この瞬間を受け入れることで、何気ない日常にも新しい美しさや価値を見いだせるという考え方を表現する。"
+      ],
+      "visual": "ブラックに鮮やかなグリーンを合わせ、フロントには英文を組み込んだアップルモチーフを配置。バックには大型のXENタイポグラフィとメッセージ、袖にはXENロゴを配しています。前後で異なるグラフィックを展開した構成です。",
+      "messages": [
+        [
+          "YOUTH IS NOT A TIME OF LIFE. IT IS A STATE OF MIND.",
+          "青春とは人生のある期間ではなく、心のあり方である。"
+        ],
+        [
+          "A PEACEFUL MIND IS THE WAY.",
+          "穏やかな心こそが、進むべき道。"
+        ],
+        [
+          "Peace begins within, not around us.",
+          "平穏は周囲ではなく、自分の内側から始まる。"
+        ],
+        [
+          "Let go of expectations and embrace the present.",
+          "期待を手放し、今この瞬間を受け入れよう。"
+        ],
+        [
+          "The ordinary becomes extraordinary through a peaceful mind.",
+          "穏やかな心を通して、ありふれた日常が特別なものになる。"
+        ]
+      ],
+      "copy": "STATE OF MIND｜XEN GRAPHIC T-SHIRT\n\n心のあり方が変われば、世界の見え方も変わる。\n\n「STATE OF MIND（心のあり方）」をテーマにしたグラフィックTシャツ。\n\n同じ景色や出来事でも、心の状態によって、その意味や受け止め方は変わっていく。物事を明確に捉えるために必要なのは、周囲の環境を変えることではなく、自分自身の心を見つめ直すことなのかもしれません。\n\n穏やかな心は、自分の内側から生まれるもの。こうあるべきだという期待や思い込みを少しずつ手放し、今この瞬間をあるがままに受け入れる。そうすることで、普段は見過ごしていた何気ない日常にも、新しい美しさや特別な価値を見いだせるはずです。\n\n心の平穏は、どこか遠くに探しに行くものではなく、自分の内側から育てていくもの。\n\nブラックのボディに映える鮮やかなグリーンのアップルモチーフと、大胆なタイポグラフィに、そんなメッセージを込めました。\n\n「A PEACEFUL MIND IS THE WAY.」\n\n穏やかな心こそが、進むべき道。\n\n自分の心と向き合い、日々の景色を新しい視点で見つめるための一着です。",
+      "images": [
+        {
+          "view": "front",
+          "src": "./xen-graphic-state-of-mind-front-20261024.jpg",
+          "sha256": "2f2302dec9ddc91a66a9dad04a136124a6a462cea885a2d40540d616bcc52687"
+        },
+        {
+          "view": "back",
+          "src": "./xen-graphic-state-of-mind-back-20261024.jpg",
+          "sha256": "085c25e67a9976d9ee7e411c70eedd2f8465a2fd7050ec21061c204edd74adc0"
+        }
+      ],
+      "url": "https://xen.official.ec/items/163232279"
+    }
+  ]
+}
