@@ -38,10 +38,10 @@ const fixture = {
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
-      assert.equal(await page.locator('.base-product').count(), displayedIds.length);
-      assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length);
-      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length);
-      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 3);
+      assert.equal(await page.locator('.base-product').count(), displayedIds.length + 1);
+      assert.equal(await page.locator('.base-product-brand').count(), displayedIds.length + 1);
+      assert.equal(await page.locator('.base-product-cta').count(), displayedIds.length + 1);
+      assert.equal(await page.locator('[data-base-products] [data-jewelry]').count(), 4);
       assert.match(await page.locator('.base-product-cta').first().innerText(), /購入する/);
       assert.match(await page.locator('.base-product-cta').nth(1).innerText(), /購入する/);
       assert.match(await page.locator('#base-products-title').innerText(), /ONLINE STORE/);
@@ -56,7 +56,7 @@ const fixture = {
       const columns = await page.locator('[data-base-grid]').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(columns, 3);
       const rows = await page.locator('.base-product').evaluateAll(els => [...new Set(els.map(el => Math.round(el.getBoundingClientRect().top)))]);
-      assert.equal(rows.length, Math.ceil(displayedIds.length / columns));
+      assert.equal(rows.length, Math.ceil((displayedIds.length + 1) / columns));
       const alignment = await page.locator('.catalog-product').evaluateAll(cards => {
         const rect = element => { const r = element.getBoundingClientRect(); return {top:r.top, width:r.width, height:r.height}; };
         return cards.map(card => ({
@@ -72,13 +72,13 @@ const fixture = {
         for (const card of row) {
           assert.ok(Math.abs(card.visual.width-card.visual.height)<1, 'Square product images');
           assert.equal(card.button.height,44);
-          const jewelry = ['base-product-156850693','base-product-156851036','base-product-156851056'].includes(card.id);
+          const jewelry = ['base-product-156850693','base-product-156851036','base-product-156851056','lapis-lazuli-ring'].includes(card.id);
           assert.deepEqual(card.order,['base-product-visual','base-product-brand','base-product-name','base-product-price',...(jewelry ? ['base-product-links','base-product-cta'] : ['base-product-cta','base-product-links'])]);
           for (const key of ['price','button','links']) assert.ok(Math.abs(card[key].top-row[0][key].top)<1, `${key} must align within its row`);
         }
       }
       assert.equal(await page.locator('#base-product-160058456').count(), 0);
-      assert.equal(await page.locator('.catalog-product > .base-product-cta').allTextContents().then(labels => labels.every(label => label === '購入する →')), true);
+      assert.equal(await page.locator('.catalog-product:not([data-catalog-static]) > .base-product-cta').allTextContents().then(labels => labels.every(label => label === '購入する →')), true);
       for (const id of [156850693,156851036,156851056]) {
         const drawer = page.locator(`#base-product-${id} [data-jewelry]`);
         const summary = drawer.locator('summary');
@@ -102,8 +102,17 @@ const fixture = {
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
       assert.deepEqual(errors, []);
       await catalog.screenshot({ path: `base-products-qa/catalog-${width}.png` });
-      results.push({ width, cards: displayedIds.length, columns, horizontalOverflow: false, pageErrors: errors });
+      results.push({ width, cards: displayedIds.length + 1, columns, horizontalOverflow: false, pageErrors: errors });
       assert.equal(await page.locator('#base-product-156849283 .base-product-design-link').getAttribute('href'), './design.html#kuro-usagi');
+      const lapis = page.locator('#lapis-lazuli-ring');
+      assert.equal(await lapis.count(), 1);
+      assert.equal(await lapis.locator('.base-product-price').innerText(), '価格未定');
+      assert.equal(await lapis.locator('.base-product-cta').isDisabled(), true);
+      assert.equal(await lapis.locator('a[href]').count(), 0);
+      await lapis.locator('.base-product-visual').click();
+      assert.equal(await lapis.locator('summary').getAttribute('aria-expanded'), 'true');
+      await lapis.locator('summary').press('Enter');
+      assert.equal(await lapis.locator('.base-product-visual').getAttribute('aria-expanded'), 'false');
       // A reordered catalog must be rejected instead of replacing the approved selection.
       await page.unroute('**/base-products.json');
       const reordered = structuredClone(fixture);
@@ -111,14 +120,15 @@ const fixture = {
       await page.route('**/base-products.json', route => route.fulfill({json:reordered}));
       await page.reload();
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
-      assert.equal(await page.locator('.base-product').count(), 0);
+      assert.equal(await page.locator('.base-product:not([data-catalog-static])').count(), 0);
       // Missing JSON must expose the store fallback, without fake cards.
       await page.unroute('**/base-products.json');
       await page.route('**/base-products.json', route => route.fulfill({ status: 503, body: 'unavailable' }));
       await page.reload();
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
-      assert.equal(await page.locator('.base-product').count(), 0);
+      assert.equal(await page.locator('.base-product:not([data-catalog-static])').count(), 0);
       assert.equal(await page.locator('[data-base-status]').isVisible(), true);
+      assert.equal(await page.locator('#lapis-lazuli-ring').count(), 1, 'Local design survives feed failure');
       assert.equal(await page.locator('.base-products-store').getAttribute('href'), 'https://xen.official.ec/');
       // An invalid product destination must reject the entire catalog.
       await page.unroute('**/base-products.json');
@@ -127,7 +137,7 @@ const fixture = {
       await page.route('**/base-products.json', route => route.fulfill({ json: invalid }));
       await page.reload();
       await page.waitForFunction(() => document.querySelector('[data-base-products]').getAttribute('aria-busy') === 'false');
-      assert.equal(await page.locator('.base-product').count(), 0);
+      assert.equal(await page.locator('.base-product:not([data-catalog-static])').count(), 0);
       // The added character shares the real disclosure and catalog renderer.
       await page.unroute('**/base-products.json');
       await page.route('**/base-products.json', route => route.fulfill({json:fixture}));

@@ -17,19 +17,25 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
       await page.goto(origin+'apparel.html?verify='+Date.now(), {waitUntil:'domcontentloaded'});
-      await page.waitForFunction(count => document.querySelectorAll('.base-product').length === count, ids.length);
+      await page.waitForFunction(count => document.querySelectorAll('.base-product').length === count, ids.length + 1);
       const catalog = page.locator('[data-base-products]');
       await catalog.scrollIntoViewIfNeeded();
       for (const img of await catalog.locator('img').all()) await img.scrollIntoViewIfNeeded();
       await page.waitForFunction(count => {
         const images = [...document.querySelectorAll('.base-product img')];
         return images.length === count && images.every(img => img.complete && img.naturalWidth > 0);
-      }, ids.length);
-      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator(':scope > .base-product-cta').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
-      assert.deepEqual(await page.locator('.base-product-name').allTextContents(), visibleItems.map(displayName));
+      }, ids.length + 1);
+      assert.deepEqual(await page.locator('[data-base-grid] > .base-product:not([data-catalog-static])').locator(':scope > .base-product-cta').evaluateAll(es=>es.map(e=>e.href)), ids.map(id=>'https://xen.official.ec/items/'+id));
+      assert.deepEqual(await page.locator('.catalog-product:not([data-catalog-static]) > .base-product-name').allTextContents(), visibleItems.map(displayName));
       const prices = await page.locator('.catalog-product > .base-product-price').allTextContents();
       visibleItems.forEach((item,i)=>assert.ok(prices[i].includes(new Intl.NumberFormat('ja-JP').format(item.price))));
       assert.equal(await page.locator('#base-product-160058456').count(),0);
+      const lapis=page.locator('#lapis-lazuli-ring');
+      assert.equal(await lapis.count(),1);
+      assert.equal(await lapis.locator('.base-product-price').innerText(),'価格未定');
+      assert.equal(await lapis.locator('.base-product-cta').isDisabled(),true);
+      assert.equal(await lapis.locator('a[href]').count(),0);
+
       for (const [id,file] of [[156850693,'signet-ring-20261023-8a2ce834d1'],[156851036,'sculpted-choker-20261023-7605c8856a']]) {
         const img=page.locator(`#base-product-${id} img`);
         assert.equal(await img.getAttribute('src'),`./xen-apparel-${file}.jpg`);
@@ -57,9 +63,9 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
         assert.equal(item.button.height,44);
         for(const key of ['price','button','links']) assert.ok(Math.abs(item[key].top-positions[i][key].top)<1,`${key} alignment`);
       }
-      assert.equal(await page.locator('.catalog-product > .base-product-cta').allTextContents().then(labels=>labels.every(label=>label==='購入する →')),true);
+      assert.equal(await page.locator('.catalog-product:not([data-catalog-static]) > .base-product-cta').allTextContents().then(labels=>labels.every(label=>label==='購入する →')),true);
       assert.equal(await page.locator('[data-base-grid]').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),3);
-      assert.equal(await page.locator('.base-product').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().top))).size),Math.ceil(ids.length/3));
+      assert.equal(await page.locator('.base-product').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().top))).size),Math.ceil((ids.length+1)/3));
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
       assert.equal(await page.locator('.base-products-store').getAttribute('href'),'https://xen.official.ec/');
       assert.ok(await page.locator('.base-products-store').evaluate(el=>el.getBoundingClientRect().top >= document.querySelector('[data-base-grid]').getBoundingClientRect().bottom));
@@ -75,7 +81,7 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
       assert.equal(await page.locator('footer').count(),1);
       assert.deepEqual(errors,[]);
       await catalog.screenshot({path:`base-products-qa/published-${width}.png`});
-      results.push({width,cards:ids.length,columns:3,rows:Math.ceil(ids.length/3),imagesLoaded:ids.length,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,alignedRows:true,drawers:3,films:3,pageErrors:errors});
+      results.push({width,cards:ids.length+1,columns:3,rows:Math.ceil((ids.length+1)/3),imagesLoaded:ids.length+1,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,alignedRows:true,drawers:4,films:3,pageErrors:errors});
       await page.close();
     }
     // Confirm that every destination and the one shop link return successful pages.
