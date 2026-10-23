@@ -1,0 +1,32 @@
+name: SHOP DESIGN graphic collection verification
+on:
+  push:
+    branches: [work/shop-design-graphic-20261024]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: python build_graphic_collection.py && git diff --exit-code -- apparel.html design.html
+      - run: python -m unittest -q test_base_products.py
+      - run: node --check xen-graphic-collection.js && node verify-graphic-collection.cjs
+        env:
+          GRAPHIC_WEBKIT: '1'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: graphic-collection-browser-evidence
+          path: graphic-collection-qa/
+          retention-days: 14
