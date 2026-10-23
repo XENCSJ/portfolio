@@ -216,7 +216,15 @@
       status.textContent = `${tab.textContent}：${count}商品`;
     }
     tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('click', () => {
+        const changed = tab.dataset.shopFilter !== current;
+        select(tab);
+        // Controls follow the catalog: show the result after an explicit activation.
+        // Arrow-key navigation retains focus and position at the tab list.
+        if (changed && grid.getBoundingClientRect().top < 0) {
+          grid.scrollIntoView({ block: 'start', behavior: reduced.matches ? 'instant' : 'smooth' });
+        }
+      });
       tab.addEventListener('keydown', event => {
         const next = { ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index + tabs.length - 1) % tabs.length, Home: 0, End: tabs.length - 1 }[event.key];
         if (next === undefined) return;
