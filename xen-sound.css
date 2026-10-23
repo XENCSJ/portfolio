@@ -303,7 +303,7 @@ body#top.sound-page main .sound-showcase[hidden] { display: none; }
 .sound-slide[data-position="next"] { transform: translateX(calc(-50% + var(--cover-size) * .85)) scale(.82); opacity: .42; z-index: 1; }
 .sound-showcase-controls { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; }
 .sound-showcase-controls button { display: grid; place-items: center; width: 36px; height: 36px; border: 0; background: transparent; color: #897348; padding: 0; cursor: pointer; font-size: 23px; }
-.sound-showcase-controls .sound-slide-pause { font-size: 12px; }
+.sound-showcase-controls .sound-slide-pause { display: none; }
 .sound-showcase-controls button:disabled { opacity: .3; cursor: default; }
 .sound-slide-dots { display: flex; }
 .sound-slide-dots button { width: 24px; font-size: 0; }
