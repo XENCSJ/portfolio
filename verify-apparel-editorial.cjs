@@ -33,15 +33,15 @@ const server = http.createServer((req,res) => {
       await context.route(/googletagmanager|google-analytics/,r=>r.abort());
       const page = await context.newPage();
       await page.goto(base+'apparel.html',{waitUntil:'domcontentloaded'});
-      await page.waitForSelector('.base-product');
+      await page.waitForSelector('#base-product-'+ids[0]);
       const editorial = page.locator('.apparel-editorial');
       for(const image of await editorial.locator('img').all()) {
         await image.scrollIntoViewIfNeeded();
         await image.evaluate(img=>img.decode());
       }
       assert.equal(await editorial.locator('img').count(),5);
-      assert.equal(await page.locator('.base-product').count(),ids.length);
-      assert.deepEqual(await page.locator('[data-base-grid] > .base-product').locator(':scope > .base-product-cta').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
+      assert.equal(await page.locator('.base-product:not([data-catalog-static])').count(),ids.length);
+      assert.deepEqual(await page.locator('[data-base-grid] > .base-product:not([data-catalog-static])').locator(':scope > .base-product-cta').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
       assert.deepEqual(await page.locator('.apparel-editorial-trio [data-apparel-product]').evaluateAll(nodes=>nodes.map(n=>n.dataset.apparelProduct)),['tshirt','hoodie','hat']);
       // Four purchase locations stay unlinked until the official product match is certain.
       assert.equal(await page.locator('[data-apparel-product]').count(),4);
@@ -55,9 +55,9 @@ const server = http.createServer((req,res) => {
       });
       assert.equal(layout.columns,3);assert(layout.overflow<=1);assert(layout.loaded);assert(layout.uncropped);
       assert(Math.abs(layout.brandToHoodie)<1);assert(Math.abs(layout.hoodieToTrio)<1);assert(layout.trioToStore>=23&&layout.trioToStore<=37);
-      assert.deepEqual(await page.locator('.base-product-name').allTextContents(),visibleItems.map(displayName));
-      assert.equal(await page.locator('.base-product-brand').count(),ids.length);
-      assert.equal(await page.locator('.base-product-cta').count(),ids.length);
+      assert.deepEqual(await page.locator('.base-product:not([data-catalog-static]) .base-product-name').allTextContents(),visibleItems.map(displayName));
+      assert.equal(await page.locator('.base-product:not([data-catalog-static]) .base-product-brand').count(),ids.length);
+      assert.equal(await page.locator('.base-product:not([data-catalog-static]) .base-product-cta').count(),ids.length);
       const cards = await page.locator('.base-product').evaluateAll(nodes=>nodes.map(node=>{
         const image=node.querySelector('.base-product-visual, .jewelry-visual').getBoundingClientRect();
         const name=node.querySelector('.base-product-name').getBoundingClientRect();
