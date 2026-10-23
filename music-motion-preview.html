@@ -16,6 +16,8 @@
 /* Inner artwork owns entrance motion; outer slides own carousel transitions. */
 .sound-showcase { position: relative; }
 .sound-showcase-stage { isolation: isolate; }
+.sound-slide { background: transparent; }
+.sound-slide-art { background: #fff; }
 .sound-bloom { position:absolute; width:calc(var(--cover-size) * 1.8); height:var(--cover-size); left:50%; top:10px; transform:translateX(-50%); background:radial-gradient(ellipse,#eadbbc70 0%,#f7eedf40 35%,transparent 69%); opacity:0; pointer-events:none; z-index:0; }
 .sound-slide-art::before,.sound-slide-art::after { content:'';position:absolute;inset:0;opacity:0;pointer-events:none; }
 .is-entering .sound-slide { transition: none; }
