@@ -7,8 +7,8 @@
   const roots = [root, ...related].filter(Boolean);
   const designTargets = { 157787639: 'shirowashi', 157783299: 'takoleo', 156849283: 'kuro-usagi' };
   const pinnedIds = [163232279, 162561554, 160058456, 159175661, 157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
-  // APPAREL display choices are independent of the scheduled BASE feed.
-  const apparelExcludedIds = new Set([160058456]);
+  // SHOP display order is independent of the scheduled BASE feed and DESIGN cards.
+  const shopIds = [157787639, 157783299, 156849283, 156850693, 156851036, 156851056];
   // User-supplied APPAREL images, 2026-10-23 JST. Versioned names avoid stale caches.
   const apparelImages = {
     156850693: './xen-apparel-signet-ring-20261023-8a2ce834d1.jpg',
@@ -103,6 +103,7 @@
     const jewelry = sculpted || item.id === 156850693;
     const article = element('article', `base-product catalog-product${jewelry ? ' catalog-jewelry' : ''}`);
     article.id = `base-product-${item.id}`;
+    article.dataset.shopCategory = jewelry ? 'jewelry' : 'apparel';
     const visual = element('a', 'base-product-visual');
     visual.href = item.url;
     visual.target = '_blank';
@@ -177,6 +178,65 @@
     details.append(summary, panel);
     return details;
   }
+  function initializeShop(section) {
+    if (!section.hasAttribute('data-shop-catalog')) return;
+    const tablist = section.querySelector('[role="tablist"]');
+    const tabs = [...tablist.querySelectorAll('[data-shop-filter]')];
+    const grid = section.querySelector('[data-base-grid]');
+    const cards = [...grid.children];
+    const status = section.querySelector('[data-shop-status]');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const active = new Set();
+    let current = 'all';
+    const settle = () => { active.forEach(animation => animation.cancel()); active.clear(); };
+    function select(tab, initial = false) {
+      const category = tab.dataset.shopFilter;
+      if (!initial && category === current) return;
+      current = category;
+      settle();
+      tabs.forEach(button => {
+        const selected = button === tab;
+        button.setAttribute('aria-selected', String(selected));
+        button.tabIndex = selected ? 0 : -1;
+      });
+      grid.setAttribute('aria-labelledby', tab.id);
+      let count = 0;
+      cards.forEach(card => {
+        card.hidden = category !== 'all' && card.dataset.shopCategory !== category;
+        if (card.hidden) return;
+        const index = count++;
+        if (reduced.matches || !card.animate || document.hidden) return;
+        const animation = card.animate([
+          { opacity: 0, transform: 'translateY(12px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 400, delay: index * 55, easing: 'ease-out', fill: 'backwards' });
+        active.add(animation);
+        animation.finished.then(() => { active.delete(animation); animation.cancel(); }, () => active.delete(animation));
+      });
+      status.textContent = `${tab.textContent}：${count}商品`;
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', event => {
+        const next = { ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index + tabs.length - 1) % tabs.length, Home: 0, End: tabs.length - 1 }[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        tabs[next].focus();
+        select(tabs[next]);
+      });
+    });
+    // If a product anchor is followed while filtering, reveal the existing card.
+    addEventListener('hashchange', () => {
+      const target = cards.find(card => `#${card.id}` === location.hash);
+      if (target?.hidden) { select(tabs[0]); target.scrollIntoView({ block: 'start', behavior: 'instant' }); }
+    });
+    section.addEventListener('focusin', event => { if (event.target.closest('.catalog-product')) settle(); });
+    reduced.addEventListener('change', () => { if (reduced.matches) settle(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) settle(); });
+    addEventListener('pagehide', settle);
+    tablist.hidden = false;
+    select(tabs[0], true);
+  }
   async function load() {
     roots.forEach(section => section.setAttribute('aria-busy', 'true'));
     try {
@@ -191,11 +251,12 @@
       validate(data);
       roots.forEach(section => {
         const isRelated = section.hasAttribute('data-related-product');
-        const items = isRelated ? data.items.filter(item => item.id === Number(section.dataset.relatedProduct)) : data.items.filter(item => !apparelExcludedIds.has(item.id));
+        const items = isRelated ? data.items.filter(item => item.id === Number(section.dataset.relatedProduct)) : shopIds.map(id => data.items.find(item => item.id === id));
         const cards = document.createDocumentFragment();
         items.forEach(item => cards.append(card(item, isRelated)));
         section.querySelector('[data-base-grid]').replaceChildren(cards);
         section.querySelector('[data-base-status]').hidden = true;
+        if (!isRelated) initializeShop(section);
       });
       // Product anchors are inserted after the initial document navigation.
       if (root && /^#base-product-\d+$/.test(location.hash)) {

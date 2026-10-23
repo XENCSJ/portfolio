@@ -7,7 +7,7 @@ const {execFileSync} = require('node:child_process');
 const assert = require('node:assert/strict');
 const out = 'apparel-editorial-qa';
 const expected = JSON.parse(fs.readFileSync('base-products.json','utf8'));
-const ids = [163232279,162561554,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
+const ids = [157787639,157783299,156849283,156850693,156851036,156851056];
 const visibleItems = expected.items.filter(item => ids.includes(item.id));
 const displayName = item => item.id === 156851036 ? 'K18 Sculpted Choker' : item.id === 156851056 ? 'K18 Sculpted Bangle' : item.name;
 const mime = {'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.png':'image/png','.jpeg':'image/jpeg','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml'};
@@ -50,11 +50,11 @@ const server = http.createServer((req,res) => {
         const brand=el.querySelector('.brand-visual').getBoundingClientRect();
         const back=el.querySelector('.apparel-hoodie-back').getBoundingClientRect();
         const trio=el.querySelector('.apparel-editorial-trio').getBoundingClientRect();
-        const heading=document.querySelector('#base-products-title').getBoundingClientRect();
-        return {brandToHoodie:back.top-brand.bottom,hoodieToTrio:trio.top-back.bottom,trioToStore:heading.top-trio.bottom,columns:getComputedStyle(el.querySelector('.apparel-editorial-trio')).gridTemplateColumns.split(' ').length,overflow:document.documentElement.scrollWidth-innerWidth,uncropped:[...el.querySelectorAll('img')].every(img=>Math.abs(img.getBoundingClientRect().width/img.getBoundingClientRect().height-img.naturalWidth/img.naturalHeight)<.005),loaded:[...el.querySelectorAll('img')].every(img=>img.naturalWidth>0)};
+        const store=document.querySelector('[data-base-products]').getBoundingClientRect();
+        return {brandToHoodie:back.top-brand.bottom,hoodieToTrio:trio.top-back.bottom,storeBeforeEditorial:store.bottom<=el.getBoundingClientRect().top,columns:getComputedStyle(el.querySelector('.apparel-editorial-trio')).gridTemplateColumns.split(' ').length,overflow:document.documentElement.scrollWidth-innerWidth,uncropped:[...el.querySelectorAll('img')].every(img=>Math.abs(img.getBoundingClientRect().width/img.getBoundingClientRect().height-img.naturalWidth/img.naturalHeight)<.005),loaded:[...el.querySelectorAll('img')].every(img=>img.naturalWidth>0)};
       });
       assert.equal(layout.columns,3);assert(layout.overflow<=1);assert(layout.loaded);assert(layout.uncropped);
-      assert(Math.abs(layout.brandToHoodie)<1);assert(Math.abs(layout.hoodieToTrio)<1);assert(layout.trioToStore>=23&&layout.trioToStore<=37);
+      assert(Math.abs(layout.brandToHoodie)<1);assert(Math.abs(layout.hoodieToTrio)<1);assert(layout.storeBeforeEditorial);
       assert.deepEqual(await page.locator('.base-product-name').allTextContents(),visibleItems.map(displayName));
       assert.equal(await page.locator('.base-product-brand').count(),ids.length);
       assert.equal(await page.locator('.base-product-cta').count(),ids.length);
@@ -82,7 +82,7 @@ const server = http.createServer((req,res) => {
         await old.evaluate(()=>scrollTo(0,document.querySelector('#base-products-title').getBoundingClientRect().top+scrollY-510));
         await old.screenshot({path:`${out}/before-390.jpg`,type:'jpeg',quality:90});await old.close();
       }
-      results.push({width,...layout,catalog:ids.length,purchaseLinks:'nine verified BASE destinations; editorial visual matches remain pending'});
+      results.push({width,...layout,catalog:ids.length,purchaseLinks:'six verified BASE destinations; editorial visual matches remain pending'});
       await context.close();
     }
     fs.writeFileSync(`${out}/results.json`,JSON.stringify({base,results},null,2));
