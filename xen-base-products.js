@@ -146,7 +146,8 @@
     return article;
   }
   function jewelryDesignLink(item, title) {
-    const target = item.id === 156850693 ? 'k18-signet-ring' : 'product';
+    const targets = { 156850693: 'k18-signet-ring', 156851036: 'product', 156851056: 'product' };
+    const target = targets[item.id];
     const link = element('a', 'base-product-design-link', '詳細を見る →');
     link.href = `./design.html#${target}`;
     link.setAttribute('aria-label', `${title} の詳細を見る（DESIGNページ）`);
