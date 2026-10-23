@@ -1,0 +1,69 @@
+/* STUDIO central logo only. All source geometry, sizing and layout are retained. */
+body#top.studio-page .studio-fusion-logo {
+  --studio-logo-motion-ready: 1;
+  --studio-logo-gold: #C5A059;
+}
+body#top.studio-page .studio-fusion-logo-enter,
+body#top.studio-page .studio-fusion-logo-drift {
+  animation: none !important;
+  transform: none;
+}
+/* Preserve the existing static K18 surface; retire only its repeating sweep. */
+body#top.studio-page .studio-fusion .studio-fusion-logo-drift::after {
+  animation: none !important;
+  background-position: 100% 100%;
+}
+body#top.studio-page .studio-logo-trace {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; opacity: 0; overflow: hidden; pointer-events: none;
+}
+body#top.studio-page .studio-logo-line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+body#top.studio-page .studio-logo-guide { opacity: .09; }
+body#top.studio-page .studio-logo-fill { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-state="playing"] .studio-fusion-logo-drift {
+    animation: studio-logo-solid var(--studio-logo-duration) linear 1 !important;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-state="playing"] .studio-logo-trace {
+    animation: studio-logo-envelope var(--studio-logo-duration) linear 1;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-state="playing"] .studio-logo-line {
+    animation: studio-logo-draw var(--draw-duration) cubic-bezier(.42,0,.58,1) var(--draw-delay) 1 both;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-state="playing"] .studio-logo-fill {
+    animation: studio-logo-fill .48s cubic-bezier(.4,0,.2,1) var(--fill-delay) 1 both;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-set="original"][data-studio-logo-state="playing"] .studio-fusion-logo-drift {
+    animation-name: studio-logo-original-solid !important;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-set="original"][data-studio-logo-state="playing"] .studio-logo-trace {
+    animation-name: studio-logo-original-envelope;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-set="soft-reveal"][data-studio-logo-state="playing"] .studio-fusion-logo-drift {
+    animation-name: studio-logo-soft-solid !important;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-set="soft-reveal"][data-studio-logo-state="playing"] .studio-logo-line {
+    stroke-dashoffset: 0;
+    animation: studio-logo-soft-line 1.8s cubic-bezier(.4,0,.2,1) .1s 1 both;
+  }
+  body#top.studio-page .studio-fusion-logo[data-studio-logo-set="reverse-trace"][data-studio-logo-state="playing"] .studio-logo-line {
+    animation-name: studio-logo-draw-reverse;
+  }
+}
+@keyframes studio-logo-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes studio-logo-draw-reverse { from { stroke-dashoffset: -1; } to { stroke-dashoffset: 0; } }
+@keyframes studio-logo-fill { from { opacity: 0; } to { opacity: 1; } }
+@keyframes studio-logo-soft-line { from { opacity: 0; } to { opacity: 1; } }
+@keyframes studio-logo-original-solid {
+  0%,64% { opacity: 0; }
+  64% { animation-timing-function: cubic-bezier(.4,0,.2,1); }
+  88%,100% { opacity: 1; }
+}
+@keyframes studio-logo-original-envelope { 0% { opacity: 0; } 16%,88% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes studio-logo-solid { 0%,78% { opacity: 0; } 92%,100% { opacity: 1; } }
+@keyframes studio-logo-soft-solid { 0%,28% { opacity: 0; } 90%,100% { opacity: 1; } }
+@keyframes studio-logo-envelope { 0% { opacity: 0; } 9%,92% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce), print {
+  body#top.studio-page .studio-logo-trace { display: none !important; }
+  body#top.studio-page .studio-fusion-logo .studio-fusion-logo-drift { animation: none !important; opacity: 1 !important; }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>STUDIO — 5 Motion Sets</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111;color:#eee;font:14px Arial,sans-serif}header{padding:20px 24px;border-bottom:1px solid #333}h1{font-size:18px;letter-spacing:.13em;color:#C5A059;margin:0 0 14px}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px}button,select{font:inherit;padding:10px;background:#191919;color:#eee;border:1px solid #555;border-radius:3px;min-height:44px;cursor:pointer}button[aria-pressed=true]{border-color:#C5A059;color:#C5A059}p{color:#aaa;font-size:12px;line-height:1.6}#viewport{overflow:auto;padding:18px 0 0}iframe{display:block;border:0;margin:0 auto;background:#000;max-width:none}#result{white-space:pre-wrap;color:#ddd}a{color:#C5A059}
+</style></head><body><header><h1>STUDIO / FIVE MOTION SETS</h1>
+<div class="controls"><button data-set="1" aria-pressed="true">01 Original</button><button data-set="2" aria-pressed="false">02 Sequential</button><button data-set="3" aria-pressed="false">03 Soft</button><button data-set="4" aria-pressed="false">04 Reverse</button><button data-set="5" aria-pressed="false">05 Dual</button><button id="replay">再生</button>
+<label>表示幅 <select id="width"><option value="390">390px スマートフォン</option><option value="430">430px スマートフォン</option><option value="1440">1440px PC</option><option value="320">320px</option></select></label>
+<label>確認位置 <select id="frame"><option value="">通常再生</option><option value="0.25">25%</option><option value="0.5">50%</option><option value="0.75">75%</option><option value="1">完成</option></select></label>
+<button id="check">全5セット × 3幅を検証</button></div>
+<p>実際のSTUDIOを表示。通常のSTUDIOページは各20%で1回だけ再生。検証用の固定表示はこのページから選択できます。</p><output id="result" aria-live="polite"></output>
+</header><div id="viewport"><iframe id="preview" title="STUDIO アニメーションプレビュー" width="390" height="844"></iframe></div>
+<script>
+const preview=document.getElementById('preview'),width=document.getElementById('width'),frame=document.getElementById('frame'),result=document.getElementById('result');let set=1,serial=0;
+function show(){preview.width=width.value;preview.height=width.value==='1440'?'900':'844';preview.src='./studio-logo-review.html?xen-studio-set='+set+(frame.value!==''?'&xen-studio-frame='+frame.value:'')+'&preview='+ ++serial;document.querySelectorAll('[data-set]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.set)===set)));}
+document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{set=Number(b.dataset.set);show()});document.getElementById('replay').onclick=()=>{frame.value='';show()};width.onchange=show;frame.onchange=show;
+document.getElementById('check').onclick=async()=>{
+ const button=document.getElementById('check');button.disabled=true;result.textContent='検証中…';const rows=[];const names=['original','sequential-trace','soft-reveal','reverse-trace','dual-reveal'];
+ try{
+  for(const w of [390,430,1440]){let baseline=null;
+   for(let s=1;s<=5;s++){
+    set=s;width.value=String(w);frame.value='';const loaded=new Promise(resolve=>preview.onload=resolve);show();await loaded;
+    const doc=preview.contentDocument,win=preview.contentWindow,logo=doc.querySelector('.studio-fusion-logo');
+    const geometry=()=>[logo,...doc.querySelectorAll('.studio-fusion-list a')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height].map(v=>Math.round(v*100)/100)});
+    const before=geometry();const selected=logo.dataset.studioLogoSet;
+    await new Promise(resolve=>setTimeout(resolve,3800));
+    const surface=win.getComputedStyle(logo.querySelector('.studio-fusion-logo-drift'));const after=geometry();
+    const state={width:w,set:s,name:selected,complete:logo.dataset.studioLogoState==='complete',geometryStable:JSON.stringify(before)===JSON.stringify(after),sameFinal:true,static:logo.getAnimations({subtree:true}).length===0,visible:surface.opacity==='1',overflow:doc.documentElement.scrollWidth>w};
+    const final=JSON.stringify({geometry:after,background:surface.backgroundImage,opacity:surface.opacity});if(baseline===null)baseline=final;else state.sameFinal=baseline===final;
+    if(selected!==names[s-1]||!state.complete||!state.geometryStable||!state.sameFinal||!state.static||!state.visible||state.overflow)throw new Error(JSON.stringify(state));
+    rows.push(state);result.textContent=rows.length+'/15 PASS';
+   }
+  }
+  result.textContent='15/15 PASS — 全5セット、3幅、形状配置一致、完成状態一致、静止、横はみ出しなし。';result.dataset.results=JSON.stringify(rows);
+ }catch(error){result.textContent='FAIL: '+error.message;result.dataset.results=JSON.stringify(rows)}finally{button.disabled=false}
+};show();
+</script></body></html>
