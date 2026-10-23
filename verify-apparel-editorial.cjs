@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const assert = require('node:assert/strict');
-const out = 'apparel-editorial-qa';
+const out = process.env.APPAREL_QA_DIR || 'apparel-editorial-qa';
 const expected = JSON.parse(fs.readFileSync('base-products.json','utf8'));
 const ids = [163232279,162561554,159175661,157787639,157783299,156849283,156850693,156851036,156851056];
 const visibleItems = expected.items.filter(item => ids.includes(item.id));
@@ -27,6 +27,8 @@ const server = http.createServer((req,res) => {
     for(const width of [375,390,430,768,1440]) {
       const context = await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',hasTouch:width<650,isMobile:width<650});
       await context.route(/googletagmanager|google-analytics/,r=>r.abort());
+      // Optional unmodified responses fetched from the original CDN URLs for restricted QA environments.
+      if(process.env.SHOP_IMAGE_CACHE)for(const item of expected.items.filter(i=>ids.slice(0,6).includes(i.id)))await context.route(url=>url.href===item.image_url,r=>r.fulfill({path:path.join(process.env.SHOP_IMAGE_CACHE,`${item.id}.jpg`),contentType:'image/jpeg'}));
       const page = await context.newPage();
       await page.goto(base+'apparel.html',{waitUntil:'domcontentloaded'});
       await page.waitForSelector('#base-product-'+ids[0]);
@@ -35,7 +37,7 @@ const server = http.createServer((req,res) => {
         await image.scrollIntoViewIfNeeded();
         await image.evaluate(img=>img.decode());
       }
-      assert.equal(await editorial.locator('img').count(),2);
+      assert.equal(await editorial.locator('img').count(),5);
       assert.equal(await page.locator('.apparel-editorial-trio img').count(),3);
       assert.equal(await page.locator('.base-product:not([data-catalog-static])').count(),ids.length);
       assert.deepEqual(await page.locator('[data-base-grid] > .base-product:not([data-catalog-static])').locator(':scope > .base-product-cta').evaluateAll(nodes=>nodes.map(n=>Number(new URL(n.href).pathname.split('/').pop()))),ids);
@@ -52,12 +54,14 @@ const server = http.createServer((req,res) => {
         const buttons=[...document.querySelectorAll('.shop-tab')].map(e=>e.getBoundingClientRect());
         const images=[...document.querySelectorAll('.apparel-editorial img')];
         const width=document.body.getBoundingClientRect().width;
-        return {brandToHoodie:back.top-brand.bottom,sequence:hero.bottom<=concept.top&&concept.bottom<=brand.top&&back.bottom<=grid.top&&grid.bottom<=trio.top&&trio.bottom<=tabs.top&&tabs.bottom<=films.top,titleCentered:Math.abs(hero.left+hero.width/2-width/2)<1,tabsCentered:Math.abs((buttons[0].left+buttons[2].right)/2-width/2)<1,tabsHorizontal:buttons.every(r=>Math.abs(r.top-buttons[0].top)<1),tabsEqualGap:Math.abs((buttons[1].left-buttons[0].right)-(buttons[2].left-buttons[1].right))<1,columns:getComputedStyle(document.querySelector('#shop-products')).gridTemplateColumns.split(' ').length,overflow:document.documentElement.scrollWidth-innerWidth,uncropped:images.every(img=>Math.abs(img.clientWidth/img.clientHeight-img.naturalWidth/img.naturalHeight)<.005),loaded:images.every(img=>img.naturalWidth>0)};
+        return {brandToHoodie:back.top-brand.bottom,sequence:hero.bottom<=concept.top&&concept.bottom<=brand.top&&brand.bottom<=back.top&&back.bottom<=trio.top&&trio.bottom<=tabs.top&&tabs.bottom<=grid.top&&grid.bottom<=films.top,titleCentered:Math.abs(hero.left+hero.width/2-width/2)<1,tabsCentered:Math.abs((buttons[0].left+buttons[2].right)/2-width/2)<1,tabsHorizontal:buttons.every(r=>Math.abs(r.top-buttons[0].top)<1),tabsEqualGap:Math.abs((buttons[1].left-buttons[0].right)-(buttons[2].left-buttons[1].right))<1,columns:getComputedStyle(document.querySelector('#shop-products')).gridTemplateColumns.split(' ').length,overflow:document.documentElement.scrollWidth-innerWidth,uncropped:images.every(img=>Math.abs(img.clientWidth/img.clientHeight-img.naturalWidth/img.naturalHeight)<.005),loaded:images.every(img=>img.naturalWidth>0)};
       });
       assert.equal(layout.columns,3);assert(layout.overflow<=1);assert(layout.loaded);assert(layout.uncropped);
       assert(Math.abs(layout.brandToHoodie)<1);assert(layout.sequence);assert(layout.titleCentered);
       assert(layout.tabsCentered&&layout.tabsHorizontal&&layout.tabsEqualGap);
       assert.equal(await page.locator('.shop-tabs').count(),1);
+      assert.equal(await page.locator('.apparel-editorial-trio').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),3);
+      assert.equal(await page.locator('#shop-tab-all').getAttribute('aria-selected'),'true');
       for(const [category,count] of [['apparel',6],['jewelry',4],['all',10]]) {
         await page.locator(`[data-shop-filter="${category}"]`).click();
         assert.equal(await page.locator('.catalog-product:visible').count(),count);
@@ -91,8 +95,19 @@ const server = http.createServer((req,res) => {
       assert.equal(await page.locator('#base-products-title').evaluate(n=>getComputedStyle(n).textAlign),'center');
       await page.locator('#shop-tab-all').click();
       await page.screenshot({path:`${out}/controls-${width}.jpg`,type:'jpeg',quality:92});
-      await page.getByRole('button',{name:'XEN COLLECTION 2023 | APPAREL を再生',exact:true}).click();
-      assert.equal(await page.locator('.video-container iframe[src*="OvsxT_ngrWg"]').count(),1);
+      for(const video of await page.locator('.video-container').all()) {
+        const before=await video.boundingBox();
+        assert(Math.abs(before.width/before.height-16/9)<.01);
+        const src=await video.locator('template').evaluate(t=>t.content.querySelector('iframe').getAttribute('src'));
+        await video.locator('.xen-cinema-cover').click();
+        const frame=video.locator('iframe');
+        assert.equal(await frame.count(),1);
+        const current=new URL(await frame.getAttribute('src'));
+        assert.equal(current.pathname,new URL(src).pathname);
+        assert.equal(current.searchParams.get('autoplay'),'1');
+        const after=await video.boundingBox();
+        assert(Math.abs(after.width/after.height-16/9)<.01);
+      }
       await page.locator('.xen-header-toggle').click();assert(await page.locator('.xen-menu').isVisible());
       await page.keyboard.press('Escape');assert(!(await page.locator('.xen-menu').isVisible()));
       results.push({width,filters:[10,6,4],menu:true,videoActivation:true,...layout,catalog:ids.length+1,purchaseLinks:'nine verified BASE destinations; editorial visual matches remain pending'});

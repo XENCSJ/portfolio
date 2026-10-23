@@ -2,7 +2,6 @@
 body#top.shop-page main > .base-products { margin-top: 20px; }
 body#top.shop-page.xen-noir.apparel-page main > .hero { min-height:0; text-align:center; }
 body#top.shop-page.xen-noir.apparel-page main > .lead { margin-top:24px; }
-body#top.shop-page .base-products > .apparel-editorial-trio { margin-top:32px; }
 body#top.shop-page.xen-noir.apparel-page main > .base-products + section { margin-top:24px; }
 body#top.shop-page .apparel-films-heading,
 body#top.shop-page .apparel-films-heading .section-ja { text-align:center; }
@@ -13,7 +12,7 @@ body#top.shop-page .shop-sr-only {
 }
 body#top.shop-page .shop-tabs {
   display:flex;justify-content:center;align-items:center;gap:clamp(20px,5vw,44px);
-  position:static;width:100%;margin:28px 0 0;padding:0;flex-wrap:nowrap;
+  position:static;width:100%;margin:0 0 28px;padding:0;flex-wrap:nowrap;
 }
 body#top.shop-page .shop-tabs[hidden],
 body#top.shop-page .catalog-product[hidden] { display:none!important; }
@@ -36,8 +35,7 @@ body#top.shop-page .catalog-product .jewelry-action { flex-wrap:wrap; }
 body#top.shop-page .catalog-product .jewelry-icon { margin-left:auto; }
 body#top.shop-page .catalog-product > .base-product-links:empty { min-height:0; margin-top:0; }
 @media(max-width:650px) {
-  body#top.shop-page .shop-tabs { margin-top:22px;gap:24px; }
-  body#top.shop-page .base-products > .apparel-editorial-trio { margin-inline:calc(-1 * clamp(18px,4vw,56px)); }
+  body#top.shop-page .shop-tabs { margin-bottom:22px;gap:24px; }
   body#top.shop-page .shop-tab { font-size:11px;letter-spacing:.1em; }
   body#top.shop-page .catalog-product > .base-product-name { min-height:5.1em; }
 }
