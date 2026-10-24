@@ -3,20 +3,16 @@
 const {chromium,webkit}=require('playwright');
 const fs=require('node:fs');const path=require('node:path');const http=require('node:http');
 const {execFileSync}=require('node:child_process');const assert=require('node:assert/strict');
-const baseline=process.env.CINEMA_BASE_SHA || '5b69d1a111408dd80f503cad2cc322968800d446';
+// Compare with the actual PR base instead of a stale historical redesign.
+let baseline=process.env.CINEMA_BASE_SHA;
+if(!baseline){
+  execFileSync('git',['fetch','--depth','1','origin',process.env.GITHUB_BASE_REF||'main']);
+  baseline='FETCH_HEAD';
+}
 const pages={storybooks:3,animation:4,sound:4,cinematic:4,apparel:3,creator:4};
 const old=new Map();
 for(const file of [...Object.keys(pages).map(n=>n+'.html'),'xen-latest-videos.js'])
   old.set(file,execFileSync('git',['show',baseline+':'+file]));
-// The approved J-POP release adds page height independently of the video UI.
-// Include that same release in both fixtures; retain exact geometry assertions
-// for every existing player, work, heading and surrounding layout.
-const soundRelease=fs.readFileSync('sound.html','utf8').match(/\n<article class="sound-song"[\s\S]*?<\/article>\n/);
-if(soundRelease){
-  const previousSound=old.get('sound.html').toString();
-  assert.equal((previousSound.match(/<p class="sound-empty">準備中<\/p>/g)||[]).length,1,'expected J-POP placeholder');
-  old.set('sound.html',Buffer.from(previousSound.replace('<p class="sound-empty">準備中</p>',soundRelease[0])));
-}
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp'};
 const server=http.createServer((req,res)=>{
   const url=new URL(req.url,'http://localhost');
@@ -46,7 +42,8 @@ const layout=()=>({width:document.documentElement.scrollWidth,height:document.do
         return route.abort();
       });
       const shots={};let target;
-      for(const mode of ['before','after']){
+      // MUSIC intentionally changes player visibility and page height; check its current playback geometry below.
+      for(const mode of (name==='sound'?['after']:['before','after'])){
         const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
         await page.goto(origin+'/'+mode+'/'+name+'.html',{waitUntil:'networkidle'});
         if(name==='creator')await page.locator('.xen-latest-play').nth(3).waitFor();
@@ -59,10 +56,14 @@ const layout=()=>({width:document.documentElement.scrollWidth,height:document.do
         assert.deepEqual(errors,[],name+' script errors');
         if(mode==='after')target=page;else await page.close();
       }
-      assert.deepEqual(shots.after,shots.before,engine+' '+width+' '+name+' outside layout');
+      if(name!=='sound')assert.deepEqual(shots.after,shots.before,engine+' '+width+' '+name+' outside layout');
       const covers=target.locator(name==='creator'?'.xen-latest-play':'.xen-cinema-cover');
       assert.equal(await covers.count(),count);assert.equal(await target.locator('.xen-cinema-icon').count(),count);
       assert.equal(await target.locator('iframe[src*="youtube"]').count(),0);
+      if(name==='sound'){
+        await target.locator('.music-player-drawer[data-service="youtube"] > summary').first().click();
+        shots.after=await target.evaluate(layout);
+      }
       const bounds=await covers.first().boundingBox();
       await covers.first().press('Enter');
       const frame=target.locator('iframe[src*="youtube"]');assert.equal(await frame.count(),1);

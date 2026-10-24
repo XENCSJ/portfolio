@@ -3,10 +3,7 @@ body#top.sound-page main .music-reader-ready > details { display:none; }
 body#top.sound-page main .music-services { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; width:100%; max-width:440px; list-style:none; margin:24px auto 0; padding:0; }
 body#top.sound-page main .music-services li { margin:0; padding:0; min-width:0; }
 body#top.sound-page main .music-service { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; width:100%; min-height:94px; padding:4px 0; color:#292929; background:none; border:0; text-decoration:none; }
-body#top.sound-page main .music-service img { display:block; width:36px; height:36px; object-fit:contain; margin:0 0 12px; border:0; border-radius:0; filter:none; opacity:1; transform:none; }
-/* Official PNGs include clear space; uniform scaling equalizes the visible marks. */
-body#top.sound-page main .music-service[data-service="youtube"] img { transform:scale(1.5); }
-body#top.sound-page main .music-service[data-service="lineMusic"] img { transform:scale(1.8); }
+body#top.sound-page main .music-service-icon { display:block; flex:0 0 auto; width:28px; height:28px; margin:0 0 10px; border:0; opacity:1; transform:none; color:inherit; }
 body#top.sound-page main .music-service-status { font:11px/1.5 Arial,sans-serif; letter-spacing:0; white-space:nowrap; color:#666; }
 body#top.sound-page main a.music-service .music-service-status { color:#555; }
 body#top.sound-page main .music-service[aria-disabled="true"] { cursor:default; }
@@ -35,23 +32,36 @@ body#top.sound-page main #music-reader .music-services { margin:15px 0 0; flex-s
 #music-reader .music-reader-tabs [aria-selected="true"]::after { content:''; position:absolute; inset:auto 0 -1px; height:2px; background:#9b8254; }
 #music-reader .music-reader-panel { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; overscroll-behavior-y:contain; -webkit-overflow-scrolling:touch; touch-action:pan-y; scrollbar-width:thin; scrollbar-color:#c3b79f transparent; padding:24px 12px 32px 0; scrollbar-gutter:stable; scroll-behavior:auto; text-align:left; }
 #music-reader .music-reader-panel[hidden] { display:none; }
-/* Match the catalogue selector specificity so shared paragraph rules cannot override this reader. */
-body#top.sound-page main #music-reader .song-description,
+/* DESIGN baseline: xen-prose.css + .design-description p, measured 2026-10-25.
+   Both viewports use Arial/Helvetica Neue/Noto Sans JP, 14px / 2, 18px paragraphs.
+   DESIGN has no maximum prose width; use the available reader column. */
+body#top.sound-page main .song-description,
+body#top.sound-page main #music-reader .song-description {
+  width:100%; max-width:none; margin:0; padding:0;
+  font-family:Arial,"Helvetica Neue","Noto Sans JP",sans-serif;
+  font-size:14px; line-height:2; letter-spacing:normal; color:var(--music-ink);
+  text-align:left; white-space:normal; word-break:normal; overflow-wrap:break-word; line-break:strict;
+}
+body#top.sound-page main .song-description p,
+body#top.sound-page main #music-reader .song-description p {
+  margin:0 0 18px!important; font:inherit; letter-spacing:normal; color:inherit; text-align:left;
+  white-space:normal; word-break:normal; overflow-wrap:break-word; line-break:strict; text-wrap:wrap;
+}
+body#top.sound-page main .sound-song-lyrics,
 body#top.sound-page main #music-reader .sound-song-lyrics {
-  width:100%; max-width:34em; margin:0 auto; padding:0; color:#3f3f43;
-  font-size:16px; line-height:1.95; letter-spacing:.02em; text-align:left;
+  width:100%; max-width:34em; margin:0 auto; padding:0; color:var(--music-ink);
+  font-size:16px; line-height:1.95; letter-spacing:.02em; text-align:center;
   white-space:normal; word-break:normal; overflow-wrap:break-word; line-break:strict;
 }
-body#top.sound-page main #music-reader .song-description p { margin:0; font:inherit; color:inherit; text-align:left; }
-body#top.sound-page main #music-reader .song-description p + p { margin-top:1.35em; }
+body#top.sound-page main .sound-song-lyrics .sound-lyric-section p,
 body#top.sound-page main #music-reader .sound-lyric-section p {
-  margin:0; font:inherit; letter-spacing:inherit; color:inherit; text-align:left;
+  margin:0; font:inherit; letter-spacing:inherit; color:inherit; text-align:center;
   white-space:pre-line; word-break:normal; overflow-wrap:break-word;
 }
-body#top.sound-page main #music-reader .sound-lyric-section p + p { margin-top:1.4em; }
-/* Existing lyrics use <br> plus source newlines: render each authored break once. */
-body#top.sound-page main #music-reader .sound-lyric-section p:has(br) { white-space:normal; }
-body#top.sound-page main #music-reader .sound-lyric-section + .sound-lyric-section { margin-top:2.25em; }
+body#top.sound-page main .sound-lyric-section p + p { margin-top:1.4em!important; }
+/* Source uses br plus line feeds: render each authored break once. */
+body#top.sound-page main .sound-lyric-section p:has(br) { white-space:normal!important; }
+body#top.sound-page main .sound-lyric-section + .sound-lyric-section { margin-top:2.25em; }
 #music-reader .music-reader-heading { display:flex; flex-direction:column; gap:6px; margin:0; padding:8px 0 16px; font-size:11px; font-weight:400; letter-spacing:.1em; color:#756341; }
 #music-reader .music-reader-heading small { font-size:12px; letter-spacing:.04em; }
 #music-reader :is(button,a,[tabindex]):focus-visible { outline:2px solid #897348; outline-offset:3px; }
@@ -121,3 +131,65 @@ body#top.sound-page main .music-genre-videos .sound-video-list { padding:0; }
   body#top.sound-page main #music-reader .music-services { grid-template-columns:repeat(5,minmax(0,1fr)); }
   body#top.sound-page main #music-reader .music-service-name { font-size:11px; }
 }
+/* MUSIC surface tokens also supply the inverse treatment for a light surface. */
+body#top.sound-page {
+  --music-surface:#000; --music-ink:#fff; --music-muted:#b8b8bd;
+  --music-line:#303034; --music-gold:#c7b184; --music-hover:#151515;
+  --ink:var(--music-ink); --muted:var(--music-muted); --bg:var(--music-surface);
+  --line:var(--music-line); color-scheme:dark;
+  background:var(--music-surface); color:var(--music-ink);
+}
+body#top.sound-page[data-music-theme="light"] {
+  --music-surface:#fff; --music-ink:#000; --music-muted:#555;
+  --music-line:#dedee2; --music-gold:#756341; --music-hover:#f6f6f6; color-scheme:light;
+}
+body#top.sound-page main,
+body#top.sound-page main :is(.sound-song,.sound-release-card,.sound-cover-frame,.sound-category-drawer,.sound-service),
+body#top.sound-page main #music-reader {
+  background:var(--music-surface); color:var(--music-ink); border-color:var(--music-line);
+}
+body#top.sound-page main :is(.title-en,.series-title,.sound-song-title,.sound-video-title,.sound-platform-group h3,.music-genre-videos > h3),
+body#top.sound-page main #music-reader #music-reader-title { color:var(--music-ink); }
+body#top.sound-page main :is(.page-title-ja,.sound-section-ja,.sound-category-ja,.sound-artist,.sound-platform-note,.sound-platform-group h3 span),
+body#top.sound-page main #music-reader :is(.sound-artist,.music-reader-close) { color:var(--music-muted); }
+body#top.sound-page main :is(.sound-song-credit,.music-reader-open,.music-reader-toolbar,.music-reader-heading),
+body#top.sound-page main #music-reader .music-reader-tabs [aria-selected="true"] { color:var(--music-gold); }
+body#top.sound-page main :is(.music-reader-open,.music-playback,.music-genre-videos,.sound-platform-group,.sound-category-links,.music-reader-tabs) { border-color:var(--music-line); }
+body#top.sound-page main .sound-category-drawer > summary { color:var(--music-ink); }
+body#top.sound-page main .sound-category-drawer[open] > summary,
+body#top.sound-page main .sound-category-drawer > summary:hover { background:var(--music-hover); }
+body#top.sound-page main .sound-category-nav .sound-category-links a { color:var(--music-ink); border-color:var(--music-line); background:transparent; }
+body#top.sound-page main :is(.music-service,.music-service-name,.sound-service-name) { color:var(--music-ink); }
+body#top.sound-page main :is(.music-service-status,a.music-service .music-service-status,.sound-service-status,.music-playback-heading,.music-playback .video-source,.music-playback .xen-spotify-link,.sound-video-item .video-source) { color:var(--music-muted); }
+body#top.sound-page main #music-reader .music-reader-tabs button { color:var(--music-muted); }
+body#top.sound-page main .music-service-name { font-size:11px; line-height:1.4; min-height:2.8em; }
+body#top.sound-page main .music-services { gap:8px; }
+body#top.sound-page main .music-service { justify-content:flex-start; }
+body#top.sound-page main .sound-service-logo .music-service-icon { width:28px; height:28px; color:var(--music-ink); }
+body#top.sound-page main .sound-service-logo img { filter:brightness(0) invert(1); }
+body#top.sound-page[data-music-theme="light"] main .sound-service-logo img { filter:brightness(0); }
+/* Separate native disclosures: usable without JS, independently openable with JS. */
+body#top.sound-page main .music-playback { gap:0; margin-top:24px; padding:0; }
+body#top.sound-page main .music-player-drawer { width:100%; min-width:0; border-bottom:1px solid var(--music-line); }
+body#top.sound-page main .music-player-drawer > summary {
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  min-height:56px; padding:16px 0; list-style:none; cursor:pointer;
+  color:var(--music-ink); font:12px/2 Arial,"Helvetica Neue","Noto Sans JP",sans-serif;
+  letter-spacing:.04em; text-align:left; touch-action:manipulation;
+}
+.music-player-drawer > summary::-webkit-details-marker { display:none; }
+.music-player-drawer > summary::marker { content:''; }
+.music-player-drawer > summary svg { flex:0 0 auto; transition:transform 260ms ease; }
+.music-player-drawer > summary[aria-expanded="true"] svg { transform:rotate(180deg); }
+.music-player-drawer > summary:focus-visible { outline:2px solid var(--music-gold); outline-offset:3px; }
+body#top.sound-page main .music-player-panel { min-width:0; padding:4px 0 20px; }
+body#top.sound-page main .music-player-panel .video-container { width:100%; height:auto; aspect-ratio:16/9; margin:0; }
+body#top.sound-page main .music-player-panel .video-container iframe { width:100%; height:100%; border:0; }
+body#top.sound-page main .music-player-panel .video-source { display:block; margin:0; padding:10px 0 0; text-align:right; font-size:11px; line-height:1.8; }
+@media(max-width:700px) {
+  body#top.sound-page main .music-services { gap:4px; }
+  body#top.sound-page main .music-service-icon { width:26px; height:26px; }
+  body#top.sound-page main .music-service-name { font-size:10px; }
+  body#top.sound-page main .music-service-status { font-size:10px; }
+}
+@media(prefers-reduced-motion:reduce) { .music-player-drawer > summary svg { transition:none; } }

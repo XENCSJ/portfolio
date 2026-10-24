@@ -8,6 +8,7 @@ module.exports = async function verifyCategoryTitles() {
  for (const [device,engine,width,height] of [['desktop',chromium,1440,1000],['iphone',webkit,390,844],['small-phone',chromium,375,812],['large-phone',chromium,430,932],['tablet',chromium,768,1024]]) {
   const browser=await engine.launch({headless:true,executablePath:process.env[engine===webkit?'WEBKIT_EXECUTABLE_PATH':'CHROMIUM_EXECUTABLE_PATH']});
   const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
+  ctx.setDefaultTimeout(15000);
   const page=await ctx.newPage();
   let referenceTitleStyle;
   const errors=[]; page.on('pageerror',e=>errors.push(e.message));
@@ -63,20 +64,65 @@ module.exports = async function verifyCategoryTitles() {
    assert.equal(await page.locator('.xen-header-toggle').getAttribute('aria-expanded'),'false');
    if(['sound','artworks','studio','creator'].includes(slug)) await page.screenshot({path:'news-qa/categories-'+device+'-'+slug+'.png'});
    if(slug==='sound') {
-    const workStyles=await page.locator('.sound-work-title').evaluateAll(es=>es.map(e=>{
-     const s=getComputedStyle(e),line=getComputedStyle(e,'::after');
-     return [s.fontSize,s.fontWeight,s.letterSpacing,s.textAlign,s.marginBottom,line.width,line.height];
-    }));
-    assert.equal(workStyles.length,3);
-    for(const style of workStyles)assert.deepEqual(style,workStyles[0]);
-    assert.equal(workStyles[0][3],'center');
-    assert.equal(await page.locator('#deep-sleep-title,#celestial-lake-title').count(),0);
-    const stack=await page.locator('.sound-sleep-series').evaluate(el=>{
-     const videos=[...el.querySelectorAll('.video-container')].map(e=>e.getBoundingClientRect());
-     return {count:videos.length,vertical:videos[0].bottom<videos[1].top,ratios:videos.map(r=>r.width/r.height),gap:getComputedStyle(el).gap};
-    });
-    assert.equal(stack.count,2);assert.ok(stack.vertical);assert.equal(stack.gap,'24px');
-    stack.ratios.forEach(r=>assert.ok(Math.abs(r-16/9)<.01));
+    console.log(device+' MUSIC: begin');
+    assert.equal(await page.locator('.sound-category-drawer').count(),3);
+    assert.equal(await page.locator('.sound-release-card').count(),8);
+    assert.equal(await page.locator('.music-service-icon').count(),44);
+    assert.equal(await page.locator('.music-player-drawer').count(),7);
+    assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
+    assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(0, 0, 0)');
+    const iconLayout=await page.locator('.music-services').evaluateAll(rows=>rows.every(row=>[...row.children].every(item=>{
+     const r=item.getBoundingClientRect(),icon=item.querySelector('svg'),label=item.querySelector('.music-service-name');
+     const a=icon.getBoundingClientRect(),b=label.getBoundingClientRect();
+     return getComputedStyle(icon).color==='rgb(255, 255, 255)'&&a.left>=r.left-1&&a.right<=r.right+1&&a.bottom<=b.top+1&&b.left>=r.left-1&&b.right<=r.right+1;
+    })));
+    assert.ok(iconLayout,device+' service icon and label alignment');
+    const before=await page.locator('.song-description,.sound-song-lyrics').allTextContents();
+    const design=await ctx.newPage();await design.route('**/*',r=>r.request().url().startsWith('http://127.0.0.1:8765/')?r.continue():r.abort());
+    await design.goto('http://127.0.0.1:8765/design.html',{waitUntil:'load'});
+    const properties=['fontFamily','fontSize','lineHeight','letterSpacing','marginTop','marginBottom','maxWidth','whiteSpace','wordBreak','overflowWrap','lineBreak','textAlign'];
+    const reference=await design.locator('.design-description p').first().evaluate((e,keys)=>Object.fromEntries(keys.map(k=>[k,getComputedStyle(e)[k]])),properties);
+    await design.close();
+    const buttons=page.locator('.music-reader-open');
+    assert.equal(await buttons.count(),4);
+    for(let i=0;i<await buttons.count();i++) {
+     console.log(device+' MUSIC reader '+i);await buttons.nth(i).click();
+     const paragraphs=page.locator('#music-reader .song-description p');
+     for(const paragraph of await paragraphs.all()) assert.deepEqual(await paragraph.evaluate((e,keys)=>Object.fromEntries(keys.map(k=>[k,getComputedStyle(e)[k]])),properties),reference,device+' DESIGN typography');
+     if(i===0)await page.screenshot({path:'news-qa/music-'+device+'-description.png'});
+     await page.getByRole('tab',{name:/LYRICS/}).click();
+     assert.ok(await page.locator('#music-reader .sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
+     assert.ok(await page.locator('#music-reader').evaluate(e=>e.scrollWidth<=e.clientWidth+1),'reader overflow');
+     if(i===0)await page.screenshot({path:'news-qa/music-'+device+'-lyrics.png'});
+     await page.getByRole('button',{name:'楽曲詳細を閉じる',exact:true}).click();
+    }
+    assert.deepEqual(await page.locator('.song-description,.sound-song-lyrics').allTextContents(),before,'all authored content restored');
+    const drawers=page.locator('.music-player-drawer');
+    for(let i=0;i<await drawers.count();i++) {
+     console.log(device+' MUSIC player '+i);const drawer=drawers.nth(i),summary=drawer.locator('summary');
+     await summary.press('Enter');await page.waitForTimeout(320);
+     assert.equal(await summary.getAttribute('aria-expanded'),'true');
+     if(await drawer.getAttribute('data-service')==='youtube') {
+      const video=drawer.locator('.video-container');const bounds=await video.boundingBox();
+      assert.ok(Math.abs(bounds.width/bounds.height-16/9)<.01,'YouTube 16:9');
+      await drawer.locator('.xen-cinema-cover').click();
+      assert.equal(await drawer.locator('iframe').count(),1,'YouTube mounted');
+     } else assert.ok((await drawer.locator('iframe').getAttribute('src')).startsWith('https://open.spotify.com/embed/'));
+     await summary.press('Enter');await page.waitForTimeout(320);
+     assert.equal(await summary.getAttribute('aria-expanded'),'false');
+     assert.equal(await drawer.getAttribute('open'),null);
+     if(await drawer.getAttribute('data-service')==='youtube')assert.equal(await drawer.locator('iframe').count(),0,'closed video stopped');
+     else assert.equal(await drawer.locator('iframe').getAttribute('src'),null,'closed Spotify stopped');
+    }
+    const nova=page.locator('#nova-pulse');
+    await nova.locator('[data-service="spotify"] > .music-player-drawer > summary').click();
+    await nova.locator('[data-service="youtube"] > .music-player-drawer > summary').click();await page.waitForTimeout(320);
+    assert.equal(await nova.locator('.music-player-drawer[open]').count(),2,'independent drawers');
+    await nova.locator('[data-service="youtube"] > .music-player-drawer > summary').click();
+    await nova.locator('[data-service="spotify"] > .music-player-drawer > summary').click();await page.waitForTimeout(320);
+    await nova.scrollIntoViewIfNeeded();await page.screenshot({path:'news-qa/music-'+device+'-players.png'});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'MUSIC horizontal overflow');
+    fs.writeFileSync('news-qa/music-'+device+'-typography.json',JSON.stringify(reference,null,2));
    }
    if(slug==='creator') {
     assert.equal(await page.getByText('CONNECT WITH XEN',{exact:true}).count(),0);
