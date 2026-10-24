@@ -1,8 +1,8 @@
 # MUSIC reader — 2026-10-25
 
-Scope: all eight release cards in sound.html. The original HTML remains the content source and non-JavaScript fallback. Four existing descriptions and four lyric texts are moved, never rewritten or reformatted. Each dialog returns their original DOM nodes on close. The carousel code, eight jackets, three genre disclosures, header and footer are unchanged.
+Scope: all eight release cards in sound.html. The original HTML remains the content source and non-JavaScript fallback. Four existing descriptions and four lyric texts are moved without changing their text, paragraph markup or line breaks. Each dialog returns their original DOM nodes on close. The carousel code, eight jackets, three genre disclosures, header and footer are unchanged.
 
-The native modal dialog keeps artwork, metadata, the five service icons and two accessible tabs stationary; only the active text panel scrolls. Arrow keys, Home/End, Escape, focus return and viewport-height adaptations are included. Existing Spotify/YouTube players remain available within ABOUT THE SONG. Missing text is explicitly labelled 未掲載. Unverified URLs remain empty and cannot navigate. Brand artwork is not recolored or dimmed; pending state is conveyed by a separate 準備中 label and aria-disabled.
+The native modal dialog keeps artwork, metadata, the five service icons and available text navigation stationary; only the active text panel scrolls. Arrow keys, Home/End, Escape, focus return and viewport-height adaptations are included. Existing Spotify/YouTube players are independent page sections outside the reader. Missing/whitespace/known placeholder text produces no tab or panel. If both texts are missing there is no VIEW DETAILS button; a single text uses a heading without a tablist. Unverified URLs remain empty and cannot navigate. Brand artwork is not recolored or dimmed; pending state is conveyed by a separate 準備中 label and aria-disabled.
 
 ## Release URL state
 
@@ -17,16 +17,22 @@ The native modal dialog keeps artwork, metadata, the five service icons and two 
 | NIGHT’S AWAKENING | pending | pending | existing video | pending | pending |
 | BLUE SLEEP | existing album | pending | pending | pending | pending |
 
-NOVA PULSE's three added URLs match both the existing LISTEN & DOWNLOAD section and the distributor's release record at https://big-up.style/6EmHEAIHB1 (retrieved 2026-10-25 JST). BLUE SLEEP's two existing individual videos remain in its reader; neither is silently reused as an album-level YouTube destination. Unknown state does not claim that a release does not exist.
+NOVA PULSE's three added URLs match both the existing LISTEN & DOWNLOAD section and the distributor's release record at https://big-up.style/6EmHEAIHB1 (retrieved 2026-10-25 JST). BLUE SLEEP's two differently titled videos (Deep Sleep / Celestial Lake) are preserved in a separate AMBIENT / CHILL VIDEOS section; they are not asserted to be BLUE SLEEP videos or reused as its YouTube destination. Unknown state does not claim that a release does not exist.
 
 ## Official icon assets (original bytes)
 
-- Spotify: https://developer.spotify.com/images/guidelines/design/2024-spotify-logo-icon.zip — Primary_Logo_Green_RGB.svg
-- Apple Music: official identity guide https://marketing.services.apple/apple-music-identity-guidelines → https://apple.co/am-icon-2020 — RGB/Small/Apple_Music_Icon_RGB_sm_073120.svg
-- YouTube: https://brand.youtube/youtube-icon/ → https://www.gstatic.com/marketing-cms/78/29/3e68a1414bb28d0b7e47b44c3c91/youtube-icon.zip — Digital/01 Red/yt_icon_red_digital.png
-- LINE MUSIC: https://music.line.me/top/logo/ → https://vos.line-scdn.net/lmj-scdn/assets/web/logo/png.zip — Symbol/LINE_MUSIC_Symbol_260303_green.png
+- Spotify: https://developer.spotify.com/images/guidelines/design/2024-spotify-logo-icon.zip — Primary_Logo_Black_RGB.svg → xen-music-spotify-black.svg
+- Apple Music: official identity guide https://marketing.services.apple/apple-music-identity-guidelines → https://apple.co/am-icon-2020 — AppleMusic_Icon_BlackandWhite/SVG/Small/Apple_Music_Icon_blk_sm_073120.svg → xen-music-apple-black.svg
+- YouTube: https://brand.youtube/youtube-icon/ → https://www.gstatic.com/marketing-cms/89/d9/cf95c4f345709f4998dc581221b0/youtube-icon.zip — Digital/02 Almost Black/yt_icon_almostblack_digital.png → xen-music-youtube-black.png
+- LINE MUSIC: https://music.line.me/top/logo/ → https://vos.line-scdn.net/lmj-scdn/assets/web/logo/png.zip — Symbol/LINE_MUSIC_Symbol_260303_black.png → xen-music-line-black.png
 - YouTube Music: official service page https://music.youtube.com/ → https://music.youtube.com/img/favicon_144.png
+
+Apple Music retains the official black icon’s original outer shape. The YouTube Music icon remains the existing official color asset: an approved black replacement and its usage conditions were not verified, so full five-icon monochrome is explicitly incomplete. No CSS recoloring or fabricated mark is used. Service names and status labels follow a shared five-column layout.
+
+## Adding releases
+
+Use the existing card data URL attributes. Empty or invalid destinations become disabled labels. Put published copy in `.song-description` and `.sound-song-lyrics`; omit absent content. Put actual existing players inside `.music-playback > .music-playback-item[data-service]` on their own release, outside the text details. Do not invent players from unknown URLs. The reader detects zero, one or two valid text entries automatically.
 
 ## Verification
 
-Run node verify-music-reader.cjs with Playwright Chromium and WebKit installed. Optional MUSIC_BASE_URL points to the published site. The 22 browser/viewport cases cover 1920, 1440, 1280, 1024, 768, 430, 390, 375 and 320 widths, short screens and landscape. Each case opens all eight releases, tests tab/scroll/focus behavior, validates exact content preservation and icon loading, verifies the release link matrix, genre disclosure and carousel navigation. Screenshots/results are written to music-reader-qa/. Physical iPhone Safari and audio delivery through third-party services require separate device/network verification.
+Run node verify-music-reader.cjs with Playwright Chromium and WebKit installed. Optional MUSIC_BASE_URL points to the published site. The 22 browser/viewport cases cover 1920, 1440, 1280, 1024, 768, 430, 390, 375 and 320 widths, short screens and landscape. Each case checks all eight releases, opens the four releases with published text, tests tab/scroll/focus behavior, validates exact content preservation and icon loading, verifies the release link matrix, genre disclosure and carousel navigation. Screenshots/results are written to music-reader-qa/. Ten additional future-content cases check about-only, lyrics-only, whitespace, placeholders and valid text containing the word 未掲載. Physical iPhone Safari and audio delivery through third-party services require separate device/network verification.
