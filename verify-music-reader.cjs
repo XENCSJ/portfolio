@@ -36,7 +36,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.children].map(li=>({key:li.firstElementChild.dataset.service,name:li.querySelector('.music-service-name').textContent,href:li.firstElementChild.getAttribute('href'),status:li.querySelector('.music-service-status').textContent}))));
     for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
     assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,1,5,1,1]);
-    await page.locator('.sound-song-cover,.sound-slide img,.sound-service-logo img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+    await page.locator('.sound-song-cover,.sound-slide img,.sound-service-logo img').evaluateAll(imgs=>Promise.all(imgs.map(img=>{img.loading='eager';return Promise.race([img.decode(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Image decode timeout: '+img.src)),15000))]);})));
     await squares(page.locator('.sound-release-card .sound-cover-frame'));
     await squares(page.locator('.sound-release-card .sound-song-cover'));
     await squares(page.locator('.sound-slide,.sound-slide-art,.sound-slide img'));
