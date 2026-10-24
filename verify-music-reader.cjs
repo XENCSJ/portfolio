@@ -73,6 +73,7 @@ const server=http.createServer((req,res)=>{
       await page.screenshot({path:`${out}/${label}-lyrics.jpg`,type:'jpeg',quality:90});
      }
      await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
+     await page.waitForFunction(id=>document.querySelector('#'+id+' .music-reader-open').getAttribute('aria-expanded')==='false',original.id);
      assert.equal(await open.getAttribute('aria-expanded'),'false');assert(await open.evaluate(el=>document.activeElement===el));
      if(original.about)assert.equal(await page.locator('#'+original.id+' .song-description').innerHTML(),original.about);
      if(original.lyrics)assert.equal(await page.locator('#'+original.id+' .sound-song-lyrics').innerHTML(),original.lyrics);
