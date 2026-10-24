@@ -46,6 +46,8 @@ body#top.sound-page main #music-reader .sound-lyric-section p {
   white-space:pre-line; word-break:normal; overflow-wrap:break-word;
 }
 body#top.sound-page main #music-reader .sound-lyric-section p + p { margin-top:1.4em; }
+/* Existing lyrics use <br> plus source newlines: render each authored break once. */
+body#top.sound-page main #music-reader .sound-lyric-section p:has(br) { white-space:normal; }
 body#top.sound-page main #music-reader .sound-lyric-section + .sound-lyric-section { margin-top:2.25em; }
 #music-reader .music-reader-heading { display:flex; flex-direction:column; gap:6px; margin:0; padding:8px 0 16px; font-size:11px; font-weight:400; letter-spacing:.1em; color:#756341; }
 #music-reader .music-reader-heading small { font-size:12px; letter-spacing:.04em; }
