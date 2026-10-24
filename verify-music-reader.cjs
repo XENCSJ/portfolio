@@ -100,8 +100,8 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     await page.locator('.sound-category-drawer').first().locator('summary').click();
     const stage=page.locator('.sound-showcase-stage');await stage.scrollIntoViewIfNeeded();const previous=await stage.getAttribute('data-active-release');await page.locator('.sound-slide[data-position="next"]').click();assert.notEqual(await stage.getAttribute('data-active-release'),previous);
     const afterTap=await stage.getAttribute('data-active-release');
-    await stage.dispatchEvent('touchstart',{touches:[{clientX:260,clientY:150}]});
-    await stage.dispatchEvent('touchend',{changedTouches:[{clientX:100,clientY:152}]});
+    await stage.dispatchEvent('pointerdown',{pointerId:1,pointerType:'touch',isPrimary:true,button:0,clientX:260,clientY:150});
+    await stage.dispatchEvent('pointerup',{pointerId:1,pointerType:'touch',isPrimary:true,button:0,clientX:100,clientY:152});
     assert.notEqual(await stage.getAttribute('data-active-release'),afterTap);
     if(width===1440){
      await page.locator('h1').click();await page.mouse.move(0,0);
