@@ -8,11 +8,11 @@
   if (!main || !cards.length) return;
 
   const services = [
-    {key:'spotify', name:'Spotify', image:'xen-music-spotify-black.svg', host:'open.spotify.com', path:/^\/(album|track)\/[A-Za-z0-9]+\/?$/},
-    {key:'appleMusic', name:'Apple Music', image:'xen-music-apple-black.svg', host:'music.apple.com', path:/^\/[a-z]{2}\/album\/[^/]+\/\d+\/?$/},
-    {key:'youtube', name:'YouTube', image:'xen-music-youtube-black.png', host:/^(youtu\.be|www\.youtube\.com|youtube\.com)$/},
-    {key:'lineMusic', name:'LINE MUSIC', image:'xen-music-line-black.png', host:'music.line.me', path:/^\/(launch|webapp\/album\/)/},
-    {key:'youtubeMusic', name:'YouTube Music', image:'xen-music-youtube-music.png', host:'music.youtube.com', path:/^\/(playlist|watch)$/}
+    {key:'spotify', name:'Spotify', host:'open.spotify.com', path:/^\/(album|track)\/[A-Za-z0-9]+\/?$/},
+    {key:'appleMusic', name:'Apple Music', host:'music.apple.com', path:/^\/[a-z]{2}\/album\/[^/]+\/\d+\/?$/},
+    {key:'youtube', name:'YouTube', host:/^(youtu\.be|www\.youtube\.com|youtube\.com)$/},
+    {key:'lineMusic', name:'LINE MUSIC', host:'music.line.me', path:/^\/(launch|webapp\/album\/)/},
+    {key:'youtubeMusic', name:'YouTube Music', host:'music.youtube.com', path:/^\/(playlist|watch)$/}
   ];
   function validURL(value, service) {
     try {
@@ -26,6 +26,22 @@
       return u.href;
     } catch { return null; }
   }
+  // One 24-unit, currentColor SVG system for both dark and light surfaces.
+  const serviceMarks = {
+    spotify:'<circle cx="12" cy="12" r="9.5"/><path d="M6.5 9.2c3.8-1.2 7.7-.8 11 1M7.3 12.3c3.1-.9 6.2-.6 9.1.9M8.1 15.3c2.5-.6 4.8-.3 7 .7"/>',
+    appleMusic:'<path d="M9 16V5l11-2v11M9 8l11-2"/><ellipse cx="6" cy="17.5" rx="3" ry="2.5"/><ellipse cx="17" cy="15.5" rx="3" ry="2.5"/>',
+    youtube:'<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 6 3-6 3z" fill="currentColor" stroke="none"/>',
+    lineMusic:'<path d="M21.5 10.8c0 4.8-5.2 8.2-12.4 10.2l.9-3.1C5.6 17.4 2.5 14.6 2.5 10.8c0-4.3 4.2-7.8 9.5-7.8s9.5 3.5 9.5 7.8Z"/><path d="M13 12V7l3 1"/><ellipse cx="11.2" cy="12.8" rx="1.8" ry="1.4"/>',
+    youtubeMusic:'<circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="6.6"/><path d="m10 8.5 5.5 3.5-5.5 3.5z" fill="currentColor" stroke="none"/>'
+  };
+  function serviceIcon(key) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24'); svg.setAttribute('width','28'); svg.setAttribute('height','28');
+    svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor'); svg.setAttribute('stroke-width','1.7');
+    svg.setAttribute('stroke-linecap','round'); svg.setAttribute('stroke-linejoin','round');
+    svg.setAttribute('aria-hidden','true'); svg.setAttribute('focusable','false');
+    svg.classList.add('music-service-icon'); svg.innerHTML = serviceMarks[key]; return svg;
+  }
   function serviceRow(card) {
     const row = document.createElement('ul');
     row.className = 'music-services'; row.setAttribute('aria-label', '音楽配信サービス');
@@ -38,9 +54,7 @@
       item.setAttribute('aria-label', label); item.title = label;
       if (href) { item.href = href; item.target = '_blank'; item.rel = 'noopener noreferrer'; }
       else { item.setAttribute('aria-disabled', 'true'); item.setAttribute('role', 'link'); }
-      const img = document.createElement('img');
-      img.src = './' + service.image; img.alt = ''; img.width = 32; img.height = 32;
-      img.setAttribute('aria-hidden', 'true');
+      const img = serviceIcon(service.key);
       const name = document.createElement('span'); name.className = 'music-service-name';
       name.textContent = service.name; name.lang = 'en';
       const status = document.createElement('span'); status.className = 'music-service-status';
@@ -63,6 +77,94 @@
       {key:'lyrics', en:'LYRICS', name:'歌詞', node:publishedContent(card.querySelector('.sound-song-lyrics'))}
     ].filter(item => item.node);
   }
+
+  // Reuse the DESIGN prose classes; authored text and paragraph boundaries stay intact.
+  main.querySelectorAll('.song-description').forEach(node => {
+    node.classList.add('xen-prose-container');
+    node.querySelectorAll('p').forEach(p => p.classList.add('xen-description'));
+  });
+  main.querySelectorAll('.sound-service').forEach(item => {
+    const name = item.querySelector('.sound-service-name')?.textContent.trim();
+    const service = services.find(s => s.name === name);
+    const logo = item.querySelector('.sound-service-logo');
+    if (service && logo) logo.replaceChildren(serviceIcon(service.key));
+  });
+  const drawers = [...main.querySelectorAll('.music-player-drawer')];
+  const youtubeSlots = new Map();
+  drawers.forEach(drawer => drawer.querySelectorAll('.video-container').forEach(slot => youtubeSlots.set(slot,slot.innerHTML)));
+  function stopMedia(drawer, keepReady = false) {
+    drawer.querySelectorAll('iframe').forEach(frame => {
+      if (drawer.dataset.service === 'spotify') {
+        frame.dataset.musicSrc = frame.getAttribute('src') || frame.dataset.musicSrc;
+        frame.removeAttribute('src');
+        if (keepReady && drawer.open && frame.dataset.musicSrc) frame.src = frame.dataset.musicSrc;
+      } else frame.remove();
+    });
+    drawer.querySelectorAll('.video-container').forEach(slot => {
+      if (!slot.querySelector('.xen-cinema-cover')) {
+        slot.innerHTML = youtubeSlots.get(slot);
+        window.XENCinema?.enhance(slot.parentElement);
+      }
+    });
+  }
+  function resumeMedia(drawer) {
+    drawer.querySelectorAll('iframe[data-music-src]').forEach(frame => {
+      if (!frame.hasAttribute('src')) frame.src = frame.dataset.musicSrc;
+    });
+  }
+  function stopOthers(current) {
+    drawers.forEach(drawer => { if (drawer !== current) stopMedia(drawer, true); });
+  }
+  drawers.forEach(drawer => {
+    const summary = drawer.querySelector('summary');
+    const panel = drawer.querySelector('.music-player-panel');
+    let desiredOpen = false, animation;
+    drawer.open = false; panel.inert = true;
+    summary.setAttribute('aria-expanded','false');
+    // Closed Spotify drawers do not load or play until deliberately opened.
+    if (drawer.dataset.service === 'spotify') stopMedia(drawer);
+    function settle(open) {
+      drawer.open = open; drawer.style.height = ''; drawer.style.overflow = '';
+      animation = null;
+    }
+    summary.addEventListener('click', event => {
+      event.preventDefault();
+      desiredOpen = !desiredOpen;
+      const start = drawer.getBoundingClientRect().height;
+      if (animation) { animation.cancel(); animation = null; }
+      summary.setAttribute('aria-expanded',String(desiredOpen)); panel.inert = !desiredOpen;
+      if (desiredOpen) { drawer.open = true; stopOthers(drawer); resumeMedia(drawer); }
+      else stopMedia(drawer);
+      drawer.style.height = '';
+      const end = desiredOpen ? drawer.getBoundingClientRect().height : summary.getBoundingClientRect().height;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches || !drawer.animate) { settle(desiredOpen); return; }
+      drawer.style.overflow = 'hidden';
+      animation = drawer.animate({height:[start+'px',end+'px']},{duration:260,easing:'cubic-bezier(.22,1,.36,1)'});
+      animation.onfinish = () => settle(desiredOpen);
+    });
+    // Also reflect native/programmatic changes, without interfering with animation.
+    drawer.addEventListener('toggle', () => {
+      if (animation) return;
+      desiredOpen = drawer.open; panel.inert = !desiredOpen;
+      summary.setAttribute('aria-expanded',String(desiredOpen));
+      if (!desiredOpen) stopMedia(drawer);
+    });
+  });
+  // YouTube's existing one-click player retains ownership of playback.
+  main.addEventListener('click', event => {
+    const trigger = event.target.closest('.xen-cinema-cover');
+    const drawer = trigger?.closest('.music-player-drawer');
+    if (drawer) stopOthers(drawer);
+  }, true);
+  // Focusing an already-open Spotify player makes it the active media source.
+  // Neither this nor stopOthers closes the other independent drawers.
+  window.addEventListener('blur', () => setTimeout(() => {
+    const frame = document.activeElement;
+    if (frame?.tagName !== 'IFRAME') return;
+    const drawer = frame.closest('.music-player-drawer');
+    if (drawer?.open) { stopOthers(drawer); resumeMedia(drawer); }
+  }, 0));
+
   const dialog = document.createElement('dialog');
   dialog.id = 'music-reader'; dialog.setAttribute('aria-labelledby', 'music-reader-title');
   dialog.innerHTML = `<div class="music-reader-toolbar"><span lang="en">XEN / MUSIC</span><button class="music-reader-close" type="button" aria-label="楽曲詳細を閉じる" autofocus>閉じる <span aria-hidden="true">×</span></button></div>
