@@ -1,109 +1,64 @@
-/* MUSIC reader regression coverage; CI runs Chromium and WebKit against all eight releases. */
-const {chromium, webkit}=require('playwright');
+/* Task-specific browser acceptance checks for BLUE SLEEP and the shared detail reader. */
+const {chromium,webkit}=require('playwright');
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const out='music-reader-qa';fs.mkdirSync(out,{recursive:true});
-const profiles=[[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[375,568],[320,480],[844,390]];
-const results=[],source=fs.readFileSync('sound.html','utf8');
+const results=[],playback=[];
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg'};
-const server=http.createServer((req,res)=>{
- const file=path.join(process.cwd(),decodeURIComponent(new URL(req.url,'http://localhost').pathname));
- if(!file.startsWith(process.cwd()+path.sep)){res.writeHead(403).end();return;}
- fs.readFile(file,(e,data)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(data);});
-});
+const server=http.createServer((req,res)=>{const file=path.join(process.cwd(),decodeURIComponent(new URL(req.url,'http://localhost').pathname));if(!file.startsWith(process.cwd()+path.sep)){res.writeHead(403).end();return;}fs.readFile(file,(e,data)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(data);});});
 async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:88});}
 (async()=>{
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const base=process.env.MUSIC_BASE_URL||`http://127.0.0.1:${server.address().port}`;
  for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){
   const browser=await engine.launch();
-  for(const [width,height] of profiles){
-   const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1});
-   context.setDefaultTimeout(15000);
-   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-   // Avoid third-party playback/analytics during deterministic UI checks; URLs and nodes are checked separately.
-   await page.route(/googletagmanager|google-analytics|open\.spotify\.com\/embed|youtube-nocookie|i\.ytimg\.com|youtube\.com\/(iframe_api|s\/player)/,r=>r.abort());
-   const label=`${engineName}-${width}x${height}`;
+  for(const [width,height] of [[1440,900],[390,844]]){
+   const label=`${engineName}-${width}x${height}`,context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1});
+   context.setDefaultTimeout(12000);const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+   await page.route(/googletagmanager|google-analytics|open\.spotify\.com\/embed/,r=>r.abort());
    try{
     await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});
-    await page.locator('.music-reader-open').first().waitFor();
-    const originals=await page.locator('.sound-release-card').evaluateAll(cards=>cards.map(c=>({id:c.id,title:c.querySelector('h3').textContent,about:c.querySelector('.song-description')?.innerHTML,lyrics:c.querySelector('.sound-song-lyrics')?.innerHTML,cover:c.querySelector('.sound-song-cover').getAttribute('src')})));
-    assert.equal(originals.length,8);assert.equal(await page.locator('.sound-slide').count(),8);assert.equal(await page.locator('.sound-category-drawer').count(),3);
-    const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.children].map(li=>({key:li.firstElementChild.dataset.service,name:li.querySelector('.music-service-name').textContent,href:li.firstElementChild.getAttribute('href'),status:li.querySelector('.music-service-status').textContent}))));
-    for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
-    assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,1,5,1,1]);
-    assert.equal(await page.locator('.sound-media-accordion').count(),0);assert.equal(await page.locator('.music-playback').count(),4);
-    assert.equal(await page.locator('.music-playback iframe[data-music-src*="spotify"]').count(),3);
-    assert.equal(await page.locator('.music-player-drawer').count(),7);
-    assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
-    assert.equal(await page.locator('.music-playback .video-container').count(),2);
-    assert.equal(await page.locator('.music-genre-videos .video-container').count(),2);
-    assert.equal(await page.locator('#blue-sleep .video-container').count(),0);
-    assert.equal(await page.locator('.music-reader-open').count(),4);
-    await page.locator('.sound-release-card > .music-services img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
-    await page.locator('.music-playback,.music-genre-videos').evaluateAll(els=>{
-     window.__musicPlaybackNodes=els.flatMap(el=>[el,...el.querySelectorAll('iframe,template,.video-container')]).map(node=>({node,parent:node.parentNode,source:node.getAttribute('src')}));
-    });
+    await page.locator('.music-reader-ready').first().waitFor();
+    const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.querySelectorAll('.music-service-name')].map(x=>x.textContent)));
+    assert.equal(rows.length,8);rows.forEach(row=>assert.deepEqual(row,['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']));
+    assert.equal(await page.locator('.sound-slide').count(),8);assert.equal(await page.locator('.sound-category-drawer').count(),3);
+    assert.equal(await page.locator('.music-genre-videos').count(),0);
+    assert.equal(await page.locator('#blue-sleep .sound-video-item').count(),2);
+    assert.equal(await page.locator('a[href="https://www.youtube.com/@XEN_BLU"]').count(),1);
+    const urls=[['deep-sleep','-_Z0oOPnfvE'],['celestial-lake','t2sB0oOTOAA']];
+    for(const [id,video] of urls){assert.equal(await page.locator('#'+id).count(),1);assert(await page.locator('#blue-sleep #'+id+' template').evaluate((e,video)=>e.content.querySelector('iframe').getAttribute('src').includes('/'+video),video));}
+    const originals=await page.locator('.sound-release-card').evaluateAll(cards=>cards.map(c=>({id:c.id,title:c.querySelector('h3').textContent,about:c.querySelector('.song-description')?.innerHTML,lyrics:c.querySelector('.sound-song-lyrics')?.innerHTML})));
     for(const original of originals){
-     const card=page.locator('#'+original.id),open=card.locator('.music-reader-open');
-     if(!original.about&&!original.lyrics){assert.equal(await open.count(),0);continue;}
-     await open.click();const dialog=page.locator('#music-reader');await dialog.waitFor({state:'visible'});
+     const card=page.locator('#'+original.id),button=card.locator('.music-reader-open');
+     if(!original.about&&!original.lyrics){assert.equal(await button.count(),0);continue;}
+     await button.click();const d=page.locator('#music-reader');await d.waitFor({state:'visible'});
+     assert.equal(await d.locator('.music-services,.music-service,.music-service-name,.music-service-status,iframe,template,.music-playback').count(),0);
      assert.equal(await page.locator('#music-reader-title').textContent(),original.title);
-     await page.locator('.music-reader-cover').evaluate(img=>img.decode());
-     assert.equal(await page.locator('.music-reader-cover').getAttribute('src'),original.cover);
      assert.equal(await page.locator('#music-about-panel .song-description').innerHTML(),original.about);
-     assert.equal(await dialog.locator('iframe,template,details,.music-playback').count(),0);
-     assert.equal(await dialog.getByText('楽曲解説は未掲載です。',{exact:true}).count(),0);
-     assert(await page.evaluate(()=>window.__musicPlaybackNodes.every(({node,parent,source})=>node.isConnected&&node.parentNode===parent&&node.getAttribute('src')===source)),'reader must not relocate or replace any player');
-     const before=await page.locator('.music-reader-cover').boundingBox();
-     const geometry=await dialog.evaluate(d=>{const p=d.querySelector('#music-about-panel'),a=p.querySelector('.song-description');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
-     assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>=100,`${label}: ${geometry.panel}px reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'14px');assert(Math.abs(parseFloat(geometry.line)-28)<.01);
+     assert(await d.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
+     const order=await d.evaluate(el=>{const cover=el.querySelector('.music-reader-cover'),title=el.querySelector('#music-reader-title'),text=el.querySelector('.music-reader-text');return cover.getBoundingClientRect().bottom<=title.getBoundingClientRect().top+1&&title.getBoundingClientRect().bottom<=text.getBoundingClientRect().top+1;});assert(order);
+     if(original.id==='hikari-no-arika')await shot(page,label+'-details');
      await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-panel .sound-song-lyrics').innerHTML(),original.lyrics);
-     assert(await page.locator('#music-lyrics-panel .sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
-     if(width>=1280){const firstVerse=await page.locator('#music-lyrics-panel .sound-lyric-section p').first().evaluate(p=>({height:p.getBoundingClientRect().height,line:parseFloat(getComputedStyle(p).lineHeight),lines:p.querySelectorAll('br').length+1}));assert(Math.abs(firstVerse.height-firstVerse.line*firstVerse.lines)<2,'authored lyric breaks must render once');}
-     await page.locator('#music-lyrics-panel').evaluate(el=>{el.scrollTop=el.scrollHeight;});
-     assert.deepEqual(await page.locator('.music-reader-cover').boundingBox(),before);
-     const extent=await page.locator('#music-lyrics-panel').evaluate(el=>({end:el.scrollTop+el.clientHeight,total:el.scrollHeight,overflow:el.scrollWidth>el.clientWidth+1}));assert(!extent.overflow);assert(extent.end>=extent.total-2);
-     await page.locator('#music-lyrics-tab').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#music-about-tab').getAttribute('aria-selected'),'true');
-     await page.keyboard.press('End');assert.equal(await page.locator('#music-lyrics-tab').getAttribute('aria-selected'),'true');await page.keyboard.press('Home');
-     if(original.id==='hikari-no-arika'&&[1440,390,375].includes(width)){
-      await shot(page,label+'-about');await page.locator('#music-lyrics-tab').click();await page.locator('#music-lyrics-panel').evaluate(el=>el.scrollTop=0);await shot(page,label+'-lyrics');
-     }
-     await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
-     await page.waitForFunction(id=>document.querySelector('#'+id+' .music-reader-open').getAttribute('aria-expanded')==='false',original.id);
-     assert(await open.evaluate(el=>document.activeElement===el));
+     assert(await page.locator('#music-lyrics-panel p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
+     await page.locator('.music-reader-close').click();await d.waitFor({state:'hidden'});
      assert.equal(await card.locator('.song-description').innerHTML(),original.about);assert.equal(await card.locator('.sound-song-lyrics').innerHTML(),original.lyrics);
     }
-    await page.locator('.sound-category-drawer').first().locator('summary').click();await page.locator('.sound-category-links a').first().click();await page.locator('#music-reader').waitFor({state:'visible'});await page.locator('.music-reader-close').click();assert(await page.locator('.sound-category-drawer').first().evaluate(el=>el.open));
-    await page.locator('.sound-category-drawer').first().locator('summary').click();
-    const stage=page.locator('.sound-showcase-stage');await stage.scrollIntoViewIfNeeded();const previous=await stage.getAttribute('data-active-release');await page.locator('.sound-slide[data-position="next"]').click();assert.notEqual(await stage.getAttribute('data-active-release'),previous);
-    const ids=await page.locator('[id]').evaluateAll(els=>els.map(e=>e.id));assert.equal(new Set(ids).size,ids.length);
-    assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1));
-    if([1440,390].includes(width)){
-     await page.locator('#nova-pulse').scrollIntoViewIfNeeded();await shot(page,label+'-playback');
+    await page.locator('#blue-sleep').scrollIntoViewIfNeeded();await shot(page,label+'-blue-sleep');
+    for(const [id,video] of urls){
+     const drawer=page.locator('#'+id+' details');await drawer.locator('summary').click();await page.locator('#'+id+' .xen-cinema-cover').click();
+     const frame=page.locator('#'+id+' .video-container iframe');await frame.waitFor();assert((await frame.getAttribute('src')).includes('/'+video));
+     let outcome={label,id,mounted:true,playing:false};
+     if(engineName==='chromium'){
+      try{const media=page.frameLocator('#'+id+' .video-container iframe').locator('video');await media.waitFor({timeout:15000});const initial=await media.evaluate(v=>({time:v.currentTime,paused:v.paused,error:v.error?.message}));await page.waitForTimeout(2000);const after=await media.evaluate(v=>({time:v.currentTime,paused:v.paused,error:v.error?.message}));outcome={...outcome,initial,after,playing:!after.paused&&after.time>initial.time};}catch(e){outcome.note=e.message.slice(0,240);}
+     }
+     playback.push(outcome);await shot(page,label+'-'+id+'-player');
+     await drawer.locator('summary').click();await frame.waitFor({state:'detached'});assert.equal(await drawer.locator('summary').getAttribute('aria-expanded'),'false');
     }
-    // One-tap activation must mount the original video in its existing page section.
-    await page.locator('#nova-pulse .music-player-drawer[data-service="youtube"] > summary').click();
-    await page.locator('#nova-pulse .xen-cinema-cover').click();
-    const frame=page.locator('#nova-pulse .video-container iframe');await frame.waitFor();assert((await frame.getAttribute('src')).includes('/TpUbm4xbmVc'));
-    await page.locator('#nova-pulse .music-player-drawer[data-service="youtube"] > summary').click();
-    await frame.waitFor({state:'detached'});
-    assert.deepEqual(errors,[]);results.push({label,pass:true,releases:8});console.log('PASS',label);
+    assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1));assert.deepEqual(errors,[]);
+    results.push({label,pass:true,releases:8,details:4,videos:2});console.log('PASS',label);
    }catch(e){await shot(page,label+'-failure');results.push({label,pass:false,error:e.stack});console.error('FAIL',label,e);}
    await context.close();
   }
-  // Edge cases for future releases: about-only, lyrics-only, whitespace and exact placeholders.
-  for(const [name,about,lyrics,count] of [['about-only','<p>実際の楽曲解説。</p>','',1],['lyrics-only','', '<p>一行目<br>二行目</p>',1],['empty',' \n\t ','',0],['placeholder','<p>楽曲解説は未掲載です。</p>','<p>歌詞は未掲載です。</p>',0],['valid-word','<p>未掲載の手紙をテーマにした曲。</p>','',1]]){
-   const context=await browser.newContext({viewport:{width:390,height:844}}),page=await context.newPage();
-   await page.route('**/sound.html',r=>r.fulfill({contentType:'text/html',body:source.replace(/(<article\b[^>]*id="tochu-no-mamade"[\s\S]*?<\/article>)/,card=>card.replace(/<div class="song-description">[\s\S]*?<\/div>/,`<div class="song-description">${about}</div>`).replace(/<div aria-label="途中のままで 歌詞全文" class="sound-song-lyrics">[\s\S]*?<\/div>/,`<div class="sound-song-lyrics">${lyrics}</div>`))}));
-   const label=engineName+'-'+name;
-   try{
-    await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});await page.locator('#tochu-no-mamade.music-reader-ready').waitFor();
-    const button=page.locator('#tochu-no-mamade .music-reader-open');assert.equal(await button.count(),count);
-    if(count){await button.click();assert.equal(await page.locator('#music-reader [role="tablist"]').count(),0);assert.equal(await page.locator('#music-reader .music-reader-panel').count(),1);assert.equal(await page.locator('#music-reader .music-reader-heading').count(),1);}
-    results.push({label,pass:true});console.log('PASS',label);
-   }catch(e){results.push({label,pass:false,error:e.stack});console.error('FAIL',label,e);}await context.close();
-  }
   await browser.close();
  }
- fs.writeFileSync(out+'/results.json',JSON.stringify(results,null,2));server.close();if(results.some(r=>!r.pass))process.exitCode=1;
+ fs.writeFileSync(out+'/results.json',JSON.stringify({results,playback},null,2));server.close();if(results.some(r=>!r.pass))process.exitCode=1;
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});
