@@ -1,0 +1,9 @@
+/* SHOP gallery only; DESIGN and the catalog grid keep their existing layout. */
+.xg-shop-dialog .xg-stage img{transition:opacity 180ms ease}
+.xg-shop-dialog .xg-dots{display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap}
+.xg-shop-dialog .xg-dots button{display:grid;place-items:center;width:28px;height:28px;padding:0;border:0;background:transparent;color:#737373;cursor:pointer}
+.xg-shop-dialog .xg-dots button::before{content:'';display:block;width:5px;height:5px;border-radius:50%;background:currentColor}
+.xg-shop-dialog .xg-dots button[aria-pressed="true"]{color:#c5a059}
+.xg-shop-dialog .xg-gallery-navigation button:hover{color:#c5a059}
+.xg-shop-dialog .xg-gallery-navigation button:focus-visible,.xg-shop-dialog .xg-dots button:focus-visible{outline:1px solid #c5a059;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.xg-shop-dialog .xg-stage img{transition:none}}

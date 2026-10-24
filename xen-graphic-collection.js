@@ -163,10 +163,11 @@
         visual.setAttribute('aria-label',`${dialog.dataset.graphicName}の商品詳細を開く`);visual.setAttribute('aria-haspopup','dialog');
         let img=visual.querySelector('img');
         if(!img){img=document.createElement('img');visual.append(img);}
-        img.src=dialog.dataset.graphicCover;img.alt=`${dialog.dataset.graphicName} フロント`;
-        img.loading='lazy';img.decoding='async';img.width=img.height=1254;
-        const detail=document.createElement('a');detail.className='xg-product-detail';detail.href=`#${dialog.id}`;
-        detail.setAttribute('aria-haspopup','dialog');detail.textContent='詳細を見る ↗';
+        const cover=dialog.querySelector('.xg-stage img');
+        img.src=dialog.dataset.graphicCover;img.alt=cover.alt;
+        img.loading='lazy';img.decoding='async';img.width=cover.width;img.height=cover.height;
+        const detail=document.createElement('a');detail.className='xg-product-detail';detail.href=`./design.html#${dialog.id}`;
+        detail.setAttribute('aria-label',`${dialog.dataset.graphicName} の詳細を見る（DESIGNページ）`);detail.textContent='詳細を見る ↗';
         card.querySelector('.base-product-links').append(detail);
       }
       const price=card.querySelector(':scope > .base-product-price');

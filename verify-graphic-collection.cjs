@@ -3,6 +3,8 @@ const {chromium,webkit,devices}=require('playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const content=JSON.parse(fs.readFileSync('xen-graphic-content.json','utf8'));
 const works=content.works;
+const shopProducts=JSON.parse(fs.readFileSync('xen-shop-gallery.json','utf8')).products;
+const shopImages=new Map(shopProducts.map(w=>[w.key,w.images]));
 const out=process.env.GRAPHIC_QA_OUT||'graphic-collection-qa';fs.mkdirSync(out,{recursive:true});
 const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{const file=path.resolve(decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1));if(!file.startsWith(process.cwd()+path.sep)||!fs.existsSync(file)){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file).toLowerCase()]||'application/octet-stream');fs.createReadStream(file).pipe(res)});
@@ -25,6 +27,10 @@ async function run(engine,profile,label){
    assert((await card.locator(':scope > .base-product-price').innerText()).includes(new Intl.NumberFormat('ja-JP').format(item.price)));
    assert.equal(await card.locator(':scope > .base-product-cta').getAttribute('href'),item.url);
   }
+  await page.locator('[data-base-grid]').scrollIntoViewIfNeeded();
+  await page.locator('[data-graphic-product] .base-product-visual img').evaluateAll(es=>Promise.all(es.map(i=>i.decode())));
+  await page.screenshot({path:`${out}/${label}-CATALOG.jpg`,type:'jpeg',quality:90});
+  assert.equal(await page.locator('[data-base-grid]').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),3);
   assert.equal(await page.locator('#base-product-160077299 > .base-product-cta').getAttribute('href'),'https://xen.official.ec/items/160077299');
   await page.getByRole('tab',{name:'APPAREL',exact:true}).click();assert.equal(await page.locator('.catalog-product:visible').count(),7);
   await page.getByRole('tab',{name:'JEWELRY',exact:true}).click();assert.equal(await page.locator('.catalog-product:visible').count(),4);
@@ -33,6 +39,8 @@ async function run(engine,profile,label){
   await page.locator('.xen-header-toggle').click();assert.equal(await page.locator('.xen-menu a[href="./design.html"]').isVisible(),true);await page.locator('.xen-drawer-close').click();
   for(const w of works){
    const card=page.locator(`#base-product-${w.product_id}`);
+   assert.equal(await card.locator('.base-product-visual img').getAttribute('src'),shopImages.get(w.key)[0].src);
+   assert.equal(await card.locator('.xg-product-detail').getAttribute('href'),`./design.html#graphic-${w.key}`);
    await card.locator('.base-product-visual').click();
    const dialog=page.locator(`#graphic-${w.key}`);await dialog.waitFor({state:'visible'});
    assert.equal(new URL(page.url()).hash,`#graphic-${w.key}`);
@@ -43,15 +51,20 @@ async function run(engine,profile,label){
    assert(await dialog.locator('.xg-approved-copy').evaluate(e=>getComputedStyle(e).maxHeight==='none'&&e.scrollHeight<=e.clientHeight+1));
    const imgs=dialog.locator('.xg-stage img');
    await imgs.evaluateAll(es=>Promise.all(es.map(i=>i.decode())));
-   for(const [n,img] of w.images.entries()){
+   for(const [n,img] of shopImages.get(w.key).entries()){
     await dialog.locator(`[data-graphic-thumb="${n}"]`).click();
     assert.equal(await dialog.locator('.xg-stage img.is-current').getAttribute('src'),img.src);
     assert.equal(await dialog.locator(`[data-graphic-thumb="${n}"]`).getAttribute('aria-pressed'),'true');
     assert.equal(await dialog.locator('.xg-stage img.is-current').evaluate(i=>getComputedStyle(i).objectFit),'contain');
    }
+   await dialog.locator('[data-graphic-next]').click();
+   assert.equal(await dialog.locator('[data-graphic-thumb="0"]').getAttribute('aria-pressed'),'true','wrap to graphic');
+   assert.equal(await dialog.locator('[data-graphic-thumb="0"]').evaluate(e=>getComputedStyle(e).color),'rgb(197, 160, 89)');
+   await dialog.locator('[data-graphic-prev]').click();
+   assert.equal(await dialog.locator('.xg-stage img.is-current').getAttribute('src'),shopImages.get(w.key).at(-1).src);
    await dialog.locator('.xg-stage').press('Home');await dialog.locator('.xg-stage').press('ArrowRight');assert.equal(await dialog.locator('[data-graphic-thumb="1"]').getAttribute('aria-pressed'),'true');
    await check(page);
-   if(w.number==='01'){await dialog.locator('.xg-concept summary').click();await page.screenshot({path:`${out}/${label}-SHOP.jpg`,type:'jpeg',quality:88});}
+   if(w.key==='state-of-mind'){await dialog.locator('.xg-stage').press('Home');await dialog.locator('.xg-concept summary').click();await page.screenshot({path:`${out}/${label}-SHOP.jpg`,type:'jpeg',quality:88});}
    await dialog.locator('[data-graphic-close]').click();await page.waitForFunction(()=>!document.querySelector('.xg-dialog[open]'));
    assert.equal(await card.locator('.base-product-visual').evaluate(e=>e===document.activeElement),true);
   }
@@ -90,12 +103,12 @@ async function run(engine,profile,label){
   await d.locator('.xg-concept summary').click();await page.waitForTimeout(400);assert.equal(await d.locator('.xg-concept-panel').evaluate(e=>e.style.height),'');
   await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await stage.locator('img').first().evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
   await check(page);assert.deepEqual(errors,[]);
-  results.push({label,passed:true,approvedCopyExact:true,images:9,catalogCards:11,existingProductsPreserved:true,keyboardAndSwipe:true,hashBackForward:true,reducedMotion:true,pageErrors:errors});console.log('PASS',label);
+  results.push({label,passed:true,approvedCopyExact:true,images:22,catalogCards:11,existingProductsPreserved:true,keyboardAndSwipe:true,hashBackForward:true,reducedMotion:true,pageErrors:errors});console.log('PASS',label);
  }catch(e){await page.screenshot({path:`${out}/FAIL-${label}.jpg`,type:'jpeg'}).catch(()=>{});results.push({label,passed:false,error:e.stack});console.error('FAIL',label,e.stack);}
  finally{await browser.close();}
 }
 (async()=>{
- for(const w of works)for(const i of w.images)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256,'unaltered source image');
+ for(const w of [...works,...shopProducts])for(const i of w.images)assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256,'unaltered source image');
  if(!process.env.GRAPHIC_PUBLIC_URL)await new Promise(r=>server.listen(8766,'127.0.0.1',r));
  const profiles=[['PC',chromium,{viewport:{width:1440,height:1000}}],['tablet',chromium,{viewport:{width:768,height:1024},hasTouch:true}],['iPhone',chromium,{viewport:{width:390,height:844},isMobile:true,hasTouch:true}],['Android',chromium,{viewport:{width:360,height:800},isMobile:true,hasTouch:true}]];
  if(process.env.GRAPHIC_WEBKIT==='1')profiles.push(['webkit-iPhone',webkit,{...devices['iPhone 14 Pro Max']}]);
