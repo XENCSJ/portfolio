@@ -1,0 +1,82 @@
+/* MUSIC's editorial index. Release cards and the cover carousel keep their owners. */
+body#top.sound-page main .sound-category-nav.music-index {
+  display:block; width:100%; max-width:880px; margin:48px auto 0;
+  border:0; border-top:1px solid #303034; background:transparent;
+}
+body#top.sound-page main .music-index .sound-category-drawer {
+  min-width:0; margin:0; padding:0; border:0; border-bottom:1px solid #303034;
+  border-radius:0; background:transparent; box-shadow:none;
+}
+body#top.sound-page main .music-index .sound-category-drawer > summary {
+  display:grid; grid-template-columns:30px minmax(0,1fr) 24px;
+  align-items:center; gap:20px; min-height:118px; padding:26px 8px;
+  border:0; border-radius:0; background:transparent; list-style:none;
+  cursor:pointer; touch-action:manipulation; color:#fff;
+}
+.music-index summary::-webkit-details-marker { display:none; }
+.music-index summary::marker { content:''; }
+body#top.sound-page main .music-index-number { color:var(--music-gold,#c7b184); font:12px/1.5 Arial,sans-serif; letter-spacing:.12em; align-self:start; padding-top:7px; }
+body#top.sound-page main .music-index-label { display:block; min-width:0; }
+body#top.sound-page main .music-index .sound-category-en {
+  display:table; max-width:100%; position:relative; padding:0 0 9px; margin:0;
+  color:#fff; font-size:clamp(20px,2.6vw,30px); font-weight:400;
+  line-height:1.35; letter-spacing:.045em; overflow-wrap:anywhere;
+  transition:color 350ms ease-in-out;
+}
+.music-index .sound-category-en::after {
+  content:''; position:absolute; left:0; right:0; bottom:1px; height:1px;
+  background:var(--music-gold,#c7b184); transform:scaleX(0); transform-origin:left;
+  transition:transform 350ms ease-in-out;
+}
+body#top.sound-page main .music-index .sound-category-ja {
+  display:block; margin:3px 0 0; color:#b8b8bd; font-size:12px; line-height:1.7; letter-spacing:.04em;
+}
+.music-index-toggle { display:block; position:relative; width:20px; height:20px; color:var(--music-gold,#c7b184); }
+.music-index-toggle::before,.music-index-toggle::after { content:''; position:absolute; left:3px; top:9px; width:14px; height:1px; background:currentColor; }
+.music-index-toggle::after { transform:rotate(90deg); transition:transform 350ms ease-in-out; }
+.music-index [open]:not([data-expanded="false"]) .music-index-toggle::after { transform:rotate(0deg); }
+body#top.sound-page main .music-index [open]:not([data-expanded="false"]) .sound-category-en { color:var(--music-gold,#c7b184); }
+.music-index [open]:not([data-expanded="false"]) .sound-category-en::after { transform:scaleX(1); }
+body#top.sound-page main .music-index .sound-category-links { padding:0 8px 22px 58px; border:0; }
+body#top.sound-page main .music-index .sound-category-links .music-index-link {
+  display:grid; grid-template-columns:88px minmax(0,1fr) 24px; align-items:center;
+  gap:22px; min-height:112px; margin:0; padding:12px 0;
+  border:0; border-bottom:1px solid #242427; border-radius:0;
+  background:transparent; color:#fff; text-align:left;
+  line-height:1.6; letter-spacing:.025em; transition:color .2s;
+}
+body#top.sound-page main .music-index .music-index-link:last-child { border-bottom:0; }
+.music-index-link::after { content:none!important; }
+body#top.sound-page main .music-index-cover { display:block; width:88px; height:88px; aspect-ratio:1; object-fit:cover; object-position:center; border:0; border-radius:0; }
+.music-index-meta { display:block; min-width:0; }
+.music-index-title { display:block; font-size:15px; font-weight:400; overflow-wrap:anywhere; }
+.music-index-artist { display:block; margin-top:5px; color:#b8b8bd; font-size:11px; letter-spacing:.14em; }
+.music-index-arrow { width:20px; height:20px; color:var(--music-gold,#c7b184); }
+body#top.sound-page main .music-index :is(summary,a):focus-visible { outline:1px solid var(--music-gold,#c7b184); outline-offset:4px; }
+body#top.sound-page main :is(#j-pop,#edm-electronic,#ambient-chill) > .series-title { border:0; background:transparent; box-shadow:none; padding:0; font-size:clamp(16px,2vw,22px); }
+body#top.sound-page main :is(#j-pop,#edm-electronic,#ambient-chill) > .series-title::before,
+body#top.sound-page main :is(#j-pop,#edm-electronic,#ambient-chill) > .series-title::after { content:none; }
+body#top.sound-page main :is(#j-pop,#edm-electronic,#ambient-chill) > .series-title :is(.sound-number,.sound-section-ja) { display:none; }
+.sound-release-card[data-music-navigation-target]:focus { outline:none; }
+.sound-cover-frame.music-navigation-highlight { animation:music-navigation-arrival 500ms ease-in-out; }
+@keyframes music-navigation-arrival { 0%,100% { outline:1px solid transparent; outline-offset:3px; } 25%,70% { outline:1px solid #c7b184; outline-offset:3px; } }
+@media (hover:hover) {
+  body#top.sound-page main .music-index .sound-category-drawer > summary:hover { background:transparent; }
+  body#top.sound-page main .music-index summary:hover .sound-category-en,
+  body#top.sound-page main .music-index .music-index-link:hover { color:var(--music-gold,#c7b184); }
+}
+@media (max-width:700px) {
+  body#top.sound-page main .sound-category-nav.music-index { margin-top:32px; }
+  body#top.sound-page main .music-index .sound-category-drawer > summary { grid-template-columns:22px minmax(0,1fr) 20px; gap:12px; min-height:100px; padding:22px 0; }
+  body#top.sound-page main .music-index-number { font-size:10px; padding-top:5px; }
+  body#top.sound-page main .music-index .sound-category-en { font-size:clamp(19px,4.8vw,25px); letter-spacing:.015em; }
+  body#top.sound-page main .music-index .sound-category-ja { font-size:11px; }
+  body#top.sound-page main .music-index .sound-category-links { padding:0 0 16px; }
+  body#top.sound-page main .music-index .sound-category-links .music-index-link { grid-template-columns:68px minmax(0,1fr) 20px; gap:14px; min-height:92px; }
+  body#top.sound-page main .music-index-cover { width:68px; height:68px; }
+  .music-index-title { font-size:14px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .music-index *, .music-index *::after { transition:none!important; }
+  .sound-cover-frame.music-navigation-highlight { animation:none!important; outline:1px solid #c7b184; outline-offset:3px; }
+}
