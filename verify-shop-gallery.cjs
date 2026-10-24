@@ -93,32 +93,32 @@ async function run(engine,profile,label){
   for(const [key,p] of Object.entries(characters)){
    const item=feed.find(i=>i.id===p.product_id), card=page.locator('#base-product-'+p.product_id);
    assert.equal(await card.locator('.base-product-visual').getAttribute('href'),item.url,'original product link');
-   assert.equal(await card.locator('.base-product-visual img').getAttribute('src'),item.image_url,'original hoodie cover');
+   assert.equal(await card.locator('.base-product-visual img').getAttribute('src'),p.images[0].src,'graphic catalog cover');
    assert.equal(await card.locator('.xg-product-detail').count(),1,'one gallery entry');
    const entry=card.locator('.xg-product-detail');await entry.click();
    const d=page.locator('#character-'+key);await d.waitFor({state:'visible'});
    const current=d.locator('.xg-stage img.is-current');
    assert.equal(await d.locator('.xg-stage img').count(),2);
-   assert.equal(await current.getAttribute('src'),item.image_url);
+   assert.equal(await current.getAttribute('src'),p.images[0].src);
    assert.equal(await d.locator('[data-graphic-purchase]').getAttribute('href'),item.url);
-   await d.locator('[data-graphic-next]').click();assert.equal(await current.getAttribute('src'),p.images[1].src);
+   await d.locator('[data-graphic-next]').click();assert.equal(await current.getAttribute('src'),item.image_url,'live hoodie second');
    assert.equal(await d.locator('[data-graphic-thumb="1"]').getAttribute('aria-pressed'),'true');
    assert((await d.locator('[data-graphic-image-status]').innerText()).includes('2 / 2'));
-   await current.evaluate(i=>i.decode());assert.equal(await current.evaluate(i=>i.naturalWidth),p.images[1].width);
+   await d.locator('[data-graphic-prev]').click();assert.equal(await current.getAttribute('src'),p.images[0].src);
+   await current.evaluate(i=>i.decode());assert.equal(await current.evaluate(i=>i.naturalWidth),p.images[0].width);
    assert.equal(await current.evaluate(i=>getComputedStyle(i).objectFit),'contain');
    await d.evaluate(e=>{e.scrollTop=0;});
    await d.locator('.xg-stage').evaluate(async e=>{await Promise.all(e.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));});
    await page.screenshot({path:`${out}/${label}-${key}.jpg`,type:'jpeg',quality:90});
    await d.locator('[data-shop-enlarge]').click();const z=page.locator('.xsg-zoom');await z.waitFor({state:'visible'});
-   assert.equal(await z.locator('img').getAttribute('src'),origin+p.images[1].src.slice(2));
+   assert.equal(await z.locator('img').getAttribute('src'),origin+p.images[0].src.slice(2));
    await z.locator('img').evaluate(i=>i.decode());await z.locator('[data-shop-magnify]').click();
    assert.equal(await z.locator('[data-shop-magnify]').getAttribute('aria-pressed'),'true');
    await z.locator('[data-shop-zoom-close]').click();await z.waitFor({state:'hidden'});
-   await d.locator('[data-graphic-prev]').click();assert.equal(await current.getAttribute('src'),item.image_url);
-   await d.locator('[data-graphic-thumb="1"]').click();assert.equal(await current.getAttribute('src'),p.images[1].src);
+   await d.locator('[data-graphic-thumb="1"]').click();assert.equal(await current.getAttribute('src'),item.image_url);
    assert(await d.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
    await d.locator('[data-graphic-close]').click();await d.waitFor({state:'hidden'});
-   await entry.click();await d.waitFor({state:'visible'});assert.equal(await current.getAttribute('src'),item.image_url,'character reopen');
+   await entry.click();await d.waitFor({state:'visible'});assert.equal(await current.getAttribute('src'),p.images[0].src,'character reopen');
    await d.locator('[data-graphic-close]').press('Escape');await d.waitFor({state:'hidden'});
   }
   await page.reload({waitUntil:'domcontentloaded'});
@@ -190,7 +190,7 @@ async function run(engine,profile,label){
 }
 (async()=>{
  for(const p of Object.values(products))for(const i of p.images){assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256);assert(fs.existsSync(i.thumbnail));}
- for(const p of Object.values(characters)){const i=p.images[1];assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256);}
+ for(const p of Object.values(characters)){const i=p.images[0];assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256);}
  if(!process.env.SHOP_PUBLIC_URL)await new Promise(resolve=>server.listen(8786,'127.0.0.1',resolve));
  try{
   for(const width of [375,390,430,768,1280,1440]){

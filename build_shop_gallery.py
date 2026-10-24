@@ -41,6 +41,7 @@ def character_dialog(key, product):
     name = escape(product['name'])
     return (
         f'<dialog class="xg-dialog xg-shop-dialog" id="{ident}" data-graphic-dialog data-graphic-preserve-cover '
+        f'data-graphic-cover="{product["images"][0]["src"]}" data-graphic-feed-index="1" '
         f'data-product-id="{product["product_id"]}" data-graphic-name="{name}" style="--xg-accent:#c9b58b" aria-labelledby="{ident}-title">'
         '<div class="xg-dialog-bar"><span>SHOP / PRODUCT</span><button class="xg-close" type="button" data-graphic-close '
         'aria-label="詳細を閉じる">CLOSE <span aria-hidden="true">×</span></button></div>'

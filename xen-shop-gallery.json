@@ -223,13 +223,6 @@
       "price": 18800,
       "images": [
         {
-          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
-          "label": "パーカー",
-          "width": 640,
-          "height": 640,
-          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
-        },
-        {
           "src": "./xen-shop-shirowashi-graphic-20261025-2a163420a8.jpeg",
           "label": "グラフィック",
           "source_filename": "IMG_9781(1).jpeg",
@@ -237,6 +230,13 @@
           "height": 3000,
           "sha256": "2a163420a81baa0daa740f23ede907b7bc2ef27b067dc754fc794336b5987dde",
           "thumbnail": "./xen-shop-shirowashi-graphic-20261025-2a163420a8.jpeg"
+        },
+        {
+          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+          "label": "パーカー",
+          "width": 640,
+          "height": 640,
+          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
         }
       ]
     },
@@ -247,13 +247,6 @@
       "price": 18800,
       "images": [
         {
-          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
-          "label": "パーカー",
-          "width": 640,
-          "height": 640,
-          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
-        },
-        {
           "src": "./xen-shop-takoleo-graphic-20261025-75d32b8850.jpeg",
           "label": "グラフィック",
           "source_filename": "IMG_9779(1).jpeg",
@@ -261,6 +254,13 @@
           "height": 3000,
           "sha256": "75d32b88507ff0c1c5c6f3ed71fd7a72498a4012f144d9e325f1bfdf06f85f01",
           "thumbnail": "./xen-shop-takoleo-graphic-20261025-75d32b8850.jpeg"
+        },
+        {
+          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+          "label": "パーカー",
+          "width": 640,
+          "height": 640,
+          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
         }
       ]
     },
@@ -271,13 +271,6 @@
       "price": 13000,
       "images": [
         {
-          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
-          "label": "パーカー",
-          "width": 640,
-          "height": 640,
-          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
-        },
-        {
           "src": "./xen-shop-kuro-usagi-graphic-20261025-292bdaa92a.jpeg",
           "label": "グラフィック",
           "source_filename": "IMG_9785(1).jpeg",
@@ -285,6 +278,13 @@
           "height": 3000,
           "sha256": "292bdaa92a97b463dbbe2d261d762dcfca9c0d08a5aa7e83463e673f8f7fc236",
           "thumbnail": "./xen-shop-kuro-usagi-graphic-20261025-292bdaa92a.jpeg"
+        },
+        {
+          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+          "label": "パーカー",
+          "width": 640,
+          "height": 640,
+          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
         }
       ]
     }

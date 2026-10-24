@@ -168,11 +168,17 @@
           img.src=dialog.dataset.graphicCover;img.alt=`${dialog.dataset.graphicName} フロント`;
           img.loading='lazy';img.decoding='async';img.width=img.height=1254;
         } else {
-          // Keep the card's existing image and external product link; use its current feed photo in the gallery.
+          // Preserve the external product link and keep the live product photo after the curated graphic.
           const cover=visual.querySelector('img');
           if(cover){
-            dialog.querySelector('.xg-stage img').src=cover.src;
-            dialog.querySelector('[data-graphic-thumb="0"] img').src=cover.src;
+            const photoIndex=Number(dialog.dataset.graphicFeedIndex||0);
+            dialog.querySelectorAll('.xg-stage img')[photoIndex].src=cover.src;
+            dialog.querySelector(`[data-graphic-thumb="${photoIndex}"] img`).src=cover.src;
+            if(dialog.dataset.graphicCover){
+              const first=dialog.querySelector('.xg-stage img');
+              cover.src=dialog.dataset.graphicCover;cover.alt=first.alt;
+              cover.width=first.width;cover.height=first.height;
+            }
           }
         }
         const detail=document.createElement('a');detail.className='xg-product-detail';detail.href=`#${dialog.id}`;
