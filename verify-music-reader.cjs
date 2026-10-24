@@ -29,7 +29,12 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     const originals=await page.locator('.sound-release-card').evaluateAll(cards=>cards.map(c=>({id:c.id,title:c.querySelector('h3').textContent,about:c.querySelector('.song-description')?.innerHTML,lyrics:c.querySelector('.sound-song-lyrics')?.innerHTML,cover:c.querySelector('.sound-song-cover').getAttribute('src')})));
     assert.equal(originals.length,8);assert.equal(await page.locator('.sound-slide').count(),8);assert.equal(await page.locator('.sound-category-drawer').count(),3);
     // Every catalogue and carousel image fills an undistorted square, including non-square sources.
-    await page.locator('.sound-release-card .sound-song-cover,.sound-slide img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+    // Reveal lazy catalogue images before waiting: WebKit leaves offscreen lazy images unloaded.
+    for(const cover of await page.locator('.sound-release-card .sound-song-cover').all()){
+     await cover.scrollIntoViewIfNeeded();
+     await page.waitForFunction(src=>[...document.querySelectorAll('.sound-release-card .sound-song-cover')].filter(img=>img.getAttribute('src')===src).every(img=>img.complete&&img.naturalWidth>0),await cover.getAttribute('src'));
+    }
+    await page.waitForFunction(()=>[...document.querySelectorAll('.sound-slide img')].every(img=>img.complete&&img.naturalWidth>0));
     const covers=await page.locator('.sound-release-card .sound-song-cover,.sound-slide img').evaluateAll(imgs=>imgs.map(img=>({src:img.getAttribute('src'),width:img.clientWidth,height:img.clientHeight,fit:getComputedStyle(img).objectFit,position:getComputedStyle(img).objectPosition,frameWidth:img.parentElement.clientWidth,frameHeight:img.parentElement.clientHeight})));
     assert.equal(covers.length,16);
     for(const cover of covers){assert(cover.width>0&&Math.abs(cover.width-cover.height)<=1,JSON.stringify(cover));assert.equal(cover.fit,'cover');assert.equal(cover.position,'50% 50%');assert(Math.abs(cover.frameWidth-cover.width)<=1&&Math.abs(cover.frameHeight-cover.height)<=1,JSON.stringify(cover));}
