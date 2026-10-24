@@ -77,3 +77,7 @@ for page,context in [('apparel.html','shop'),('design.html','design')]:
             assert needle in s
             s=s.replace(needle,'<li><a href="#xen-graphic-collection"><span class="contents-project-label">XEN GRAPHIC COLLECTION<small class="contents-project-description" lang="ja">思想を、身につけるアートへ。</small></span><span aria-hidden="true">↘</span></a></li>'+needle,1)
     path.write_text(s)
+
+# Reapply SHOP-only image curation after regenerating the shared approved copy.
+from build_shop_gallery import render as render_shop_gallery
+render_shop_gallery()
