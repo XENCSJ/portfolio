@@ -106,7 +106,9 @@ async function run(engine,profile,label){
    assert((await d.locator('[data-graphic-image-status]').innerText()).includes('2 / 2'));
    await current.evaluate(i=>i.decode());assert.equal(await current.evaluate(i=>i.naturalWidth),p.images[1].width);
    assert.equal(await current.evaluate(i=>getComputedStyle(i).objectFit),'contain');
-   await d.evaluate(e=>{e.scrollTop=0;});await page.screenshot({path:`${out}/${label}-${key}.jpg`,type:'jpeg',quality:90});
+   await d.evaluate(e=>{e.scrollTop=0;});
+   await d.locator('.xg-stage').evaluate(async e=>{await Promise.all(e.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));});
+   await page.screenshot({path:`${out}/${label}-${key}.jpg`,type:'jpeg',quality:90});
    await d.locator('[data-shop-enlarge]').click();const z=page.locator('.xsg-zoom');await z.waitFor({state:'visible'});
    assert.equal(await z.locator('img').getAttribute('src'),origin+p.images[1].src.slice(2));
    await z.locator('img').evaluate(i=>i.decode());await z.locator('[data-shop-magnify]').click();

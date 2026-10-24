@@ -48,7 +48,7 @@ const fixture = {
       assert.equal(await page.locator('#base-products-title').evaluate(el => getComputedStyle(el).textAlign), 'center');
       assert.equal(await page.locator('[role=tab]').count(), 3);
       assert.equal(await page.locator('.base-product-name img').count(), 0, 'Product names must be rendered as text');
-      assert.equal(await page.locator('.base-product-state').innerText(), 'SOLD OUT');
+      assert.equal(await catalog.locator('.base-product-state').innerText(), 'SOLD OUT');
       assert.match(await page.locator('#base-product-157787639 > .base-product-price').innerText(), /価格はストアでご確認ください/);
       assert.equal(await page.locator('.catalog-product > .base-product-cta').first().getAttribute('href'), fixture.items[0].url);
       assert.equal(await page.locator('.image-gallery.trio .gallery-item').count(), 0);
