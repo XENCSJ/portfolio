@@ -68,9 +68,21 @@ async function run(engine,profile,label){
   for(const w of works){
    await page.locator(`.xg-card a[href="#graphic-${w.key}"]`).click();const d=page.locator(`#graphic-${w.key}`);
    await d.waitFor({state:'visible'});assert.equal(await d.locator('.xg-price').count(),0);
-   assert.deepEqual(await d.locator('.xg-message p[lang="en"]').allTextContents(),w.messages.map(m=>m[0]));
+   assert.equal(await d.locator('.xg-message').count(),0,'remove sentence-by-sentence translation UI');
+   assert.deepEqual(await d.locator('.xg-print-section').evaluateAll(es=>es.map(e=>e.dataset.graphicPart)),w.design_prints.map(p=>p.role));
+   assert.deepEqual(await d.locator('.xg-print-english').allTextContents(),w.design_prints.map(p=>p.message_indices.map(i=>w.messages[i][0]).join(' ')));
+   assert.deepEqual(await d.locator('.xg-print-concept').allTextContents(),w.design_prints.map(p=>p.concept));
+   assert.equal(await d.locator('[data-graphic-part="main"]').count(),w.key==='nichinichi-kore-kojitsu'?0:1,'do not invent a front theme');
+   assert(await d.evaluate(e=>e.querySelector('h2').getBoundingClientRect().top>=e.querySelector('.xg-dialog-bar').getBoundingClientRect().bottom),'initial modal header overlap');
+   assert(await d.evaluate(e=>parseFloat(getComputedStyle(e.querySelector('.xg-print-english')).fontSize)>parseFloat(getComputedStyle(e.querySelector('.xg-print-concept')).fontSize)),'English emphasis');
+   await d.locator('.xg-stage img').evaluateAll(es=>Promise.all(es.map(i=>i.decode())));
+   await page.screenshot({path:`${out}/${label}-${w.key}-theme.jpg`,type:'jpeg',quality:88});
+   await d.locator('[data-graphic-part="key"]').scrollIntoViewIfNeeded();
+   assert(await d.evaluate(e=>Math.abs(e.querySelector('.xg-dialog-bar').getBoundingClientRect().top-e.getBoundingClientRect().top-1)<2),'sticky modal header');
+   await page.screenshot({path:`${out}/${label}-${w.key}-message.jpg`,type:'jpeg',quality:88});
    assert.equal(await d.locator('.xg-crosslink').getAttribute('href'),`./apparel.html#graphic-${w.key}`);
-   await check(page);await d.locator('[data-graphic-close]').press('Escape');await page.waitForFunction(()=>!document.querySelector('.xg-dialog[open]'));
+   await check(page);await d.locator('[data-graphic-close]').click();await page.waitForFunction(()=>!document.querySelector('.xg-dialog[open]'));
+   await page.locator(`.xg-card a[href="#graphic-${w.key}"]`).click();await d.waitFor({state:'visible'});await d.locator('[data-graphic-close]').press('Escape');await page.waitForFunction(()=>!document.querySelector('.xg-dialog[open]'));
   }
   await page.locator('#xen-graphic-collection').scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${label}-DESIGN.jpg`,type:'jpeg',quality:88});
   // Direct hash, inter-page navigation, Back/Forward, and visible focus trap.
