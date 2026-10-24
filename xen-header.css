@@ -97,9 +97,16 @@ body#top #xen-site-header :is(.xen-header-cart, .xen-header-toggle) {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-body#top #xen-site-header .xen-header-cart svg {
+body#top #xen-site-header .xen-header-cart :is(img, svg) {
   display: block;
   width: 19px;
+  height: auto;
+}
+body#top #xen-site-header .xen-header-cart img {
+  filter: var(--xen-header-logo-filter);
+  object-fit: contain;
+}
+body#top #xen-site-header .xen-header-cart svg {
   height: 19px;
   fill: none;
   stroke: currentColor;

@@ -31,7 +31,8 @@ async function run() {
     await page.route('**/*', route=>route.request().url().startsWith(base)?route.continue():route.abort());
     try {
       for (const slug of pages) {
-        assert.equal((await page.goto(base+slug+'.html',{waitUntil:'load'})).status(),200);
+        console.log('CHECK',name,slug);
+        assert.equal((await page.goto(base+slug+'.html',{waitUntil:'domcontentloaded'})).status(),200);
         const header=page.locator('#xen-site-header');
         const cart=header.locator('.xen-header-cart');
         const toggle=header.locator('.xen-header-toggle');
@@ -76,7 +77,7 @@ async function run() {
           await rendered(item.locator('svg'));
           await page.screenshot({path:`${output}/${name}-index-directory.png`});
           await item.click(); await expect(page).toHaveURL(base+'apparel.html');
-          await page.goto(base+slug+'.html',{waitUntil:'load'});
+          await page.goto(base+slug+'.html',{waitUntil:'domcontentloaded'});
         }
         if(slug==='creator') {
           const link=page.locator('.creator-connect-links a[aria-label="Shop"]');
@@ -91,10 +92,10 @@ async function run() {
           await link.scrollIntoViewIfNeeded(); await rendered(link.locator('svg'));
           await page.screenshot({path:`${output}/${name}-studio.png`});
           await link.click(); await expect(page).toHaveURL(base+'apparel.html');
-          await page.goto(base+slug+'.html',{waitUntil:'load'});
+          await page.goto(base+slug+'.html',{waitUntil:'domcontentloaded'});
         }
         await cart.click(); await expect(page).toHaveURL(base+'apparel.html');
-        await page.goto(base+slug+'.html',{waitUntil:'load'});
+        await page.goto(base+slug+'.html',{waitUntil:'domcontentloaded'});
         await toggle.click(); await page.locator('#xen-menu a[href="./apparel.html"]').click();
         await expect(page).toHaveURL(base+'apparel.html');
         results.push({profile:name,page:slug,passed:true,geometry,menu:styles});
@@ -102,7 +103,9 @@ async function run() {
       }
       assert.deepEqual(errors,[],name+' JavaScript errors');
     } catch(error) {
-      await page.screenshot({path:`${output}/${name}-failure.png`});
+      console.error('Verification failed:',error);
+      fs.writeFileSync(`${output}/partial-results.json`,JSON.stringify({base,results},null,2));
+      await page.screenshot({path:`${output}/${name}-failure.png`,timeout:5000}).catch(e=>console.warn('Failure screenshot unavailable:',e.message));
       throw error;
     } finally {await browser.close();}
   }
