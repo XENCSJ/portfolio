@@ -1,9 +1,9 @@
-/* SHOP-only additions; catalog layout, pricing and shared DESIGN styles retain ownership. */
+/* Curated SHOP and DESIGN galleries; their existing page layouts retain ownership. */
 .xsg-gallery .xg-thumbnails{overflow-x:auto;gap:8px;padding:3px 2px 8px;scrollbar-width:thin;scrollbar-color:#555 #111}
 .xsg-gallery .xg-thumbnails button{flex:0 0 64px;max-width:none;width:64px;padding-bottom:3px}
 .xsg-gallery .xg-thumbnails img{width:100%;aspect-ratio:1;object-fit:contain;background:#0b0b0b}
 .xsg-gallery .xg-thumbnails span{margin-top:2px;font-variant-numeric:tabular-nums}
-.xsg-enlarge{display:block;min-height:44px;margin:8px 0 0;padding:10px 0;background:transparent;border:0;color:#ccc;font:inherit;font-size:11px;letter-spacing:.05em;cursor:zoom-in}
+.xsg-enlarge{display:block;min-height:44px;margin:8px 0 0;padding:10px 0;background:transparent;border:0;color:var(--xg-muted,#ccc);font:inherit;font-size:11px;letter-spacing:.05em;cursor:zoom-in}
 .xsg-enlarge:hover{color:var(--xg-accent)}
 .xsg-gallery .xg-stage img{object-fit:contain;transform:none}
 .xsg-zoom{color-scheme:dark;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;padding:0;margin:0;border:0;background:#070707;color:#f5f5f5;overflow:hidden}

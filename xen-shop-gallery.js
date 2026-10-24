@@ -1,7 +1,7 @@
-/* Extend the existing four SHOP dialogs without changing the shared DESIGN controller. */
+/* Extend the four curated galleries in SHOP and DESIGN without changing their copy. */
 (() => {
   'use strict';
-  const galleries = [...document.querySelectorAll('.xg-shop-dialog .xsg-gallery')];
+  const galleries = [...document.querySelectorAll('.xg-dialog .xsg-gallery')];
   if (!galleries.length) return;
   const zoom = document.createElement('dialog');
   zoom.className = 'xsg-zoom';

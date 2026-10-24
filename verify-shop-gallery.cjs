@@ -1,7 +1,8 @@
-/* End-to-end checks for the four SHOP galleries and existing purchase/navigation behavior. */
+/* End-to-end checks for the curated SHOP/DESIGN galleries and existing content. */
 const {chromium,webkit,devices}=require('playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const products=JSON.parse(fs.readFileSync('xen-shop-gallery.json')).products;
+const works=JSON.parse(fs.readFileSync('xen-graphic-content.json')).works;
 const feed=JSON.parse(fs.readFileSync('base-products.json')).items;
 const out=process.env.SHOP_QA_OUT||'shop-gallery-qa';fs.mkdirSync(out,{recursive:true});
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.jpeg':'image/jpeg','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
@@ -95,9 +96,60 @@ async function run(engine,profile,label){
   assert.equal(await page.locator('.video-container>template').count(),3);
   await page.goto(origin+'apparel.html#graphic-kyakka-shoko');await page.locator('#graphic-kyakka-shoko').waitFor({state:'visible'});
   await page.locator('#graphic-kyakka-shoko [data-graphic-close]').click();await page.locator('#graphic-kyakka-shoko').waitFor({state:'hidden'});
-  await page.goto(origin+'design.html#graphic-state-of-mind');await page.locator('#graphic-state-of-mind').waitFor({state:'visible'});
-  assert.equal(await page.locator('.xsg-gallery').count(),0);assert.equal(await page.locator('#graphic-state-of-mind .xg-stage img').count(),2);
-  assert.deepEqual(errors,[]);results.push({profile:label,status:'passed',products:4,images:22,errors});
+  await page.goto(origin+'design.html#xen-graphic-collection',{waitUntil:'domcontentloaded'});
+  assert.equal(await page.locator('.xsg-gallery').count(),4);
+  assert.deepEqual(await page.locator('.xg-card h3').allTextContents(),works.map(w=>w.name));
+  for(const id of ['branding','selene-pet-clinic','shirowashi','kuro-usagi','takoleo','apparel-graphics','uniform','product','k18-signet-ring','lapis-lazuli-ring','phone-cases','t-shirt-graphics'])assert.equal(await page.locator('#'+id).count(),1,id);
+  for(const w of works){
+   console.log('CHECK DESIGN',label,w.key);
+   const p=products[w.key], card=page.locator(`.xg-card a[href="#graphic-${w.key}"]`);
+   assert.equal(await card.locator('img').getAttribute('src'),p.images[0].src);
+   await card.click();const d=page.locator('#graphic-'+w.key);await d.waitFor({state:'visible'});
+   const current=d.locator('.xg-stage img.is-current');
+   assert.equal(await current.getAttribute('src'),p.images[0].src);
+   assert.deepEqual(await d.locator('.xg-stage img').evaluateAll(es=>es.map(i=>i.getAttribute('src'))),p.images.map(i=>i.src));
+   assert.deepEqual(await d.locator('.xg-print-english').allTextContents(),w.design_prints.map(x=>x.message_indices.map(i=>w.messages[i][0]).join(' ')));
+   assert.deepEqual(await d.locator('.xg-print-concept').allTextContents(),w.design_prints.map(x=>x.concept));
+   assert.equal(await d.locator('.xg-crosslink').getAttribute('href'),'./apparel.html#graphic-'+w.key);
+   for(let n=0;n<p.images.length;n++){
+    await d.locator(`[data-graphic-thumb="${n}"]`).click();
+    assert.equal(await current.getAttribute('src'),p.images[n].src);
+    await current.scrollIntoViewIfNeeded();await current.evaluate(i=>i.decode());
+    assert.equal(await current.evaluate(i=>getComputedStyle(i).objectFit),'contain');
+    assert((await d.locator('[data-graphic-image-status]').innerText()).includes(`${n+1} / ${p.images.length}`));
+   }
+   await d.locator('.xg-stage').press('Home');
+   await d.locator('[data-graphic-next]').click();assert.equal(await current.getAttribute('src'),p.images[1].src);
+   await d.locator('[data-graphic-prev]').click();assert.equal(await current.getAttribute('src'),p.images[0].src);
+   await d.locator('.xg-stage').press('ArrowRight');assert.equal(await current.getAttribute('src'),p.images[1].src);
+   if(engine===chromium&&profile.hasTouch){
+    await d.locator('.xg-stage').scrollIntoViewIfNeeded();const r=await d.locator('.xg-stage').boundingBox(),cdp=await context.newCDPSession(page);
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x+r.width*.8,y:r.y+r.height/2}]});
+    for(let n=1;n<=6;n++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:r.x+r.width*.8-n*18,y:r.y+r.height/2}]});
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();
+    assert.equal(await current.getAttribute('src'),p.images[2].src,'DESIGN touch swipe');
+   }
+   const selected=w.key==='kyakka-shoko'?3:0;
+   await d.locator(`[data-graphic-thumb="${selected}"]`).click();
+   await d.locator('[data-shop-enlarge]').click();const z=page.locator('.xsg-zoom');await z.waitFor({state:'visible'});
+   assert.equal(await z.locator('img').getAttribute('src'),origin+p.images[selected].src.slice(2));
+   await z.locator('img').evaluate(i=>i.decode());
+   await z.locator('[data-shop-magnify]').click();assert.equal(await z.locator('[data-shop-magnify]').getAttribute('aria-pressed'),'true');
+   assert(await z.locator('.xsg-zoom-viewport').evaluate(e=>e.scrollWidth>e.clientWidth||e.scrollHeight>e.clientHeight));
+   if(w.key==='kyakka-shoko')await page.screenshot({path:`${out}/${label}-DESIGN-zoom.jpg`,type:'jpeg',quality:90});
+   await z.locator('[data-shop-zoom-close]').press('Escape');await z.waitFor({state:'hidden'});
+   assert(await d.locator('[data-shop-enlarge]').evaluate(e=>e===document.activeElement));
+   await d.evaluate(e=>{e.scrollTop=0;});
+   await d.locator('.xg-stage').evaluate(async e=>{await Promise.all(e.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));});
+   if(w.key==='kyakka-shoko'||w.key==='state-of-mind')await page.screenshot({path:`${out}/${label}-DESIGN-${w.key}.jpg`,type:'jpeg',quality:90});
+   assert(await d.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+   await d.locator('[data-graphic-close]').click();await d.waitFor({state:'hidden'});
+   await card.click();await d.waitFor({state:'visible'});assert.equal(await current.getAttribute('src'),p.images[0].src);
+   await d.locator('[data-graphic-close]').press('Escape');await d.waitFor({state:'hidden'});
+  }
+  await page.locator('.xg-card').first().scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${label}-DESIGN-catalog.jpg`,type:'jpeg',quality:90});
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  assert.deepEqual(errors,[]);results.push({profile:label,status:'passed',pages:['SHOP','DESIGN'],products:4,imagesPerPage:22,designCopyPreserved:true,errors});
  }catch(e){await page.screenshot({path:`${out}/FAIL-${label}.jpg`,type:'jpeg'}).catch(()=>{});fs.writeFileSync(`${out}/failure.json`,JSON.stringify({profile:label,error:e.stack},null,2));throw e;}finally{await browser.close();}
 }
 (async()=>{

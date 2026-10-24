@@ -78,6 +78,6 @@ for page,context in [('apparel.html','shop'),('design.html','design')]:
             s=s.replace(needle,'<li><a href="#xen-graphic-collection"><span class="contents-project-label">XEN GRAPHIC COLLECTION<small class="contents-project-description" lang="ja">思想を、身につけるアートへ。</small></span><span aria-hidden="true">↘</span></a></li>'+needle,1)
     path.write_text(s)
 
-# Reapply SHOP-only image curation after regenerating the shared approved copy.
+# Reapply the shared SHOP/DESIGN image curation after regenerating approved copy.
 from build_shop_gallery import render as render_shop_gallery
 render_shop_gallery()

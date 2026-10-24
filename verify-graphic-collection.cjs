@@ -5,7 +5,7 @@ const content=JSON.parse(fs.readFileSync('xen-graphic-content.json','utf8'));
 const works=content.works;
 const shopGalleries=JSON.parse(fs.readFileSync('xen-shop-gallery.json','utf8')).products;
 const out=process.env.GRAPHIC_QA_OUT||'graphic-collection-qa';fs.mkdirSync(out,{recursive:true});
-const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
+const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{const file=path.resolve(decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1));if(!file.startsWith(process.cwd()+path.sep)||!fs.existsSync(file)){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file).toLowerCase()]||'application/octet-stream');fs.createReadStream(file).pipe(res)});
 let origin=process.env.GRAPHIC_PUBLIC_URL||'http://127.0.0.1:8766/';
 const results=[];
@@ -103,7 +103,7 @@ async function run(engine,profile,label){
   await d.locator('.xg-concept summary').click();await page.waitForTimeout(400);assert.equal(await d.locator('.xg-concept-panel').evaluate(e=>e.style.height),'');
   await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await stage.locator('img').first().evaluate(e=>getComputedStyle(e).transitionDuration),'0s');
   await check(page);assert.deepEqual(errors,[]);
-  results.push({label,passed:true,approvedCopyExact:true,images:9,catalogCards:11,existingProductsPreserved:true,keyboardAndSwipe:true,hashBackForward:true,reducedMotion:true,pageErrors:errors});console.log('PASS',label);
+  results.push({label,passed:true,approvedCopyExact:true,images:22,catalogCards:11,existingProductsPreserved:true,keyboardAndSwipe:true,hashBackForward:true,reducedMotion:true,pageErrors:errors});console.log('PASS',label);
  }catch(e){await page.screenshot({path:`${out}/FAIL-${label}.jpg`,type:'jpeg'}).catch(()=>{});results.push({label,passed:false,error:e.stack});console.error('FAIL',label,e.stack);}
  finally{await browser.close();}
 }
