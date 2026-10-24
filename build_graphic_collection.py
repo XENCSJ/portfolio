@@ -9,6 +9,32 @@ WORKS=json.loads((ROOT/'xen-graphic-content.json').read_text())['works']
 LABELS={'front':'FRONT｜フロント','back':'BACK｜バック','detail':'DETAIL｜ディテール'}
 def paragraphs(items,cls=''):
     return ''.join(f'<p{(" class="+chr(34)+cls+chr(34)) if cls else ""}>{e(t)}</p>' for t in items)
+def print_sections(w):
+    labels={'main':('01','FRONT','MAIN THEME','主題'),'manifesto':('02','BACK','MANIFESTO','思想'),'key':('03','BACK','KEY MESSAGE','核心')}
+    parts=w['design_prints']
+    indices=[i for part in parts for i in part['message_indices']]
+    assert sorted(indices)==list(range(len(w['messages']))), f"Missing or duplicate English: {w['key']}"
+    sections=[]
+    for part in parts:
+        role=part['role'];number,position,title,ja=labels[role]
+        selected=part['message_indices']
+        assert selected==sorted(selected), 'Preserve the original order within each print'
+        en=' '.join(w['messages'][i][0] for i in selected)
+        heading_id=f"graphic-{w['key']}-{role}-heading"
+        enclass='xg-print-english xg-print-manifesto' if role=='manifesto' else 'xg-print-english'
+        section=f'''<section class="xg-explanation xg-print-section" data-graphic-part="{role}" aria-labelledby="{heading_id}">
+<p class="xg-print-location" lang="en">{number} / {position} PRINT</p>
+<h3 id="{heading_id}"><span class="xg-print-heading-en" lang="en">{title}</span> <span lang="ja">— {ja}</span></h3>
+<p class="{enclass}" lang="en">{e(en)}</p>
+'''
+        if role!='manifesto':
+            assert len(selected)==1
+            section+=f'<p class="xg-print-translation" lang="ja">{e(w["messages"][selected[0]][1])}</p>\n'
+        section+=f'<p class="xg-print-concept" lang="ja">{e(part["concept"])}</p>\n</section>'
+        sections.append(section)
+    # No invented front English for works whose front print is motif-only.
+    concept='' if any(part['role']=='main' for part in parts) else f'<section class="xg-explanation"><h3>CONCEPT<span>コンセプト</span></h3>{paragraphs(w["concept"])}</section>'
+    return concept+'\n'+'\n'.join(sections)+'\n'
 def gallery(w,context):
     prefix=f'{context}-{w["key"]}'
     imgs=''.join(f'<img src="{i["src"]}" alt="{e(w["name"])} {LABELS[i["view"]]}" width="1254" height="1254" loading="lazy" decoding="async" class="{("is-current" if n==0 else "")}" aria-hidden="{str(n!=0).lower()}">' for n,i in enumerate(w['images']))
@@ -23,8 +49,7 @@ def dialog(w,context):
         price=11000 if w['product_id']==160077299 else 9000
         content=f'''<p class="xg-catch">{e(w['catch'])}</p><p class="xg-overview">{e(w['summary'])}</p><p class="xg-price" data-graphic-price>¥{price:,} <small>（税込）</small></p><a class="xg-purchase" data-graphic-purchase href="{w['url']}" target="_blank" rel="noopener noreferrer">購入する ↗</a><details class="xg-concept" data-graphic-concept><summary aria-expanded="false" aria-controls="{ident}-copy">コンセプトを読む<span class="xg-disclosure-icon" aria-hidden="true">＋</span></summary><div class="xg-concept-panel" id="{ident}-copy"><div class="xg-approved-copy">{paragraphs(w['copy'].split(chr(10)+chr(10)))}</div></div></details><a class="xg-crosslink" href="./design.html#{ident}">デザインコンセプトを見る <span aria-hidden="true">↗</span></a>'''
     else:
-        messages=''.join(f'<div class="xg-message"><p lang="en">{e(en)}</p><p lang="ja">{e(ja)}</p></div>' for en,ja in w['messages'])
-        content=f'''<p class="xg-catch">{e(w['catch'])}</p><section class="xg-explanation"><h3>CONCEPT<span>コンセプト</span></h3>{paragraphs(w['concept'])}</section><section class="xg-explanation"><h3>MESSAGE<span>メッセージ</span></h3>{messages}</section><section class="xg-explanation"><h3>VISUAL DESIGN<span>視覚表現</span></h3><p>{e(w['visual'])}</p></section><section class="xg-explanation"><h3>SHOP<span>商品ページ</span></h3><a class="xg-crosslink" href="./apparel.html#{ident}">この作品の商品を見る <span aria-hidden="true">↗</span></a></section>'''
+        content=f'''<p class="xg-catch">{e(w['catch'])}</p>{print_sections(w)}<section class="xg-explanation"><h3>VISUAL DESIGN<span>視覚表現</span></h3><p>{e(w['visual'])}</p></section><section class="xg-explanation"><h3>SHOP<span>商品ページ</span></h3><a class="xg-crosslink" href="./apparel.html#{ident}">この作品の商品を見る <span aria-hidden="true">↗</span></a></section>'''
     return f'''<dialog class="xg-dialog xg-{context}-dialog" id="{ident}" data-graphic-dialog data-product-id="{w['product_id']}" data-graphic-cover="{w['images'][0]['src']}" data-graphic-name="{e(w['name'])}" style="--xg-accent:{w['color']}" aria-labelledby="{ident}-title"><div class="xg-dialog-bar"><span>{'SHOP / PRODUCT' if is_shop else 'DESIGN / WORK'}</span><button class="xg-close" type="button" data-graphic-close aria-label="詳細を閉じる">CLOSE <span aria-hidden="true">×</span></button></div><div class="xg-dialog-inner">{heading}<div class="xg-detail-grid"><section class="xg-gallery-section"><h3 class="xg-gallery-heading">GALLERY<span>作品画像</span></h3>{gallery(w,context)}</section><div class="xg-detail-copy">{content}</div></div></div></dialog>'''
 def collection():
     cards=''.join(f'''<article class="xg-card" style="--xg-accent:{w['color']}" data-graphic-reveal><a href="#graphic-{w['key']}" class="xg-card-link" aria-haspopup="dialog"><div class="xg-card-image"><img src="{w['images'][0]['src']}" alt="{e(w['name'])} フロント" width="1254" height="1254" loading="lazy" decoding="async"></div><div class="xg-card-copy"><p class="xg-kicker">{w['number']} / GRAPHIC COLLECTION</p><h3>{e(w['name'])}</h3><p class="xg-catch">{e(w['catch'])}</p><p class="xg-overview">{e(w['summary'])}</p><span class="xg-card-cta">詳細を見る <span aria-hidden="true">↗</span></span></div></a></article>''' for w in WORKS)
@@ -38,6 +63,7 @@ def block(text,label,value,before):
 for page,context in [('apparel.html','shop'),('design.html','design')]:
     path=ROOT/page;s=path.read_text()
     includes='<link rel="stylesheet" href="./xen-graphic-collection.css?v=20261024-1">\n<script defer src="./xen-graphic-collection.js?v=20261024-1"></script>\n<noscript><style>.xg-dialog{display:block;position:static;max-height:none;width:100%;margin:40px auto}.xg-dialog-bar,.xg-gallery-navigation,.xg-thumbnails{display:none}.xg-stage{aspect-ratio:auto}.xg-stage img{position:static;opacity:1}</style></noscript>'
+    if context=='design':includes=includes.replace('xen-graphic-collection.css?v=20261024-1','xen-graphic-collection.css?v=20261024-structure1')
     s=block(s,'XEN-GRAPHIC-ASSETS',includes,'</head>')
     s=block(s,'XEN-GRAPHIC-DETAILS','\n'.join(dialog(w,context) for w in WORKS),'</body>')
     if context=='shop':
