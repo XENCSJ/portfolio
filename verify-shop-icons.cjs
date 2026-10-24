@@ -37,7 +37,10 @@ async function run() {
         const cart=header.locator('.xen-header-cart');
         const toggle=header.locator('.xen-header-toggle');
         await rendered(cart.locator('svg'));
-        assert.equal(await cart.getAttribute('href'),'./apparel.html');
+        assert.equal(await cart.getAttribute('href'),'https://xen.official.ec/');
+        assert.equal(await cart.getAttribute('target'),'_blank');
+        assert.deepEqual((await cart.getAttribute('rel')).split(/\s+/).sort(),['noopener','noreferrer']);
+        assert.equal(await cart.getAttribute('aria-label'),'XEN公式オンラインショップ（新しいタブで開く）');
         const geometry=await header.evaluate(el=>{
           const box=s=>{const r=el.querySelector(s).getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,right:r.right}};
           return {home:box('.xen-header-home'),cart:box('.xen-header-cart'),toggle:box('.xen-header-toggle'),height:el.getBoundingClientRect().height,
@@ -94,7 +97,16 @@ async function run() {
           await link.click(); await expect(page).toHaveURL(base+'apparel.html');
           await page.goto(base+slug+'.html',{waitUntil:'domcontentloaded'});
         }
-        await cart.click(); await expect(page).toHaveURL(base+'apparel.html');
+        // Isolate navigation from the external shop availability, checked separately on the live site.
+        await ctx.route('https://xen.official.ec/', route=>route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Header link target</title>'}));
+        const popupPromise=page.waitForEvent('popup');
+        if(options.hasTouch) await cart.tap(); else await cart.click();
+        const popup=await popupPromise;
+        await expect(popup).toHaveURL('https://xen.official.ec/');
+        await expect(page).toHaveURL(base+slug+'.html');
+        assert.equal(await popup.evaluate(()=>window.opener),null);
+        await popup.close();
+        await ctx.unroute('https://xen.official.ec/');
         await page.goto(base+slug+'.html',{waitUntil:'domcontentloaded'});
         await toggle.click(); await page.locator('#xen-menu a[href="./apparel.html"]').click();
         await expect(page).toHaveURL(base+'apparel.html');

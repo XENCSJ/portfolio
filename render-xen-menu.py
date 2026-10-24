@@ -50,7 +50,7 @@ def render(path):
     header = ('<header class="xen-header" id="xen-site-header">'
               '<a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ">'
               '<img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a>'
-              '<a class="xen-header-cart" href="https://xen.official.ec/" aria-label="XEN APPAREL STOREへ">'
+              '<a class="xen-header-cart" href="https://xen.official.ec/" target="_blank" rel="noopener noreferrer" aria-label="XEN公式オンラインショップ（新しいタブで開く）">'
               '<img src="./xen-header-cart.png" alt="" width="56" height="51"></a>'
               '<button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false">'
               '<span></span><span></span><span></span></button>' + menu + '</header>')
