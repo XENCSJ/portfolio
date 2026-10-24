@@ -97,12 +97,15 @@ body#top #xen-site-header :is(.xen-header-cart, .xen-header-toggle) {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-body#top #xen-site-header .xen-header-cart img {
+body#top #xen-site-header .xen-header-cart svg {
   display: block;
   width: 19px;
-  height: auto;
-  filter: var(--xen-header-logo-filter);
-  object-fit: contain;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 body#top #xen-site-header .xen-header-toggle { flex-direction: column; gap: var(--xen-header-line-gap); }
 body#top #xen-site-header .xen-header-toggle span {
