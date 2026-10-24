@@ -33,6 +33,9 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      await button.click();const d=page.locator('#music-reader');await d.waitFor({state:'visible'});
      assert.equal(await d.locator('.music-services,.music-service,.music-service-name,.music-service-status,iframe,template,.music-playback').count(),0);
      assert.equal(await page.locator('#music-reader-title').textContent(),original.title);
+     await d.locator('.music-reader-cover').evaluate(img=>img.decode());
+     const cover=await d.locator('.music-reader-cover').evaluate(img=>({loaded:img.complete&&img.naturalWidth>0,width:img.clientWidth,height:img.clientHeight,opacity:getComputedStyle(img).opacity,fit:getComputedStyle(img).objectFit}));
+     assert(cover.loaded&&cover.width>0&&Math.abs(cover.width-cover.height)<=1&&cover.opacity==='1'&&cover.fit==='cover',JSON.stringify(cover));
      assert.equal(await page.locator('#music-about-panel .song-description').innerHTML(),original.about);
      assert(await d.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
      const order=await d.evaluate(el=>{const cover=el.querySelector('.music-reader-cover'),title=el.querySelector('#music-reader-title'),text=el.querySelector('.music-reader-text');return cover.getBoundingClientRect().bottom<=title.getBoundingClientRect().top+1&&title.getBoundingClientRect().bottom<=text.getBoundingClientRect().top+1;});assert(order);
@@ -42,16 +45,19 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      await page.locator('.music-reader-close').click();await d.waitFor({state:'hidden'});
      assert.equal(await card.locator('.song-description').innerHTML(),original.about);assert.equal(await card.locator('.sound-song-lyrics').innerHTML(),original.lyrics);
     }
-    await page.locator('#blue-sleep').scrollIntoViewIfNeeded();await shot(page,label+'-blue-sleep');
+    await page.locator('#blue-sleep').scrollIntoViewIfNeeded();await page.locator('#blue-sleep .sound-song-cover').evaluate(img=>img.decode());await shot(page,label+'-blue-sleep');
     for(const [id,video] of urls){
-     const drawer=page.locator('#'+id+' details');await drawer.locator('summary').click();await page.locator('#'+id+' .xen-cinema-cover').click();
+     const drawer=page.locator('#'+id+' details');await drawer.locator('summary').click();
+     await page.waitForFunction(id=>{const d=document.querySelector('#'+id+' details');return d.open&&d.getAnimations().length===0&&d.querySelector('summary').getAttribute('aria-expanded')==='true';},id);
+     await page.locator('#'+id+' .xen-cinema-cover').click();
      const frame=page.locator('#'+id+' .video-container iframe');await frame.waitFor();assert((await frame.getAttribute('src')).includes('/'+video));
      let outcome={label,id,mounted:true,playing:false};
      if(engineName==='chromium'){
       try{const media=page.frameLocator('#'+id+' .video-container iframe').locator('video');await media.waitFor({timeout:15000});const initial=await media.evaluate(v=>({time:v.currentTime,paused:v.paused,error:v.error?.message}));await page.waitForTimeout(2000);const after=await media.evaluate(v=>({time:v.currentTime,paused:v.paused,error:v.error?.message}));outcome={...outcome,initial,after,playing:!after.paused&&after.time>initial.time};}catch(e){outcome.note=e.message.slice(0,240);}
      }
      playback.push(outcome);await shot(page,label+'-'+id+'-player');
-     await drawer.locator('summary').click();await frame.waitFor({state:'detached'});assert.equal(await drawer.locator('summary').getAttribute('aria-expanded'),'false');
+     await drawer.locator('summary').click();await frame.waitFor({state:'detached'});
+     await page.waitForFunction(id=>{const d=document.querySelector('#'+id+' details');return !d.open&&d.getAnimations().length===0&&d.querySelector('summary').getAttribute('aria-expanded')==='false';},id);
     }
     assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1));assert.deepEqual(errors,[]);
     results.push({label,pass:true,releases:8,details:4,videos:2});console.log('PASS',label);
