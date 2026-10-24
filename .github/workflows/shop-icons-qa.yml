@@ -1,0 +1,37 @@
+name: SHOP icon verification
+on:
+  push:
+    branches: [work/shop-icons-20261025, main]
+    paths: ['xen-header.*', 'xen-shop-icon.svg', 'verify-shop-icons.cjs', '.github/workflows/shop-icons-qa.yml']
+  workflow_dispatch:
+    inputs:
+      public_url:
+        description: Public site base URL, or empty for checkout
+        type: string
+        required: false
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false @playwright/test@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Check fifteen pages across five browser and viewport profiles
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/shop-icons-http.log 2>&1 &
+          node --check xen-header.js
+          node verify-shop-icons.cjs
+        env:
+          SHOP_ICONS_URL: ${{ inputs.public_url }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shop-icons-evidence
+          path: shop-icons-qa/
+          retention-days: 14
