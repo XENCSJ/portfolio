@@ -63,6 +63,7 @@ def block(text,label,value,before):
 for page,context in [('apparel.html','shop'),('design.html','design')]:
     path=ROOT/page;s=path.read_text()
     includes='<link rel="stylesheet" href="./xen-graphic-collection.css?v=20261024-1">\n<script defer src="./xen-graphic-collection.js?v=20261024-1"></script>\n<noscript><style>.xg-dialog{display:block;position:static;max-height:none;width:100%;margin:40px auto}.xg-dialog-bar,.xg-gallery-navigation,.xg-thumbnails{display:none}.xg-stage{aspect-ratio:auto}.xg-stage img{position:static;opacity:1}</style></noscript>'
+    includes=includes.replace('xen-graphic-collection.js?v=20261024-1','xen-graphic-collection.js?v=20261025-images1')
     if context=='design':includes=includes.replace('xen-graphic-collection.css?v=20261024-1','xen-graphic-collection.css?v=20261024-structure1')
     s=block(s,'XEN-GRAPHIC-ASSETS',includes,'</head>')
     s=block(s,'XEN-GRAPHIC-DETAILS','\n'.join(dialog(w,context) for w in WORKS),'</body>')
