@@ -1,0 +1,33 @@
+name: MUSIC reader verification
+on:
+  push:
+    branches: [work/music-reader-20261025]
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Published site base URL; leave empty to test this checkout'
+        required: false
+        default: ''
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Check all eight releases at eleven viewport sizes
+        env:
+          MUSIC_BASE_URL: ${{ inputs.base_url }}
+        run: node --check xen-music-reader.js && node verify-music-reader.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: music-reader-browser-evidence
+          path: music-reader-qa/
+          retention-days: 14
