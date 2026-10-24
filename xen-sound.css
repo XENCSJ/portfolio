@@ -90,7 +90,9 @@ body#top.sound-page main .sound-song-cover {
   width: min(100%, 380px);
   height: auto;
   margin: 0 auto;
-  object-fit: contain;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: var(--sound-cover-position, center);
 }
 body#top.sound-page main .sound-song-title {
   margin: 30px 0 10px;
@@ -255,15 +257,13 @@ body#top.sound-page main .sound-release-card {
   border: 1px solid #e9e7e2; background: #fff; border-radius: 2px;
   min-width: 0; align-self: start;
 }
-/* Every card starts with its centered artwork; the sole title follows it.
-   Keep intrinsic image proportions, including future non-square jackets. */
+/* One square crop for every release. Original image pixels and proportions stay intact. */
 body#top.sound-page main .sound-release-card .sound-cover-frame {
   display: grid; place-items: center; width: min(100%, 380px);
-  margin: 0 auto; background: #fff;
+  margin: 0 auto; aspect-ratio: 1 / 1; overflow: hidden; background: transparent;
 }
 body#top.sound-page main .sound-release-card .sound-song-cover {
-  display: block; width: 100%; height: auto; margin: 0 auto;
-  aspect-ratio: auto; object-fit: contain;
+  display: block; width: 100%; height: 100%; margin: 0; min-height: 0;
 }
 body#top.sound-page main .sound-release-card .sound-song-title {
   display: block; margin: 19px 0 3px; padding: 0;
@@ -298,7 +298,7 @@ body#top.sound-page main .sound-showcase { --cover-size: clamp(205px, 54vw, 330p
 .sound-showcase-stage { position: relative; height: calc(var(--cover-size) + 28px); overflow: hidden; touch-action: pan-y; perspective: 1100px; }
 .sound-slide { position: absolute; width: var(--cover-size); height: var(--cover-size); left: 50%; top: 10px; opacity: 0; transform: translate3d(100%,0,0) scale(.75); transition: transform .65s cubic-bezier(.22,1,.36,1), opacity .65s ease; pointer-events: none; background: #fff; box-shadow: 0 8px 24px #0000000c; transform-style: preserve-3d; }
 .sound-slide-art { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
-.sound-slide img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.sound-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--sound-cover-position, center); user-select: none; -webkit-user-drag: none; }
 .sound-slide[data-position="active"] { transform: translate3d(-50%,0,0) scale(1); opacity: 1; z-index: 3; pointer-events: auto; }
 .sound-slide[data-position="previous"] { transform: translate3d(calc(-50% - var(--cover-size) * .85),0,0) scale(.82); opacity: .42; z-index: 1; pointer-events: auto; cursor: pointer; }
 .sound-slide[data-position="next"] { transform: translate3d(calc(-50% + var(--cover-size) * .85),0,0) scale(.82); opacity: .42; z-index: 1; pointer-events: auto; cursor: pointer; }

@@ -28,6 +28,16 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     await page.locator('.music-reader-open').first().waitFor();
     const originals=await page.locator('.sound-release-card').evaluateAll(cards=>cards.map(c=>({id:c.id,title:c.querySelector('h3').textContent,about:c.querySelector('.song-description')?.innerHTML,lyrics:c.querySelector('.sound-song-lyrics')?.innerHTML,cover:c.querySelector('.sound-song-cover').getAttribute('src')})));
     assert.equal(originals.length,8);assert.equal(await page.locator('.sound-slide').count(),8);assert.equal(await page.locator('.sound-category-drawer').count(),3);
+    // Every catalogue and carousel image fills an undistorted square, including non-square sources.
+    // Reveal lazy catalogue images before waiting: WebKit leaves offscreen lazy images unloaded.
+    for(const cover of await page.locator('.sound-release-card .sound-song-cover').all()){
+     await cover.scrollIntoViewIfNeeded();
+     await page.waitForFunction(src=>[...document.querySelectorAll('.sound-release-card .sound-song-cover')].filter(img=>img.getAttribute('src')===src).every(img=>img.complete&&img.naturalWidth>0),await cover.getAttribute('src'));
+    }
+    await page.waitForFunction(()=>[...document.querySelectorAll('.sound-slide img')].every(img=>img.complete&&img.naturalWidth>0));
+    const covers=await page.locator('.sound-release-card .sound-song-cover,.sound-slide img').evaluateAll(imgs=>imgs.map(img=>({src:img.getAttribute('src'),width:img.clientWidth,height:img.clientHeight,fit:getComputedStyle(img).objectFit,position:getComputedStyle(img).objectPosition,frameWidth:img.parentElement.clientWidth,frameHeight:img.parentElement.clientHeight})));
+    assert.equal(covers.length,16);
+    for(const cover of covers){assert(cover.width>0&&Math.abs(cover.width-cover.height)<=1,JSON.stringify(cover));assert.equal(cover.fit,'cover');assert.equal(cover.position,'50% 50%');assert(Math.abs(cover.frameWidth-cover.width)<=1&&Math.abs(cover.frameHeight-cover.height)<=1,JSON.stringify(cover));}
     const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.children].map(li=>({key:li.firstElementChild.dataset.service,name:li.querySelector('.music-service-name').textContent,href:li.firstElementChild.getAttribute('href'),status:li.querySelector('.music-service-status').textContent}))));
     for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
     assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,1,5,1,1]);
@@ -55,6 +65,8 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      assert.equal(await dialog.getByText('楽曲解説は未掲載です。',{exact:true}).count(),0);
      assert(await page.evaluate(()=>window.__musicPlaybackNodes.every(({node,parent,source})=>node.isConnected&&node.parentNode===parent&&node.getAttribute('src')===source)),'reader must not relocate or replace any player');
      const before=await page.locator('.music-reader-cover').boundingBox();
+     assert(Math.abs(before.width-before.height)<1,`${label}: square reader cover ${JSON.stringify(before)}`);
+     assert.equal(await page.locator('.music-reader-cover').evaluate(img=>getComputedStyle(img).objectFit),'cover');
      const geometry=await dialog.evaluate(d=>{const p=d.querySelector('#music-about-panel'),a=p.querySelector('.song-description');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
      assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>=100,`${label}: ${geometry.panel}px reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'14px');assert(Math.abs(parseFloat(geometry.line)-28)<.01);
      await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-panel .sound-song-lyrics').innerHTML(),original.lyrics);
@@ -65,8 +77,8 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      const extent=await page.locator('#music-lyrics-panel').evaluate(el=>({end:el.scrollTop+el.clientHeight,total:el.scrollHeight,overflow:el.scrollWidth>el.clientWidth+1}));assert(!extent.overflow);assert(extent.end>=extent.total-2);
      await page.locator('#music-lyrics-tab').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#music-about-tab').getAttribute('aria-selected'),'true');
      await page.keyboard.press('End');assert.equal(await page.locator('#music-lyrics-tab').getAttribute('aria-selected'),'true');await page.keyboard.press('Home');
-     if(original.id==='hikari-no-arika'&&[1440,390,375].includes(width)){
-      await shot(page,label+'-about');await page.locator('#music-lyrics-tab').click();await page.locator('#music-lyrics-panel').evaluate(el=>el.scrollTop=0);await shot(page,label+'-lyrics');
+     if(['hikari-no-arika','sora-ni-tokeru'].includes(original.id)&&[1440,390,375].includes(width)){
+      await shot(page,label+'-'+original.id+'-about');await page.locator('#music-lyrics-tab').click();await page.locator('#music-lyrics-panel').evaluate(el=>el.scrollTop=0);await shot(page,label+'-'+original.id+'-lyrics');
      }
      await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
      await page.waitForFunction(id=>document.querySelector('#'+id+' .music-reader-open').getAttribute('aria-expanded')==='false',original.id);
