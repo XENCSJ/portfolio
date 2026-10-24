@@ -1,0 +1,53 @@
+name: MUSIC square covers and brand logos
+on:
+  push:
+    branches: [work/music-square-20261025, main]
+    paths:
+      - sound.html
+      - xen-sound.css
+      - xen-music-reader.css
+      - xen-music-reader.js
+      - verify-music-reader.cjs
+      - .github/workflows/music-square-qa.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Wait for the exact main files to reach GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python3 - <<'PY'
+          import os,time,urllib.request
+          from pathlib import Path
+          files=['sound.html','xen-sound.css','xen-music-reader.css','xen-music-reader.js']
+          base='https://xencsj.github.io/portfolio/'
+          for attempt in range(60):
+              try:
+                  if all(urllib.request.urlopen(base+f+'?verify='+os.environ['GITHUB_SHA'], timeout=20).read()==Path(f).read_bytes() for f in files):
+                      print('Published assets match this exact commit');break
+              except Exception as error:
+                  print(type(error).__name__)
+              time.sleep(5)
+          else:
+              raise SystemExit('GitHub Pages has not served the current files')
+          PY
+      - name: Check square geometry, original logos and preserved interactions
+        env:
+          MUSIC_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://xencsj.github.io/portfolio' || '' }}
+        run: node --check xen-music-reader.js && node verify-music-reader.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: music-square-browser-evidence
+          path: music-reader-qa/
+          retention-days: 14
