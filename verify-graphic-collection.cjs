@@ -3,6 +3,7 @@ const {chromium,webkit,devices}=require('playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const content=JSON.parse(fs.readFileSync('xen-graphic-content.json','utf8'));
 const works=content.works;
+const shopGalleries=JSON.parse(fs.readFileSync('xen-shop-gallery.json','utf8')).products;
 const out=process.env.GRAPHIC_QA_OUT||'graphic-collection-qa';fs.mkdirSync(out,{recursive:true});
 const mime={'.html':'text/html','.css':'text/css','.js':'text/javascript','.json':'application/json','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{const file=path.resolve(decodeURIComponent(new URL(req.url,'http://localhost').pathname).slice(1));if(!file.startsWith(process.cwd()+path.sep)||!fs.existsSync(file)){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file).toLowerCase()]||'application/octet-stream');fs.createReadStream(file).pipe(res)});
@@ -43,7 +44,7 @@ async function run(engine,profile,label){
    assert(await dialog.locator('.xg-approved-copy').evaluate(e=>getComputedStyle(e).maxHeight==='none'&&e.scrollHeight<=e.clientHeight+1));
    const imgs=dialog.locator('.xg-stage img');
    await imgs.evaluateAll(es=>Promise.all(es.map(i=>i.decode())));
-   for(const [n,img] of w.images.entries()){
+   for(const [n,img] of shopGalleries[w.key].images.entries()){
     await dialog.locator(`[data-graphic-thumb="${n}"]`).click();
     assert.equal(await dialog.locator('.xg-stage img.is-current').getAttribute('src'),img.src);
     assert.equal(await dialog.locator(`[data-graphic-thumb="${n}"]`).getAttribute('aria-pressed'),'true');
