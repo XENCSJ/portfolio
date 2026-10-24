@@ -10,7 +10,7 @@ const results=[];let origin=process.env.SHOP_PUBLIC_URL||'http://127.0.0.1:8786/
 async function run(engine,profile,label){
  const browser=await engine.launch({headless:true,...(engine===chromium&&process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE}:{}),...(engine===webkit&&process.env.PLAYWRIGHT_WEBKIT_EXECUTABLE?{executablePath:process.env.PLAYWRIGHT_WEBKIT_EXECUTABLE}:{})});const context=await browser.newContext(profile);
  await context.route(/googletagmanager|google-analytics|youtube|i.ytimg/,r=>r.abort());
- const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));console.log('START',label);
  try{
   await page.goto(origin+'apparel.html',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('[data-base-products]')?.getAttribute('aria-busy')==='false');
@@ -24,11 +24,13 @@ async function run(engine,profile,label){
   }
   for(const [key,p] of Object.entries(products)){
    assert.equal(await page.locator(`#base-product-${p.product_id} .base-product-visual img`).getAttribute('src'),p.images[0].src);
-   await page.locator(`#base-product-${p.product_id} .base-product-visual img`).evaluate(i=>i.decode());
+   await page.locator(`#base-product-${p.product_id} .base-product-visual img`).scrollIntoViewIfNeeded();
+   await page.locator(`#base-product-${p.product_id} .base-product-visual img`).evaluate(i=>Promise.race([i.decode(),new Promise((_,reject)=>setTimeout(()=>reject(Error('cover load timeout')),15000))]));
   }
-  const catalog=page.locator('[data-base-grid]');await catalog.scrollIntoViewIfNeeded();
+  const catalog=page.locator('[data-base-grid]');await page.locator('.catalog-product').first().scrollIntoViewIfNeeded();
   await page.screenshot({path:`${out}/${label}-catalog.jpg`,type:'jpeg',quality:90});
   for(const [key,p] of Object.entries(products)){
+   console.log('CHECK',label,key);
    const card=page.locator(`#base-product-${p.product_id} .base-product-visual`);
    await card.click();const d=page.locator('#graphic-'+key);await d.waitFor({state:'visible'});
    const current=d.locator('.xg-stage img.is-current');
@@ -39,7 +41,8 @@ async function run(engine,profile,label){
    for(let n=0;n<p.images.length;n++){
     await d.locator(`[data-graphic-thumb="${n}"]`).click();
     assert.equal(await current.getAttribute('src'),p.images[n].src);
-    await current.evaluate(i=>i.decode());
+    await current.scrollIntoViewIfNeeded();
+    await current.evaluate(i=>Promise.race([i.decode(),new Promise((_,reject)=>setTimeout(()=>reject(Error('slide load timeout')),15000))]));
     assert.equal(await current.evaluate(i=>getComputedStyle(i).objectFit),'contain');
     assert((await d.locator('[data-graphic-image-status]').innerText()).includes(`${n+1} / ${p.images.length}`));
     assert.equal(await current.evaluate(i=>i.naturalWidth),p.images[n].width);
@@ -91,7 +94,7 @@ async function run(engine,profile,label){
   await page.goto(origin+'design.html#graphic-state-of-mind');await page.locator('#graphic-state-of-mind').waitFor({state:'visible'});
   assert.equal(await page.locator('.xsg-gallery').count(),0);assert.equal(await page.locator('#graphic-state-of-mind .xg-stage img').count(),2);
   assert.deepEqual(errors,[]);results.push({profile:label,status:'passed',products:4,images:22,errors});
- }finally{await browser.close();}
+ }catch(e){await page.screenshot({path:`${out}/FAIL-${label}.jpg`,type:'jpeg'}).catch(()=>{});fs.writeFileSync(`${out}/failure.json`,JSON.stringify({profile:label,error:e.stack},null,2));throw e;}finally{await browser.close();}
 }
 (async()=>{
  for(const p of Object.values(products))for(const i of p.images){assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256);assert(fs.existsSync(i.thumbnail));}
