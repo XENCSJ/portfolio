@@ -8,6 +8,7 @@ module.exports = async function verifyCategoryTitles() {
  for (const [device,engine,width,height] of [['desktop',chromium,1440,1000],['iphone',webkit,390,844],['small-phone',chromium,375,812],['large-phone',chromium,430,932],['tablet',chromium,768,1024]]) {
   const browser=await engine.launch({headless:true,executablePath:process.env[engine===webkit?'WEBKIT_EXECUTABLE_PATH':'CHROMIUM_EXECUTABLE_PATH']});
   const ctx=await browser.newContext({viewport:{width,height},deviceScaleFactor:1});
+  ctx.setDefaultTimeout(15000);
   const page=await ctx.newPage();
   let referenceTitleStyle;
   const errors=[]; page.on('pageerror',e=>errors.push(e.message));
@@ -63,6 +64,7 @@ module.exports = async function verifyCategoryTitles() {
    assert.equal(await page.locator('.xen-header-toggle').getAttribute('aria-expanded'),'false');
    if(['sound','artworks','studio','creator'].includes(slug)) await page.screenshot({path:'news-qa/categories-'+device+'-'+slug+'.png'});
    if(slug==='sound') {
+    console.log(device+' MUSIC: begin');
     assert.equal(await page.locator('.sound-category-drawer').count(),3);
     assert.equal(await page.locator('.sound-release-card').count(),8);
     assert.equal(await page.locator('.music-service-icon').count(),44);
@@ -84,7 +86,7 @@ module.exports = async function verifyCategoryTitles() {
     const buttons=page.locator('.music-reader-open');
     assert.equal(await buttons.count(),4);
     for(let i=0;i<await buttons.count();i++) {
-     await buttons.nth(i).click();
+     console.log(device+' MUSIC reader '+i);await buttons.nth(i).click();
      const paragraphs=page.locator('#music-reader .song-description p');
      for(const paragraph of await paragraphs.all()) assert.deepEqual(await paragraph.evaluate((e,keys)=>Object.fromEntries(keys.map(k=>[k,getComputedStyle(e)[k]])),properties),reference,device+' DESIGN typography');
      if(i===0)await page.screenshot({path:'news-qa/music-'+device+'-description.png'});
@@ -97,7 +99,7 @@ module.exports = async function verifyCategoryTitles() {
     assert.deepEqual(await page.locator('.song-description,.sound-song-lyrics').allTextContents(),before,'all authored content restored');
     const drawers=page.locator('.music-player-drawer');
     for(let i=0;i<await drawers.count();i++) {
-     const drawer=drawers.nth(i),summary=drawer.locator('summary');
+     console.log(device+' MUSIC player '+i);const drawer=drawers.nth(i),summary=drawer.locator('summary');
      await summary.press('Enter');await page.waitForTimeout(320);
      assert.equal(await summary.getAttribute('aria-expanded'),'true');
      if(await drawer.getAttribute('data-service')==='youtube') {
