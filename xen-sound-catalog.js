@@ -85,9 +85,11 @@
   const fragment = document.createDocumentFragment();
   const slides = releases.map(card => {
     const url = spotifyURL(card.dataset.spotifyUrl);
-    const slide = document.createElement(url ? 'a' : 'div');
+    const detail = card.dataset.slideshowDetail === 'true';
+    const slide = document.createElement(url || detail ? 'a' : 'div');
     slide.className = 'sound-slide'; slide.dataset.releaseId = card.id;
-    if (url) { slide.href = url.href; slide.target = '_blank'; slide.rel = 'noopener noreferrer'; }
+    if (detail) slide.href = '#' + card.id;
+    else if (url) { slide.href = url.href; slide.target = '_blank'; slide.rel = 'noopener noreferrer'; }
     const art = document.createElement('div'); art.className = 'sound-slide-art';
     const img = card.querySelector('.sound-song-cover').cloneNode(true);
     img.className = ''; img.loading = 'eager'; img.draggable = false;
@@ -114,7 +116,7 @@
       slide.tabIndex = state === 'away' ? -1 : 0;
       const title = releases[i].querySelector('h3').textContent;
       if (state === 'active' && slide.tagName === 'A') {
-        slide.removeAttribute('role'); slide.setAttribute('aria-label', title + 'をSpotifyで聴く');
+        slide.removeAttribute('role'); slide.setAttribute('aria-label', title + (releases[i].dataset.slideshowDetail === 'true' ? 'の楽曲詳細へ' : 'をSpotifyで聴く'));
       } else {
         slide.setAttribute('role', state === 'active' ? 'group' : 'button');
         slide.setAttribute('aria-label', title + (state === 'active' ? ' — 表示中' : 'を中央に表示'));
