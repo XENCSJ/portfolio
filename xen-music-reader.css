@@ -4,6 +4,9 @@ body#top.sound-page main .music-services { display:grid; grid-template-columns:r
 body#top.sound-page main .music-services li { margin:0; padding:0; min-width:0; }
 body#top.sound-page main .music-service { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; width:100%; min-height:94px; padding:4px 0; color:#292929; background:none; border:0; text-decoration:none; }
 body#top.sound-page main .music-service img { display:block; width:36px; height:36px; object-fit:contain; margin:0 0 12px; border:0; border-radius:0; filter:none; opacity:1; transform:none; }
+/* Official PNGs include clear space; uniform scaling equalizes the visible marks. */
+body#top.sound-page main .music-service[data-service="youtube"] img { transform:scale(1.5); }
+body#top.sound-page main .music-service[data-service="lineMusic"] img { transform:scale(1.8); }
 body#top.sound-page main .music-service-status { font:11px/1.5 Arial,sans-serif; letter-spacing:0; white-space:nowrap; color:#666; }
 body#top.sound-page main a.music-service .music-service-status { color:#555; }
 body#top.sound-page main .music-service[aria-disabled="true"] { cursor:default; }
