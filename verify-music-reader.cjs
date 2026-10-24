@@ -11,8 +11,8 @@ const server=http.createServer((req,res)=>{
  fs.readFile(file,(e,data)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(data);});
 });
 async function squares(locator){
- const values=await locator.evaluateAll(els=>els.map(el=>{const s=getComputedStyle(el);return {width:parseFloat(s.width),height:parseFloat(s.height),fit:s.objectFit,src:el.getAttribute('src')};}));
- for(const v of values){assert(v.width>0&&Math.abs(v.width-v.height)<.6,JSON.stringify(v));if(v.src)assert.equal(v.fit,'cover');}
+ const values=await locator.evaluateAll(els=>els.map(el=>{const s=getComputedStyle(el);return {width:parseFloat(s.width),height:parseFloat(s.height),fit:s.objectFit,position:s.objectPosition,src:el.getAttribute('src')};}));
+ for(const v of values){assert(v.width>0&&Math.abs(v.width-v.height)<.6,JSON.stringify(v));if(v.src){assert.equal(v.fit,'cover');assert.equal(v.position,'50% 50%');}}
  return values;
 }
 async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:88});}

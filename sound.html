@@ -58,7 +58,7 @@ footer .xen-powered{font-size:10px;color:#999;letter-spacing:.12em;margin:20px 0
 </style>
 <link rel="stylesheet" href="./xen-youtube.css?v=20261021-quiet-luxury">
 <link rel="stylesheet" href="./xen-ui.css?v=20261017-compact-motion-8510c61">
-<link rel="stylesheet" href="./xen-sound.css?v=20261025-square1">
+<link rel="stylesheet" href="./xen-sound.css?v=20261025-square2">
 <style id="tochu-song-description-spacing">
 body#top.sound-page main #tochu-about-panel .song-description p + p { margin-top: 12px; }
 </style>
@@ -87,18 +87,14 @@ body#top.sound-page main #tochu-about-panel .song-description p + p { margin-top
 <link rel="stylesheet" href="./xen-cinema.css?v=20261021-premium2">
 <script defer src="./xen-cinema.js?v=20261021-one-tap1"></script>
 <style id="hikari-release-layout">
-/* Preserve the supplied image bytes and proportions inside a square display frame. */
+/* Release-specific spacing; cover geometry is shared in xen-sound.css. */
 body#top.sound-page main #hikari-no-arika { margin-top: var(--sound-work-gap); }
-body#top.sound-page main #hikari-no-arika .sound-cover-frame { aspect-ratio: 1 / 1; }
-body#top.sound-page main #hikari-no-arika .sound-song-cover { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
 body#top.sound-page main #hikari-no-arika .sound-release-genre { margin: 6px 0 0; color: #666; font-size: 11px; line-height: 1.8; letter-spacing: .02em; overflow-wrap: anywhere; }
 body#top.sound-page main #hikari-about-panel .song-description p + p { margin-top: 12px; }
 </style>
 <style id="new-release-layout">
-/* New cards reuse the catalogue styling; preserve both original image files. */
+/* New cards reuse the shared catalogue cover geometry and original image files. */
 body#top.sound-page main .sound-new-release { margin-top: var(--sound-work-gap); }
-body#top.sound-page main .sound-new-release .sound-cover-frame { aspect-ratio: 1 / 1; }
-body#top.sound-page main .sound-new-release .sound-song-cover { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
 body#top.sound-page main .sound-new-release .song-description p + p { margin-top: 12px; }
 </style>
 <style id="sound-category-drawers">
@@ -120,7 +116,7 @@ body.sound-page main .sound-category-nav .sound-category-links a:last-child { bo
 @media (max-width: 700px) { .sound-category-drawer > summary { min-height: 56px; padding: 10px 14px; } .sound-category-drawer > summary > span:first-child { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; } }
 @media (prefers-reduced-motion: reduce) { .sound-category-drawer > summary > span:last-child { transition: none; } }
 </style>
-<link rel="stylesheet" href="./xen-music-reader.css?v=20261025-square1">
+<link rel="stylesheet" href="./xen-music-reader.css?v=20261025-square2">
 </head><body id="top" class="detail-page video-page xen-polished sound-page xen-detail-unified xen-youtube-unified"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" target="_blank" rel="noopener noreferrer" aria-label="XEN公式オンラインショップ（新しいタブで開く）"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false"><use href="./xen-shop-icon.svg#cart"></use></svg></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><span class="xen-menu-en" lang="en">ABOUT XEN</span><span class="xen-menu-ja" lang="ja">XENについて</span></h2><ul class="xen-menu-items"><li><a class="xen-menu-link " href="./studio.html"><span class="xen-menu-en" lang="en">STUDIO</span><span class="xen-menu-ja" lang="ja">スタジオ</span></a></li><li><a class="xen-menu-link " href="./creator.html"><span class="xen-menu-en" lang="en">CREATOR</span><span class="xen-menu-ja" lang="ja">クリエイター</span></a></li></ul></section>

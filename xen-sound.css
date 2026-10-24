@@ -95,7 +95,7 @@ body#top.sound-page main .sound-song-cover {
    All current non-square sources need only a centered 1.3% top/bottom crop. */
 body#top.sound-page main :is(.sound-song-cover, .sound-slide img, .music-reader-cover) {
   display:block; aspect-ratio:1 / 1; object-fit:cover;
-  object-position:var(--music-cover-position, 50% 50%); border:0; border-radius:0;
+  object-position:var(--sound-cover-position, 50% 50%); border:0; border-radius:0;
 }
 body#top.sound-page main .sound-song-title {
   margin: 30px 0 10px;
