@@ -2,6 +2,7 @@
 const {chromium,webkit,devices}=require('playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const products=JSON.parse(fs.readFileSync('xen-shop-gallery.json')).products;
+const characters=JSON.parse(fs.readFileSync('xen-shop-gallery.json')).characters;
 const works=JSON.parse(fs.readFileSync('xen-graphic-content.json')).works;
 const feed=JSON.parse(fs.readFileSync('base-products.json')).items;
 const out=process.env.SHOP_QA_OUT||'shop-gallery-qa';fs.mkdirSync(out,{recursive:true});
@@ -89,6 +90,41 @@ async function run(engine,profile,label){
    await card.click();await d.waitFor({state:'visible'});assert.equal(await current.getAttribute('src'),p.images[0].src,'reopen at first image');
    await d.locator('[data-graphic-close]').press('Escape');await d.waitFor({state:'hidden'});
   }
+  for(const [key,p] of Object.entries(characters)){
+   const item=feed.find(i=>i.id===p.product_id), card=page.locator('#base-product-'+p.product_id);
+   assert.equal(await card.locator('.base-product-visual').getAttribute('href'),item.url,'original product link');
+   assert.equal(await card.locator('.base-product-visual img').getAttribute('src'),item.image_url,'original hoodie cover');
+   assert.equal(await card.locator('.xg-product-detail').count(),1,'one gallery entry');
+   const entry=card.locator('.xg-product-detail');await entry.click();
+   const d=page.locator('#character-'+key);await d.waitFor({state:'visible'});
+   const current=d.locator('.xg-stage img.is-current');
+   assert.equal(await d.locator('.xg-stage img').count(),2);
+   assert.equal(await current.getAttribute('src'),item.image_url);
+   assert.equal(await d.locator('[data-graphic-purchase]').getAttribute('href'),item.url);
+   await d.locator('[data-graphic-next]').click();assert.equal(await current.getAttribute('src'),p.images[1].src);
+   assert.equal(await d.locator('[data-graphic-thumb="1"]').getAttribute('aria-pressed'),'true');
+   assert((await d.locator('[data-graphic-image-status]').innerText()).includes('2 / 2'));
+   await current.evaluate(i=>i.decode());assert.equal(await current.evaluate(i=>i.naturalWidth),p.images[1].width);
+   assert.equal(await current.evaluate(i=>getComputedStyle(i).objectFit),'contain');
+   await d.evaluate(e=>{e.scrollTop=0;});
+   await d.locator('.xg-stage').evaluate(async e=>{await Promise.all(e.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));});
+   await page.screenshot({path:`${out}/${label}-${key}.jpg`,type:'jpeg',quality:90});
+   await d.locator('[data-shop-enlarge]').click();const z=page.locator('.xsg-zoom');await z.waitFor({state:'visible'});
+   assert.equal(await z.locator('img').getAttribute('src'),origin+p.images[1].src.slice(2));
+   await z.locator('img').evaluate(i=>i.decode());await z.locator('[data-shop-magnify]').click();
+   assert.equal(await z.locator('[data-shop-magnify]').getAttribute('aria-pressed'),'true');
+   await z.locator('[data-shop-zoom-close]').click();await z.waitFor({state:'hidden'});
+   await d.locator('[data-graphic-prev]').click();assert.equal(await current.getAttribute('src'),item.image_url);
+   await d.locator('[data-graphic-thumb="1"]').click();assert.equal(await current.getAttribute('src'),p.images[1].src);
+   assert(await d.evaluate(e=>e.scrollWidth<=e.clientWidth+1));
+   await d.locator('[data-graphic-close]').click();await d.waitFor({state:'hidden'});
+   await entry.click();await d.waitFor({state:'visible'});assert.equal(await current.getAttribute('src'),item.image_url,'character reopen');
+   await d.locator('[data-graphic-close]').press('Escape');await d.waitFor({state:'hidden'});
+  }
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.querySelector('[data-base-products]')?.getAttribute('aria-busy')==='false');
+  for(const p of Object.values(products))assert.equal(await page.locator(`#base-product-${p.product_id} .base-product-visual img`).getAttribute('src'),p.images[0].src);
+  assert.equal(await page.locator('[data-graphic-preserve-cover]').count(),3);
   for(const [name,count] of [['APPAREL',7],['JEWELRY',4],['ALL',11]]){
    await page.getByRole('tab',{name,exact:true}).click();assert.equal(await page.locator('.catalog-product:visible').count(),count);
   }
@@ -149,17 +185,19 @@ async function run(engine,profile,label){
   }
   await page.locator('.xg-card').first().scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${label}-DESIGN-catalog.jpg`,type:'jpeg',quality:90});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
-  assert.deepEqual(errors,[]);results.push({profile:label,status:'passed',pages:['SHOP','DESIGN'],products:4,imagesPerPage:22,designCopyPreserved:true,errors});
+  assert.deepEqual(errors,[]);results.push({profile:label,width:profile.viewport.width,status:'passed',pages:['SHOP','DESIGN'],products:4,characters:3,imagesPerPage:22,designCopyPreserved:true,errors});
  }catch(e){await page.screenshot({path:`${out}/FAIL-${label}.jpg`,type:'jpeg'}).catch(()=>{});fs.writeFileSync(`${out}/failure.json`,JSON.stringify({profile:label,error:e.stack},null,2));throw e;}finally{await browser.close();}
 }
 (async()=>{
  for(const p of Object.values(products))for(const i of p.images){assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256);assert(fs.existsSync(i.thumbnail));}
+ for(const p of Object.values(characters)){const i=p.images[1];assert.equal(crypto.createHash('sha256').update(fs.readFileSync(i.src)).digest('hex'),i.sha256);}
  if(!process.env.SHOP_PUBLIC_URL)await new Promise(resolve=>server.listen(8786,'127.0.0.1',resolve));
  try{
-  await run(chromium,{viewport:{width:1440,height:1000}},'desktop');
-  await run(chromium,{...devices['iPhone 13'],defaultBrowserType:undefined},'mobile-chromium');
+  for(const width of [375,390,430,768,1280,1440]){
+   const mobile=width<768;
+   await run(chromium,{...(mobile?devices['iPhone 13']:{}),viewport:{width,height:mobile?844:1000},defaultBrowserType:undefined},'width-'+width);
+  }
   await run(webkit,{...devices['iPhone 13'],defaultBrowserType:undefined},'mobile-webkit');
-  await run(chromium,{viewport:{width:320,height:720},isMobile:true,hasTouch:true,reducedMotion:'reduce'},'mobile-320');
   fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));console.log(JSON.stringify(results));
  }finally{server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

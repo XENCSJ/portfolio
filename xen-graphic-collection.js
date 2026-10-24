@@ -159,14 +159,24 @@
       if(!card.hasAttribute('data-graphic-product')){
         card.setAttribute('data-graphic-product','');
         const visual=card.querySelector('.base-product-visual');
-        visual.href=`#${dialog.id}`;visual.removeAttribute('target');visual.removeAttribute('rel');
-        visual.setAttribute('aria-label',`${dialog.dataset.graphicName}の商品詳細を開く`);visual.setAttribute('aria-haspopup','dialog');
-        let img=visual.querySelector('img');
-        if(!img){img=document.createElement('img');visual.append(img);}
-        img.src=dialog.dataset.graphicCover;img.alt=`${dialog.dataset.graphicName} フロント`;
-        img.loading='lazy';img.decoding='async';img.width=img.height=1254;
+        const preserveCover = dialog.hasAttribute('data-graphic-preserve-cover');
+        if (!preserveCover) {
+          visual.href=`#${dialog.id}`;visual.removeAttribute('target');visual.removeAttribute('rel');
+          visual.setAttribute('aria-label',`${dialog.dataset.graphicName}の商品詳細を開く`);visual.setAttribute('aria-haspopup','dialog');
+          let img=visual.querySelector('img');
+          if(!img){img=document.createElement('img');visual.append(img);}
+          img.src=dialog.dataset.graphicCover;img.alt=`${dialog.dataset.graphicName} フロント`;
+          img.loading='lazy';img.decoding='async';img.width=img.height=1254;
+        } else {
+          // Keep the card's existing image and external product link; use its current feed photo in the gallery.
+          const cover=visual.querySelector('img');
+          if(cover){
+            dialog.querySelector('.xg-stage img').src=cover.src;
+            dialog.querySelector('[data-graphic-thumb="0"] img').src=cover.src;
+          }
+        }
         const detail=document.createElement('a');detail.className='xg-product-detail';detail.href=`#${dialog.id}`;
-        detail.setAttribute('aria-haspopup','dialog');detail.textContent='詳細を見る ↗';
+        detail.setAttribute('aria-haspopup','dialog');detail.textContent=preserveCover?'商品画像を見る ↗':'詳細を見る ↗';
         card.querySelector('.base-product-links').append(detail);
       }
       const price=card.querySelector(':scope > .base-product-price');

@@ -6,13 +6,13 @@
       "name": "脚下照顧",
       "images": [
         {
-          "src": "./xen-shop-kyakka-shoko-graphic.jpeg",
+          "src": "./xen-shop-kyakka-shoko-graphic-20261025-1d87e4514f.jpeg",
           "label": "グラフィック",
-          "source_filename": "B174FF68-A4B4-46AC-B121-B66C27AA612E(1).jpeg",
-          "width": 1122,
-          "height": 1402,
-          "sha256": "d8f0f4b529d301ad0e905718f1e134f29eaafde43bb97e1650e74c0e7674279c",
-          "thumbnail": "./xen-shop-kyakka-shoko-1-thumb.webp"
+          "source_filename": "IMG_9780(1).jpeg",
+          "width": 3000,
+          "height": 3000,
+          "sha256": "1d87e4514f28635a3e19d4d2535540f441fc15e93c4ceb39b8d01eaa2ecda7a3",
+          "thumbnail": "./xen-shop-kyakka-shoko-graphic-20261025-1d87e4514f.jpeg"
         },
         {
           "src": "./xen-shop-kyakka-shoko-front.jpeg",
@@ -72,13 +72,13 @@
       "name": "日日是好日",
       "images": [
         {
-          "src": "./xen-shop-nichinichi-kore-kojitsu-graphic.jpeg",
+          "src": "./xen-shop-nichinichi-kore-kojitsu-graphic-20261025-8b50eebde4.jpeg",
           "label": "グラフィック",
-          "source_filename": "B155FC5A-EF32-4395-9896-F922E30EE71A(1).jpeg",
-          "width": 1254,
-          "height": 1254,
-          "sha256": "7762f4a94caf2ebed7aaacf548f7d69cf8c0b1aa061af98c63ec119d2e87159f",
-          "thumbnail": "./xen-shop-nichinichi-kore-kojitsu-1-thumb.webp"
+          "source_filename": "IMG_9784(1).jpeg",
+          "width": 3000,
+          "height": 3000,
+          "sha256": "8b50eebde4ee95751fd64fc5443fb4ce69f480f32b966e5c2b82fc602121f577",
+          "thumbnail": "./xen-shop-nichinichi-kore-kojitsu-graphic-20261025-8b50eebde4.jpeg"
         },
         {
           "src": "./xen-shop-nichinichi-kore-kojitsu-front.jpeg",
@@ -121,13 +121,13 @@
       "name": "善因善果",
       "images": [
         {
-          "src": "./xen-shop-zenin-zenka-graphic.jpeg",
+          "src": "./xen-shop-zenin-zenka-graphic-20261025-c81742cb93.jpeg",
           "label": "グラフィック",
-          "source_filename": "DA3A264B-56BB-4AD6-97E8-CBECF54A83B5(1).jpeg",
-          "width": 1199,
-          "height": 1312,
-          "sha256": "ad37d8dbbc334835696c9ad935c8893e1d82fe1d46dc2e60acde3fae2ad20045",
-          "thumbnail": "./xen-shop-zenin-zenka-1-thumb.webp"
+          "source_filename": "IMG_9783(1).jpeg",
+          "width": 1536,
+          "height": 1536,
+          "sha256": "c81742cb935b87a4b83caf2a4bf76d9da7a33c844c3980dbe27ad515b8ab1309",
+          "thumbnail": "./xen-shop-zenin-zenka-graphic-20261025-c81742cb93.jpeg"
         },
         {
           "src": "./xen-shop-zenin-zenka-front.jpeg",
@@ -170,13 +170,13 @@
       "name": "STATE OF MIND",
       "images": [
         {
-          "src": "./xen-shop-state-of-mind-graphic.jpeg",
+          "src": "./xen-shop-state-of-mind-graphic-20261025-a65e570af0.jpeg",
           "label": "グラフィック",
-          "source_filename": "B8C1EC3D-B512-4BFD-A14E-8671C545AEA6(1).jpeg",
-          "width": 1254,
-          "height": 1254,
-          "sha256": "b727e23f529fe55d6fa9d6d76fab510bd7cc66966191fc54fe4fbad16377fe1a",
-          "thumbnail": "./xen-shop-state-of-mind-1-thumb.webp"
+          "source_filename": "IMG_9782(1).jpeg",
+          "width": 1536,
+          "height": 1536,
+          "sha256": "a65e570af03074bfb01b88d92dd3042fe2f67ba6e31a6483fa6dff0d92f7198c",
+          "thumbnail": "./xen-shop-state-of-mind-graphic-20261025-a65e570af0.jpeg"
         },
         {
           "src": "./xen-shop-state-of-mind-front.jpeg",
@@ -211,6 +211,80 @@
           "height": 1254,
           "sha256": "085c25e67a9976d9ee7e411c70eedd2f8465a2fd7050ec21061c204edd74adc0",
           "thumbnail": "./xen-shop-state-of-mind-5-thumb.webp"
+        }
+      ]
+    }
+  },
+  "characters": {
+    "shirowashi": {
+      "product_id": 157787639,
+      "name": "しろわし",
+      "url": "https://xen.official.ec/items/157787639",
+      "price": 18800,
+      "images": [
+        {
+          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+          "label": "パーカー",
+          "width": 640,
+          "height": 640,
+          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/2c34ddc033b5eca8d4db9278f035ee04.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
+        },
+        {
+          "src": "./xen-shop-shirowashi-graphic-20261025-2a163420a8.jpeg",
+          "label": "グラフィック",
+          "source_filename": "IMG_9781(1).jpeg",
+          "width": 3000,
+          "height": 3000,
+          "sha256": "2a163420a81baa0daa740f23ede907b7bc2ef27b067dc754fc794336b5987dde",
+          "thumbnail": "./xen-shop-shirowashi-graphic-20261025-2a163420a8.jpeg"
+        }
+      ]
+    },
+    "takoleo": {
+      "product_id": 157783299,
+      "name": "たこれお",
+      "url": "https://xen.official.ec/items/157783299",
+      "price": 18800,
+      "images": [
+        {
+          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+          "label": "パーカー",
+          "width": 640,
+          "height": 640,
+          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/ceeb0849289438d03fcf47fd12ad0d78.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
+        },
+        {
+          "src": "./xen-shop-takoleo-graphic-20261025-75d32b8850.jpeg",
+          "label": "グラフィック",
+          "source_filename": "IMG_9779(1).jpeg",
+          "width": 3000,
+          "height": 3000,
+          "sha256": "75d32b88507ff0c1c5c6f3ed71fd7a72498a4012f144d9e325f1bfdf06f85f01",
+          "thumbnail": "./xen-shop-takoleo-graphic-20261025-75d32b8850.jpeg"
+        }
+      ]
+    },
+    "kuro-usagi": {
+      "product_id": 156849283,
+      "name": "くろうさぎ",
+      "url": "https://xen.official.ec/items/156849283",
+      "price": 13000,
+      "images": [
+        {
+          "src": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?imformat=generic&q=90&im=Resize,width=640,type=normal",
+          "label": "パーカー",
+          "width": 640,
+          "height": 640,
+          "thumbnail": "https://baseec-img-mng.akamaized.net/images/item/origin/ade45d199eca3df8e4fa363cd65c3a3a.png?imformat=generic&q=90&im=Resize,width=640,type=normal"
+        },
+        {
+          "src": "./xen-shop-kuro-usagi-graphic-20261025-292bdaa92a.jpeg",
+          "label": "グラフィック",
+          "source_filename": "IMG_9785(1).jpeg",
+          "width": 3000,
+          "height": 3000,
+          "sha256": "292bdaa92a97b463dbbe2d261d762dcfca9c0d08a5aa7e83463e673f8f7fc236",
+          "thumbnail": "./xen-shop-kuro-usagi-graphic-20261025-292bdaa92a.jpeg"
         }
       ]
     }
