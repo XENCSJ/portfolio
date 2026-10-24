@@ -9,14 +9,15 @@ const base=remote||'http://127.0.0.1:8765/';
 const server=remote?null:spawn('python3',['-m','http.server','8765'],{stdio:'ignore'});
 const widths=[375,390,430,768,1024,1280,1440,1920];
 const results=[];
+let currentBrowser,currentPage;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function run(){
   if(server){for(let i=0;i<30;i++){try{await fetch(base);break;}catch{await sleep(100);}}}
   for(const [engine,api] of Object.entries({chromium,webkit})){
-    const browser=await api.launch();
+    const browser=currentBrowser=await api.launch();
     for(const width of widths){
       const context=await browser.newContext({viewport:{width,height:width<700?844:1000},deviceScaleFactor:1,isMobile:width<700,hasTouch:width<700});
-      const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+      const page=currentPage=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
       if(!remote) await page.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
       await page.goto(base+'sound.html',{waitUntil:'load'});
       await page.waitForSelector('[data-music-navigation-ready="true"]');
@@ -49,7 +50,7 @@ async function run(){
           const link=links.filter({has:page.locator('.music-index-title',{hasText:item.title})});
           await link.click();
           const card=page.locator('#'+item.id);
-          await card.locator('.music-navigation-highlight').waitFor({state:'attached',timeout:5000});
+          await page.waitForFunction(id=>document.getElementById(id)?.querySelector('.music-navigation-highlight'),item.id,{polling:'raf',timeout:6000});
           assert.equal(await page.locator('dialog[open]').count(),0,'index must not open reader');
           assert.equal(new URL(page.url()).hash,'#'+item.id);
           const position=await card.locator('.sound-cover-frame').evaluate(el=>({top:el.getBoundingClientRect().top,header:document.getElementById('xen-site-header').getBoundingClientRect().height}));
@@ -77,4 +78,4 @@ async function run(){
     await browser.close();
   }
 }
-run().then(()=>{fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));console.log('All',results.length,'cases passed.');}).catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>{server?.kill();});
+run().then(()=>{fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));console.log('All',results.length,'cases passed.');}).catch(async e=>{console.error(e);if(currentPage){console.log('FAIL STATE',await currentPage.evaluate(()=>({url:location.href,scrollY,active:document.activeElement?.id,highlight:[...document.querySelectorAll('.music-navigation-highlight')].map(e=>e.closest('.sound-release-card').id)})));await currentPage.screenshot({path:path.join(out,'failure.jpg'),fullPage:false});}process.exitCode=1;}).finally(async()=>{await currentBrowser?.close();server?.kill();});
