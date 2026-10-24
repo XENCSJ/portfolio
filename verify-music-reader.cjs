@@ -18,6 +18,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
   const browser=await engine.launch();
   for(const [width,height] of profiles){
    const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1});
+   context.setDefaultTimeout(15000);
    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
    // Avoid third-party playback/analytics during deterministic UI checks; URLs and nodes are checked separately.
    await page.route(/googletagmanager|google-analytics|open\.spotify\.com\/embed|youtube-nocookie|i\.ytimg\.com|youtube\.com\/(iframe_api|s\/player)/,r=>r.abort());
@@ -31,7 +32,9 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
     assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,1,5,1,1]);
     assert.equal(await page.locator('.sound-media-accordion').count(),0);assert.equal(await page.locator('.music-playback').count(),4);
-    assert.equal(await page.locator('.music-playback iframe[src*="spotify"]').count(),3);
+    assert.equal(await page.locator('.music-playback iframe[data-music-src*="spotify"]').count(),3);
+    assert.equal(await page.locator('.music-player-drawer').count(),7);
+    assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
     assert.equal(await page.locator('.music-playback .video-container').count(),2);
     assert.equal(await page.locator('.music-genre-videos .video-container').count(),2);
     assert.equal(await page.locator('#blue-sleep .video-container').count(),0);
@@ -53,8 +56,9 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      assert(await page.evaluate(()=>window.__musicPlaybackNodes.every(({node,parent,source})=>node.isConnected&&node.parentNode===parent&&node.getAttribute('src')===source)),'reader must not relocate or replace any player');
      const before=await page.locator('.music-reader-cover').boundingBox();
      const geometry=await dialog.evaluate(d=>{const p=d.querySelector('#music-about-panel'),a=p.querySelector('.song-description');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
-     assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>=100,`${label}: ${geometry.panel}px reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'16px');assert(Math.abs(parseFloat(geometry.line)-31.2)<.01);
+     assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>=100,`${label}: ${geometry.panel}px reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'14px');assert(Math.abs(parseFloat(geometry.line)-28)<.01);
      await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-panel .sound-song-lyrics').innerHTML(),original.lyrics);
+     assert(await page.locator('#music-lyrics-panel .sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
      if(width>=1280){const firstVerse=await page.locator('#music-lyrics-panel .sound-lyric-section p').first().evaluate(p=>({height:p.getBoundingClientRect().height,line:parseFloat(getComputedStyle(p).lineHeight),lines:p.querySelectorAll('br').length+1}));assert(Math.abs(firstVerse.height-firstVerse.line*firstVerse.lines)<2,'authored lyric breaks must render once');}
      await page.locator('#music-lyrics-panel').evaluate(el=>{el.scrollTop=el.scrollHeight;});
      assert.deepEqual(await page.locator('.music-reader-cover').boundingBox(),before);
@@ -78,8 +82,11 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      await page.locator('#nova-pulse').scrollIntoViewIfNeeded();await shot(page,label+'-playback');
     }
     // One-tap activation must mount the original video in its existing page section.
+    await page.locator('#nova-pulse .music-player-drawer[data-service="youtube"] > summary').click();
     await page.locator('#nova-pulse .xen-cinema-cover').click();
     const frame=page.locator('#nova-pulse .video-container iframe');await frame.waitFor();assert((await frame.getAttribute('src')).includes('/TpUbm4xbmVc'));
+    await page.locator('#nova-pulse .music-player-drawer[data-service="youtube"] > summary').click();
+    await frame.waitFor({state:'detached'});
     assert.deepEqual(errors,[]);results.push({label,pass:true,releases:8});console.log('PASS',label);
    }catch(e){await shot(page,label+'-failure');results.push({label,pass:false,error:e.stack});console.error('FAIL',label,e);}
    await context.close();
