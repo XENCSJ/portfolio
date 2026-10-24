@@ -165,9 +165,6 @@ body#top.sound-page main #music-reader .music-reader-tabs button { color:var(--m
 body#top.sound-page main .music-service-name { font-size:11px; line-height:1.4; min-height:2.8em; }
 body#top.sound-page main .music-services { gap:8px; }
 body#top.sound-page main .music-service { justify-content:flex-start; }
-body#top.sound-page main .sound-service-logo .music-service-icon { width:28px; height:28px; color:var(--music-ink); }
-body#top.sound-page main .sound-service-logo img { filter:brightness(0) invert(1); }
-body#top.sound-page[data-music-theme="light"] main .sound-service-logo img { filter:brightness(0); }
 /* Separate native disclosures: usable without JS, independently openable with JS. */
 body#top.sound-page main .music-playback { gap:0; margin-top:24px; padding:0; }
 body#top.sound-page main .music-player-drawer { width:100%; min-width:0; border-bottom:1px solid var(--music-line); }

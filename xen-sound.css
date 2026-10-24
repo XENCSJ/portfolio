@@ -90,9 +90,12 @@ body#top.sound-page main .sound-song-cover {
   width: min(100%, 380px);
   height: auto;
   margin: 0 auto;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  object-position: var(--sound-cover-position, center);
+}
+/* One crop contract for the catalogue, cloned carousel art and fixed reader art.
+   All current non-square sources need only a centered 1.3% top/bottom crop. */
+body#top.sound-page main :is(.sound-song-cover, .sound-slide img, .music-reader-cover) {
+  display:block; aspect-ratio:1 / 1; object-fit:cover;
+  object-position:var(--sound-cover-position, 50% 50%); border:0; border-radius:0;
 }
 body#top.sound-page main .sound-song-title {
   margin: 30px 0 10px;
@@ -257,13 +260,13 @@ body#top.sound-page main .sound-release-card {
   border: 1px solid #e9e7e2; background: #fff; border-radius: 2px;
   min-width: 0; align-self: start;
 }
-/* One square crop for every release. Original image pixels and proportions stay intact. */
+/* Reserve the same square before image loading; the sole title follows it. */
 body#top.sound-page main .sound-release-card .sound-cover-frame {
   display: grid; place-items: center; width: min(100%, 380px);
-  margin: 0 auto; aspect-ratio: 1 / 1; overflow: hidden; background: transparent;
+  aspect-ratio: 1 / 1; overflow: hidden; margin: 0 auto; background: transparent;
 }
 body#top.sound-page main .sound-release-card .sound-song-cover {
-  display: block; width: 100%; height: 100%; margin: 0; min-height: 0;
+  display: block; width: 100%; height: auto; margin: 0 auto;
 }
 body#top.sound-page main .sound-release-card .sound-song-title {
   display: block; margin: 19px 0 3px; padding: 0;
@@ -296,9 +299,9 @@ body#top.sound-page main .sound-release-card .sound-song-lyrics { margin-top: 26
 /* Shared final geometry. Entrance variants are confined to the comparison HTML. */
 body#top.sound-page main .sound-showcase { --cover-size: clamp(205px, 54vw, 330px); margin: 32px auto 20px; width: 100%; overflow: hidden; }
 .sound-showcase-stage { position: relative; height: calc(var(--cover-size) + 28px); overflow: hidden; touch-action: pan-y; perspective: 1100px; }
-.sound-slide { position: absolute; width: var(--cover-size); height: var(--cover-size); left: 50%; top: 10px; opacity: 0; transform: translate3d(100%,0,0) scale(.75); transition: transform .65s cubic-bezier(.22,1,.36,1), opacity .65s ease; pointer-events: none; background: #fff; box-shadow: 0 8px 24px #0000000c; transform-style: preserve-3d; }
-.sound-slide-art { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
-.sound-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--sound-cover-position, center); user-select: none; -webkit-user-drag: none; }
+.sound-slide { position: absolute; width: var(--cover-size); height: auto; aspect-ratio: 1 / 1; left: 50%; top: 10px; opacity: 0; transform: translate3d(100%,0,0) scale(.75); transition: transform .65s cubic-bezier(.22,1,.36,1), opacity .65s ease; pointer-events: none; background: transparent; box-shadow: 0 8px 24px #0000000c; transform-style: preserve-3d; }
+.sound-slide-art { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; transform-style: preserve-3d; }
+.sound-slide img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
 .sound-slide[data-position="active"] { transform: translate3d(-50%,0,0) scale(1); opacity: 1; z-index: 3; pointer-events: auto; }
 .sound-slide[data-position="previous"] { transform: translate3d(calc(-50% - var(--cover-size) * .85),0,0) scale(.82); opacity: .42; z-index: 1; pointer-events: auto; cursor: pointer; }
 .sound-slide[data-position="next"] { transform: translate3d(calc(-50% + var(--cover-size) * .85),0,0) scale(.82); opacity: .42; z-index: 1; pointer-events: auto; cursor: pointer; }

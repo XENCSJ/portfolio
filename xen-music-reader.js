@@ -83,12 +83,6 @@
     node.classList.add('xen-prose-container');
     node.querySelectorAll('p').forEach(p => p.classList.add('xen-description'));
   });
-  main.querySelectorAll('.sound-service').forEach(item => {
-    const name = item.querySelector('.sound-service-name')?.textContent.trim();
-    const service = services.find(s => s.name === name);
-    const logo = item.querySelector('.sound-service-logo');
-    if (service && logo) logo.replaceChildren(serviceIcon(service.key));
-  });
   const drawers = [...main.querySelectorAll('.music-player-drawer')];
   const youtubeSlots = new Map();
   drawers.forEach(drawer => drawer.querySelectorAll('.video-container').forEach(slot => youtubeSlots.set(slot,slot.innerHTML)));
