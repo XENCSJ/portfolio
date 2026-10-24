@@ -10,6 +10,11 @@ const server=http.createServer((req,res)=>{
  if(!file.startsWith(process.cwd()+path.sep)){res.writeHead(403).end();return;}
  fs.readFile(file,(e,data)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.end(data);});
 });
+async function squares(locator){
+ const values=await locator.evaluateAll(els=>els.map(el=>{const s=getComputedStyle(el);return {width:parseFloat(s.width),height:parseFloat(s.height),fit:s.objectFit,src:el.getAttribute('src')};}));
+ for(const v of values){assert(v.width>0&&Math.abs(v.width-v.height)<.6,JSON.stringify(v));if(v.src)assert.equal(v.fit,'cover');}
+ return values;
+}
 async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:88});}
 (async()=>{
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
@@ -31,6 +36,23 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.children].map(li=>({key:li.firstElementChild.dataset.service,name:li.querySelector('.music-service-name').textContent,href:li.firstElementChild.getAttribute('href'),status:li.querySelector('.music-service-status').textContent}))));
     for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
     assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,1,5,1,1]);
+    await page.locator('.sound-song-cover,.sound-slide img,.sound-service-logo img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+    await squares(page.locator('.sound-release-card .sound-cover-frame'));
+    await squares(page.locator('.sound-release-card .sound-song-cover'));
+    await squares(page.locator('.sound-slide,.sound-slide-art,.sound-slide img'));
+    const brands=await page.locator('.sound-service-logo img').evaluateAll(imgs=>imgs.map(img=>({src:img.getAttribute('src'),filter:getComputedStyle(img).filter,fit:getComputedStyle(img).objectFit,loaded:img.complete&&img.naturalWidth>0,width:img.clientWidth,height:img.clientHeight,nw:img.naturalWidth,nh:img.naturalHeight})));
+    assert.equal(brands.length,23);assert.equal(await page.locator('.sound-service-logo svg').count(),0);
+    for(const brand of brands){assert(brand.loaded);assert.equal(brand.filter,'none');assert.equal(brand.fit,'contain');assert(Math.abs(brand.width/brand.height-brand.nw/brand.nh)<.02,JSON.stringify(brand));}
+    assert.equal(await page.locator('.sound-release-card > .music-services .music-service-icon').count(),40);
+    assert(await page.locator('.sound-release-card > .music-services .music-service-icon').evaluateAll(icons=>icons.every(i=>getComputedStyle(i).color==='rgb(255, 255, 255)')));
+    assert(await page.locator('.sound-slide').evaluateAll(els=>els.every(el=>getComputedStyle(el).backgroundColor==='rgba(0, 0, 0, 0)')));
+    if([1440,390].includes(width)){
+     await page.locator('.sound-showcase').scrollIntoViewIfNeeded();await shot(page,label+'-carousel');
+     for(const id of ['hikari-no-arika','sora-ni-tokeru']){await page.locator('#'+id).scrollIntoViewIfNeeded();await shot(page,label+'-'+id+'-card');}
+     await page.locator('#listen-download').scrollIntoViewIfNeeded();await shot(page,label+'-streaming');
+     await page.locator('.sound-platform-group').last().scrollIntoViewIfNeeded();await shot(page,label+'-download');
+    }
+
     assert.equal(await page.locator('.sound-media-accordion').count(),0);assert.equal(await page.locator('.music-playback').count(),4);
     assert.equal(await page.locator('.music-playback iframe[data-music-src*="spotify"]').count(),3);
     assert.equal(await page.locator('.music-player-drawer').count(),7);
@@ -54,6 +76,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      assert.equal(await dialog.locator('iframe,template,details,.music-playback').count(),0);
      assert.equal(await dialog.getByText('楽曲解説は未掲載です。',{exact:true}).count(),0);
      assert(await page.evaluate(()=>window.__musicPlaybackNodes.every(({node,parent,source})=>node.isConnected&&node.parentNode===parent&&node.getAttribute('src')===source)),'reader must not relocate or replace any player');
+     await squares(page.locator('.music-reader-cover'));
      const before=await page.locator('.music-reader-cover').boundingBox();
      const geometry=await dialog.evaluate(d=>{const p=d.querySelector('#music-about-panel'),a=p.querySelector('.song-description');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
      assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>=100,`${label}: ${geometry.panel}px reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'14px');assert(Math.abs(parseFloat(geometry.line)-28)<.01);
@@ -65,8 +88,8 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      const extent=await page.locator('#music-lyrics-panel').evaluate(el=>({end:el.scrollTop+el.clientHeight,total:el.scrollHeight,overflow:el.scrollWidth>el.clientWidth+1}));assert(!extent.overflow);assert(extent.end>=extent.total-2);
      await page.locator('#music-lyrics-tab').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#music-about-tab').getAttribute('aria-selected'),'true');
      await page.keyboard.press('End');assert.equal(await page.locator('#music-lyrics-tab').getAttribute('aria-selected'),'true');await page.keyboard.press('Home');
-     if(original.id==='hikari-no-arika'&&[1440,390,375].includes(width)){
-      await shot(page,label+'-about');await page.locator('#music-lyrics-tab').click();await page.locator('#music-lyrics-panel').evaluate(el=>el.scrollTop=0);await shot(page,label+'-lyrics');
+     if(['hikari-no-arika','sora-ni-tokeru'].includes(original.id)&&[1440,390,375].includes(width)){
+      await shot(page,label+'-'+original.id+'-about');await page.locator('#music-lyrics-tab').click();await page.locator('#music-lyrics-panel').evaluate(el=>el.scrollTop=0);await shot(page,label+'-'+original.id+'-lyrics');
      }
      await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
      await page.waitForFunction(id=>document.querySelector('#'+id+' .music-reader-open').getAttribute('aria-expanded')==='false',original.id);
@@ -76,6 +99,15 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     await page.locator('.sound-category-drawer').first().locator('summary').click();await page.locator('.sound-category-links a').first().click();await page.locator('#music-reader').waitFor({state:'visible'});await page.locator('.music-reader-close').click();assert(await page.locator('.sound-category-drawer').first().evaluate(el=>el.open));
     await page.locator('.sound-category-drawer').first().locator('summary').click();
     const stage=page.locator('.sound-showcase-stage');await stage.scrollIntoViewIfNeeded();const previous=await stage.getAttribute('data-active-release');await page.locator('.sound-slide[data-position="next"]').click();assert.notEqual(await stage.getAttribute('data-active-release'),previous);
+    const afterTap=await stage.getAttribute('data-active-release');
+    await stage.dispatchEvent('touchstart',{touches:[{clientX:260,clientY:150}]});
+    await stage.dispatchEvent('touchend',{changedTouches:[{clientX:100,clientY:152}]});
+    assert.notEqual(await stage.getAttribute('data-active-release'),afterTap);
+    if(width===1440){
+     await page.locator('h1').click();await page.mouse.move(0,0);
+     const beforeAuto=await stage.getAttribute('data-active-release');
+     await page.waitForFunction(id=>document.querySelector('.sound-showcase-stage').dataset.activeRelease!==id,beforeAuto,{timeout:8000});
+    }
     const ids=await page.locator('[id]').evaluateAll(els=>els.map(e=>e.id));assert.equal(new Set(ids).size,ids.length);
     assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1));
     if([1440,390].includes(width)){
