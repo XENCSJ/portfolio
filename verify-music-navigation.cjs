@@ -11,6 +11,20 @@ const widths=[375,390,430,768,1024,1280,1440,1920];
 const results=[];
 let currentBrowser,currentPage;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+// Arm before clicking: a busy CI runner can return from click after the 500ms effect ends.
+async function observeArrival(page,id){
+  await page.evaluate(id=>{
+    window.musicArrival=null;window.musicDeparture=null;
+    const frame=document.getElementById(id).querySelector('.sound-cover-frame');
+    const observer=new MutationObserver(()=>{
+      if(frame.classList.contains('music-navigation-highlight')){
+        window.musicArrival={id,time:performance.now(),top:frame.getBoundingClientRect().top,header:document.getElementById('xen-site-header').getBoundingClientRect().height,animation:getComputedStyle(frame).animationName};
+      }else if(window.musicArrival){window.musicDeparture=performance.now();observer.disconnect();}
+    });
+    observer.observe(frame,{attributes:true,attributeFilter:['class']});
+  },id);
+}
+
 async function run(){
   if(server){for(let i=0;i<30;i++){try{await fetch(base);break;}catch{await sleep(100);}}}
   for(const [engine,api] of Object.entries({chromium,webkit})){
@@ -48,18 +62,20 @@ async function run(){
         const targets=(width===390||width===1440)?expected[genre]:[expected[genre].at(-1)];
         for(const item of targets){
           const link=links.filter({has:page.locator('.music-index-title',{hasText:item.title})});
+          await observeArrival(page,item.id);
           await link.click();
           if(width===390&&genre===0&&item===targets[0]) await page.setViewportSize({width,height:876});
           const card=page.locator('#'+item.id);
-          await page.waitForFunction(id=>document.getElementById(id)?.querySelector('.music-navigation-highlight'),item.id,{polling:'raf',timeout:6000});
+          await page.waitForFunction(id=>window.musicArrival?.id===id,item.id,{polling:'raf',timeout:6000});
           assert.equal(await page.locator('dialog[open]').count(),0,'index must not open reader');
           assert.equal(new URL(page.url()).hash,'#'+item.id);
-          const position=await card.locator('.sound-cover-frame').evaluate(el=>({top:el.getBoundingClientRect().top,header:document.getElementById('xen-site-header').getBoundingClientRect().height}));
+          const position=await page.evaluate(()=>({top:window.musicArrival.top,header:window.musicArrival.header}));
           assert(position.top>=position.header+16&&position.top<=position.header+32,JSON.stringify({engine,width,id:item.id,...position}));
           assert.equal(await page.evaluate(()=>document.activeElement.id),item.id);
           if(genre===0&&item===targets[0]&&(width===390||width===1440)) await page.screenshot({path:path.join(out,engine+'-'+width+'-destination.jpg'),type:'jpeg',quality:88});
           if(width===390&&genre===0&&item===targets[0]) await page.keyboard.press('Escape');
-          await page.waitForTimeout(550);assert.equal(await card.locator('.music-navigation-highlight').count(),0);
+          await page.waitForFunction(()=>window.musicDeparture!==null);assert.equal(await card.locator('.music-navigation-highlight').count(),0);
+          assert(await page.evaluate(()=>window.musicDeparture-window.musicArrival.time>=400),'highlight duration');
           if(width===390&&genre===0&&item===targets[0]) await page.setViewportSize({width,height:844});
         }
       }
@@ -75,8 +91,8 @@ async function run(){
     }
     const reducedContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});const reducedPage=await reducedContext.newPage();
     await reducedPage.goto(base+'sound.html');await reducedPage.locator('[data-music-navigation-ready]').waitFor();
-    await reducedPage.locator('.music-index summary').nth(0).click();await reducedPage.locator('.music-index-link').first().click();await reducedPage.locator('.music-navigation-highlight').waitFor();
-    assert.equal(await reducedPage.locator('.music-navigation-highlight').evaluate(e=>getComputedStyle(e).animationName),'none');results.push({engine,reducedMotion:true,passed:true});await reducedContext.close();
+    await reducedPage.locator('.music-index summary').nth(0).click();await observeArrival(reducedPage,'tochu-no-mamade');await reducedPage.locator('.music-index-link').first().click();await reducedPage.waitForFunction(()=>window.musicArrival!==null);
+    assert.equal(await reducedPage.evaluate(()=>window.musicArrival.animation),'none');results.push({engine,reducedMotion:true,passed:true});await reducedContext.close();
     const plain=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const p=await plain.newPage();await p.goto(base+'sound.html');await p.locator('.music-index summary').nth(0).click();assert.equal(await p.locator('.music-index-link:visible').count(),4);await p.locator('.music-index summary').nth(1).click();assert.equal(await p.locator('.music-index details[open]').count(),1);results.push({engine,noJS:true,passed:true});await plain.close();
     await browser.close();
   }
