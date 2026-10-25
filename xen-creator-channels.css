@@ -1,0 +1,51 @@
+/* CREATOR specialist channels. Scoped to this section only. */
+body.creator-page #youtube-channels { --channel-gold:#c5af82; overflow-anchor:none; }
+#youtube-channels .xc-channel { margin:0; border-bottom:1px solid #303030; overflow:hidden; overflow-anchor:none; }
+#youtube-channels .xc-channel:first-child { border-top:1px solid #303030; }
+#youtube-channels .xc-toggle {
+  display:grid; grid-template-columns:24px 80px minmax(0,1fr) 24px;
+  align-items:center; gap:22px; min-height:128px; padding:24px 4px;
+  list-style:none; cursor:pointer; background:#000; color:#fff;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  transition:background-color 180ms ease;
+}
+#youtube-channels .xc-toggle::-webkit-details-marker { display:none; }
+#youtube-channels .xc-toggle::marker { content:''; }
+#youtube-channels .xc-number { color:var(--channel-gold); font-size:10px; letter-spacing:.06em; font-variant-numeric:tabular-nums; }
+#youtube-channels .xc-logo { display:block; width:80px; height:80px; max-width:none; aspect-ratio:1; border-radius:50%; object-fit:contain; }
+#youtube-channels .xc-label { min-width:0; }
+#youtube-channels .xc-name { display:block; color:#fff; font-size:clamp(15px,2vw,20px); font-weight:400; letter-spacing:.035em; line-height:1.5; }
+#youtube-channels .xc-name > span { white-space:nowrap; }
+#youtube-channels .xc-genre { display:block; margin-top:7px; color:#aaa; font-size:10px; letter-spacing:.1em; line-height:1.7; }
+#youtube-channels .xc-mark { position:relative; width:20px; height:20px; color:var(--channel-gold); }
+#youtube-channels .xc-mark::before,#youtube-channels .xc-mark::after { content:''; position:absolute; left:3px; right:3px; top:9px; height:1px; background:currentColor; }
+#youtube-channels .xc-mark::after { transform:rotate(90deg); transition:transform 350ms ease; }
+#youtube-channels .xc-channel[open] .xc-mark::after { transform:rotate(0); }
+#youtube-channels .xc-channel[data-enhanced] .xc-toggle[aria-expanded=false] .xc-mark::after { transform:rotate(90deg); }
+#youtube-channels .xc-toggle:focus-visible { outline:2px solid var(--channel-gold)!important; outline-offset:-3px; }
+#youtube-channels .xc-panel { padding:0 4px 32px; }
+#youtube-channels .xc-banner { display:block; width:100%; height:auto; aspect-ratio:1138/188; object-fit:contain; margin:0 0 28px; background:#000; }
+#youtube-channels .xc-copy { max-width:720px; margin-inline:auto; }
+#youtube-channels .xc-copy h3 { margin:0 0 6px; color:#fff; font-size:18px; line-height:1.6; font-weight:400; letter-spacing:.035em; }
+#youtube-channels .xc-handle { margin:0 0 22px; color:#aaa; font-size:12px; line-height:1.7; }
+#youtube-channels .xc-tagline { margin:0 0 14px; color:#fff; font-size:15px; line-height:2; letter-spacing:.02em; }
+#youtube-channels .xc-description { margin:0 0 22px; color:#bcbcbc; font-size:14px; line-height:2; line-break:strict; overflow-wrap:break-word; }
+#youtube-channels .xc-link { display:inline-flex; align-items:center; gap:9px 14px; flex-wrap:wrap; min-height:44px; padding-block:8px; color:var(--channel-gold); font-size:10px; letter-spacing:.1em; text-decoration:underline; text-underline-offset:6px; text-decoration-color:#655b48; }
+#youtube-channels .xc-link small { font-size:11px; letter-spacing:.025em; }
+#youtube-channels .xc-link:focus-visible { outline:2px solid var(--channel-gold); outline-offset:4px; }
+@media(hover:hover) { #youtube-channels .xc-toggle:hover { background:#0a0a0a; } #youtube-channels .xc-link:hover { text-decoration-color:currentColor; } }
+@media(max-width:600px) {
+  #youtube-channels .xc-toggle { grid-template-columns:64px minmax(0,1fr) 20px; gap:14px; min-height:112px; padding:20px 0; }
+  #youtube-channels .xc-logo { width:64px; height:64px; grid-column:1; grid-row:1 / span 2; }
+  #youtube-channels .xc-number { grid-column:2; grid-row:1; align-self:end; font-size:9px; }
+  #youtube-channels .xc-label { grid-column:2; grid-row:2; align-self:start; }
+  #youtube-channels .xc-toggle { row-gap:3px; }
+  #youtube-channels .xc-name { font-size:14px; letter-spacing:.015em; }
+  #youtube-channels .xc-genre { margin-top:5px; font-size:8px; letter-spacing:.04em; }
+  #youtube-channels .xc-mark { grid-column:3; grid-row:1 / span 2; }
+  #youtube-channels .xc-panel { padding:0 0 26px; }
+  #youtube-channels .xc-banner { margin-bottom:22px; }
+  #youtube-channels .xc-copy h3 { font-size:16px; }
+  #youtube-channels .xc-tagline { font-size:14px; }
+}
+@media(prefers-reduced-motion:reduce) { #youtube-channels *,#youtube-channels *::before,#youtube-channels *::after { transition:none!important; animation:none!important; } }
