@@ -67,7 +67,8 @@ module.exports = async function verifyCategoryTitles() {
     console.log(device+' MUSIC: begin');
     assert.equal(await page.locator('.sound-category-drawer').count(),3);
     assert.equal(await page.locator('.sound-release-card').count(),8);
-    assert.equal(await page.locator('.music-service-icon').count(),44);
+    assert.equal(await page.locator('.sound-release-card .music-service-icon').count(),40);
+    for (const card of await page.locator('.sound-release-card').all()) assert.equal(await card.locator('.music-service-icon').count(),5);
     assert.equal(await page.locator('.music-player-drawer').count(),7);
     assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
     assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(0, 0, 0)');
@@ -95,12 +96,13 @@ module.exports = async function verifyCategoryTitles() {
      assert.ok(await page.locator('#music-reader').evaluate(e=>e.scrollWidth<=e.clientWidth+1),'reader overflow');
      if(i===0)await page.screenshot({path:'news-qa/music-'+device+'-lyrics.png'});
      await page.getByRole('button',{name:'楽曲詳細を閉じる',exact:true}).click();
+     await page.waitForFunction(()=>!document.querySelector('#music-reader').open&&document.querySelector('.music-reader-identity').children.length===0);
     }
     assert.deepEqual(await page.locator('.song-description,.sound-song-lyrics').allTextContents(),before,'all authored content restored');
     const drawers=page.locator('.music-player-drawer');
     for(let i=0;i<await drawers.count();i++) {
      console.log(device+' MUSIC player '+i);const drawer=drawers.nth(i),summary=drawer.locator('summary');
-     await summary.press('Enter');await page.waitForTimeout(320);
+     await summary.press('Enter');await page.waitForFunction(()=>[...document.querySelectorAll('.music-player-drawer')].every(d=>!d.style.overflow));
      assert.equal(await summary.getAttribute('aria-expanded'),'true');
      if(await drawer.getAttribute('data-service')==='youtube') {
       const video=drawer.locator('.video-container');const bounds=await video.boundingBox();
@@ -108,7 +110,7 @@ module.exports = async function verifyCategoryTitles() {
       await drawer.locator('.xen-cinema-cover').click();
       assert.equal(await drawer.locator('iframe').count(),1,'YouTube mounted');
      } else assert.ok((await drawer.locator('iframe').getAttribute('src')).startsWith('https://open.spotify.com/embed/'));
-     await summary.press('Enter');await page.waitForTimeout(320);
+     await summary.press('Enter');await page.waitForFunction(()=>[...document.querySelectorAll('.music-player-drawer')].every(d=>!d.style.overflow));
      assert.equal(await summary.getAttribute('aria-expanded'),'false');
      assert.equal(await drawer.getAttribute('open'),null);
      if(await drawer.getAttribute('data-service')==='youtube')assert.equal(await drawer.locator('iframe').count(),0,'closed video stopped');
@@ -116,10 +118,10 @@ module.exports = async function verifyCategoryTitles() {
     }
     const nova=page.locator('#nova-pulse');
     await nova.locator('[data-service="spotify"] > .music-player-drawer > summary').click();
-    await nova.locator('[data-service="youtube"] > .music-player-drawer > summary').click();await page.waitForTimeout(320);
+    await nova.locator('[data-service="youtube"] > .music-player-drawer > summary').click();await page.waitForFunction(()=>[...document.querySelectorAll('.music-player-drawer')].every(d=>!d.style.overflow));
     assert.equal(await nova.locator('.music-player-drawer[open]').count(),2,'independent drawers');
     await nova.locator('[data-service="youtube"] > .music-player-drawer > summary').click();
-    await nova.locator('[data-service="spotify"] > .music-player-drawer > summary').click();await page.waitForTimeout(320);
+    await nova.locator('[data-service="spotify"] > .music-player-drawer > summary').click();await page.waitForFunction(()=>[...document.querySelectorAll('.music-player-drawer')].every(d=>!d.style.overflow));
     await nova.scrollIntoViewIfNeeded();await page.screenshot({path:'news-qa/music-'+device+'-players.png'});
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'MUSIC horizontal overflow');
     fs.writeFileSync('news-qa/music-'+device+'-typography.json',JSON.stringify(reference,null,2));
