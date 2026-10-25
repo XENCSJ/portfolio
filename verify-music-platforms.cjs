@@ -37,7 +37,7 @@ try{
  assert(await page.locator('.sound-release-card > .music-services .music-service-icon').evaluateAll(es=>es.every(e=>getComputedStyle(e).color==='rgb(255, 255, 255)')));
  assert.equal(await page.locator('.sound-slide').count(),8);await page.locator('.sound-showcase-stage').focus();const active=await page.locator('.sound-slide[data-position="active"] img').getAttribute('src');await page.keyboard.press('ArrowRight');await page.waitForFunction(src=>document.querySelector('.sound-slide[data-position="active"] img').getAttribute('src')!==src,active);
  const genre=page.locator('.sound-category-drawer').first();await genre.locator('summary').click();await page.waitForFunction(()=>document.querySelector('.sound-category-drawer').open);assert.equal(await page.locator('.music-index-link').count(),8);await genre.locator('summary').click();
- assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),7);
+ assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),6); // BLUE SLEEP keeps both videos in one YouTube drawer.
  // Album identity is independent of the preserved YouTube video title/URL.
  assert.equal(await page.locator('#nights-awakening-title').textContent(),'PURPLE AWAKE');
  assert.equal(await page.locator('.music-index-link[href="#nights-awakening"] .music-index-title').textContent(),'PURPLE AWAKE');
@@ -64,10 +64,13 @@ try{
   }
   if(r===1&&[1440,390].includes(width)&&height!==500){await tabs.nth(1).click();await page.screenshot({path:`${out}/${engineName}-${width}-fixed-reader.png`});}
   await dialog.getByRole('button',{name:'楽曲詳細を閉じる'}).click();await dialog.waitFor({state:'hidden'});
+  // dialog.close() hides synchronously; its close event restores authored nodes on the next task.
+  await page.waitForFunction(()=>![...document.querySelectorAll('.music-reader-open')].some(e=>e.getAttribute('aria-expanded')==='true'));
  }
  assert.deepEqual(await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)])),sourceText);
 
  if([1440,390].includes(width)){for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${engineName}-${width}-${id}.png`});}}
+ if([1440,390].includes(width)&&height!==500) await require('./verify-music-links.cjs')(page,context,{engineName,width,out});
  assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four fixed readers`);
 }catch(error){await page.screenshot({path:`${out}/${engineName}-${width}x${height}-failure.png`});throw error;}finally{await context.close();}
 }}finally{await browser.close();}}

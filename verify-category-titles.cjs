@@ -69,7 +69,8 @@ module.exports = async function verifyCategoryTitles() {
     assert.equal(await page.locator('.sound-release-card').count(),8);
     assert.equal(await page.locator('.sound-release-card .music-service-icon').count(),40);
     for (const card of await page.locator('.sound-release-card').all()) assert.equal(await card.locator('.music-service-icon').count(),5);
-    assert.equal(await page.locator('.music-player-drawer').count(),7);
+    assert.equal(await page.locator('.music-player-drawer').count(),6);
+    assert.equal(await page.locator('#blue-sleep .video-container').count(),2);
     assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
     assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(0, 0, 0)');
     const iconLayout=await page.locator('.music-services').evaluateAll(rows=>rows.every(row=>[...row.children].every(item=>{
@@ -105,10 +106,13 @@ module.exports = async function verifyCategoryTitles() {
      await summary.press('Enter');await page.waitForFunction(()=>[...document.querySelectorAll('.music-player-drawer')].every(d=>!d.style.overflow));
      assert.equal(await summary.getAttribute('aria-expanded'),'true');
      if(await drawer.getAttribute('data-service')==='youtube') {
-      const video=drawer.locator('.video-container');const bounds=await video.boundingBox();
-      assert.ok(Math.abs(bounds.width/bounds.height-16/9)<.01,'YouTube 16:9');
-      await drawer.locator('.xen-cinema-cover').click();
-      assert.equal(await drawer.locator('iframe').count(),1,'YouTube mounted');
+      // BLUE SLEEP has two independent videos inside its shared YouTube drawer.
+      for(const video of await drawer.locator('.video-container').all()) {
+       const bounds=await video.boundingBox();
+       assert.ok(Math.abs(bounds.width/bounds.height-16/9)<.01,'YouTube 16:9');
+       await video.locator('.xen-cinema-cover').click();
+       assert.equal(await video.locator('iframe').count(),1,'YouTube mounted');
+      }
      } else assert.ok((await drawer.locator('iframe').getAttribute('src')).startsWith('https://open.spotify.com/embed/'));
      await summary.press('Enter');await page.waitForFunction(()=>[...document.querySelectorAll('.music-player-drawer')].every(d=>!d.style.overflow));
      assert.equal(await summary.getAttribute('aria-expanded'),'false');

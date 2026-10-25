@@ -19,7 +19,7 @@
       const title = card.querySelector('.sound-song-title');
       if (!card.id || !cover || !title) return null;
       const link = document.createElement('a');
-      link.className = 'music-index-link'; link.href = '#' + card.id;
+      link.className = 'music-index-link'; link.href = '#' + card.id; link.dataset.releaseId = card.id;
       const image = cover.cloneNode(false);
       image.className = 'music-index-cover'; image.alt = ''; image.width = image.height = 88;
       image.loading = 'lazy';
@@ -121,19 +121,20 @@
       highlightTimer = setTimeout(() => frame.classList.remove('music-navigation-highlight'),500);
     }
   }
-  nav.addEventListener('click', event => {
+  function selectRelease(event) {
     if (event.defaultPrevented || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const link = event.target.closest('.music-index-link');
-    if (!link || !nav.contains(link)) return;
-    const card = cardForHash(link.getAttribute('href'));
+    const link = event.target.closest('.music-index-link, .sound-slide[data-position="active"]');
+    if (!link) return;
+    const card = cardForHash('#' + link.dataset.releaseId);
     if (!card) return;
-    // Prevent the older document-level reader shortcut: VIEW DETAILS owns that action.
     event.preventDefault(); navigate(card,true);
-  });
+  }
+  nav.addEventListener('click', selectRelease);
+  document.querySelector('.sound-showcase-stage')?.addEventListener('click', selectRelease);
   const cancelJourney = () => { journey++; };
   window.addEventListener('wheel',cancelJourney,{passive:true});
   window.addEventListener('touchstart',cancelJourney,{passive:true});
-  window.addEventListener('keydown',event => { if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Escape','Tab',' '].includes(event.key)) cancelJourney(); });
+  window.addEventListener('keydown',event => { if (!event.defaultPrevented && ['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Escape','Tab',' '].includes(event.key)) cancelJourney(); });
   // iOS Safari may resize only the height when its address bar collapses during a scroll.
   window.addEventListener('resize',() => {
     if (innerWidth === viewportWidth) return;

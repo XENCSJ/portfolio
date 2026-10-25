@@ -84,12 +84,9 @@
   }
   const fragment = document.createDocumentFragment();
   const slides = releases.map(card => {
-    const url = spotifyURL(card.dataset.spotifyUrl);
-    const detail = card.dataset.slideshowDetail === 'true';
-    const slide = document.createElement(url || detail ? 'a' : 'div');
+    const slide = document.createElement('a');
     slide.className = 'sound-slide'; slide.dataset.releaseId = card.id;
-    if (detail) slide.href = '#' + card.id;
-    else if (url) { slide.href = url.href; slide.target = '_blank'; slide.rel = 'noopener noreferrer'; }
+    slide.href = '#' + card.id;
     const art = document.createElement('div'); art.className = 'sound-slide-art';
     const img = card.querySelector('.sound-song-cover').cloneNode(true);
     img.className = ''; img.loading = 'eager'; img.draggable = false;
@@ -116,7 +113,7 @@
       slide.tabIndex = state === 'away' ? -1 : 0;
       const title = releases[i].querySelector('h3').textContent;
       if (state === 'active' && slide.tagName === 'A') {
-        slide.removeAttribute('role'); slide.setAttribute('aria-label', title + (releases[i].dataset.slideshowDetail === 'true' ? 'の楽曲詳細へ' : 'をSpotifyで聴く'));
+        slide.removeAttribute('role'); slide.setAttribute('aria-label', title + 'の楽曲紹介へ');
       } else {
         slide.setAttribute('role', state === 'active' ? 'group' : 'button');
         slide.setAttribute('aria-label', title + (state === 'active' ? ' — 表示中' : 'を中央に表示'));
@@ -157,7 +154,11 @@
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       e.preventDefault();move(e.key === 'ArrowLeft' ? -1 : 1);
-    } else if (e.key === 'Enter' || e.key === ' ') activateSide(e.target, e);
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      const slide = e.target.closest('.sound-slide');
+      if (e.key === ' ' && slide?.dataset.position === 'active') { e.preventDefault();slide.click(); }
+      else activateSide(e.target, e);
+    }
   });
   let start = null;
   stage.addEventListener('pointerdown', e => {
@@ -168,11 +169,12 @@
   window.addEventListener('pointerup', e => {
     if (!start || e.pointerId !== start.id) return;
     const dx=e.clientX-start.x, dy=e.clientY-start.y;start=null;
+    if (Math.hypot(dx,dy)>12) suppressClickUntil=Date.now()+500;
     if (Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)*1.4) {
       suppressClickUntil=Date.now()+500;move(dx<0 ? 1 : -1);
     }
   }, {passive:true});
-  window.addEventListener('pointercancel', () => { start=null; }, {passive:true});
+  window.addEventListener('pointercancel', () => { start=null;suppressClickUntil=Date.now()+500; }, {passive:true});
   stage.addEventListener('click', e => {
     if (Date.now()<suppressClickUntil) { e.preventDefault();e.stopPropagation();return; }
     activateSide(e.target, e);
