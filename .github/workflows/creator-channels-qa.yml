@@ -1,0 +1,32 @@
+name: CREATOR specialist channels verification
+on:
+  push:
+    branches: [work/creator-channels-20261026]
+  workflow_dispatch:
+    inputs:
+      public_url:
+        description: Public base URL, or empty to test checkout
+        required: false
+        type: string
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node --check xen-creator-channels.js && node verify-creator-channels.cjs
+        env:
+          CREATOR_PUBLIC_URL: ${{ inputs.public_url }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: creator-channels-browser-evidence
+          path: creator-channels-qa/
+          retention-days: 14

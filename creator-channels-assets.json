@@ -1,0 +1,36 @@
+{
+  "verified_date": "2026-10-26 JST",
+  "method": "Official YouTube rendered banner/avatar image URLs; original bytes, no recoloring or regeneration. Repository image filenames and existing covers inspected; dedicated assets were absent.",
+  "assets": [
+    {
+      "file": "xen-channel-amber-banner.jpg",
+      "source": "https://yt3.googleusercontent.com/rnxHORB26dX6E62LwpTnzDAqHb6WDAzBvLcmQzhhgHtcdyq0VxsMi3Rl5gkDHR6H44C-xIGzI_0=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
+      "sha256": "3ad4589d76f56a7443097a02d4244eace80db2b881f1f81e423f89af87eb9a32"
+    },
+    {
+      "file": "xen-channel-amber-logo.jpg",
+      "source": "https://yt3.googleusercontent.com/Jf2i_1HFhcF0uDKd9seDoYHvgen9eK2-0fErHIV3S26QjzDmhr8Q-O8QnR5fuqhxV0MJd73y2w=s160-c-k-c0x00ffffff-no-rj",
+      "sha256": "cbb930b752b7776b376512237499b23656fd474bac992b0fe666b945dd12f322"
+    },
+    {
+      "file": "xen-channel-purple-banner.jpg",
+      "source": "https://yt3.googleusercontent.com/43A6-_PgnU8MRPx5zwtsGDFU0Ciy141FTgXnp5uHdlcUfpyaadUrS1HxLEQuBkvFnKJzwQe0SA=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
+      "sha256": "3fe752445dff20d8e93b7fd76f897418926e65b0c052854ec7a927140ff05575"
+    },
+    {
+      "file": "xen-channel-purple-logo.jpg",
+      "source": "https://yt3.googleusercontent.com/nBuY70-Qq6ZGwdszBUY6wOH0SIYGzZ8jC9uOsR8_D1VAzZ6E5Ob2gxunrtdVFZ3VQj2QRaj1VQ=s160-c-k-c0x00ffffff-no-rj",
+      "sha256": "c9652ef01ff9892ea2b866d1f28a6c64f01ed675b2c7cd56726b8786c8c5f78d"
+    },
+    {
+      "file": "xen-channel-blue-banner.jpg",
+      "source": "https://yt3.googleusercontent.com/tq96Fa6kUZ4L3W6oex26__Peaw9RdY5iVw6wEPo1c-G3v0PyrOoDQltammbS51IfORS5pqMGxh4=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
+      "sha256": "54139c15e29cbe9cabbd5ad0f6b20c330e878d3e3f3e9979b4b950af5eb75827"
+    },
+    {
+      "file": "xen-channel-blue-logo.jpg",
+      "source": "https://yt3.googleusercontent.com/9rUsLqhTAiUUNfgqJxDTVovrJCVt-oJnrx7GtgTVMSU4m2YQQmSUNBFVRboNp7paVGaseZqpKmA=s160-c-k-c0x00ffffff-no-rj",
+      "sha256": "72f44ae22af6aadc92d5758f6a28b721004712759d8d38184d9691e771f253b8"
+    }
+  ]
+}
