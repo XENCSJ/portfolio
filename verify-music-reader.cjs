@@ -42,7 +42,8 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     await squares(page.locator('.sound-slide,.sound-slide-art,.sound-slide img'));
     const brands=await page.locator('.sound-service-logo img').evaluateAll(imgs=>imgs.map(img=>({src:img.getAttribute('src'),filter:getComputedStyle(img).filter,fit:getComputedStyle(img).objectFit,loaded:img.complete&&img.naturalWidth>0,width:img.clientWidth,height:img.clientHeight,nw:img.naturalWidth,nh:img.naturalHeight})));
     assert.equal(brands.length,23);assert.equal(await page.locator('.sound-service-logo svg').count(),0);
-    for(const brand of brands){assert(brand.loaded);assert.equal(brand.filter,'none');assert.equal(brand.fit,'contain');assert(Math.abs(brand.width/brand.height-brand.nw/brand.nh)<.02,JSON.stringify(brand));}
+    // Compare pixel dimensions: clientWidth/clientHeight and SVG natural sizes are integer-rounded, especially in WebKit.
+    for(const brand of brands){assert(brand.loaded);assert.equal(brand.filter,'none');assert.equal(brand.fit,'contain');assert(Math.abs(brand.height-brand.width*brand.nh/brand.nw)<=1.1,JSON.stringify(brand));}
     assert.equal(await page.locator('.sound-release-card > .music-services .music-service-icon').count(),40);
     assert(await page.locator('.sound-release-card > .music-services .music-service-icon').evaluateAll(icons=>icons.every(i=>getComputedStyle(i).color==='rgb(255, 255, 255)')));
     assert(await page.locator('.sound-slide').evaluateAll(els=>els.every(el=>getComputedStyle(el).backgroundColor==='rgba(0, 0, 0, 0)')));
