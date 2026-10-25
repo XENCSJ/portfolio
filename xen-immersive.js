@@ -51,7 +51,7 @@
       const candidates = new Set(document.querySelectorAll(selector));
       for (const node of candidates) {
         // Keep the existing logo and MVV diagrams intact. Their controls have their own state.
-        if (node.closest('.studio-fusion,.mvv-pyramid,[data-shop-catalog] .catalog-product,[hidden],dialog')) {candidates.delete(node); continue;}
+        if (node.closest('#xen-site-header,.studio-fusion,.mvv-pyramid,[data-shop-catalog] .catalog-product,[hidden],dialog')) {candidates.delete(node); continue;}
         for (let parent=node.parentElement; parent; parent=parent.parentElement) {
           if (candidates.has(parent) || targets.has(parent)) {candidates.delete(node); break;}
         }
