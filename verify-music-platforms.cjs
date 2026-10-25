@@ -16,6 +16,8 @@ const context=await browser.newContext({viewport:{width,height},isMobile:width<7
 await context.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():r.abort());
 try{
  await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});await page.locator('.music-reader-open').first().waitFor();
+ // The load handler restores a deep link without focus; let it finish before testing a user navigation.
+ await page.waitForLoadState('load');
  const entries=page.locator('#listen-download .sound-service');assert.equal(await entries.count(),23);
  assert.deepEqual(await entries.evaluateAll(es=>es.map(e=>({name:e.querySelector('.sound-service-name').textContent,href:e.getAttribute('href')}))),expected.map(x=>({name:x.name,href:x.href})));
  assert.equal(await page.locator('#sound-streaming .sound-service').count(),12);assert.equal(await page.locator('#sound-download .sound-service').count(),11);
@@ -67,7 +69,7 @@ try{
 
  if([1440,390].includes(width)){for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${engineName}-${width}-${id}.png`});}}
  assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four fixed readers`);
-}finally{await context.close();}
+}catch(error){await page.screenshot({path:`${out}/${engineName}-${width}x${height}-failure.png`});throw error;}finally{await context.close();}
 }}finally{await browser.close();}}
 }finally{server.close();fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));}
 })().catch(e=>{console.error(e);process.exitCode=1;});
