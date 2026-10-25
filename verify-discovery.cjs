@@ -8,7 +8,7 @@ let checks=0;const results=[];
 function ok(value,message){assert(value,message);checks++;}
 async function ready(page){await page.waitForSelector('html[data-discovery-ready="true"]');}
 async function scene(page,id){await page.waitForFunction(id=>document.querySelector('.xd-stage').dataset.branch===id,id);}
-async function select(page,id){await page.locator(`[data-node="${id}"]`).click({force:true});if(nodes[id].children)await scene(page,id);else await page.waitForFunction(title=>document.querySelector('.xd-dialog[open] #xd-detail-title')?.textContent===title,nodes[id].title);}
+async function select(page,id){for(let group=0;group<4&&!await page.locator(`[data-node="${id}"]`).count();group++){if(!await page.locator('.xd-page-controls').isVisible())break;await page.locator('.xd-page-controls [data-page="1"]').click();}await page.locator(`[data-node="${id}"]`).click({force:true});if(nodes[id].children)await scene(page,id);else await page.waitForFunction(title=>document.querySelector('.xd-dialog[open] #xd-detail-title')?.textContent===title,nodes[id].title);}
 async function home(page){await page.locator('[data-home]').click();await scene(page,'home');}
 async function checkBounds(page,label){
  const data=await page.evaluate(()=>{const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,r:r.right,b:r.bottom}};return{width:innerWidth,scroll:document.documentElement.scrollWidth,words:[...document.querySelectorAll('.xd-word button')].map(rect),center:rect(document.querySelector('.xd-center'))};});
