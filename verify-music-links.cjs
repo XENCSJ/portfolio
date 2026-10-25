@@ -4,7 +4,10 @@ module.exports=async function verifyLinks(page,context,{engineName,width,out}){
  const ids=await page.locator('.sound-release-card').evaluateAll(es=>es.map(e=>e.id));
  const services=await page.locator('.sound-release-card > .music-services').evaluateAll(es=>es.map(e=>e.innerHTML));
  const destination=async id=>{
-  await page.waitForFunction(id=>document.activeElement.id===id&&document.querySelector('#'+id+' .sound-cover-frame').classList.contains('music-navigation-highlight'),id);
+  await page.waitForFunction(id=>{
+   const frame=document.querySelector('#'+id+' .sound-cover-frame'),top=frame.getBoundingClientRect().top,header=document.querySelector('#xen-site-header').getBoundingClientRect().bottom;
+   return document.activeElement.id===id&&frame.classList.contains('music-navigation-highlight')&&top>=header-1&&top<header+55;
+  },id);
   assert(page.url().endsWith('#'+id));assert.equal(context.pages().length,1);
   assert.equal(await page.locator('#music-reader').isVisible(),false);
   const geometry=await page.locator('#'+id+' .sound-cover-frame').evaluate(e=>({top:e.getBoundingClientRect().top,header:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
