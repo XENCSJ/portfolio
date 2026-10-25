@@ -49,6 +49,9 @@ try{
  const sourceText=await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)]));
  for(let r=0;r<await readers.count();r++){
   await readers.nth(r).click();const dialog=page.locator('#music-reader');await dialog.waitFor({state:'visible'});
+  // Public CDN images may decode after dialog.showModal(); measure the settled artwork.
+  await dialog.locator('.music-reader-cover').evaluate(async image=>{await image.decode();await document.fonts.ready;});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   assert.equal(await dialog.locator('.music-services').count(),0);
   const fixed=()=>dialog.evaluate(d=>[...d.querySelectorAll('.music-reader-toolbar,.music-reader-cover,#music-reader-title,.sound-artist,.sound-song-credit,.music-reader-tabs')].map(e=>{const r=e.getBoundingClientRect();return[r.x,r.y,r.width,r.height]}));
   const before=await fixed();const tabs=dialog.getByRole('tab');assert.equal(await tabs.count(),2);
