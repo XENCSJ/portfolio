@@ -1,7 +1,8 @@
 name: MUSIC platform directory
 on:
   push:
-    branches: [work/music-platform-directory-20261025]
+    branches: [work/music-platform-directory-20261025, work/music-logo-transparency-final-20261025, main]
+    paths: [sound.html, xen-sound.css, 'xen-platform-*', verify-music-platforms.cjs, music-platforms-inventory.json, .github/workflows/music-platforms-qa.yml]
   pull_request:
     paths: [sound.html, xen-sound.css, 'xen-platform-*', verify-music-platforms.cjs, music-platforms-inventory.json]
   workflow_dispatch:
@@ -30,5 +31,27 @@ jobs:
         if: always()
         with:
           name: music-platforms-evidence
+          path: music-platforms-qa/
+          retention-days: 14
+  published:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: browser
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node verify-music-platforms.cjs
+        env:
+          MUSIC_BASE_URL: https://xencsj.github.io/portfolio
+          MUSIC_WAIT_FOR_DEPLOY: 'true'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: music-platforms-published-evidence
           path: music-platforms-qa/
           retention-days: 14
