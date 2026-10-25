@@ -32,7 +32,6 @@ jobs:
           retention-days: 14
   published:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    needs: browser
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
