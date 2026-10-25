@@ -13,7 +13,7 @@ HOME = ("INDEX", "トップページ", "./index.html")
 TITLES = json.loads((ROOT / "category-titles.json").read_text())
 def category(slug):
     return (TITLES[slug]["en"], TITLES[slug]["ja"], "./" + slug + ".html")
-ABOUT = [category(slug) for slug in ("studio", "creator")]
+ABOUT = [("WHAT IS XEN?", "XENを知る", "./what-is-xen.html")] + [category(slug) for slug in ("studio", "creator")]
 WORKS = [category(slug) for slug in TITLES if slug not in ("studio", "creator", "price-list")]
 GROUPS = [("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", WORKS),
           ("PRICE LIST", "料金一覧", "./price-list.html"),
@@ -39,6 +39,7 @@ def navigation(page, directory=False):
             items = ""
         else:
             title = label(en, ja, prefix)
+            entries = [item for item in entries if not (directory and item[0] == "WHAT IS XEN?")]
             items = '<ul class="' + prefix + '-items">' + "".join('<li>' + link(item) + '</li>' for item in entries) + '</ul>'
         parts.append(f'<section class="{prefix}-category"><h2 class="{prefix}-heading">{title}</h2>{items}</section>')
     return "\n".join(parts)
