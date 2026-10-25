@@ -26,7 +26,7 @@ async function close(page){await page.keyboard.press('Escape');await page.waitFo
    for(const branch of ['identity','philosophy','creation','connection']){
     await select(page,branch);const seen=new Set();let count=1;
     if(await page.locator('.xd-page-controls').isVisible())count=Number((await page.locator('.xd-page-count').innerText()).split('/')[1]);
-    for(let group=0;group<count;group++){await checkBounds(page,engine.name()+width+branch);for(const id of await page.locator('.xd-word button').evaluateAll(bs=>bs.map(b=>b.dataset.node)))seen.add(id);if(count>1)await page.locator('[data-page="1"]').click();}
+    for(let group=0;group<count;group++){await checkBounds(page,engine.name()+width+branch);for(const id of await page.locator('.xd-word button').evaluateAll(bs=>bs.map(b=>b.dataset.node)))seen.add(id);if(count>1)await page.locator('.xd-page-controls [data-page="1"]').click();}
     ok(nodes[branch].children.every(id=>seen.has(id)),'all keywords available '+branch);
     await home(page);
    }
@@ -34,7 +34,7 @@ async function close(page){await page.keyboard.press('Escape');await page.waitFo
     for(const branch of ['identity','philosophy','creation','connection']){
      await select(page,branch);
      for(const id of nodes[branch].children){
-      while(!await page.locator(`[data-node="${id}"]`).count())await page.locator('[data-page="1"]').click();
+      while(!await page.locator(`[data-node="${id}"]`).count())await page.locator('.xd-page-controls [data-page="1"]').click();
       if(id==='youtube'){
        await select(page,id);ok(await page.locator('.xd-word button').count()===3,'three channels');
        for(const channel of nodes.youtube.children){await select(page,channel);await page.locator('.xc-banner').scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.xd-dialog img')].every(i=>i.complete&&i.naturalWidth>0));ok(await page.locator('.xd-dialog .xc-banner').count()===1,'channel banner');await page.locator('.xd-dialog .xc-more summary').click();ok(await page.locator('.xd-dialog .xc-more').getAttribute('open')!==null,'channel MORE');const a=page.locator('.xd-dialog .xc-body>a');ok(await a.getAttribute('rel')==='noopener noreferrer','channel external security');await close(page);await scene(page,'youtube');}
