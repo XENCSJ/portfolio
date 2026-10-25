@@ -202,7 +202,7 @@
       const source = card.querySelector(selector);
       if (source) { const copy = source.cloneNode(true); copy.removeAttribute('id'); identity.append(copy); }
     });
-    identity.append(serviceRow(card));
+    // Distribution links belong only to the catalogue, never to the text reader.
     const multiple = entries.length > 1;
     let tablist;
     if (multiple) {
