@@ -27,7 +27,7 @@ async function run(){
       assert.equal(expected.flat().length,8);
       for(let genre=0;genre<3;genre++){
         await toggles.nth(genre).click();
-        await page.waitForTimeout(390);
+        await page.waitForFunction(()=>[...document.querySelectorAll('.music-index details')].every(d=>!d.style.overflow));
         assert.equal(await nav.locator('[data-expanded="true"]').count(),1);
         assert.equal(await drawers.filter({has:page.locator('summary[aria-expanded="true"]')}).count(),1);
         const links=drawers.nth(genre).locator('.music-index-link');assert.equal(await links.count(),expected[genre].length);
@@ -63,10 +63,10 @@ async function run(){
           if(width===390&&genre===0&&item===targets[0]) await page.setViewportSize({width,height:844});
         }
       }
-      await toggles.nth(2).click();await page.waitForTimeout(390);assert.equal(await nav.locator('details[open]').count(),0);
-      await toggles.nth(0).focus();await page.keyboard.press('Enter');await page.waitForTimeout(390);assert.equal(await toggles.nth(0).getAttribute('aria-expanded'),'true');
-      await page.keyboard.press('Space');await page.waitForTimeout(390);assert.equal(await toggles.nth(0).getAttribute('aria-expanded'),'false');
-      await toggles.nth(0).click();await toggles.nth(1).click();await toggles.nth(2).click();await page.waitForTimeout(390);assert.equal(await nav.locator('details[open]').count(),1);
+      await toggles.nth(2).click();await page.waitForFunction(()=>[...document.querySelectorAll('.music-index details')].every(d=>!d.style.overflow));assert.equal(await nav.locator('details[open]').count(),0);
+      await toggles.nth(0).focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>[...document.querySelectorAll('.music-index details')].every(d=>!d.style.overflow));assert.equal(await toggles.nth(0).getAttribute('aria-expanded'),'true');
+      await page.keyboard.press('Space');await page.waitForFunction(()=>[...document.querySelectorAll('.music-index details')].every(d=>!d.style.overflow));assert.equal(await toggles.nth(0).getAttribute('aria-expanded'),'false');
+      await toggles.nth(0).click();await toggles.nth(1).click();await toggles.nth(2).click();await page.waitForFunction(()=>[...document.querySelectorAll('.music-index details')].every(d=>!d.style.overflow));assert.equal(await nav.locator('details[open]').count(),1);
       const stage=page.locator('.sound-showcase-stage');await stage.focus();const before=await stage.getAttribute('data-active-release');await page.keyboard.press('ArrowRight');assert.notEqual(await stage.getAttribute('data-active-release'),before);assert.equal(await stage.locator('.sound-slide').count(),8);
       const details=page.locator('#tochu-no-mamade .music-reader-open');await details.click();await page.locator('dialog[open]').waitFor();await page.locator('.music-reader-close').click();
       assert.equal(await page.locator('.sound-release-card').count(),8);
