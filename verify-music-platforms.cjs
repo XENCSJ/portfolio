@@ -64,6 +64,8 @@ try{
   }
   if(r===1&&[1440,390].includes(width)&&height!==500){await tabs.nth(1).click();await page.screenshot({path:`${out}/${engineName}-${width}-fixed-reader.png`});}
   await dialog.getByRole('button',{name:'楽曲詳細を閉じる'}).click();await dialog.waitFor({state:'hidden'});
+  // dialog.close() hides synchronously; its close event restores authored nodes on the next task.
+  await page.waitForFunction(()=>![...document.querySelectorAll('.music-reader-open')].some(e=>e.getAttribute('aria-expanded')==='true'));
  }
  assert.deepEqual(await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)])),sourceText);
 
