@@ -11,7 +11,7 @@ const server=http.createServer((req,res)=>{const file=path.resolve('.'+decodeURI
 const results=[];
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=process.env.MUSIC_BASE_URL||`http://127.0.0.1:${server.address().port}`;
 try{for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){const browser=await engine.launch();
-try{for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[320,568]]){
+try{for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[320,568],[390,500],[812,375]]){
 const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1,reducedMotion:'reduce'});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await context.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():r.abort());
 try{
@@ -36,9 +36,37 @@ try{
  assert.equal(await page.locator('.sound-slide').count(),8);await page.locator('.sound-showcase-stage').focus();const active=await page.locator('.sound-slide[data-position="active"] img').getAttribute('src');await page.keyboard.press('ArrowRight');await page.waitForFunction(src=>document.querySelector('.sound-slide[data-position="active"] img').getAttribute('src')!==src,active);
  const genre=page.locator('.sound-category-drawer').first();await genre.locator('summary').click();await page.waitForFunction(()=>document.querySelector('.sound-category-drawer').open);assert.equal(await page.locator('.music-index-link').count(),8);await genre.locator('summary').click();
  assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),7);
- await page.locator('#hikari-no-arika .music-reader-open').click();await page.locator('#music-reader').waitFor({state:'visible'});assert.equal(await page.locator('#music-reader .music-services').count(),0);await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-tab').getAttribute('aria-selected'),'true');await page.keyboard.press('Escape');await page.locator('#music-reader').waitFor({state:'hidden'});
+ // Album identity is independent of the preserved YouTube video title/URL.
+ assert.equal(await page.locator('#nights-awakening-title').textContent(),'PURPLE AWAKE');
+ assert.equal(await page.locator('.music-index-link[href="#nights-awakening"] .music-index-title').textContent(),'PURPLE AWAKE');
+ assert((await page.locator('.sound-slide[data-release-id="nights-awakening"]').getAttribute('aria-label')).startsWith('PURPLE AWAKE'));
+ assert.equal(await page.locator('#nights-awakening template').evaluate(e=>e.content.querySelector('iframe').title),"NIGHT'S AWAKENING");
+ assert.equal(await page.locator('#nights-awakening .video-source').getAttribute('href'),'https://youtu.be/uqQI6369VYg');
+ const edm=page.locator('.sound-category-drawer[data-genre-section="edm-electronic"]');await edm.locator('summary').click();await page.locator('.music-index-link[href="#nights-awakening"]').click();await page.waitForFunction(()=>document.activeElement?.id==='nights-awakening');assert(page.url().endsWith('#nights-awakening'));assert.equal(await page.locator('#music-reader').isVisible(),false);
+ const readers=page.locator('.music-reader-open');assert.equal(await readers.count(),4);
+ const sourceText=await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)]));
+ for(let r=0;r<await readers.count();r++){
+  await readers.nth(r).click();const dialog=page.locator('#music-reader');await dialog.waitFor({state:'visible'});
+  assert.equal(await dialog.locator('.music-services').count(),0);
+  const fixed=()=>dialog.evaluate(d=>[...d.querySelectorAll('.music-reader-toolbar,.music-reader-cover,#music-reader-title,.sound-artist,.sound-song-credit,.music-reader-tabs')].map(e=>{const r=e.getBoundingClientRect();return[r.x,r.y,r.width,r.height]}));
+  const before=await fixed();const tabs=dialog.getByRole('tab');assert.equal(await tabs.count(),2);
+  for(let t=0;t<await tabs.count();t++){
+   await tabs.nth(t).click();const panel=dialog.locator('.music-reader-panel:not([hidden])');
+   assert.equal(await panel.evaluate(e=>e.scrollTop),0);
+   const metrics=await dialog.evaluate(d=>{const p=d.querySelector('.music-reader-panel:not([hidden])'),c=d.querySelector('.music-reader-cover'),r=d.getBoundingClientRect();return{dialog:[r.top,r.bottom],overflow:getComputedStyle(d).overflowY,panel:p.clientHeight,panelOverflow:getComputedStyle(p).overflowY,square:Math.abs(c.getBoundingClientRect().width-c.getBoundingClientRect().height),body:getComputedStyle(document.body).position};});
+   assert(metrics.dialog[0]>=-1&&metrics.dialog[1]<=height+1);assert.equal(metrics.overflow,'hidden');assert.equal(metrics.body,'fixed');assert.equal(metrics.panelOverflow,'auto');assert(metrics.panel>=Math.min(180,height*.3),JSON.stringify(metrics));assert(metrics.square<1);
+   assert.equal(await panel.locator(t===0?'.song-description':'.sound-song-lyrics').evaluate(e=>getComputedStyle(e).textAlign),t===0?'left':'center');
+   await panel.focus();await page.keyboard.press('End');await page.waitForFunction(()=>{const e=document.querySelector('.music-reader-panel:not([hidden])');return Math.abs(e.scrollHeight-e.clientHeight-e.scrollTop)<2;});
+   assert.deepEqual(await fixed(),before);assert.equal(await dialog.evaluate(e=>e.scrollTop),0);
+   await panel.evaluate(e=>e.scrollTop=e.scrollHeight);await tabs.nth(1-t).click();await tabs.nth(t).click();assert.equal(await panel.evaluate(e=>e.scrollTop),0);
+  }
+  if(r===1&&[1440,390].includes(width)&&height!==500){await tabs.nth(1).click();await page.screenshot({path:`${out}/${engineName}-${width}-fixed-reader.png`});}
+  await dialog.getByRole('button',{name:'楽曲詳細を閉じる'}).click();await dialog.waitFor({state:'hidden'});
+ }
+ assert.deepEqual(await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)])),sourceText);
+
  if([1440,390].includes(width)){for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${engineName}-${width}-${id}.png`});}}
- assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression`);
+ assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four fixed readers`);
 }finally{await context.close();}
 }}finally{await browser.close();}}
 }finally{server.close();fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));}
