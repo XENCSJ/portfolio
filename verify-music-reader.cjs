@@ -35,7 +35,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     assert.equal(originals.length,8);assert.equal(await page.locator('.sound-slide').count(),8);assert.equal(await page.locator('.sound-category-drawer').count(),3);
     const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.children].map(li=>({key:li.firstElementChild.dataset.service,name:li.querySelector('.music-service-name').textContent,href:li.firstElementChild.getAttribute('href'),status:li.querySelector('.music-service-status').textContent}))));
     for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
-    assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,1,5,1,1]);
+    assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,4,5,1,4]);
     await page.locator('.sound-song-cover,.sound-slide img,.sound-service-logo img').evaluateAll(imgs=>Promise.all(imgs.map(img=>{img.loading='eager';return Promise.race([img.decode(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Image decode timeout: '+img.src)),15000))]);})));
     await squares(page.locator('.sound-release-card .sound-cover-frame'));
     await squares(page.locator('.sound-release-card .sound-song-cover'));
@@ -96,7 +96,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
      assert(await open.evaluate(el=>document.activeElement===el));
      assert.equal(await card.locator('.song-description').innerHTML(),original.about);assert.equal(await card.locator('.sound-song-lyrics').innerHTML(),original.lyrics);
     }
-    await page.locator('.sound-category-drawer').first().locator('summary').click();await page.locator('.sound-category-links a').first().click();await page.locator('#music-reader').waitFor({state:'visible'});await page.locator('.music-reader-close').click();assert(await page.locator('.sound-category-drawer').first().evaluate(el=>el.open));
+    await page.locator('.sound-category-drawer').first().locator('summary').click();await page.locator('.sound-category-links a').first().click();await page.waitForFunction(()=>document.activeElement?.id==='tochu-no-mamade');assert(page.url().endsWith('#tochu-no-mamade'));assert.equal(await page.locator('#music-reader').isVisible(),false);assert(await page.locator('.sound-category-drawer').first().evaluate(el=>el.open));
     await page.locator('.sound-category-drawer').first().locator('summary').click();
     const stage=page.locator('.sound-showcase-stage');await stage.scrollIntoViewIfNeeded();const previous=await stage.getAttribute('data-active-release');await page.locator('.sound-slide[data-position="next"]').click();assert.notEqual(await stage.getAttribute('data-active-release'),previous);
     const afterTap=await stage.getAttribute('data-active-release');
