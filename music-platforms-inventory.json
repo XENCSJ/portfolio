@@ -1,0 +1,186 @@
+[
+  {
+    "section": "STREAMING",
+    "name": "Spotify",
+    "href": "https://open.spotify.com/album/4jLnddVGBl06VdUf0VK6UX",
+    "originalAsset": "./xen-service-spotify.png",
+    "asset": "xen-platform-spotify.svg",
+    "replaced": true
+  },
+  {
+    "section": "STREAMING",
+    "name": "Apple Music",
+    "href": "https://music.apple.com/jp/album/nova-pulse-single/1857515198?l=en&ls=1&app=music",
+    "originalAsset": "./xen-service-apple-music.png",
+    "asset": "xen-sound-apple-music.svg",
+    "replaced": true
+  },
+  {
+    "section": "STREAMING",
+    "name": "LINE MUSIC",
+    "href": "https://music.line.me/launch?target=album&item=mb0000000004d99d5f&cc=JP&v=1",
+    "originalAsset": "./xen-service-line-music.png",
+    "asset": "xen-sound-line-music.png",
+    "replaced": true
+  },
+  {
+    "section": "STREAMING",
+    "name": "AWA",
+    "href": "https://s.awa.fm/album/7d5aad8990145990c641",
+    "originalAsset": "./xen-service-awa.png",
+    "asset": "xen-service-awa.png",
+    "replaced": false
+  },
+  {
+    "section": "STREAMING",
+    "name": "YouTube Music",
+    "href": "https://music.youtube.com/playlist?list=OLAK5uy_km4yzSkBhfInYdIoFNmGX8fbxNAfozUYQ",
+    "originalAsset": "./xen-service-youtube-music.png",
+    "asset": "xen-music-youtube-music.png",
+    "replaced": true
+  },
+  {
+    "section": "STREAMING",
+    "name": "Amazon Music Unlimited",
+    "href": "https://music.amazon.co.jp/albums/B0G4LFXCS6",
+    "originalAsset": "./xen-service-amazon-music.png",
+    "asset": "xen-platform-amazon.svg",
+    "replaced": true
+  },
+  {
+    "section": "STREAMING",
+    "name": "Amazon Music Prime",
+    "href": "https://music.amazon.co.jp/albums/B0G4LFXCS6",
+    "originalAsset": "./xen-service-prime-music.png",
+    "asset": "xen-platform-amazon.svg",
+    "replaced": true
+  },
+  {
+    "section": "STREAMING",
+    "name": "Rakuten Music",
+    "href": "https://music.rakuten.co.jp/link/album/32269329",
+    "originalAsset": "./xen-service-rakuten-music.png",
+    "asset": "xen-service-rakuten-music.png",
+    "replaced": false
+  },
+  {
+    "section": "STREAMING",
+    "name": "KKBOX",
+    "href": "https://www.kkbox.com/jp/ja/album/HYCNy3iwU1EtUCuMEL",
+    "originalAsset": "./xen-service-kkbox.png",
+    "asset": "xen-service-kkbox.png",
+    "replaced": false
+  },
+  {
+    "section": "STREAMING",
+    "name": "dヒッツ powered by レコチョク",
+    "href": null,
+    "originalAsset": "./xen-service-d-hits.png",
+    "asset": "xen-service-d-hits.png",
+    "replaced": false
+  },
+  {
+    "section": "STREAMING",
+    "name": "TikTok",
+    "href": null,
+    "originalAsset": "./xen-service-tiktok.png",
+    "asset": "xen-service-tiktok.png",
+    "replaced": false
+  },
+  {
+    "section": "STREAMING",
+    "name": "NetEase Cloud Music（网易云音乐）",
+    "href": null,
+    "originalAsset": "./xen-service-netease.png",
+    "asset": "xen-service-netease.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "iTunes Store",
+    "href": "https://music.apple.com/jp/album/nova-pulse-single/1857515198?l=en&ls=1&app=itunes",
+    "originalAsset": "./xen-service-itunes.png",
+    "asset": "xen-platform-itunes.png",
+    "replaced": true
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "Amazonデジタルミュージックストア",
+    "href": "https://www.amazon.co.jp/dp/B0G4LFXCS6",
+    "originalAsset": "./xen-service-amazon-music.png",
+    "asset": "xen-platform-amazon.svg",
+    "replaced": true
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "オリミュウストア",
+    "href": "https://music.orimyu.com/php/cd/CdTop.php?cd=SPC07267365&utm_source=label&utm_medium=label&utm_campaign=label",
+    "originalAsset": "./xen-service-oricon.png",
+    "asset": "xen-service-oricon.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "mora",
+    "href": "https://mora.jp/package/43000002/bigup14255164/",
+    "originalAsset": "./xen-service-mora.png",
+    "asset": "xen-platform-mora.png",
+    "replaced": true
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "mu-mo",
+    "href": "https://sp-m.mu-mo.net/album/1762148/",
+    "originalAsset": "./xen-service-mu-mo.png",
+    "asset": "xen-service-mu-mo.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "NetEase Cloud Music（网易云音乐）",
+    "href": null,
+    "originalAsset": "./xen-service-netease.png",
+    "asset": "xen-service-netease.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "OTOTOY",
+    "href": null,
+    "originalAsset": "./xen-service-ototoy.png",
+    "asset": "xen-platform-ototoy.svg",
+    "replaced": true
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "レコチョク",
+    "href": null,
+    "originalAsset": "./xen-service-rekochoku.png",
+    "asset": "xen-service-rekochoku.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "ドワンゴジェイピー",
+    "href": null,
+    "originalAsset": "./xen-service-dwango-jp.png",
+    "asset": "xen-service-dwango-jp.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "mysound",
+    "href": null,
+    "originalAsset": "./xen-service-my-sound.png",
+    "asset": "xen-service-my-sound.png",
+    "replaced": false
+  },
+  {
+    "section": "DOWNLOAD",
+    "name": "music.jp STORE",
+    "href": null,
+    "originalAsset": "./xen-service-music-jp.png",
+    "asset": "xen-service-music-jp.png",
+    "replaced": false
+  }
+]

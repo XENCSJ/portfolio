@@ -166,19 +166,18 @@
   main.append(dialog);
   const identity = dialog.querySelector('.music-reader-identity');
   const textArea = dialog.querySelector('.music-reader-text');
-  let tabs = [], panels = [], scrollPositions = [];
+  let tabs = [], panels = [];
   let activeCard, opener, pageY = 0, restored = [], bodyStyle = '';
   function selectTab(index, focus = false) {
     if (!panels[index]) return;
     panels.forEach((panel, i) => {
-      if (!panel.hidden) scrollPositions[i] = panel.scrollTop;
       panel.hidden = i !== index;
       if (tabs[i]) {
         tabs[i].setAttribute('aria-selected', String(i === index));
         tabs[i].tabIndex = i === index ? 0 : -1;
       }
     });
-    panels[index].scrollTop = scrollPositions[index] || 0;
+    panels[index].scrollTop = 0;
     if (focus) tabs[index]?.focus({preventScroll:true});
   }
   function borrow(node, target) {
@@ -192,7 +191,7 @@
     if (!entries.length) return false;
     activeCard = card; opener = trigger; pageY = window.scrollY;
     identity.replaceChildren(); textArea.replaceChildren();
-    tabs = []; panels = []; scrollPositions = entries.map(() => 0);
+    tabs = []; panels = [];
     const image = card.querySelector('.sound-song-cover').cloneNode(true);
     image.className = 'music-reader-cover'; image.loading = 'eager';
     const heading = document.createElement('h2'); heading.id = 'music-reader-title';
@@ -248,7 +247,7 @@
   dialog.addEventListener('close', () => {
     restored.forEach(({node, marker}) => marker.replaceWith(node)); restored = [];
     identity.replaceChildren(); textArea.replaceChildren();
-    tabs = []; panels = []; scrollPositions = [];
+    tabs = []; panels = [];
     document.body.setAttribute('style', bodyStyle);
     window.scrollTo({top:pageY, behavior:'instant'});
     activeCard?.querySelector('.music-reader-open')?.setAttribute('aria-expanded', 'false');
