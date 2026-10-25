@@ -38,7 +38,7 @@ try{
  // Intro + verified BIG UP! release routing, checked at every Chromium/WebKit viewport.
  const introText=["日常の中で生まれる思考や感情。", "デザインをはじめとする視覚表現だけでは伝えきれない想いを、音楽と言葉にのせて形にしています。", "言葉にならない感覚や、心の奥にある感情。", "音楽には、そうした目に見えないものを伝える力があると感じています。"];
  const releaseURLs={"void-to-form": {"title": "VOID TO FORM", "bigup": "https://big-up.style/Inno3PlgIt", "spotify": "https://open.spotify.com/album/3gctpaDVfWyTIEOQqJCoJW", "apple-music": "https://music.apple.com/jp/album/void-to-form/1862015320?l=en&ls=1&app=music", "line-music": "https://music.line.me/launch?target=album&item=mb0000000004e379d1&cc=JP&v=1", "youtube-music": "https://music.youtube.com/playlist?list=OLAK5uy_nXY1X_13U3-6h7INr_4sOLwwIviNojBAI"}, "blue-sleep": {"title": "BLUE SLEEP", "bigup": "https://big-up.style/FNgAp3vScI", "spotify": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D", "apple-music": "https://music.apple.com/jp/album/blue-sleep/1872882836?l=en&ls=1&app=music", "line-music": "https://music.line.me/launch?target=album&item=mb0000000004fbbc06&cc=JP&v=1", "youtube-music": "https://music.youtube.com/playlist?list=OLAK5uy_klyQLSz8qxzMTe5ZgyECFDOOd-kjT_VXg"}};
- assert.deepEqual(await page.locator('.music-intro > p').allTextContents(),introText);
+ assert.deepEqual(await page.locator('.music-intro > p').allTextContents(),[introText.join('')]);
  const intro=await page.locator('.music-intro').evaluate(e=>{
   const r=e.getBoundingClientRect(),h=document.querySelector('.hero h1').getBoundingClientRect(),c=document.querySelector('.sound-showcase').getBoundingClientRect();
   return {width:r.width,afterTitle:r.top>=h.bottom-1,beforeCarousel:r.bottom<=c.top+1,overflow:e.scrollWidth>e.clientWidth+1};

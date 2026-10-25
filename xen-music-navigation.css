@@ -9,17 +9,17 @@ body#top.sound-page main .music-index .sound-category-drawer {
 }
 body#top.sound-page main .music-index .sound-category-drawer > summary {
   display:grid; grid-template-columns:30px minmax(0,1fr) 24px;
-  align-items:center; gap:20px; min-height:118px; padding:26px 8px;
+  align-items:center; gap:20px; min-height:104px; padding:20px 8px;
   border:0; border-radius:0; background:transparent; list-style:none;
   cursor:pointer; touch-action:manipulation; color:#fff;
 }
 .music-index summary::-webkit-details-marker { display:none; }
 .music-index summary::marker { content:''; }
-body#top.sound-page main .music-index-number { color:var(--music-gold,#c7b184); font:12px/1.5 Arial,sans-serif; letter-spacing:.12em; align-self:start; padding-top:7px; }
+body#top.sound-page main .music-index-number { color:var(--music-gold,#c7b184); font:12px/1.5 Arial,sans-serif; letter-spacing:.12em; align-self:start; padding-top:5px; }
 body#top.sound-page main .music-index-label { display:block; min-width:0; }
 body#top.sound-page main .music-index .sound-category-en {
-  display:table; max-width:100%; position:relative; padding:0 0 9px; margin:0;
-  color:#fff; font-size:clamp(20px,2.6vw,30px); font-weight:400;
+  display:table; max-width:100%; position:relative; padding:0 0 6px; margin:0;
+  color:#fff; font-size:clamp(20px,2vw,24px); font-weight:400;
   line-height:1.35; letter-spacing:.045em; overflow-wrap:anywhere;
   transition:color 350ms ease-in-out;
 }
@@ -67,10 +67,10 @@ body#top.sound-page main :is(#j-pop,#edm-electronic,#ambient-chill) > .series-ti
 }
 @media (max-width:700px) {
   body#top.sound-page main .sound-category-nav.music-index { margin-top:32px; }
-  body#top.sound-page main .music-index .sound-category-drawer > summary { grid-template-columns:22px minmax(0,1fr) 20px; gap:12px; min-height:100px; padding:22px 0; }
-  body#top.sound-page main .music-index-number { font-size:10px; padding-top:5px; }
-  body#top.sound-page main .music-index .sound-category-en { font-size:clamp(19px,4.8vw,25px); letter-spacing:.015em; }
-  body#top.sound-page main .music-index .sound-category-ja { font-size:11px; }
+  body#top.sound-page main .music-index .sound-category-drawer > summary { grid-template-columns:22px minmax(0,1fr) 20px; gap:12px; min-height:88px; padding:16px 0; }
+  body#top.sound-page main .music-index-number { font-size:11px; padding-top:3px; }
+  body#top.sound-page main .music-index .sound-category-en { font-size:clamp(16px,4vw,18px); letter-spacing:.015em; }
+  body#top.sound-page main .music-index .sound-category-ja { font-size:12px; }
   body#top.sound-page main .music-index .sound-category-links { padding:0 0 16px; }
   body#top.sound-page main .music-index .sound-category-links .music-index-link { grid-template-columns:68px minmax(0,1fr) 20px; gap:14px; min-height:92px; }
   body#top.sound-page main .music-index-cover { width:68px; height:68px; }
