@@ -25,35 +25,49 @@ body.sound-page.xen-detail-unified main .sound-section .grid+.grid{margin-top:va
 body#top.sound-page main .sound-section .sound-sleep-series{grid-template-columns:minmax(0,1fr);gap:24px;margin-top:24px}
 .sound-page .sound-empty{margin:0;padding:16px 0 2px;font-size:12px;line-height:1.8;color:#777}
 body.sound-page main .sound-channel{display:table;margin:14px 0 0 auto;font-size:11px;overflow-wrap:anywhere}
-body.sound-page main .sound-platform-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;text-align:center}
+/* Service directory: native brand artwork in a borderless, four-to-six column grid. */
+body.sound-page main .sound-platform-columns{display:grid;grid-template-columns:minmax(0,1fr);gap:42px;text-align:center}
 .sound-platform-group{min-width:0}
-.sound-platform-group+.sound-platform-group{border-left:1px solid #e4e4e6;padding-left:32px}
-body.sound-page main .sound-platform-group h3{margin:0 0 24px;font-size:12px;line-height:1.8;letter-spacing:.1em;font-weight:500;text-align:left}
-.sound-platform-group h3 span{display:block;font-size:11px;letter-spacing:.04em;color:#727277;margin-top:5px}
-body.sound-page main .sound-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 10px;list-style:none;padding:0;margin:0}
+.sound-platform-group+.sound-platform-group{border-top:1px solid #242424;padding-top:34px}
+body.sound-page main .sound-platform-group h3{margin:0 0 28px;font-size:12px;line-height:1.8;letter-spacing:.1em;font-weight:500;text-align:left}
+.sound-platform-group h3 span{display:block;font-size:11px;letter-spacing:.04em;color:#999;margin-top:5px}
+body.sound-page main .sound-service-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 12px;list-style:none;padding:0;margin:0}
 .sound-service-grid li{min-width:0;margin:0;padding:0}
-.sound-service{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:130px;padding:8px 3px;border:1px solid transparent;background:#fff;border-radius:4px;line-height:1.5;transition:border-color .2s}
-.sound-service-logo{display:flex;align-items:center;justify-content:center;width:100%;height:72px;margin-bottom:10px;padding:10px 4px}
-.sound-service-logo img{display:block;width:auto;height:auto;max-width:100%;max-height:52px;object-fit:contain}
-.sound-service-logo img[hidden]{display:none}
-.sound-service-logo[hidden]{display:none}
-.sound-service-logo .sound-logo-wide{width:90px;max-height:42px}
-.sound-service-logo .sound-logo-square{width:48px;max-height:48px}
-.sound-service-name{display:block;max-width:100%;font-size:11px;line-height:1.6;overflow-wrap:anywhere;word-break:normal;letter-spacing:0}
-.sound-service-status{display:block;margin-top:5px;font-size:9px;line-height:1.5;color:#767676;letter-spacing:0}
-/* A plain name is the explicit fallback when no licensed brand asset is available. */
-.sound-service-text{justify-content:center}
-.sound-service-text .sound-service-name{font-size:12px}
-.sound-service-text .sound-service-status{margin-top:10px}
-body.sound-page main .sound-platform-note{margin:26px 0 0;text-align:left;font-size:10px;line-height:1.9;color:#727277}
+body#top.sound-page main #listen-download .sound-service{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:116px;padding:0 2px;border:0;background:transparent;border-radius:0;box-shadow:none;line-height:1.5;text-align:center;text-decoration:none;opacity:1}
+#listen-download .sound-service-logo{display:flex;align-items:center;justify-content:center;width:100%;height:88px;margin-bottom:12px;padding:0;background:none;border:0}
+#listen-download .sound-service-logo img{display:block;width:auto;height:auto;max-width:min(100%,68px);max-height:68px;object-fit:contain;filter:none;opacity:1;transform:none}
+#listen-download .sound-service-logo .sound-logo-wide{max-width:min(100%,100px);max-height:60px}
+/* These marks reserve half their own height around the artwork. */
+#listen-download .sound-service-logo:has(.sound-logo-clearspace){padding:20px 0}
+#listen-download .sound-service-logo .sound-logo-clearspace{max-width:44px;max-height:44px}
+#listen-download .sound-service-logo img[hidden],#listen-download .sound-service-logo[hidden]{display:none}
+#listen-download .sound-service-name{display:block;max-width:100%;font-size:12px;line-height:1.6;color:#eee;overflow-wrap:anywhere;word-break:normal;letter-spacing:0;text-wrap:pretty}
+#listen-download .sound-service-status{display:block;margin-top:5px;font-size:10px;line-height:1.5;color:#999;letter-spacing:0;overflow-wrap:anywhere}
+#listen-download .sound-service[href]:focus-visible{outline:1px solid #ddd;outline-offset:7px}
+#listen-download .sound-service[href]:active .sound-service-name{opacity:.65}
+/* Text feedback leaves official artwork, including Apple icons, unanimated. */
+@media(hover:hover) and (pointer:fine){#listen-download .sound-service[href]:hover .sound-service-name{opacity:.7}}
+@media(prefers-reduced-motion:no-preference){#listen-download .sound-service-name{transition:opacity .18s ease}}
+#listen-download .sound-service-text{justify-content:center}
+body.sound-page main .sound-platform-note{margin:32px 0 0;text-align:left;font-size:10px;line-height:1.9;color:#999}
+body.sound-page main .sound-platform-credits{margin:12px 0 0;text-align:left;font-size:9px;line-height:1.7;color:#888;overflow-wrap:anywhere}
+@media(min-width:1000px){body.sound-page main .sound-service-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:28px 18px}}
+@media(max-width:700px){
+ body.sound-page main .sound-service-grid{gap:24px 8px}
+ #listen-download .sound-service-logo{height:72px;margin-bottom:10px}
+ #listen-download .sound-service-logo img{max-width:min(100%,52px);max-height:52px}
+ #listen-download .sound-service-logo .sound-logo-wide{max-width:100%;max-height:48px}
+ #listen-download .sound-service-logo:has(.sound-logo-clearspace){padding:16px 0}
+ #listen-download .sound-service-logo .sound-logo-clearspace{max-width:36px;max-height:36px}
+ #listen-download .sound-service-name{font-size:11px}
+ #listen-download .sound-service-status{font-size:9px}
+}
 body.sound-page main .sound-social-use{border-top:1px solid #e4e4e6;margin-top:28px;padding-top:20px}
 body.sound-page main .sound-social-use h4{font-size:10px;font-weight:400;letter-spacing:.06em;text-align:left;margin:0 0 8px;color:#727277}
 .sound-social-use .sound-service{min-height:60px;align-items:flex-start;text-align:left}
 .sound-page .sound-anchor-alias{display:block;position:relative;scroll-margin-top:24px}
 body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
-.sound-service[href]:active{border-color:#777}
-@media(hover:hover) and (pointer:fine){body.sound-page main .sound-category-nav a:hover{background:#fafafa;border-color:#a2a2a2}.sound-service[href]:hover{border-color:#d5d5d5}.sound-service[href]:not(.sound-no-logo-motion):hover img{transform:scale(1.035)}.sound-service:not(.sound-no-logo-motion) img{transition:transform .25s}}
-@media(min-width:1100px){body.sound-page main .sound-service-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(hover:hover) and (pointer:fine){body.sound-page main .sound-category-nav a:hover{background:#fafafa;border-color:#a2a2a2}}
 @media(max-width:700px){
  body.sound-page main .sound-category-nav{grid-template-columns:1fr;gap:6px;margin-top:26px}
  body.sound-page main .sound-category-nav a{min-height:56px;padding:10px 14px}
@@ -61,20 +75,11 @@ body.sound-page main .sound-category-nav a:active{background:#f2f2f2}
  .sound-category-ja{margin-top:0}
  body.sound-page.xen-detail-unified main .sound-section{margin-top:40px}
  body.sound-page.xen-detail-unified main .sound-section .grid{grid-template-columns:1fr;gap:var(--sound-work-gap)}
- body.sound-page main .sound-platform-columns{grid-template-columns:1fr;gap:32px}
- .sound-platform-group+.sound-platform-group{border-left:0;padding-left:0;border-top:1px solid #e4e4e6;padding-top:28px}
- body.sound-page main .sound-service-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}
- .sound-service{min-height:125px}
  .sound-page .sound-album-player{height:352px;min-height:352px}
 }
-@media(min-width:440px) and (max-width:700px){body.sound-page main .sound-service-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(prefers-reduced-motion:no-preference){.sound-revealed{animation:sound-rise .6s ease-out backwards}@keyframes sound-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sound-page .sound-service,.sound-page .sound-service img{animation:none!important;transition:none!important;transform:none!important}}
 
-/* Preserve supplied service marks and keep unverified destinations non-interactive. */
-.sound-service-unverified { opacity: .72; }
-.sound-service-unverified .sound-service-status { color: #6b6b6b; }
-.sound-service-logo img { max-width: 100%; object-fit: contain; }
 
 /* One self-contained J-POP release; existing catalogue layouts are unchanged. */
 body#top.sound-page main .sound-song {
