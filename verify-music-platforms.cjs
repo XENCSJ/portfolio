@@ -17,6 +17,16 @@ fs.writeFileSync('music-logo-before.html',beforeHtml.toString().replace('xen-sou
 fs.writeFileSync('music-logo-before.css',beforeCss);
 const results=[];
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=process.env.MUSIC_BASE_URL||`http://127.0.0.1:${server.address().port}`;
+if(process.env.MUSIC_WAIT_FOR_DEPLOY==='true'){
+ const files=['sound.html','xen-sound.css',...new Set(expected.map(x=>x.asset))];
+ const hash=b=>require('node:crypto').createHash('sha256').update(b).digest('hex');
+ let ready=false;
+ for(let attempt=0;attempt<30;attempt++){
+  try{for(const f of files){const r=await fetch(base+'/'+f+'?logo-qa='+Date.now(),{signal:AbortSignal.timeout(20000)});assert(r.ok);assert.equal(hash(Buffer.from(await r.arrayBuffer())),hash(fs.readFileSync(f)),f);}ready=true;break;}catch(e){console.log('Waiting for Pages publication:',e.message.split('\n')[0]);await new Promise(r=>setTimeout(r,10000));}
+ }
+ assert(ready,'GitHub Pages did not serve the expected HTML, CSS and all logo bytes');
+ console.log('PUBLICATION VERIFIED: HTML, CSS and every directory asset match this commit');
+}
 try{for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){const browser=await engine.launch();
 try{for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[320,568],[390,500],[812,375]]){
 const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1,reducedMotion:'reduce'});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -59,6 +69,9 @@ try{
  const sourceText=await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)]));
  for(let r=0;r<await readers.count();r++){
   await readers.nth(r).click();const dialog=page.locator('#music-reader');await dialog.waitFor({state:'visible'});
+  // Public CDN images may decode after dialog.showModal(); measure the settled artwork.
+  await dialog.locator('.music-reader-cover').evaluate(async image=>{await image.decode();await document.fonts.ready;});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   assert.equal(await dialog.locator('.music-services').count(),0);
   const fixed=()=>dialog.evaluate(d=>[...d.querySelectorAll('.music-reader-toolbar,.music-reader-cover,#music-reader-title,.sound-artist,.sound-song-credit,.music-reader-tabs')].map(e=>{const r=e.getBoundingClientRect();return[r.x,r.y,r.width,r.height]}));
   const before=await fixed();const tabs=dialog.getByRole('tab');assert.equal(await tabs.count(),2);
