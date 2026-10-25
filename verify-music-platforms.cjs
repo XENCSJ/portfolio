@@ -8,8 +8,25 @@ const assetRatios=Object.fromEntries(expected.map(({asset})=>{const b=fs.readFil
 const out='music-platforms-qa';fs.mkdirSync(out,{recursive:true});
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp'};
 const server=http.createServer((req,res)=>{const file=path.resolve('.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));if(!file.startsWith(process.cwd()+path.sep)||!fs.existsSync(file)){res.writeHead(404);return res.end();}res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');fs.createReadStream(file).pipe(res);});
+const {execFileSync}=require('node:child_process');
+const beforeSha='2251a8ced25edec4770013baf7f5ac82baecd828';
+try{execFileSync('git',['cat-file','-e',beforeSha],{stdio:'ignore'});}catch{execFileSync('git',['fetch','--depth=1','origin',beforeSha],{stdio:'inherit'});}
+const beforeHtml=execFileSync('git',['show',beforeSha+':sound.html']);
+const beforeCss=execFileSync('git',['show',beforeSha+':xen-sound.css']);
+fs.writeFileSync('music-logo-before.html',beforeHtml.toString().replace('xen-sound.css?v=20261025-platform1','music-logo-before.css'));
+fs.writeFileSync('music-logo-before.css',beforeCss);
 const results=[];
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=process.env.MUSIC_BASE_URL||`http://127.0.0.1:${server.address().port}`;
+if(process.env.MUSIC_WAIT_FOR_DEPLOY==='true'){
+ const files=['sound.html','xen-sound.css',...new Set(expected.map(x=>x.asset))];
+ const hash=b=>require('node:crypto').createHash('sha256').update(b).digest('hex');
+ let ready=false;
+ for(let attempt=0;attempt<30;attempt++){
+  try{for(const f of files){const r=await fetch(base+'/'+f+'?logo-qa='+Date.now(),{signal:AbortSignal.timeout(20000)});assert(r.ok);assert.equal(hash(Buffer.from(await r.arrayBuffer())),hash(fs.readFileSync(f)),f);}ready=true;break;}catch(e){console.log('Waiting for Pages publication:',e.message.split('\n')[0]);await new Promise(r=>setTimeout(r,10000));}
+ }
+ assert(ready,'GitHub Pages did not serve the expected HTML, CSS and all logo bytes');
+ console.log('PUBLICATION VERIFIED: HTML, CSS and every directory asset match this commit');
+}
 try{for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){const browser=await engine.launch();
 try{for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[320,568],[390,500],[812,375]]){
 const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1,reducedMotion:'reduce'});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -30,6 +47,9 @@ try{
  const states=await entries.evaluateAll(es=>es.map(e=>{const c=getComputedStyle(e),i=e.querySelector('img'),ic=getComputedStyle(i),ir=i.getBoundingClientRect(),r=e.getBoundingClientRect(),n=e.querySelector('.sound-service-name'),nr=n.getBoundingClientRect();return{name:e.querySelector('.sound-service-name').textContent,src:i.getAttribute('src'),dimensions:[ir.width,ir.height,i.naturalWidth,i.naturalHeight],loaded:i.complete&&i.naturalWidth>0,box:[r.width,r.height],border:c.borderTopWidth,bg:c.backgroundColor,shadow:c.boxShadow,radius:c.borderRadius,opacity:c.opacity,filter:ic.filter,fit:ic.objectFit,ratio:ir.width/ir.height,natural:i.naturalWidth/i.naturalHeight,inside:nr.left>=r.left-1&&nr.right<=r.right+1,noTextOverflow:n.scrollWidth<=n.clientWidth+1,href:e.getAttribute('href'),target:e.getAttribute('target'),rel:e.getAttribute('rel'),status:e.querySelector('.sound-service-status')?.textContent};}));
  for(const s of states){assert(s.loaded);assert.equal(s.border,'0px');assert.equal(s.bg,'rgba(0, 0, 0, 0)');assert.equal(s.shadow,'none');assert.equal(s.radius,'0px');assert.equal(s.opacity,'1');assert.equal(s.filter,'none');assert.equal(s.fit,'contain');assert(Math.abs(s.ratio-assetRatios[s.src.replace(/^\.\//,'')])<.02,JSON.stringify({engineName,width,...s}));assert(s.inside&&s.noTextOverflow);assert(s.box[0]>=44&&s.box[1]>=44);if(s.href){assert.equal(s.target,'_blank');assert(s.rel.includes('noopener')&&s.rel.includes('noreferrer'));assert.equal(s.status,undefined);}else assert.equal(s.status,'リンク未確認');}
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(0, 0, 0)');
+
+ const alpha=await page.locator('#listen-download .sound-service-logo img').evaluateAll(imgs=>imgs.map(i=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(i,0,0,64,64);const d=x.getImageData(0,0,64,64).data;let transparent=0;for(let k=3;k<d.length;k+=4)if(d[k]<16)transparent++;return{src:i.getAttribute('src'),transparent};}));
+ for(const a of alpha){if(/rakuten|kkbox-transparent|dhits|tiktok|oricon-transparent|mumo|rekochoku|mysound-transparent|musicjp/.test(a.src))assert(a.transparent>10,'Missing real alpha: '+a.src);}
  const current=page.url();await page.locator('.sound-service-unverified').first().click();assert.equal(page.url(),current);assert.equal(context.pages().length,1);
  await page.locator('#sound-streaming a.sound-service').first().focus();assert.equal(await page.locator('#sound-streaming a.sound-service').first().evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
  // Protect the independent catalogue icons, carousel, genres and reader.
@@ -37,7 +57,7 @@ try{
  assert(await page.locator('.sound-release-card > .music-services .music-service-icon').evaluateAll(es=>es.every(e=>getComputedStyle(e).color==='rgb(255, 255, 255)')));
  assert.equal(await page.locator('.sound-slide').count(),8);await page.locator('.sound-showcase-stage').focus();const active=await page.locator('.sound-slide[data-position="active"] img').getAttribute('src');await page.keyboard.press('ArrowRight');await page.waitForFunction(src=>document.querySelector('.sound-slide[data-position="active"] img').getAttribute('src')!==src,active);
  const genre=page.locator('.sound-category-drawer').first();await genre.locator('summary').click();await page.waitForFunction(()=>document.querySelector('.sound-category-drawer').open);assert.equal(await page.locator('.music-index-link').count(),8);await genre.locator('summary').click();
- assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),6); // BLUE SLEEP keeps both videos in one YouTube drawer.
+ assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),6);assert.equal(await page.locator('#blue-sleep .music-player-drawer[data-service="youtube"]').count(),1);
  // Album identity is independent of the preserved YouTube video title/URL.
  assert.equal(await page.locator('#nights-awakening-title').textContent(),'PURPLE AWAKE');
  assert.equal(await page.locator('.music-index-link[href="#nights-awakening"] .music-index-title').textContent(),'PURPLE AWAKE');
@@ -72,8 +92,9 @@ try{
  }
  assert.deepEqual(await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)])),sourceText);
 
- if([1440,390].includes(width)){for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${engineName}-${width}-${id}.png`});}}
  if([1440,390].includes(width)&&height!==500) await require('./verify-music-links.cjs')(page,context,{engineName,width,out});
+ for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.locator('#'+id).screenshot({path:`${out}/${engineName}-${width}-${height}-${id}.png`});}
+ if(!process.env.MUSIC_BASE_URL && [1440,390].includes(width)&&height!==500){await page.goto(base+'/music-logo-before.html',{waitUntil:'load'});for(const id of ['sound-streaming','sound-download']){const g=page.locator('#'+id);await g.scrollIntoViewIfNeeded();await g.locator('img').evaluateAll(is=>is.forEach(i=>i.loading='eager'));await page.waitForFunction(()=>[...document.querySelectorAll('#listen-download img')].filter(i=>i.loading==='eager').every(i=>i.complete&&i.naturalWidth));await g.screenshot({path:`${out}/${engineName}-${width}-before-${id}.png`});}}
  assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four fixed readers`);
 }catch(error){await page.screenshot({path:`${out}/${engineName}-${width}x${height}-failure.png`});throw error;}finally{await context.close();}
 }}finally{await browser.close();}}
