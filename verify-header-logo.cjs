@@ -41,8 +41,8 @@ async function run(browser,engine,width,height,base){
   await page.locator('.music-index-link[href="#hikari-no-arika"]').click();
   await page.waitForFunction(()=>document.activeElement?.id==='hikari-no-arika');await visible(page,'song navigation');
   await page.locator('#hikari-no-arika .music-reader-open').click();
-  await page.locator('.music-reader-dialog[open]').waitFor();await page.keyboard.press('Escape');
-  await page.locator('.music-reader-dialog[open]').waitFor({state:'hidden'});await visible(page,'reader closed');
+  await page.locator('#music-reader[open]').waitFor();await page.keyboard.press('Escape');
+  await page.locator('#music-reader[open]').waitFor({state:'hidden'});await visible(page,'reader closed');
   await page.locator('.xen-header-toggle').click();await page.locator('#xen-drawer[open]').waitFor();
   await page.keyboard.press('Escape');await page.locator('#xen-drawer[open]').waitFor({state:'hidden'});await visible(page,'menu closed');
   for(const y of [2000,6000,1000,0]){await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);await visible(page,'scroll '+y);}
