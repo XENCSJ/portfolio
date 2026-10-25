@@ -35,6 +35,45 @@ try{
  await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});await page.locator('.music-reader-open').first().waitFor();
  // The load handler restores a deep link without focus; let it finish before testing a user navigation.
  await page.waitForLoadState('load');
+ // Intro + verified BIG UP! release routing, checked at every Chromium/WebKit viewport.
+ const introText=["日常の中で生まれる思考や感情。", "デザインをはじめとする視覚表現だけでは伝えきれない想いを、音楽と言葉にのせて形にしています。", "言葉にならない感覚や、心の奥にある感情。", "音楽には、そうした目に見えないものを伝える力があると感じています。"];
+ const releaseURLs={"void-to-form": {"title": "VOID TO FORM", "bigup": "https://big-up.style/Inno3PlgIt", "spotify": "https://open.spotify.com/album/3gctpaDVfWyTIEOQqJCoJW", "apple-music": "https://music.apple.com/jp/album/void-to-form/1862015320?l=en&ls=1&app=music", "line-music": "https://music.line.me/launch?target=album&item=mb0000000004e379d1&cc=JP&v=1", "youtube-music": "https://music.youtube.com/playlist?list=OLAK5uy_nXY1X_13U3-6h7INr_4sOLwwIviNojBAI"}, "blue-sleep": {"title": "BLUE SLEEP", "bigup": "https://big-up.style/FNgAp3vScI", "spotify": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D", "apple-music": "https://music.apple.com/jp/album/blue-sleep/1872882836?l=en&ls=1&app=music", "line-music": "https://music.line.me/launch?target=album&item=mb0000000004fbbc06&cc=JP&v=1", "youtube-music": "https://music.youtube.com/playlist?list=OLAK5uy_klyQLSz8qxzMTe5ZgyECFDOOd-kjT_VXg"}};
+ assert.deepEqual(await page.locator('.music-intro > p').allTextContents(),introText);
+ const intro=await page.locator('.music-intro').evaluate(e=>{
+  const r=e.getBoundingClientRect(),h=document.querySelector('.hero h1').getBoundingClientRect(),c=document.querySelector('.sound-showcase').getBoundingClientRect();
+  return {width:r.width,afterTitle:r.top>=h.bottom-1,beforeCarousel:r.bottom<=c.top+1,overflow:e.scrollWidth>e.clientWidth+1};
+ });
+ assert(intro.afterTitle&&intro.beforeCarousel&&!intro.overflow&&intro.width<=761,JSON.stringify(intro));
+ const typography=e=>{const c=getComputedStyle(e);return Object.fromEntries(['fontFamily','fontSize','lineHeight','textAlign','whiteSpace','wordBreak','overflowWrap','lineBreak'].map(k=>[k,c[k]]));};
+ const introType=await page.locator('.music-intro > p').first().evaluate(typography);
+ const design=await context.newPage();
+ try{await design.goto(base+'/design.html',{waitUntil:'load'});assert.deepEqual(introType,await design.locator('.hero .xen-description').evaluate(typography));}finally{await design.close();}
+ assert.equal(introType.fontSize,'14px');assert.equal(introType.lineHeight,'28px');assert.equal(introType.textAlign,'left');
+ for(const [id,urls] of Object.entries(releaseURLs)){
+  const card=page.locator('#'+id);
+  for(const [attr,key] of [['spotify','spotify'],['apple-music','appleMusic'],['line-music','lineMusic'],['youtube-music','youtubeMusic']]){
+   const service=card.locator('.music-services [data-service="'+key+'"]');
+   assert.equal(await service.getAttribute('href'),urls[attr]);
+   assert.equal(await service.locator('.music-service-status').textContent(),'配信中 ↗');
+   assert.equal(await service.getAttribute('target'),'_blank');
+   assert.equal(await service.getAttribute('aria-disabled'),null);
+  }
+  const pending=card.locator('.music-services [data-service="youtube"]');
+  assert.equal(await pending.getAttribute('href'),null);assert.equal(await pending.getAttribute('aria-disabled'),'true');
+  assert.equal(await pending.locator('.music-service-status').textContent(),'準備中');
+  assert.equal(await card.locator('.music-release-hub').getAttribute('href'),urls.bigup);
+  assert.equal(await card.locator('.music-release-hub').getAttribute('target'),'_blank');
+  assert.equal(await card.locator('.sound-artist').textContent(),'XEN');
+ }
+ if([1440,390].includes(width)&&height!==500){
+  await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${engineName}-${width}-music-intro.png`});
+  for(const id of Object.keys(releaseURLs)){
+   const card=page.locator('#'+id);await card.scrollIntoViewIfNeeded();await card.locator('.sound-song-cover').evaluate(i=>i.decode());
+   await card.screenshot({path:`${out}/${engineName}-${width}-${id}-links.png`});
+  }
+ }
+ console.log(`PASS RELEASES ${engineName} ${width}: exact intro, DESIGN typography, 8 verified service URLs, 2 BIG UP! hubs, YouTube pending`);
+
  const entries=page.locator('#listen-download .sound-service');assert.equal(await entries.count(),23);
  assert.deepEqual(await entries.evaluateAll(es=>es.map(e=>({name:e.querySelector('.sound-service-name').textContent,href:e.getAttribute('href')}))),expected.map(x=>({name:x.name,href:x.href})));
  assert.equal(await page.locator('#sound-streaming .sound-service').count(),12);assert.equal(await page.locator('#sound-download .sound-service').count(),11);
