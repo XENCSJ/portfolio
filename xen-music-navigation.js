@@ -6,7 +6,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const controllers = [];
   const nextFrame = () => new Promise(resolve => requestAnimationFrame(resolve));
-  let journey = 0;
+  let journey = 0, highlightTimer, viewportWidth = innerWidth;
   const arrow = '<svg class="music-index-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   nav.querySelectorAll('.sound-category-drawer').forEach(details => {
@@ -90,6 +90,7 @@
   }
   async function navigate(card, updateHash, focus = true) {
     const token = ++journey;
+    clearTimeout(highlightTimer);
     document.querySelectorAll('.music-navigation-highlight').forEach(el => el.classList.remove('music-navigation-highlight'));
     const ancestors = [];
     for (let parent = card.parentElement; parent; parent = parent.parentElement) {
@@ -117,7 +118,7 @@
     const frame = card.querySelector('.sound-cover-frame');
     if (frame) {
       frame.classList.add('music-navigation-highlight');
-      setTimeout(() => { if (token === journey) frame.classList.remove('music-navigation-highlight'); },500);
+      highlightTimer = setTimeout(() => frame.classList.remove('music-navigation-highlight'),500);
     }
   }
   nav.addEventListener('click', event => {
@@ -133,7 +134,11 @@
   window.addEventListener('wheel',cancelJourney,{passive:true});
   window.addEventListener('touchstart',cancelJourney,{passive:true});
   window.addEventListener('keydown',event => { if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Escape','Tab',' '].includes(event.key)) cancelJourney(); });
-  window.addEventListener('resize',() => { cancelJourney(); controllers.forEach(c => c.settle()); });
+  // iOS Safari may resize only the height when its address bar collapses during a scroll.
+  window.addEventListener('resize',() => {
+    if (innerWidth === viewportWidth) return;
+    viewportWidth = innerWidth; cancelJourney(); controllers.forEach(c => c.settle());
+  });
   reduced.addEventListener('change',() => { cancelJourney(); controllers.forEach(c => c.settle()); });
   // Native hash changes/back-forward keep the same header-aware destination.
   window.addEventListener('hashchange',() => { const card=cardForHash(location.hash); if(card) navigate(card,false,false); });

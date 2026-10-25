@@ -49,6 +49,7 @@ async function run(){
         for(const item of targets){
           const link=links.filter({has:page.locator('.music-index-title',{hasText:item.title})});
           await link.click();
+          if(width===390&&genre===0&&item===targets[0]) await page.setViewportSize({width,height:876});
           const card=page.locator('#'+item.id);
           await page.waitForFunction(id=>document.getElementById(id)?.querySelector('.music-navigation-highlight'),item.id,{polling:'raf',timeout:6000});
           assert.equal(await page.locator('dialog[open]').count(),0,'index must not open reader');
@@ -57,7 +58,9 @@ async function run(){
           assert(position.top>=position.header+16&&position.top<=position.header+32,JSON.stringify({engine,width,id:item.id,...position}));
           assert.equal(await page.evaluate(()=>document.activeElement.id),item.id);
           if(genre===0&&item===targets[0]&&(width===390||width===1440)) await page.screenshot({path:path.join(out,engine+'-'+width+'-destination.jpg'),type:'jpeg',quality:88});
+          if(width===390&&genre===0&&item===targets[0]) await page.keyboard.press('Escape');
           await page.waitForTimeout(550);assert.equal(await card.locator('.music-navigation-highlight').count(),0);
+          if(width===390&&genre===0&&item===targets[0]) await page.setViewportSize({width,height:844});
         }
       }
       await toggles.nth(2).click();await page.waitForTimeout(390);assert.equal(await nav.locator('details[open]').count(),0);
