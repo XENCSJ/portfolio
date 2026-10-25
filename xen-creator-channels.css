@@ -1,10 +1,10 @@
-/* CREATOR specialist channels. Scoped to this section only. */
+/* CREATOR YouTube channels. Scoped to this section only. */
 body.creator-page #youtube-channels { --channel-gold:#c5af82; overflow-anchor:none; }
 #youtube-channels .xc-channel { margin:0; border-bottom:1px solid #303030; overflow:hidden; overflow-anchor:none; }
 #youtube-channels .xc-channel:first-child { border-top:1px solid #303030; }
 #youtube-channels .xc-toggle {
-  display:grid; grid-template-columns:24px 80px minmax(0,1fr) 24px;
-  align-items:center; gap:22px; min-height:128px; padding:24px 4px;
+  display:grid; grid-template-columns:80px minmax(0,1fr) 24px;
+  align-items:center; gap:3px 22px; min-height:128px; padding:24px 4px;
   list-style:none; cursor:pointer; background:#000; color:#fff;
   -webkit-tap-highlight-color:transparent; touch-action:manipulation;
   transition:background-color 180ms ease;
@@ -13,7 +13,11 @@ body.creator-page #youtube-channels { --channel-gold:#c5af82; overflow-anchor:no
 #youtube-channels .xc-toggle::marker { content:''; }
 #youtube-channels .xc-number { color:var(--channel-gold); font-size:10px; letter-spacing:.06em; font-variant-numeric:tabular-nums; }
 #youtube-channels .xc-logo { display:block; width:80px; height:80px; max-width:none; aspect-ratio:1; border-radius:50%; object-fit:contain; }
-#youtube-channels .xc-label { min-width:0; }
+#youtube-channels .xc-logo { grid-column:1; grid-row:1 / span 2; }
+#youtube-channels .xc-logo-main { border-radius:0; filter:brightness(0) invert(1); }
+#youtube-channels .xc-number { grid-column:2; grid-row:1; align-self:end; }
+#youtube-channels .xc-label { min-width:0; grid-column:2; grid-row:2; align-self:start; }
+#youtube-channels .xc-mark { grid-column:3; grid-row:1 / span 2; }
 #youtube-channels .xc-name { display:block; color:#fff; font-size:clamp(15px,2vw,20px); font-weight:400; letter-spacing:.035em; line-height:1.5; }
 #youtube-channels .xc-name > span { white-space:nowrap; }
 #youtube-channels .xc-genre { display:block; margin-top:7px; color:#aaa; font-size:10px; letter-spacing:.1em; line-height:1.7; }
