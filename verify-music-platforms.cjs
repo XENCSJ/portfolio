@@ -37,7 +37,7 @@ try{
  assert(await page.locator('.sound-release-card > .music-services .music-service-icon').evaluateAll(es=>es.every(e=>getComputedStyle(e).color==='rgb(255, 255, 255)')));
  assert.equal(await page.locator('.sound-slide').count(),8);await page.locator('.sound-showcase-stage').focus();const active=await page.locator('.sound-slide[data-position="active"] img').getAttribute('src');await page.keyboard.press('ArrowRight');await page.waitForFunction(src=>document.querySelector('.sound-slide[data-position="active"] img').getAttribute('src')!==src,active);
  const genre=page.locator('.sound-category-drawer').first();await genre.locator('summary').click();await page.waitForFunction(()=>document.querySelector('.sound-category-drawer').open);assert.equal(await page.locator('.music-index-link').count(),8);await genre.locator('summary').click();
- assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),7);
+ assert.equal(await page.locator('#blue-sleep .video-container').count(),2);assert.equal(await page.locator('.music-player-drawer').count(),6); // BLUE SLEEP keeps both videos in one YouTube drawer.
  // Album identity is independent of the preserved YouTube video title/URL.
  assert.equal(await page.locator('#nights-awakening-title').textContent(),'PURPLE AWAKE');
  assert.equal(await page.locator('.music-index-link[href="#nights-awakening"] .music-index-title').textContent(),'PURPLE AWAKE');
