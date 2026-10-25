@@ -52,9 +52,10 @@ const layout=()=>({width:document.documentElement.scrollWidth,height:document.do
           if(await img.isVisible())await img.scrollIntoViewIfNeeded();
         }
         // The requested specialist-channel section adds height below LATEST VIDEOS.
-        // Its real layout, images and interaction are covered by verify-creator-channels.cjs.
+        // The requested discovery entrance also adds height at the end of main.
+        // These additions are covered by verify-creator-channels.cjs / verify-discovery.cjs.
         // Remove only that addition here to keep the original-page comparison strict.
-        if(name==='creator')await page.locator('#youtube-channels').evaluateAll(es=>es.forEach(e=>e.remove()));
+        if(name==='creator')await page.locator('#youtube-channels, .xen-discovery-entry').evaluateAll(es=>es.forEach(e=>e.remove()));
         await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(150);
         shots[mode]=await page.evaluate(layout);assert.equal(shots[mode].width<=width,true,name+' overflow');
         assert.deepEqual(errors,[],name+' script errors');
