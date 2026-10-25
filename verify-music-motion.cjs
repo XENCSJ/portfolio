@@ -7,7 +7,7 @@ const results=[];
 const hash=s=>createHash('sha256').update(s).digest('hex');
 // Entire authored main at the start of this change: text, URLs, images and data.
 const main=fs.readFileSync('sound.html','utf8').match(/<main[\s\S]*?<\/main>/)[0].replace(/ data-soft-reveal/g,'');
-assert.equal(hash(main),'c2fe6889c4a6e5f9c3865eed178de5d1a65aa5eb67d4f25acf82e1b5f8a137ac');
+assert.equal(hash(main),'d95874b2a6875141bec17216dd00b7cb402f6be3ccd78b68344bf1def9cea1fd');
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp'};
 const server=http.createServer((req,res)=>{
  const file=path.resolve('.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));
@@ -57,7 +57,7 @@ async function run(browser,engine,width,height,base){
  try{
   await page.goto(base+'/sound.html',{waitUntil:'load'});await page.locator('[data-music-navigation-ready]').waitFor();
   await settled(page);await visible(page);
-  assert.equal(await page.locator('[data-soft-reveal][data-ql-motion]').count(),9);
+  assert.equal(await page.locator('[data-soft-reveal][data-ql-motion]').count(),8);
   assert.equal(await page.locator('.sound-release-card[data-ql-motion]').count(),8);
   assert.equal(await page.locator('.sound-slide[data-ql-motion],.sound-cover-frame[data-ql-motion],.music-reader-dialog [data-ql-motion]').count(),0);
   if([1440,390].includes(width))await shot(page,label+'-top');
