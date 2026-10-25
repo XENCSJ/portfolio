@@ -1,0 +1,19 @@
+# MUSIC directory transparent artwork
+
+Scope: only STREAMING / DOWNLOAD logo sources and scoped display sizing. 23 placements (12 streaming, 11 download); 22 distinct service/plan labels, with NetEase repeated. All 14 hrefs and 9 unverified states retained. No catalogue, player, reader, header, footer or video production code is changed. Built on main 3f965a038a0a49a2c39f3423b3f4c23ffa3f6c1e, preserving the grouped BLUE SLEEP videos, channel-name corrections and the carousel/genre navigation update.
+
+| Service | Local asset | Source and operation |
+| --- | --- | --- |
+| Rakuten Music | xen-platform-rakuten.svg | https://music.rakuten.co.jp/assets/top/img/20230901/logo_v_wh.svg — official white two-line SVG from the service homepage; byte-identical. |
+| KKBOX | xen-platform-kkbox-transparent.png | Existing distributor-supplied xen-service-kkbox.png (BIG UP! store artwork). Removed only exterior white corner matte; cyan tile and white K symbol remain. Brand page https://www.kkbox.com/about/jp/ja/logo was unavailable. |
+| dヒッツ | xen-platform-dhits.png | https://resource.lap.recochoku.jp/rc-p1/front/common/logo_dhits.png — official transparent PNG from Recochoku; pink app tile and white lettering remain; byte-identical. |
+| TikTok | xen-platform-tiktok.png | https://developers.tiktok.com/doc/getting-started-design-guidelines/ → https://sf16-va.tiktokcdn.com/obj/eden-va2/uvzhqeh7nuhd/tt4d/logo-pack.zip → TikTok-logo-RGB-Stacked-white.png. Official transparent export canvas, artwork, color and alpha preserved without resampling. |
+| オリミュウストア | xen-platform-oricon-transparent.png | Existing distributor-supplied xen-service-oricon.png (BIG UP! store artwork). A spatial background/counter matte and edge unmatting remove white paper, preserving blue letter/symbol geometry and the pale horizontal separator. Official service access returned 403; no invented replacement. |
+| mu-mo | xen-platform-mumo.png | https://sp-m.mu-mo.net/images/cmn/sitename_pc.png — official transparent PNG used by the service's header CSS; byte-identical. |
+| レコチョク | xen-platform-rekochoku.svg | Official data:image/svg+xml artwork in https://recochoku.jp/css/common.css (main-header__logo-link::before), decoded without changing paths/colors. Pink full wordmark with white lettering. |
+| mysound | xen-platform-mysound-transparent.png | https://mysound.jp/assets/image/common/favicon.ico — official standalone green symbol, 48px ICO frame exported to PNG, exterior white matte removed with antialias edge recovery. Uses the officially supplied symbol rather than recoloring the black wordmark. |
+| music.jp STORE | xen-platform-musicjp.svg | https://music-book.jp/static/portal2gen/img/mdj_logo_full.svg — official transparent SVG with white wordmark; byte-identical. |
+
+Existing artwork for Spotify, Apple Music, LINE MUSIC, AWA, YouTube Music, Amazon Music (three placements), NetEase (two placements), iTunes Store, mora, OTOTOY and ドワンゴジェイピー remains unchanged. Solid tiles intrinsic to app icons (including AWA, KKBOX, dヒッツ and ドワンゴジェイピー) are deliberately preserved. Marks are used to identify the existing distribution services; no affiliation claim or new link is added. The source URLs establish provenance, not a newly obtained brand license. Background-editing/republication permission for the existing distributor marks has not been independently confirmed.
+
+Validation: verify-music-platforms.cjs runs Chromium and WebKit across the eight requested widths plus three additional small/landscape configurations. It checks real alpha, loaded images, intrinsic aspect ratios, layout, hrefs/statuses, 40 independent white catalogue icons, eight covers, genre navigation, fixed readers and the existing video group. Browser screenshots and machine-readable results are emitted to music-platforms-qa/. WebKit emulation does not represent an actual iPhone Safari device test.

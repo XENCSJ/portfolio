@@ -3,25 +3,25 @@
     "section": "STREAMING",
     "name": "Spotify",
     "href": "https://open.spotify.com/album/4jLnddVGBl06VdUf0VK6UX",
-    "originalAsset": "./xen-service-spotify.png",
+    "originalAsset": "./xen-platform-spotify.svg",
     "asset": "xen-platform-spotify.svg",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "STREAMING",
     "name": "Apple Music",
     "href": "https://music.apple.com/jp/album/nova-pulse-single/1857515198?l=en&ls=1&app=music",
-    "originalAsset": "./xen-service-apple-music.png",
+    "originalAsset": "./xen-sound-apple-music.svg",
     "asset": "xen-sound-apple-music.svg",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "STREAMING",
     "name": "LINE MUSIC",
     "href": "https://music.line.me/launch?target=album&item=mb0000000004d99d5f&cc=JP&v=1",
-    "originalAsset": "./xen-service-line-music.png",
+    "originalAsset": "./xen-sound-line-music.png",
     "asset": "xen-sound-line-music.png",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "STREAMING",
@@ -35,57 +35,57 @@
     "section": "STREAMING",
     "name": "YouTube Music",
     "href": "https://music.youtube.com/playlist?list=OLAK5uy_km4yzSkBhfInYdIoFNmGX8fbxNAfozUYQ",
-    "originalAsset": "./xen-service-youtube-music.png",
+    "originalAsset": "./xen-music-youtube-music.png",
     "asset": "xen-music-youtube-music.png",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "STREAMING",
     "name": "Amazon Music Unlimited",
     "href": "https://music.amazon.co.jp/albums/B0G4LFXCS6",
-    "originalAsset": "./xen-service-amazon-music.png",
+    "originalAsset": "./xen-platform-amazon.svg",
     "asset": "xen-platform-amazon.svg",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "STREAMING",
     "name": "Amazon Music Prime",
     "href": "https://music.amazon.co.jp/albums/B0G4LFXCS6",
-    "originalAsset": "./xen-service-prime-music.png",
+    "originalAsset": "./xen-platform-amazon.svg",
     "asset": "xen-platform-amazon.svg",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "STREAMING",
     "name": "Rakuten Music",
     "href": "https://music.rakuten.co.jp/link/album/32269329",
     "originalAsset": "./xen-service-rakuten-music.png",
-    "asset": "xen-service-rakuten-music.png",
-    "replaced": false
+    "asset": "xen-platform-rakuten.svg",
+    "replaced": true
   },
   {
     "section": "STREAMING",
     "name": "KKBOX",
     "href": "https://www.kkbox.com/jp/ja/album/HYCNy3iwU1EtUCuMEL",
     "originalAsset": "./xen-service-kkbox.png",
-    "asset": "xen-service-kkbox.png",
-    "replaced": false
+    "asset": "xen-platform-kkbox-transparent.png",
+    "replaced": true
   },
   {
     "section": "STREAMING",
     "name": "dヒッツ powered by レコチョク",
     "href": null,
     "originalAsset": "./xen-service-d-hits.png",
-    "asset": "xen-service-d-hits.png",
-    "replaced": false
+    "asset": "xen-platform-dhits.png",
+    "replaced": true
   },
   {
     "section": "STREAMING",
     "name": "TikTok",
     "href": null,
     "originalAsset": "./xen-service-tiktok.png",
-    "asset": "xen-service-tiktok.png",
-    "replaced": false
+    "asset": "xen-platform-tiktok.png",
+    "replaced": true
   },
   {
     "section": "STREAMING",
@@ -99,41 +99,41 @@
     "section": "DOWNLOAD",
     "name": "iTunes Store",
     "href": "https://music.apple.com/jp/album/nova-pulse-single/1857515198?l=en&ls=1&app=itunes",
-    "originalAsset": "./xen-service-itunes.png",
+    "originalAsset": "./xen-platform-itunes.png",
     "asset": "xen-platform-itunes.png",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "DOWNLOAD",
     "name": "Amazonデジタルミュージックストア",
     "href": "https://www.amazon.co.jp/dp/B0G4LFXCS6",
-    "originalAsset": "./xen-service-amazon-music.png",
+    "originalAsset": "./xen-platform-amazon.svg",
     "asset": "xen-platform-amazon.svg",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "DOWNLOAD",
     "name": "オリミュウストア",
     "href": "https://music.orimyu.com/php/cd/CdTop.php?cd=SPC07267365&utm_source=label&utm_medium=label&utm_campaign=label",
     "originalAsset": "./xen-service-oricon.png",
-    "asset": "xen-service-oricon.png",
-    "replaced": false
+    "asset": "xen-platform-oricon-transparent.png",
+    "replaced": true
   },
   {
     "section": "DOWNLOAD",
     "name": "mora",
     "href": "https://mora.jp/package/43000002/bigup14255164/",
-    "originalAsset": "./xen-service-mora.png",
+    "originalAsset": "./xen-platform-mora.png",
     "asset": "xen-platform-mora.png",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "DOWNLOAD",
     "name": "mu-mo",
     "href": "https://sp-m.mu-mo.net/album/1762148/",
     "originalAsset": "./xen-service-mu-mo.png",
-    "asset": "xen-service-mu-mo.png",
-    "replaced": false
+    "asset": "xen-platform-mumo.png",
+    "replaced": true
   },
   {
     "section": "DOWNLOAD",
@@ -147,17 +147,17 @@
     "section": "DOWNLOAD",
     "name": "OTOTOY",
     "href": null,
-    "originalAsset": "./xen-service-ototoy.png",
+    "originalAsset": "./xen-platform-ototoy.svg",
     "asset": "xen-platform-ototoy.svg",
-    "replaced": true
+    "replaced": false
   },
   {
     "section": "DOWNLOAD",
     "name": "レコチョク",
     "href": null,
     "originalAsset": "./xen-service-rekochoku.png",
-    "asset": "xen-service-rekochoku.png",
-    "replaced": false
+    "asset": "xen-platform-rekochoku.svg",
+    "replaced": true
   },
   {
     "section": "DOWNLOAD",
@@ -172,15 +172,15 @@
     "name": "mysound",
     "href": null,
     "originalAsset": "./xen-service-my-sound.png",
-    "asset": "xen-service-my-sound.png",
-    "replaced": false
+    "asset": "xen-platform-mysound-transparent.png",
+    "replaced": true
   },
   {
     "section": "DOWNLOAD",
     "name": "music.jp STORE",
     "href": null,
     "originalAsset": "./xen-service-music-jp.png",
-    "asset": "xen-service-music-jp.png",
-    "replaced": false
+    "asset": "xen-platform-musicjp.svg",
+    "replaced": true
   }
 ]
