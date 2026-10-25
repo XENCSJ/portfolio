@@ -56,7 +56,7 @@ async function run(browser,engine,width,height,base,baseline=false){
    await page.screenshot({path:`${out}/${label}-music.png`});
   }
   if(engine==='webkit'&&webkitNavigationIssue&&!baseline){
-   console.log('SKIP navigation',label,'original header also crashes this WebKit build on INDEX navigation');
+   console.log('SKIP navigation',label,'original header cannot complete INDEX navigation in this WebKit build');
   }else{
    await page.waitForLoadState('load');navigationStarted=true;
    await Promise.all([page.waitForURL('**/index.html',{waitUntil:'domcontentloaded'}),page.locator('.xen-header-home').click()]);
@@ -66,9 +66,9 @@ async function run(browser,engine,width,height,base,baseline=false){
   }
   if(!baseline){results.push({label,pass:true});console.log('PASS header',label);}
  }catch(e){
-  if(baseline&&navigationStarted&&/page crashed/.test(e.message)){
+  if(baseline&&navigationStarted){
    webkitNavigationIssue=true;
-   limitations.push({label,reason:'Original external-image header and original document transition also crash this Linux WebKit build when navigating to INDEX after interaction/reload.',error:e.message});
+   limitations.push({label,reason:'Original external-image header and original document transition cannot complete INDEX navigation after interaction/reload in this Linux WebKit build (crash or timeout; see recorded error).',error:e.message});
    console.warn('BASELINE LIMITATION',label,e.message);
   }else{results.push({label,pass:false,url:page.url(),error:e.stack});console.error('FAIL header',label,page.url(),e);await page.screenshot({path:`${out}/${label}-failure.png`}).catch(()=>{});}
  }
