@@ -294,31 +294,28 @@ body#top:is(.home-page, .xen-noir) {
   --xen-header-ink: #fff;
   --xen-header-logo-filter: brightness(0) invert(1);
 }
-/* The fixed header never participates in content reveals or navigation fades.
-   Capture the complete bar, including its black surface, as one static layer.
-   Keep the old snapshot painted until the new document is ready. */
-body#top #xen-site-header { view-transition-name: xen-site-header; }
 body#top #xen-site-header .xen-header-home,
+body#top #xen-site-header .xen-header-home:is(:visited, :active, :focus),
 body#top #xen-site-header .xen-header-logo {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  animation: none;
-  transition: none;
-  box-shadow: none;
+  opacity: 1; visibility: visible; transform: none; animation: none; transition: none;
 }
-body#top #xen-site-header .xen-header-home { view-transition-name: none; }
 body#top #xen-site-header .xen-header-home::before,
 body#top #xen-site-header .xen-header-home::after { content: none; }
-::view-transition-group(xen-site-header) { z-index: 1; }
-::view-transition-group(xen-site-header),
-::view-transition-image-pair(xen-site-header),
-::view-transition-old(xen-site-header),
-::view-transition-new(xen-site-header) {
-  animation: none;
-  mix-blend-mode: normal;
-  opacity: 1;
+/* The official header brand is static, including pointer/focus states. */
+body#top #xen-site-header .xen-header-home,
+body#top #xen-site-header .xen-header-home:is(:hover, :focus-visible, :active),
+body#top #xen-site-header .xen-header-logo {
+  animation: none; transition: none; transform: none; opacity: 1;
+  box-shadow: none;
 }
+/* Keep the brand out of the page-wide navigation crossfade. */
+body#top #xen-site-header .xen-header-home { view-transition-name: xen-header-brand; }
+::view-transition-group(xen-header-brand),
+::view-transition-image-pair(xen-header-brand),
+::view-transition-new(xen-header-brand) {
+  animation: none; mix-blend-mode: normal; opacity: 1;
+}
+::view-transition-old(xen-header-brand) { display: none; }
 body#top #xen-site-header :is(a, button):focus-visible { outline-color: #c9aa78; }
 /* scroll-padding accounts for the fixed bar; margin gives the heading breathing room. */
 body#top #studio-contact { scroll-margin-top: 16px; }
