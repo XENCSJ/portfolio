@@ -47,7 +47,7 @@ async function run(browser,engine,width,height,base){
   await page.keyboard.press('Escape');await page.locator('#xen-drawer[open]').waitFor({state:'hidden'});await visible(page,'menu closed');
   for(const y of [2000,6000,1000,0]){await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);await visible(page,'scroll '+y);}
   await page.reload({waitUntil:'domcontentloaded'});await visible(page,'reload');
-  await page.locator('.xen-header-home').click();await page.waitForURL('**/index.html');
+  await Promise.all([page.waitForURL('**/index.html',{waitUntil:'domcontentloaded'}),page.locator('.xen-header-home').click()]);
   await page.waitForFunction(()=>document.querySelector('.xen-header-logo')?.naturalWidth>0);await visible(page,'INDEX link');
   await page.goBack({waitUntil:'domcontentloaded'});await visible(page,'history return');
   if([390,1440].includes(width)){
@@ -56,7 +56,7 @@ async function run(browser,engine,width,height,base){
    await page.screenshot({path:`${out}/${label}-music.png`});
   }
   results.push({label,pass:true});console.log('PASS header',label);
- }catch(e){results.push({label,pass:false,error:e.stack});console.error('FAIL header',label,e);await page.screenshot({path:`${out}/${label}-failure.png`}).catch(()=>{});}
+ }catch(e){results.push({label,pass:false,url:page.url(),error:e.stack});console.error('FAIL header',label,page.url(),e);await page.screenshot({path:`${out}/${label}-failure.png`}).catch(()=>{});}
  finally{await ctx.close();}
 }
 async function resilience(browser,engine,base){
