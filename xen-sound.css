@@ -317,5 +317,5 @@ body#top.sound-page main .sound-showcase { --cover-size: clamp(205px, 54vw, 330p
 
 /* Optical sizing of official transparent directory lockups. */
 #listen-download .sound-service-logo img[src*="xen-platform-tiktok"]{max-width:72px;max-height:72px}
-#listen-download .sound-service-logo img[src*="xen-platform-mysound"]{width:68px;max-width:min(100%,68px)}
-@media(max-width:700px){#listen-download .sound-service-logo img[src*="xen-platform-tiktok"]{max-width:60px;max-height:60px}#listen-download .sound-service-logo img[src*="xen-platform-mysound"]{width:60px;max-width:min(100%,60px)}}
+#listen-download .sound-service-logo img[src*="xen-platform-mysound"]{width:68px;max-width:min(100%,68px);max-height:68px}
+@media(max-width:700px){#listen-download .sound-service-logo img[src*="xen-platform-tiktok"]{max-width:60px;max-height:60px}#listen-download .sound-service-logo img[src*="xen-platform-mysound"]{width:60px;max-width:min(100%,60px);max-height:60px}}
