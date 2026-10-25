@@ -22,7 +22,7 @@ async function close(page){await page.keyboard.press('Escape');await page.waitFo
   for(const width of [375,390,430,768,1024,1280,1440,1920]){
    const context=await browser.newContext({viewport:{width,height:width<768?844:1000},reducedMotion:'reduce',hasTouch:width<768,isMobile:width<768});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.goto(base+'what-is-xen.html',{waitUntil:'domcontentloaded'});await ready(page);
-   ok(await page.locator('.xd-logo').evaluate(i=>i.complete&&i.naturalWidth>0),'official logo loaded');await checkBounds(page,engine.name()+width+' home');
+   ok(await page.locator('.xd-logo').evaluate(i=>i.complete&&i.naturalWidth>0),'official logo loaded');await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-initial.png`,fullPage:true});await checkBounds(page,engine.name()+width+' home');
    for(const branch of ['identity','philosophy','creation','connection']){
     await select(page,branch);const seen=new Set();let count=1;
     if(await page.locator('.xd-page-controls').isVisible())count=Number((await page.locator('.xd-page-count').innerText()).split('/')[1]);
@@ -73,4 +73,4 @@ async function close(page){await page.keyboard.press('Escape');await page.waitFo
  for(const node of Object.values(nodes)){if(node.href?.startsWith('./')){const response=await api.get(base+node.href.slice(2).split('#')[0]);ok(response.ok(),'internal route '+node.href);}}
  await api.dispose();
  fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results},null,2));console.log(`PASS: ${checks} assertions, ${results.length} viewport/browser combinations`);
-})().catch(e=>{console.error(e);process.exitCode=1;});
+})().catch(e=>{console.error(e);process.exit(1);});

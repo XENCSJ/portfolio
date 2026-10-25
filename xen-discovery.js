@@ -31,7 +31,7 @@
     if (button) button.focus({ preventScroll: true }); else center.focus({ preventScroll: true });
   }
   function positionList(count) {
-    if (count <= 4) return [[23,19],[77,20],[24,81],[76,80]].slice(0,count);
+    if (count <= 4) return [[23,14],[77,14],[24,86],[76,86]].slice(0,count);
     const rows = Math.ceil(count / 2), positions = [];
     for (let i=0;i<count;i++) positions.push([i % 2 ? 81 : 19, 12 + Math.floor(i/2) * (76/(rows-1))]);
     return positions;
