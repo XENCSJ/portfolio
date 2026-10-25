@@ -10,6 +10,7 @@ assert(embedded,'MUSIC header must not depend on a separate image request');
 assert.deepEqual(Buffer.from(embedded[1],'base64'),fs.readFileSync('xen-header-logo.png'),'Use the unchanged official artwork');
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp'};
 const server=http.createServer((req,res)=>{
+ if(req.url.split('?')[0]==='/sound-header-baseline.html'){res.setHeader('Content-Type','text/html; charset=utf-8');return res.end(html.replace(/data:image\/png;base64,[^"]+/, './xen-header-logo.png').replace('loading="eager" decoding="sync"','decoding="async"').replace(/<style id="music-static-header">[\s\S]*?<\/style>/,''));}
  const f=path.resolve('.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));
  if(!f.startsWith(process.cwd()+path.sep)||!fs.existsSync(f)||!fs.statSync(f).isFile()){res.writeHead(404);return res.end();}
  res.setHeader('Content-Type',mime[path.extname(f)]||'application/octet-stream');fs.createReadStream(f).pipe(res);
@@ -28,13 +29,13 @@ async function visible(page,label){
  assert(!s.overlap&&!s.overflow,label+' layout');assert.equal(s.href,'./index.html');assert.equal(s.motion,0);
  for(const c of s.states){assert.equal(c.opacity,'1',label);assert.equal(c.visibility,'visible',label);assert.notEqual(c.display,'none',label);assert.equal(c.transform,'none',label);assert.equal(c.animation,'none',label);}
 }
-async function run(browser,engine,width,height,base){
- const label=engine+'-'+width;
+async function run(browser,engine,width,height,base,baseline=false){
+ const label=engine+'-'+width+(baseline?'-baseline':'');
  const ctx=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701});
  await ctx.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():r.abort());
  const page=await ctx.newPage();
  try{
-  await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});await visible(page,'initial');
+  await page.goto(base+(baseline?'/sound-header-baseline.html':'/sound.html'),{waitUntil:'domcontentloaded'});await visible(page,'initial');
   await page.locator('[data-music-navigation-ready]').waitFor();
   await page.locator('.sound-showcase-stage').press('ArrowRight');await visible(page,'carousel');
   await page.locator('#music-genre-1-toggle').click();await visible(page,'genre open');
@@ -47,6 +48,7 @@ async function run(browser,engine,width,height,base){
   await page.keyboard.press('Escape');await page.locator('#xen-drawer[open]').waitFor({state:'hidden'});await visible(page,'menu closed');
   for(const y of [2000,6000,1000,0]){await page.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);await visible(page,'scroll '+y);}
   await page.reload({waitUntil:'domcontentloaded'});await visible(page,'reload');
+  await page.waitForLoadState('load');console.log('NAVIGATION READY',label);
   await Promise.all([page.waitForURL('**/index.html',{waitUntil:'domcontentloaded'}),page.locator('.xen-header-home').click()]);
   await page.waitForFunction(()=>document.querySelector('.xen-header-logo')?.naturalWidth>0);await visible(page,'INDEX link');
   await page.goBack({waitUntil:'domcontentloaded'});await visible(page,'history return');
@@ -83,7 +85,7 @@ async function resilience(browser,engine,base){
  const base=(process.env.MUSIC_BASE_URL||`http://127.0.0.1:${server.address().port}`).replace(/\/$/,'');
  for(const [engine,type]of [['chromium',chromium],['webkit',webkit]]){
   const browser=await type.launch();
-  try{for(const [w,h]of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932]])await run(browser,engine,w,h,base);await resilience(browser,engine,base);}
+  try{if(engine==='webkit'&&!process.env.MUSIC_BASE_URL)await run(browser,engine,390,844,base,true);for(const [w,h]of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932]])await run(browser,engine,w,h,base);await resilience(browser,engine,base);}
   finally{await browser.close();}
  }
  fs.writeFileSync(`${out}/report.json`,JSON.stringify({base,results},null,2));
