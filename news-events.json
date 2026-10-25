@@ -566,5 +566,32 @@
       ],
       "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
     }
+  },
+  {
+    "id": "pages-04fe59442b62ba375c3009104396e5f29ca48ee4-snap",
+    "category": "SNAP",
+    "date": "2026-10-26",
+    "publishedAt": "2026-10-25T15:10:38Z",
+    "url": "./snap.html",
+    "contentIds": [
+      "image:DSC00518.jpg",
+      "image:DSC00529.jpg",
+      "image:DSC00532.jpg",
+      "image:DSC06004.jpg",
+      "image:DSC06048.jpg",
+      "image:DSC06144.jpg",
+      "image:DSC06168--2.jpg",
+      "image:DSC07100.jpg",
+      "image:DSC07138.jpg",
+      "image:DSC07144-2.jpg",
+      "image:DSC09495-2.jpg",
+      "image:DSC09519-2-2.jpg",
+      "image:DSC09530-2.jpg",
+      "image:DSC09535-2.jpg",
+      "image:DSC09557-2.jpg",
+      "image:DSC09621-2.jpg",
+      "image:IMG_5039-2.jpg"
+    ],
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/40205581116/job/121205873547"
   }
 ]

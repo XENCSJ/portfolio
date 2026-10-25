@@ -1,5 +1,35 @@
 [
   {
+    "id": "news-2026-10-26-snap",
+    "date": "2026-10-26",
+    "category": "SNAP",
+    "publishedAt": "2026-10-25T15:10:38Z",
+    "url": "./snap.html",
+    "contentIds": [
+      "image:DSC00518.jpg",
+      "image:DSC00529.jpg",
+      "image:DSC00532.jpg",
+      "image:DSC06004.jpg",
+      "image:DSC06048.jpg",
+      "image:DSC06144.jpg",
+      "image:DSC06168--2.jpg",
+      "image:DSC07100.jpg",
+      "image:DSC07138.jpg",
+      "image:DSC07144-2.jpg",
+      "image:DSC09495-2.jpg",
+      "image:DSC09519-2-2.jpg",
+      "image:DSC09530-2.jpg",
+      "image:DSC09535-2.jpg",
+      "image:DSC09557-2.jpg",
+      "image:DSC09621-2.jpg",
+      "image:IMG_5039-2.jpg"
+    ],
+    "countKnown": true,
+    "count": 17,
+    "title": "新しい写真を17枚追加しました。",
+    "body": ""
+  },
+  {
     "id": "news-2026-10-24-design",
     "date": "2026-10-24",
     "category": "DESIGN",
