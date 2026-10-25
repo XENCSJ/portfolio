@@ -35,7 +35,7 @@ try{
  await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});await page.locator('.music-reader-open').first().waitFor();
  // The load handler restores a deep link without focus; let it finish before testing a user navigation.
  await page.waitForLoadState('load');
- // Intro + verified BIG UP! release routing, checked at every Chromium/WebKit viewport.
+ // Intro + direct platform routing, checked at every Chromium/WebKit viewport.
  const introText=["日常の中で生まれる思考や感情。", "デザインをはじめとする視覚表現だけでは伝えきれない想いを、音楽と言葉にのせて形にしています。", "言葉にならない感覚や、心の奥にある感情。", "音楽には、そうした目に見えないものを伝える力があると感じています。"];
  const releaseURLs={"void-to-form": {"title": "VOID TO FORM", "bigup": "https://big-up.style/Inno3PlgIt", "spotify": "https://open.spotify.com/album/3gctpaDVfWyTIEOQqJCoJW", "apple-music": "https://music.apple.com/jp/album/void-to-form/1862015320?l=en&ls=1&app=music", "line-music": "https://music.line.me/launch?target=album&item=mb0000000004e379d1&cc=JP&v=1", "youtube-music": "https://music.youtube.com/playlist?list=OLAK5uy_nXY1X_13U3-6h7INr_4sOLwwIviNojBAI"}, "blue-sleep": {"title": "BLUE SLEEP", "bigup": "https://big-up.style/FNgAp3vScI", "spotify": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D", "apple-music": "https://music.apple.com/jp/album/blue-sleep/1872882836?l=en&ls=1&app=music", "line-music": "https://music.line.me/launch?target=album&item=mb0000000004fbbc06&cc=JP&v=1", "youtube-music": "https://music.youtube.com/playlist?list=OLAK5uy_klyQLSz8qxzMTe5ZgyECFDOOd-kjT_VXg"}};
  assert.deepEqual(await page.locator('.music-intro > p').allTextContents(),[introText.join('')]);
@@ -61,10 +61,18 @@ try{
   const pending=card.locator('.music-services [data-service="youtube"]');
   assert.equal(await pending.getAttribute('href'),null);assert.equal(await pending.getAttribute('aria-disabled'),'true');
   assert.equal(await pending.locator('.music-service-status').textContent(),'準備中');
-  assert.equal(await card.locator('.music-release-hub').getAttribute('href'),urls.bigup);
-  assert.equal(await card.locator('.music-release-hub').getAttribute('target'),'_blank');
+  assert.equal(await card.getAttribute('data-release-source-url'),urls.bigup);
+  assert.equal(await card.locator('.music-release-hub').count(),0);
   assert.equal(await card.locator('.sound-artist').textContent(),'XEN');
  }
+ // Shared publishing rule: source/provenance data never becomes visitor copy or links.
+ const internalCopy=/BIG\s*UP!?|big-up\.style|TuneCore|DistroKid|配信代行|作品ページ未確認/i;
+ assert.doesNotMatch(await page.locator('body').innerText(),internalCopy);
+ assert.equal(await page.locator('a[href*="big-up.style"], .music-release-hub, .sound-platform-note').count(),0);
+ const accessibleCopy=await page.locator('[aria-label],[title],[alt]').evaluateAll(es=>es.flatMap(e=>['aria-label','title','alt'].map(a=>e.getAttribute(a)||'')).join('\n'));
+ assert.doesNotMatch(accessibleCopy,internalCopy);
+ assert.equal(await page.locator('#listen-download').getAttribute('data-release-source-url'),'https://big-up.style/6EmHEAIHB1');
+ assert.match(await page.locator('.sound-platform-credits').innerText(),/Apple, Apple Music, and iTunes are trademarks/);
  if([1440,390].includes(width)&&height!==500){
   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${out}/${engineName}-${width}-music-intro.png`});
   for(const id of Object.keys(releaseURLs)){
@@ -72,7 +80,7 @@ try{
    await card.screenshot({path:`${out}/${engineName}-${width}-${id}-links.png`});
   }
  }
- console.log(`PASS RELEASES ${engineName} ${width}: exact intro, DESIGN typography, 8 verified service URLs, 2 BIG UP! hubs, YouTube pending`);
+ console.log(`PASS RELEASES ${engineName} ${width}: exact intro, DESIGN typography, 8 verified service URLs, no distributor copy/links, preserved source metadata, YouTube pending`);
 
  const entries=page.locator('#listen-download .sound-service');assert.equal(await entries.count(),23);
  assert.deepEqual(await entries.evaluateAll(es=>es.map(e=>({name:e.querySelector('.sound-service-name').textContent,href:e.getAttribute('href')}))),expected.map(x=>({name:x.name,href:x.href})));
@@ -132,6 +140,7 @@ try{
  assert.deepEqual(await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)])),sourceText);
 
  if([1440,390].includes(width)&&height!==500) await require('./verify-music-links.cjs')(page,context,{engineName,width,out});
+ if([1440,390].includes(width)&&height!==500){await page.locator('#listen-download').scrollIntoViewIfNeeded();await page.locator('#listen-download').screenshot({path:`${out}/${engineName}-${width}-listen-download.png`});}
  for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.locator('#'+id).screenshot({path:`${out}/${engineName}-${width}-${height}-${id}.png`});}
  if(!process.env.MUSIC_BASE_URL && [1440,390].includes(width)&&height!==500){await page.goto(base+'/music-logo-before.html',{waitUntil:'load'});for(const id of ['sound-streaming','sound-download']){const g=page.locator('#'+id);await g.scrollIntoViewIfNeeded();await g.locator('img').evaluateAll(is=>is.forEach(i=>i.loading='eager'));await page.waitForFunction(()=>[...document.querySelectorAll('#listen-download img')].filter(i=>i.loading==='eager').every(i=>i.complete&&i.naturalWidth));await g.screenshot({path:`${out}/${engineName}-${width}-before-${id}.png`});}}
  assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four fixed readers`);
