@@ -269,12 +269,5 @@
     }
     card.classList.add('music-reader-ready');
   });
-  // Preserve native catalogue navigation for releases without published text.
-  document.addEventListener('click', e => {
-    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const link = e.target.closest('.sound-category-links a, .sound-slide[data-position="active"]');
-    if (!link || !link.getAttribute('href')?.startsWith('#')) return;
-    const card = cards.find(card => '#' + card.id === link.getAttribute('href'));
-    if (card && openReader(card, link)) e.preventDefault();
-  });
+  // VIEW DETAILS exclusively owns the reader; catalogue selection stays on the page.
 })();
