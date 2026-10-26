@@ -77,11 +77,12 @@
 
   // Existing #mission / #vision / #values links remain meaningful.
   function followHash() {
-    const key = location.hash.slice(1);
-    if (!panels.some(panel => panel.id === key)) return;
+    const target = document.getElementById(location.hash.slice(1));
+    const key = target?.closest('.mvv-detail-panel')?.id;
+    if (!key) return;
     if (selected !== key) select(key);
     played = true; finish();
-    requestAnimationFrame(() => document.getElementById(key).scrollIntoView({block:'nearest'}));
+    requestAnimationFrame(() => target.scrollIntoView({block:'start'}));
   }
   addEventListener('hashchange',followHash);
   addEventListener('resize',settleDrawer,{passive:true});
