@@ -47,9 +47,9 @@ async function bounds(p,label){
      for(const id of nodes[theme].children){
       await pick(p,id);
       if(nodes[id].children){
-       for(const leaf of nodes[id].children){await pick(p,leaf);ok((await p.locator('.xd-detail-text').innerText())===nodes[leaf].text,'channel original text');await p.locator('.xd-detail-back').click();await active(p,id);}
+       for(const leaf of nodes[id].children){await pick(p,leaf);ok((await p.locator('.xd-detail-text').textContent())===nodes[leaf].text,'channel original text');await p.locator('.xd-detail-back').click();await active(p,id);}
       }else{
-       ok((await p.locator('.xd-detail-text').innerText())===nodes[id].text,'original text '+id);
+       ok((await p.locator('.xd-detail-text').textContent())===nodes[id].text,'original text '+id);
        if(nodes[id].more){await p.locator('.xd-more summary').first().click();await p.waitForFunction(()=>document.querySelector('.xd-more summary')?.getAttribute('aria-expanded')==='true');ok(await p.locator('.xd-more summary').first().getAttribute('aria-expanded')==='true','disclosure accessible');}
       }
       await p.locator('.xd-detail-back').click();await active(p,theme);

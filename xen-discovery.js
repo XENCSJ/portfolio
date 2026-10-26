@@ -215,6 +215,20 @@
   });
   close.addEventListener('click', dismiss);
   dialog.addEventListener('cancel', event => { event.preventDefault(); dismiss(); });
+  // Keep sequential keyboard navigation inside the open detail view, including
+  // browsers that otherwise move focus to browser chrome at the last control.
+  dialog.addEventListener('keydown', event => {
+    if (event.key !== 'Tab') return;
+    const controls = [...dialog.querySelectorAll('button:not([disabled]), a[href], summary, iframe, [tabindex="0"]')]
+      .filter(node => node.getClientRects().length && !node.closest('[hidden]'));
+    const first = controls[0], last = controls[controls.length - 1];
+    if (!first) return;
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === detail.querySelector('h2'))) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault(); first.focus();
+    }
+  });
   function restore() {
     clearTimeout(openingTimer); feedback?.cancel(); stage.classList.remove('is-selecting');
     cards.forEach(a => a.classList.remove('is-selecting'));
