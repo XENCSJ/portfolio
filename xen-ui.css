@@ -196,7 +196,7 @@ body#top.home-page #creative-index .index-link {
   width: 100%;
   min-height: 44px!important;
   height: auto;
-  padding: 6px 8px!important;
+  padding: 4.8px 8px!important; /* 20% less vertical inter-item space; keep 44/48px target floors. */
   gap: 2px!important;
   border: 0;
   background: none;
