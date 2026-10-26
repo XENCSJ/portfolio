@@ -5,6 +5,30 @@
  const dialog=document.querySelector('.xd-work-dialog');
  if(!grid||!dialog||typeof dialog.showModal!=='function')return;
  const status=gallery.querySelector('.xd-gallery-status');
+ // Discovery-only exclusions. Original assets and their source pages stay intact.
+ // APPAREL (1).png is the ABC TV 'Miss Target' episode 3 media collage;
+ // APPAREL (1).JPG and the separate grey hoodie are different, allowed works.
+ const excludedCategories=new Set(['cinematic','snsmanagement','snap']);
+ const excludedWorkIds=new Set(['apparel-ccc341888110']);
+ const excludedImages=new Set(['apparel (1).png','xen-preview-6e9cfc944d27281a.webp']);
+ const categoryKey=value=>String(value||'').normalize('NFKC').toLowerCase().replace(/[\s_\-–—/]+/g,'');
+ function imageName(value){
+  try{return decodeURIComponent(new URL(value,document.baseURI).pathname).split('/').pop().normalize('NFKC').toLowerCase();}catch{return '';}
+ }
+ function excludedWork(work){
+  if(!work)return true;
+  if([work.genre,work.category].some(value=>excludedCategories.has(categoryKey(value))))return true;
+  if(excludedWorkIds.has(String(work.id).toLowerCase()))return true;
+  if([work.image,work.originalImage].some(value=>value&&excludedImages.has(imageName(value))))return true;
+  // Catch catalog aliases using their source page or original category ID.
+  return /^(?:cinematic|sns[-_ ]?management|snap)(?:[-_]|$)/i.test(work.id||'')||
+   [work.source,work.href].some(value=>/^(?:cinematic|sns[-_ ]?management|snap)\.html$/i.test(imageName(value)));
+ }
+ const eligibleWork=work=>Boolean(work&&work.id&&work.title&&work.image&&work.href&&!excludedWork(work));
+ // A stale static tile must not survive a failed catalog request.
+ grid.querySelectorAll('.xd-tile').forEach(node=>{
+  if(excludedWork({id:node.dataset.work,image:node.querySelector('img')?.getAttribute('src'),href:node.getAttribute('href')}))node.remove();
+ });
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const effects=['crossfade','mask','zoom','vertical','blur'];
  const random=list=>list[Math.floor(Math.random()*list.length)];
@@ -151,8 +175,10 @@
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
- fetch('./xen-discovery-gallery.json?v=20261026-refine1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
-  works=data.works.filter(w=>w.id&&w.title&&w.image&&w.href);groups=data.genres.map(g=>works.filter(w=>w.genre===g)).filter(g=>g.length);
+ fetch('./xen-discovery-gallery.json?v=20261026-exclusions2').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
+  // Filter before grouping, selection, decoding, preloading or queuing.
+  works=(Array.isArray(data.works)?data.works:[]).filter(eligibleWork);
+  groups=[...new Set(works.map(w=>w.genre))].map(genre=>works.filter(w=>w.genre===genre));
   cells=[...grid.querySelectorAll('.xd-tile')].map(node=>({node,work:works.find(w=>w.id===node.dataset.work)}));
   if(cells.some(c=>!c.work))throw new Error('Static catalog mismatch');
   cells.forEach(bind);gallery.dataset.galleryReady='true';gallery.dataset.changeCount='0';gallery.dataset.transitioning='0';

@@ -102,8 +102,9 @@ for(const engine of [chromium,webkit]){
  await ready(page);await page.locator('[data-theme="past"]').click();await page.goBack();await page.locator('.xd-theme-dialog').waitFor({state:'hidden'});ok(true,'browser Back closes modal');
  await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
  await page.evaluate(()=>{window.galleryEvents=[];window.maxTransitions=0;document.querySelector('.xd-gallery').addEventListener('xen:gallery-change',e=>window.galleryEvents.push({...e.detail,time:performance.now()}));window.watch=setInterval(()=>window.maxTransitions=Math.max(window.maxTransitions,document.querySelectorAll('.xd-incoming').length),20);});
- await page.waitForFunction(()=>window.galleryEvents.length>=12,{},{timeout:30000});
+ await page.waitForFunction(()=>window.galleryEvents.length>=100,{},{timeout:240000});
  const events=await page.evaluate(()=>({events:window.galleryEvents,max:window.maxTransitions}));
+ console.log('PASS',engine.name(),'mobile',events.events.length,'draws; excluded=0 after catalog check');
  ok(events.max===1,'one random tile changes at a time');
  ok(new Set(events.events.map(e=>e.cell)).size>=4,'random cells');
  ok(events.events.every(e=>catalog.works.some(w=>w.id===e.id)),'dynamic works approved');
@@ -113,6 +114,41 @@ for(const engine of [chromium,webkit]){
  await page.locator('.xd-theme-close').click();await page.locator('.xd-theme-dialog').waitFor({state:'hidden'});
  await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();const before=await page.locator('.xd-gallery').getAttribute('data-change-count');await page.waitForFunction(count=>document.querySelector('.xd-gallery').dataset.changeCount!==count,before,{timeout:10000});ok(true,'gallery resumes');
  fs.writeFileSync(`discovery-evidence/${engine.name()}-random.json`,JSON.stringify(events,null,2));await context.close();
+ // Desktop: deliberately reintroduce blocked records into the network catalog.
+ // Production filtering must reject them before any image preload or random draw.
+ const desktop=await browser.newContext({viewport:{width:1440,height:900}});
+ const desktopPage=await desktop.newPage();const blockedRequests=[];
+ const variants=[
+  {id:'excluded-category-cinema',genre:' cinematic '},
+  {id:'excluded-category-sns',genre:'SNS_MANAGEMENT'},
+  {id:'excluded-category-snap',genre:'ＳＮＡＰ'},
+  {id:'excluded-source',genre:'DESIGN',source:'./sns-management.html'},
+  {id:'excluded-link',genre:'DESIGN',href:'./snap.html#work'},
+  {id:'cinematic-original-id',genre:'DESIGN'},
+  {id:'apparel-ccc341888110',genre:'SHOP'},
+  {id:'excluded-preview',genre:'SHOP',image:'./xen-preview-6e9cfc944d27281a.webp?v=old'},
+  {id:'excluded-original',genre:'APPAREL',image:'./APPAREL%20%281%29.png'},
+  {id:'excluded-original-alias',genre:'SHOP',originalImage:'./APPAREL%20(1).png'}
+ ].map((overrides,index)=>({...catalog.works[0],id:'blocked-'+index,image:'./blocked-discovery-fixture-'+index+'.png',...overrides}));
+ desktopPage.on('request',request=>{if(/blocked-discovery-fixture|6e9cfc944d27281a|APPAREL%20(?:%28|\()1(?:%29|\))\.png/i.test(request.url()))blockedRequests.push(request.url());});
+ await desktopPage.route('**/xen-discovery-gallery.json?*',route=>route.fulfill({json:{...catalog,works:[...catalog.works,...variants],genres:[...catalog.genres,' cinematic ','SNS_MANAGEMENT','ＳＮＡＰ','APPAREL']}}));
+ await ready(desktopPage);await desktopPage.reload();await desktopPage.waitForSelector('[data-gallery-ready="true"]');
+ ok(await desktopPage.locator('.xd-tile:visible').count()===12,'desktop retains 12 tiles after reload');
+ await desktopPage.locator('.xd-tile:visible').first().click();await desktopPage.locator('.xd-work-dialog').waitFor({state:'visible'});
+ await desktopPage.keyboard.press('Escape');await desktopPage.locator('.xd-work-dialog').waitFor({state:'hidden'});
+ await desktopPage.locator('.xd-mosaic').scrollIntoViewIfNeeded();
+ await desktopPage.evaluate(()=>{window.exclusionEvents=[];document.querySelector('.xd-gallery').addEventListener('xen:gallery-change',event=>window.exclusionEvents.push(event.detail));});
+ await desktopPage.waitForFunction(()=>window.exclusionEvents.length>=100,{},{timeout:240000});
+ const desktopEvents=await desktopPage.evaluate(()=>window.exclusionEvents);
+ ok(desktopEvents.every(event=>catalog.works.some(work=>work.id===event.id)),'100 desktop draws reject injected exclusions');
+ ok(blockedRequests.length===0,'excluded images never preloaded or requested');
+ ok(await desktopPage.locator('.xd-gallery button').count()===0,'no pause control added');
+ await desktopPage.locator('[data-theme="past"]').click();await desktopPage.keyboard.press('Escape');await desktopPage.locator('.xd-theme-dialog').waitFor({state:'hidden'});
+ await desktopPage.locator('.xd-mosaic').scrollIntoViewIfNeeded();
+ await screenshot(desktopPage,engine.name()+'-desktop-exclusions');
+ fs.writeFileSync(`discovery-evidence/${engine.name()}-desktop-exclusions.json`,JSON.stringify({draws:desktopEvents.length,excluded:0,blockedRequests,events:desktopEvents},null,2));
+ console.log('PASS',engine.name(),'desktop',desktopEvents.length,'draws; excluded=0; blocked image requests=0');
+ await desktop.close();
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const plain=await nojs.newPage();await plain.goto(base+'what-is-xen.html');ok(await plain.locator('.xd-theme[href]').count()===4,'no-JS navigation available');ok(await plain.locator('.xd-tile:visible').count()===9,'no-JS gallery');await nojs.close();await browser.close();
 }
 fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({checks,results,unresolved:['PAST origin unpublished','Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
