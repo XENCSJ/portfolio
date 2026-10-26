@@ -35,7 +35,27 @@
  cards.forEach(a=>{a.setAttribute('aria-controls',a.dataset.theme);a.setAttribute('aria-expanded','false');a.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();select(a.dataset.theme,a);});a.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();a.click();}});});
  host.querySelectorAll('[data-switch]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.switch)));
  host.querySelectorAll('.xd-theme-close').forEach(b=>b.addEventListener('click',close));
- host.querySelectorAll('details').forEach(d=>{const s=d.querySelector('summary');s.setAttribute('aria-expanded',String(d.open));d.addEventListener('toggle',()=>s.setAttribute('aria-expanded',String(d.open)));});
+ host.querySelectorAll('.xd-drawer').forEach(drawer=>{
+  const summary=drawer.querySelector('summary'),panel=drawer.querySelector('.xd-drawer-body');
+  let desiredOpen=false,animation;
+  drawer.open=false;panel.inert=true;
+  const settle=open=>{drawer.open=open;drawer.style.height='';drawer.style.overflow='';animation=null;};
+  summary.addEventListener('click',event=>{
+   event.preventDefault();desiredOpen=!desiredOpen;
+   const start=drawer.getBoundingClientRect().height;
+   if(animation){animation.cancel();animation=null;}
+   summary.setAttribute('aria-expanded',String(desiredOpen));panel.inert=!desiredOpen;
+   if(desiredOpen)drawer.open=true;
+   drawer.style.height='';
+   const end=desiredOpen?drawer.getBoundingClientRect().height:summary.getBoundingClientRect().height;
+   if(reduced.matches||!drawer.animate){settle(desiredOpen);return;}
+   drawer.style.overflow='hidden';
+   animation=drawer.animate({height:[start+'px',end+'px']},{duration:260,easing:'cubic-bezier(.22,1,.36,1)'});
+   animation.onfinish=()=>settle(desiredOpen);
+  });
+  drawer.addEventListener('toggle',()=>{if(animation)return;desiredOpen=drawer.open;panel.inert=!desiredOpen;summary.setAttribute('aria-expanded',String(desiredOpen));});
+ });
+ host.querySelectorAll('.xd-more').forEach(d=>{const s=d.querySelector('summary');s.setAttribute('aria-expanded',String(d.open));d.addEventListener('toggle',()=>s.setAttribute('aria-expanded',String(d.open)));});
  host.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',()=>{const frame=document.createElement('iframe');frame.src='https://www.youtube-nocookie.com/embed/'+button.dataset.video;frame.title=button.dataset.title;frame.allow='encrypted-media; picture-in-picture';frame.allowFullscreen=true;frame.referrerPolicy='strict-origin-when-cross-origin';button.replaceWith(frame);}));
  addEventListener('popstate',()=>{returnY=history.state?.xdReturnY??returnY;render(fromHash());});
  addEventListener('hashchange',()=>{if(fromHash()!==current)render(fromHash());});

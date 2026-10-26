@@ -4,26 +4,22 @@
  const gallery=document.querySelector('.xd-gallery'),grid=gallery?.querySelector('.xd-mosaic');
  const dialog=document.querySelector('.xd-work-dialog');
  if(!grid||!dialog||typeof dialog.showModal!=='function')return;
- const toggle=gallery.querySelector('.xd-gallery-toggle'),status=gallery.querySelector('.xd-gallery-status');
- const reduced=matchMedia('(prefers-reduced-motion: reduce)'),mobile=matchMedia('(max-width:1023px)');
+ const status=gallery.querySelector('.xd-gallery-status');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const effects=['crossfade','mask','zoom','vertical','blur'];
  const random=list=>list[Math.floor(Math.random()*list.length)];
  const rand=(low,high)=>low+Math.random()*(high-low);
  let works=[],groups=[],cells=[],queue=[],pending=new Set(),failed=new Set(),recent=[];
- let near=false,visible=false,paused=false,active=null,timer=null,lastCell=null,lastEffect='';
- let opener=null,pageY=0,detailOpen=false,manualWaiting=false,changeCount=0;
+ let near=false,visible=false,active=null,timer=null,lastCell=null,lastEffect='';
+ let opener=null,pageY=0,detailOpen=false,changeCount=0;
  const gestures=new Map(),hovered=new Set(),focused=new Set();
- const isVisible=cell=>cells.indexOf(cell)<(mobile.matches?9:12);
+ const isVisible=cell=>cells.indexOf(cell)<9;
  const locked=cell=>gestures.has(cell)||hovered.has(cell)||focused.has(cell);
- const canLoad=()=>near&&!document.hidden&&!detailOpen&&(!paused||reduced.matches);
- const canRun=()=>visible&&!document.hidden&&!detailOpen&&!paused&&!reduced.matches;
+ const canLoad=()=>near&&!document.hidden&&!detailOpen;
+ const canRun=()=>visible&&!document.hidden&&!detailOpen&&!reduced.matches;
  function updateState(){
-  gallery.dataset.galleryState=detailOpen?'details':document.hidden?'hidden':reduced.matches?'reduced':paused?'paused':visible?'running':'out-of-view';
-  const stopped=paused||reduced.matches;
-  toggle.setAttribute('aria-pressed',String(stopped));
-  toggle.querySelector('span').textContent=reduced.matches?'次の作品':paused?'再開':'停止';
-  toggle.setAttribute('aria-label',reduced.matches?'動きを止めたまま、1枚を次の作品にする':paused?'作品の切り替えを再開':'作品の切り替えを停止');
-  toggle.querySelector('svg').innerHTML=stopped?'<path d="m8 4 12 8-12 8Z"/>':'<path d="M8 5v14M16 5v14"/>';
+  gallery.dataset.galleryState=detailOpen?'details':document.hidden?'hidden':reduced.matches?'reduced':visible?'running':'out-of-view';
+
  }
  function setCell(cell,work,image){
   cell.work=work;cell.node.dataset.work=work.id;cell.node.href=work.href;
@@ -69,24 +65,23 @@
    const work=candidate();if(!work)break;pending.add(work.id);
    decode(work).then(image=>{
     pending.delete(work.id);queue.push({work,image});
-    if(manualWaiting&&reduced.matches&&visible&&!detailOpen){manualWaiting=false;next(true);}
     pump();schedule();
    }).catch(()=>{pending.delete(work.id);failed.add(work.id);pump();});
   }
  }
- function schedule(delay=rand(300,700)){
+ function schedule(delay=rand(800,1500)){
   updateState();if(!canRun()||timer||active||!works.length)return;
-  timer=setTimeout(()=>{timer=null;next(false);},delay);
+  timer=setTimeout(()=>{timer=null;next();},delay);
  }
- function next(manual=false){
-  if(active||detailOpen||(!manual&&!canRun()))return;
+ function next(){
+  if(active||detailOpen||!canRun())return;
   const eligible=cells.filter(c=>isVisible(c)&&!locked(c)&&c!==lastCell);
-  if(!eligible.length||!queue.length){pump();if(manual)manualWaiting=true;else schedule();return;}
+  if(!eligible.length||!queue.length){pump();schedule();return;}
   const cell=random(eligible),item=queue.shift();lastCell=cell;
   // Pointer and focus exclusions are checked again at the only mutation boundary.
   if(locked(cell)){queue.unshift(item);schedule();return;}
   const effect=random(effects.filter(e=>e!==lastEffect));lastEffect=effect;
-  const interval=rand(300,700),duration=manual?0:rand(250,Math.min(440,interval-20));
+  const interval=rand(800,1500),duration=rand(400,600);
   const image=item.image;image.className='xd-incoming';image.alt='';image.setAttribute('aria-hidden','true');image.style.objectPosition=item.work.position;
   active={cell,work:item.work,image,effect,done:null,timeout:null};
   const finish=()=>{if(active?.image!==image)return;image.removeAttribute('aria-hidden');settle(true);pump();schedule(Math.max(20,interval-duration));};
@@ -98,7 +93,7 @@
  function selectWork(cell,latched){
   if(active?.cell===cell)settle(dominantIncoming());
   const work=latched||cell.work;
-  detailOpen=true;manualWaiting=false;stop();opener=cell.node;pageY=scrollY;
+  detailOpen=true;stop();opener=cell.node;pageY=scrollY;
   dialog.dataset.work=work.id;dialog.querySelector('.xd-work-image').src=work.image;dialog.querySelector('.xd-work-image').alt=work.title;
   dialog.querySelector('#xd-work-title').textContent=work.title;dialog.querySelector('.xd-work-genre').textContent=work.genre;
   const description=dialog.querySelector('.xd-work-description');description.textContent=work.description;description.hidden=!work.description;
@@ -140,10 +135,6 @@
  addEventListener('pointerup',releaseGesture,{passive:true});
  addEventListener('pointercancel',releaseGesture,{passive:true});
  addEventListener('blur',()=>{gestures.clear();hovered.clear();});
- toggle.addEventListener('click',()=>{
-  if(reduced.matches){manualWaiting=false;pump();next(true);status.textContent='1枚の作品を切り替えます。';return;}
-  paused=!paused;stop();if(!paused){pump();schedule();}status.textContent=paused?'作品の切り替えを停止しました。':'作品の切り替えを再開しました。';
- });
  dialog.querySelector('.xd-work-close').addEventListener('click',closeDetail);
  dialog.addEventListener('cancel',e=>{e.preventDefault();closeDetail();});
  dialog.addEventListener('keydown',e=>{
@@ -151,19 +142,18 @@
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
  });
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else{pump();schedule();}});
- reduced.addEventListener('change',()=>{manualWaiting=false;stop();pump();schedule();});
- mobile.addEventListener('change',()=>{stop();gestures.clear();hovered.clear();focused.clear();pump();schedule();});
+ reduced.addEventListener('change',()=>{stop();pump();schedule();});
  addEventListener('pagehide',()=>{stop();});
  addEventListener('pageshow',()=>{pump();schedule();});
  if('IntersectionObserver'in window){
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
- fetch('./xen-discovery-gallery.json?v=20261026-mosaic2').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
+ fetch('./xen-discovery-gallery.json?v=20261026-refine1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
   works=data.works.filter(w=>w.id&&w.title&&w.image&&w.href);groups=data.genres.map(g=>works.filter(w=>w.genre===g)).filter(g=>g.length);
   cells=[...grid.querySelectorAll('.xd-tile')].map(node=>({node,work:works.find(w=>w.id===node.dataset.work)}));
   if(cells.some(c=>!c.work))throw new Error('Static catalog mismatch');
-  cells.forEach(bind);toggle.hidden=false;gallery.dataset.galleryReady='true';gallery.dataset.changeCount='0';gallery.dataset.transitioning='0';
+  cells.forEach(bind);gallery.dataset.galleryReady='true';gallery.dataset.changeCount='0';gallery.dataset.transitioning='0';
   pump();schedule();updateState();
  }).catch(()=>{status.textContent='画像から掲載ページへ進めます。';});
 })();
