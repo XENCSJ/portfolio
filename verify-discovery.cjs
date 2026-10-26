@@ -21,7 +21,20 @@ for(const engine of [chromium,webkit]){
  const browser=await engine.launch();
  for(const width of widths){
   const context=await browser.newContext({viewport:{width,height:900},isMobile:width<768,hasTouch:width<768,reducedMotion:'reduce'});
-  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await ready(page);
+  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(base+'index.html');
+  const entry=page.locator('.xen-index-discovery a');
+  ok(await entry.count()===1&&await entry.innerText()==='DISCOVER XEN','one renamed INDEX entrance');
+  ok(await entry.getAttribute('href')==='./what-is-xen.html','INDEX destination retained');
+  ok(await entry.evaluate(a=>{const s=getComputedStyle(a),r=a.getBoundingClientRect();return s.borderTopWidth==='1px'&&s.borderRadius==='0px'&&s.backgroundColor==='rgba(0, 0, 0, 0)'&&Math.abs(r.left+r.width/2-innerWidth/2)<1}),'INDEX centered transparent rectangular border');
+  ok(await page.locator('.orbit>a').count()===15,'INDEX orbit links retained');
+  ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'INDEX no horizontal overflow');
+  await page.locator('.xen-header-toggle').click();
+  ok(await page.locator('#xen-menu a[href="./what-is-xen.html"] .xen-menu-en').innerText()==='DISCOVER XEN','shared menu label');
+  await page.keyboard.press('Escape');
+  if([390,1440].includes(width))await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-index.png`});
+  await entry.click();await page.waitForURL('**/what-is-xen.html');
+  await page.waitForSelector('html[data-discovery-ready="true"]');await page.waitForSelector('[data-gallery-ready="true"]');
   ok(await page.locator('.xd-theme').count()===4,'four first-level themes');
   ok(await page.locator('.xd-logo,.xd-center').count()===0,'large center logo removed');
   const shape=await page.locator('.xd-theme').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height}}));
@@ -35,6 +48,7 @@ for(const engine of [chromium,webkit]){
   ok(await page.locator('meta[property="og:title"]').getAttribute('content')==='DISCOVER XEN | XEN CSJ','OG title');
   ok(await page.locator('meta[name="twitter:title"]').getAttribute('content')==='DISCOVER XEN | XEN CSJ','Twitter title');
   ok(await page.locator('#xd-page-title').evaluate(n=>n.scrollWidth<=n.clientWidth&&new Set([...n.children].map(c=>Math.round(c.getBoundingClientRect().top))).size===1),'main title fits one line');
+  ok(await page.locator('.xd-gallery h2').innerText()==='DISCOVERY GALLERY','exact gallery name');
   ok(await page.locator('.xd-page-intro .xd-copy > span').count()===2,'catch copy has two lines');
   ok(await page.locator('.xd-kicker').innerText()==='EXPLORE'&&await page.locator('#xd-explore-title').innerText()==='4つのテーマから探す','separate exploration heading');
   ok(await page.locator('.xen-footer-inquiry').getAttribute('href')==='./studio.html#contact'&&await page.locator('.xen-footer-action').nth(1).getAttribute('href')==='./price-list.html','consultation and price list links retained');
