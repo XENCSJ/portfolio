@@ -1,4 +1,4 @@
-/* Browser regression evidence for the published WHAT IS XEN? interaction model. */
+/* Browser regression evidence for the published DISCOVER XEN interaction model. */
 const {chromium,webkit}=require('playwright');
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const base=process.env.DISCOVERY_BASE_URL||'http://127.0.0.1:8765/';
@@ -30,9 +30,13 @@ for(const engine of [chromium,webkit]){
   ok(layout.first&&layout.ordered,'page title, gallery, exploration order without overlap');
   ok(layout.nowrap&&layout.fits&&layout.jp&&layout.firstImage,'one-line gallery title, Japanese below, images in first viewport');
   ok(layout.larger&&layout.center,'main title centered and larger than gallery heading');
-  ok(await page.getByRole('heading',{level:1,name:'WHAT IS XEN?',exact:true}).count()===1,'one accessible page title');
+  ok(await page.getByRole('heading',{level:1,name:'DISCOVER XEN',exact:true}).count()===1,'one accessible page title');
+  ok(await page.title()==='DISCOVER XEN | XEN CSJ','HTML title');
+  ok(await page.locator('meta[property="og:title"]').getAttribute('content')==='DISCOVER XEN | XEN CSJ','OG title');
+  ok(await page.locator('meta[name="twitter:title"]').getAttribute('content')==='DISCOVER XEN | XEN CSJ','Twitter title');
+  ok(await page.locator('#xd-page-title').evaluate(n=>n.scrollWidth<=n.clientWidth&&new Set([...n.children].map(c=>Math.round(c.getBoundingClientRect().top))).size===1),'main title fits one line');
   ok(await page.locator('.xd-page-intro .xd-copy > span').count()===2,'catch copy has two lines');
-  ok(await page.locator('.xd-kicker').innerText()==='EXPLORE XEN'&&await page.locator('#xd-explore-title').innerText()==='4つのテーマから探す','separate exploration heading');
+  ok(await page.locator('.xd-kicker').innerText()==='EXPLORE'&&await page.locator('#xd-explore-title').innerText()==='4つのテーマから探す','separate exploration heading');
   ok(await page.locator('.xen-footer-inquiry').getAttribute('href')==='./studio.html#contact'&&await page.locator('.xen-footer-action').nth(1).getAttribute('href')==='./price-list.html','consultation and price list links retained');
   ok(await page.locator('.xd-gallery button').count()===0,'no pause/play controls in gallery');
   for(const t of themes){
@@ -56,7 +60,7 @@ for(const engine of [chromium,webkit]){
   ok(await page.locator('.xd-panel:visible').count()===0,'theme closes');
   await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
   const tiles=await page.locator('.xd-tile:visible').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{w:r.width,h:r.height,x:r.x,y:r.y}}));
-  ok(tiles.length===9&&Math.abs(tiles[0].y-tiles[2].y)<1&&tiles[3].y>tiles[0].y,'exact 3x3 at every width');
+  const columns=width>=1024?4:3;ok(tiles.length===columns*3&&Math.abs(tiles[0].y-tiles[columns-1].y)<1&&tiles[columns].y>tiles[0].y,'three rows at each breakpoint');
   ok(tiles.every(r=>Math.abs(r.w-r.h)<1&&r.w>=44),'square, usable tiles');
   const before=await visibleWorks(page);await sleep(page,800);ok(JSON.stringify(before)===JSON.stringify(await visibleWorks(page)),'reduced motion stops autoplay');
   const tile=page.locator('.xd-tile:visible').first(),selected=await tile.getAttribute('data-work');
