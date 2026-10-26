@@ -112,7 +112,8 @@
   function navigate(id, focus=true) {
     if(!nodes[id]||busy||id===current)return;
     const previous=current;
-    history.replaceState(state(current,history.state?.xenDiscovery?history.state.depth:0),'',hashFor(current));
+    // Pagination already persists its state. One history write per selection
+    // avoids duplicate updates and WebKit's rapid-history-update limit.
     history.pushState(state(id,(history.state?.depth||0)+1,previous),'',hashFor(id));
     render(id,focus,previous);
   }
