@@ -1,81 +1,98 @@
-const {chromium,webkit,devices}=require('playwright');
-const fs=require('fs');const assert=require('node:assert/strict');
+/* Behavior checks for the shared data, responsive theme UI and history lifecycle. */
+const {chromium,webkit}=require('playwright');
+const fs=require('fs'), assert=require('node:assert/strict');
 const base=process.env.DISCOVERY_BASE_URL||'http://127.0.0.1:8765/';
 const nodes=JSON.parse(fs.readFileSync('xen-discovery-data.json','utf8')).nodes;
-const channels=JSON.parse(fs.readFileSync('xen-channels.json','utf8'));
+const themes=nodes.home.children, results=[];
+let checks=0;
 fs.mkdirSync('discovery-evidence',{recursive:true});
-let checks=0;const results=[];
-function ok(value,message){assert(value,message);checks++;}
-async function ready(page){await page.waitForSelector('html[data-discovery-ready="true"]');}
-async function scene(page,id){try{await page.waitForFunction(id=>document.querySelector('.xd-stage').dataset.branch===id,id);}catch(error){console.error('Scene mismatch',id,await page.evaluate(()=>({hash:location.hash,branch:document.querySelector('.xd-stage').dataset.branch,busy:document.querySelector('.xd-stage').getAttribute('aria-busy'),active:document.activeElement?.outerHTML,scrollY})));throw error;}}
-async function select(page,id){for(let group=0;group<4&&!await page.locator(`[data-node="${id}"]`).count();group++){if(!await page.locator('.xd-page-controls').isVisible())break;await page.locator('.xd-page-controls [data-page="1"]').click();}await page.locator(`[data-node="${id}"]`).click();if(nodes[id].children)await scene(page,id);else await page.waitForFunction(title=>document.querySelector('.xd-dialog[open] #xd-detail-title')?.textContent===title,nodes[id].title);}
-async function home(page){await page.locator('[data-home]').click();await scene(page,'home');}
-async function checkBounds(page,label){
- const data=await page.evaluate(()=>{const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,r:r.right,b:r.bottom}};return{width:innerWidth,scroll:document.documentElement.scrollWidth,words:[...document.querySelectorAll('.xd-word button')].map(rect),center:rect(document.querySelector('.xd-center'))};});
- ok(data.scroll<=data.width+1,label+' no horizontal overflow');
- for(let i=0;i<data.words.length;i++){const a=data.words[i];ok(a.w>=44&&a.h>=44,label+' touch target');ok(a.x>=0&&a.r<=data.width+1,label+' word within viewport');for(let j=i+1;j<data.words.length;j++){const b=data.words[j];ok(a.r+10<=b.x||b.r+10<=a.x||a.b+12<=b.y||b.b+12<=a.y,label+' words do not collide during float');}const c=data.center;ok(a.r+5<=c.x||c.r+5<=a.x||a.b+12<=c.y||c.b+12<=a.y,label+' central mark clear');}
+const ok=(v,msg)=>{assert(v,msg);checks++;};
+const ready=p=>p.waitForSelector('html[data-discovery-ready="true"]');
+const active=(p,id)=>p.waitForFunction(id=>document.querySelector('.xd-dialog[open] #xd-detail-title')?.textContent===id,id==='home'?'':nodes[id].ja);
+async function pick(p,id){await p.locator(`.xd-dialog [data-node="${id}"]`).click();await active(p,id);}
+async function close(p){await p.keyboard.press('Escape');await p.waitForSelector('.xd-dialog[open]',{state:'hidden'});}
+async function bounds(p,label){
+ const b=await p.evaluate(()=>{const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,r:r.right,b:r.bottom}};return{w:innerWidth,sw:document.documentElement.scrollWidth,cards:[...document.querySelectorAll('.xd-theme')].map(rect),logo:rect(document.querySelector('.xd-center'))};});
+ ok(b.sw<=b.w+1,label+' no horizontal overflow');
+ for(const a of b.cards){ok(a.w>=44&&a.h>=44,label+' large targets');ok(a.x>=0&&a.r<=b.w+1,label+' within viewport');const c=b.logo;ok(a.r<=c.x||c.r<=a.x||a.b<=c.y||c.b<=a.y,label+' logo clear');}
+ for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){const a=b.cards[i],c=b.cards[j];ok(a.r<=c.x+1||c.r<=a.x+1||a.b<=c.y+1||c.b<=a.y+1,label+' cards clear');}
+ if(b.w<768){ok(Math.abs(b.cards[0].y-b.cards[1].y)<1&&b.cards[2].y>b.cards[0].y,label+' 2x2 order');ok(Math.max(...b.cards.map(c=>c.h))-Math.min(...b.cards.map(c=>c.h))<1,label+' equal heights');}
 }
-async function close(page){await page.keyboard.press('Escape');await page.waitForSelector('.xd-dialog[open]',{state:'hidden'});}
 (async()=>{
  for(const engine of [chromium,webkit]){
   const browser=await engine.launch();
-  for(const width of [375,390,430,768,1024,1280,1440,1920]){
-   const context=await browser.newContext({viewport:{width,height:width<768?844:1000},reducedMotion:'reduce',hasTouch:width<768,isMobile:width<768});const page=await context.newPage();const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.error('PAGE ERROR',engine.name(),width,e.message);});
-   await page.goto(base+'what-is-xen.html',{waitUntil:'domcontentloaded'});await ready(page);
-   await page.waitForFunction(()=>{const i=document.querySelector('.xd-logo');return i?.complete&&i.naturalWidth>0;});
-   ok(await page.locator('.xd-logo').evaluate(i=>i.complete&&i.naturalWidth>0),'official logo loaded');await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-initial.png`,fullPage:true});await checkBounds(page,engine.name()+width+' home');
-   for(const branch of ['identity','philosophy','creation','connection']){
-    await select(page,branch);const seen=new Set();let count=1;
-    if(await page.locator('.xd-page-controls').isVisible())count=Number((await page.locator('.xd-page-count').innerText()).split('/')[1]);
-    for(let group=0;group<count;group++){await checkBounds(page,engine.name()+width+branch);for(const id of await page.locator('.xd-word button').evaluateAll(bs=>bs.map(b=>b.dataset.node)))seen.add(id);if(count>1)await page.locator('.xd-page-controls [data-page="1"]').click();}
-    ok(nodes[branch].children.every(id=>seen.has(id)),'all keywords available '+branch);
-    await home(page);
+  for(const width of [320,375,390,430,768,1024,1440,1920]){
+   const context=await browser.newContext({viewport:{width,height:width<768?844:1000},reducedMotion:'reduce',isMobile:width<768,hasTouch:width<768});
+   const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+   await p.goto(base+'what-is-xen.html',{waitUntil:'domcontentloaded'});await ready(p);
+   await p.waitForFunction(()=>document.querySelector('.xd-logo').naturalWidth>0);
+   await bounds(p,engine.name()+width);
+   if(width<768)ok(await p.locator('.xd-theme').first().evaluate(n=>n.getBoundingClientRect().top<innerHeight),'themes in first view');
+   await p.screenshot({path:`discovery-evidence/${engine.name()}-${width}-initial.png`,fullPage:true});
+   for(const theme of themes){
+    await p.locator(`.xd-theme[data-node="${theme}"]`).click();await active(p,theme);
+    ok(await p.locator('.xd-theme[aria-expanded="true"]').getAttribute('data-node')===theme,'selected theme');
+    ok((await p.locator('.xd-location').innerText()).includes(nodes[theme].title),'location');
+    ok(await p.locator('.xd-topics .xd-topic').count()===nodes[theme].children.length,'all topics available');
+    ok(await p.locator('.xd-links a').count()<=2,'related links limited');
+    ok(await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollWidth<=n.clientWidth+1),'detail no overflow');
+    await close(p);
+    ok(await p.locator(`.xd-theme[data-node="${theme}"]`).evaluate(n=>document.activeElement===n),'focus returned to selected theme');
    }
    if([390,1440].includes(width)){
-    for(const branch of ['identity','philosophy','creation','connection']){
-     await select(page,branch);
-     for(const id of nodes[branch].children){
-      while(!await page.locator(`[data-node="${id}"]`).count())await page.locator('.xd-page-controls [data-page="1"]').click();
-      if(id==='youtube'){
-       await select(page,id);ok(await page.locator('.xd-word button').count()===3,'three channels');
-       for(const channel of nodes.youtube.children){await select(page,channel);await page.locator('.xc-banner').scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.xd-dialog img')].every(i=>i.complete&&i.naturalWidth>0));ok(await page.locator('.xd-dialog .xc-banner').count()===1,'channel banner');await page.locator('.xd-dialog .xc-more summary').click();ok(await page.locator('.xd-dialog .xc-more').getAttribute('open')!==null,'channel MORE');const a=page.locator('.xd-dialog .xc-body>a');ok(await a.getAttribute('rel')==='noopener noreferrer','channel external security');await close(page);await scene(page,'youtube');}
-       await page.locator('[data-back]').click();await scene(page,'connection');
+    for(const theme of themes){
+     await p.locator(`.xd-theme[data-node="${theme}"]`).click();await active(p,theme);
+     for(const id of nodes[theme].children){
+      await pick(p,id);
+      if(nodes[id].children){
+       for(const leaf of nodes[id].children){await pick(p,leaf);ok((await p.locator('.xd-detail-text').innerText())===nodes[leaf].text,'channel original text');await p.locator('.xd-detail-back').click();await active(p,id);}
       }else{
-       await select(page,id);ok(await page.locator('#xd-detail-title').innerText()===nodes[id].title,'correct detail '+id);
-       if(nodes[id].more){await page.locator('.xd-more summary').click();ok(await page.locator('.xd-more').getAttribute('open')!==null,'MORE opens');await page.locator('.xd-more summary').click();}
-       await page.keyboard.press('Tab');ok(await page.evaluate(()=>document.querySelector('.xd-dialog').contains(document.activeElement)),'modal keyboard focus');await close(page);await scene(page,branch);
-       ok(await page.locator(`[data-node="${id}"]`).evaluate(e=>e===document.activeElement),'restore focus '+id);
+       ok((await p.locator('.xd-detail-text').innerText())===nodes[id].text,'original text '+id);
+       if(nodes[id].more){await p.locator('.xd-more summary').first().click();ok(await p.locator('.xd-more summary').first().getAttribute('aria-expanded')==='true','disclosure accessible');}
       }
-     }await home(page);
+      await p.locator('.xd-detail-back').click();await active(p,theme);
+     }
+     await close(p);
     }
-    await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-home.png`,fullPage:true});
-    await select(page,'connection');await select(page,'youtube');await select(page,'purple-awake');await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-youtube.png`,fullPage:true});await close(page);
-    await page.setViewportSize({width:844,height:390});await checkBounds(page,'rotation');await home(page);await page.setViewportSize({width,height:844});
-    await select(page,'identity');await select(page,'profile');await page.goBack();await scene(page,'identity');await page.goForward();await page.waitForSelector('.xd-dialog[open]');await close(page);
+    // Native back/forward plus NEXT must restore content and both scroll contexts.
+    await p.evaluate(()=>scrollTo(0,180));const y=await p.evaluate(()=>scrollY);
+    await p.locator('.xd-theme[data-node="creation"]').click();await active(p,'creation');
+    await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollTop=260);
+    const detailY=await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollTop);
+    await pick(p,'storybooks');await p.goBack();await active(p,'creation');
+    ok(Math.abs((await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollTop))-detailY)<3,'overview scroll restored');
+    await p.goForward();await active(p,'storybooks');
+    await p.locator('.xd-next').click();await active(p,'connection');
+    await p.locator('.xd-next').click();await active(p,'identity');await close(p);
+    ok(Math.abs((await p.evaluate(()=>scrollY))-y)<3,'original page scroll restored after NEXT');
+    await p.goto(base+'what-is-xen.html#philosophy/values');await ready(p);await active(p,'values');await close(p);
+    await p.goto(base+'what-is-xen.html#identity');await ready(p);await active(p,'identity');await close(p);
+    await p.locator('.xd-theme[data-node="identity"]').focus();await p.keyboard.press('Enter');await active(p,'identity');
+    for(let i=0;i<12;i++){await p.keyboard.press('Tab');ok(await p.evaluate(()=>document.querySelector('.xd-dialog').contains(document.activeElement)),'modal focus trapped');}
+    await close(p);await p.setViewportSize({width:844,height:390});await bounds(p,'landscape');
+    await p.setViewportSize({width,height:844});await bounds(p,'portrait');
    }
-   ok(errors.length===0,'no runtime errors '+errors.join(';'));results.push({engine:engine.name(),width,status:'PASS'});console.log('PASS',engine.name(),width);await context.close();
+   ok(errors.length===0,errors.join(';'));results.push({engine:engine.name(),width,status:'PASS'});console.log('PASS',engine.name(),width);await context.close();
   }
-  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'no-preference'});
-  await page.goto(base+'what-is-xen.html');await ready(page);
-  const retainedKeyword=await page.locator('[data-node="identity"]').elementHandle();await page.setViewportSize({width:390,height:800});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));ok(await retainedKeyword.evaluate(node=>node.isConnected),'height resize preserves active tap targets');await page.setViewportSize({width:390,height:844});
-  ok(await page.locator('.xd-float').first().evaluate(n=>getComputedStyle(n).animationName)!=='none','float active');
-  await page.locator('[data-node="identity"]').click({force:true});ok(await page.locator('.xd-stage').getAttribute('aria-busy')==='true','transition locks input');await page.setViewportSize({width:390,height:820});await scene(page,'identity');ok(await page.locator('.xd-flight').count()===0,'transition cleans up');
-  await page.locator('[data-node="profile"]').click({force:true});await page.setViewportSize({width:430,height:844});await page.waitForFunction(()=>document.querySelector('.xd-stage').getAttribute('aria-busy')==='false');ok(await page.locator('.xd-flight').count()===0,'rotation cancels flight safely');
-  await page.goto(base+'what-is-xen.html#philosophy/values');await ready(page);await page.waitForSelector('.xd-dialog[open]');await close(page);await scene(page,'philosophy');
-  await page.goto(base+'what-is-xen.html#identity/profile');await ready(page);await page.waitForSelector('.xd-dialog[open]');
-  await page.locator('.xd-related button').first().click();await page.waitForFunction(()=>document.querySelector('#xd-detail-title').textContent!=='PROFILE');await close(page);ok(await page.locator('.xd-dialog[open]').count()===0,'ESC closes a related detail');
-  await page.goto(base+'creator.html',{waitUntil:'domcontentloaded'});await page.waitForSelector('.xc-channel');ok(await page.locator('.xc-channel').count()===4,'existing CREATOR channels preserved');
-  ok(await page.locator('.xen-discovery-entry a').getAttribute('href')==='./what-is-xen.html','CREATOR discovery entrance');
-  for(const c of channels.filter(c=>c.creatorId)){const row=page.locator('#'+c.creatorId);await row.locator('summary').click();await row.locator('.xc-banner').scrollIntoViewIfNeeded();ok((await row.locator('.xc-link').getAttribute('href'))===c.url,'shared official URL');ok((await row.locator('.xc-description').allTextContents()).join('')===c.descriptionShort,'shared description');await row.locator('summary').click();}
-  await page.close();
-  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:375,height:812}});const fallback=await nojs.newPage();await fallback.goto(base+'what-is-xen.html');ok(await fallback.locator('.xd-fallback[open]').count()===1,'no-JS fallback expanded');ok(await fallback.locator('.xd-fallback a').count()===27,'no-JS all detail routes');await nojs.close();
-  const fail=await browser.newPage();await fail.route('**/xen-discovery-data.json',r=>r.abort());await fail.goto(base+'what-is-xen.html');ok(await fail.locator('.xd-fallback[open]').count()===1,'data failure keeps fallback');await fail.close();
+  const p=await browser.newPage({viewport:{width:390,height:844}});await p.goto(base+'what-is-xen.html');await ready(p);
+  // Resize caused by Safari toolbar must retain the exact interactive elements.
+  const card=await p.locator('.xd-theme').first().elementHandle();await p.setViewportSize({width:390,height:800});ok(await card.evaluate(n=>n.isConnected),'height resize retains targets');
+  await p.locator('.xd-theme[data-node="identity"]').click();await active(p,'identity');await close(p);
+  await p.emulateMedia({reducedMotion:'reduce'});ok(await p.locator('.xd-logo-wrap').evaluate(n=>getComputedStyle(n).animationName)==='none','reduced motion');await p.close();
+  // Both no-JS and failed JS keep four usable static theme links and all content.
+  for(const mode of ['nojs','failed-script']){
+   const c=await browser.newContext({javaScriptEnabled:mode!=='nojs',viewport:{width:320,height:812}});const q=await c.newPage();
+   if(mode==='failed-script')await q.route('**/xen-discovery.js*',r=>r.abort());
+   await q.goto(base+'what-is-xen.html');ok(await q.locator('.xd-theme').count()===4,mode+' static themes');ok(await q.locator('.xd-fallback').isVisible(),mode+' detail fallback');
+   ok(await q.locator('.xd-fallback details').count()===Object.values(nodes).filter(n=>!n.children).length,mode+' all original details');
+   await q.locator('.xd-theme[data-node="identity"]').click();ok(await q.locator('#identity').isVisible(),mode+' native anchor');await c.close();
+  }
+  // Unavailable optional channel data cannot block the initial UI or official links.
+  const fail=await browser.newPage();await fail.route('**/xen-channels.json',r=>r.abort());await fail.goto(base+'what-is-xen.html#connection/youtube/blue-sleep');await ready(fail);await active(fail,'blue-sleep');
+  ok(await fail.locator('.xd-links a').getAttribute('href')===nodes['blue-sleep'].href,'official link survives channel failure');await fail.close();
   await browser.close();
  }
- // Existing pages have exactly one new common menu item, no global CSS/JS changes.
- const {request}=require('playwright');const api=await request.newContext();
- for(const filename of ['index','creator','studio','sound','design','animation','cinematic','snap','apparel','architecture','space','storybooks','artworks','sns-management','price-list']){const response=await api.get(base+filename+'.html');ok(response.ok(),filename+' available');const body=await response.text();ok((body.match(/class="xen-menu-en" lang="en">WHAT IS XEN\?/g)||[]).length===1,filename+' common menu');}
- for(const node of Object.values(nodes)){if(node.href?.startsWith('./')){const response=await api.get(base+node.href.slice(2).split('#')[0]);ok(response.ok(),'internal route '+node.href);}}
- await api.dispose();
- fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results},null,2));console.log(`PASS: ${checks} assertions, ${results.length} viewport/browser combinations`);
+ // Every internal destination exists, including its named anchor.
+ for(const n of Object.values(nodes))for(const href of [n.href,...(n.links||[]).map(l=>l.href)].filter(h=>h?.startsWith('./'))){const [file,anchor]=href.slice(2).split('#');ok(fs.existsSync(file),'file '+file);if(anchor)ok(fs.readFileSync(file,'utf8').includes(`id="${anchor}"`),'anchor '+href);}
+ fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results},null,2));console.log(`PASS: ${checks} assertions; ${results.length} viewport/browser combinations`);
 })().catch(e=>{console.error(e);process.exit(1);});

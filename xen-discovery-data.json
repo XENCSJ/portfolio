@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "nodes": {
     "home": {
       "title": "XEN",
@@ -13,28 +13,45 @@
     },
     "identity": {
       "title": "IDENTITY",
-      "ja": "人物・プロフィール・個性",
+      "ja": "XENを知る",
       "children": [
         "profile",
         "personality",
         "interests",
-        "creator"
+        "creator",
+        "background"
+      ],
+      "caption": "人物・個性",
+      "overview": "建築の構成力とエンターテインメントの演出力を融合し、映像・PV・写真・音楽・絵本・空間など、多層的なクリエイティブを展開。世界観設計から作品制作までを手がけています。",
+      "links": [
+        {
+          "label": "CREATOR｜プロフィールを見る",
+          "href": "./creator.html"
+        }
       ]
     },
     "philosophy": {
       "title": "PHILOSOPHY",
-      "ja": "理念・価値観・創作思想",
+      "ja": "考え方を知る",
       "children": [
         "mission",
         "vision",
         "values",
         "creative-mind",
         "studio"
+      ],
+      "caption": "理念・価値観",
+      "overview": "独自の感性と創造力を活かし、人々の想いや課題を形にする。表現の領域を超えて、受け取る人にとって意味のある価値を生み出す。",
+      "links": [
+        {
+          "label": "STUDIO｜理念を読む",
+          "href": "./studio.html"
+        }
       ]
     },
     "creation": {
       "title": "CREATION",
-      "ja": "世界観を、さまざまな形へ。",
+      "ja": "作品に触れる",
       "children": [
         "music",
         "animation",
@@ -46,18 +63,44 @@
         "architecture",
         "space",
         "storybooks"
+      ],
+      "caption": "創作・表現",
+      "overview": "世界観を、さまざまな形へ。",
+      "links": [
+        {
+          "label": "MUSIC｜音楽を聴く",
+          "href": "./sound.html"
+        },
+        {
+          "label": "DESIGN｜デザインを見る",
+          "href": "./design.html"
+        }
       ]
     },
     "connection": {
       "title": "CONNECTION",
-      "ja": "作品と出会う、その先へ。",
+      "ja": "つながりを知る",
       "children": [
+        "collaboration",
+        "support",
         "youtube",
         "instagram",
         "x",
         "tiktok",
         "spotify",
         "shop"
+      ],
+      "caption": "人・社会",
+      "overview": "相手の目的に向き合い、確かな成果と信頼を積み重ねる。",
+      "links": [
+        {
+          "label": "STUDIO｜制作を相談する",
+          "href": "./studio.html#contact"
+        },
+        {
+          "label": "CREATION SUPPORT｜創作を応援する",
+          "href": "./creator.html#creation-support"
+        }
       ]
     },
     "youtube": {
@@ -406,6 +449,27 @@
         "youtube"
       ],
       "channel": "xen_blu"
+    },
+    "background": {
+      "title": "BACKGROUND",
+      "ja": "これまでの歩み",
+      "text": "建築設計を経て、光と影、構造の美しさを理解。その後、エンターテインメント業界で多様な人の感情や心地よさを学び、“魅せる表現”の基礎を体得する。",
+      "href": "./creator.html#background",
+      "source": "creator.html#background"
+    },
+    "collaboration": {
+      "title": "COLLABORATION",
+      "ja": "制作を通じた関わり",
+      "text": "価値で、応える。\n相手の目的に向き合い、確かな成果と信頼を積み重ねる。\n受託制作では、顧客と合意した目的・品質・条件を優先し、長期的な信頼を大切にする。",
+      "href": "./studio.html#contact",
+      "source": "studio.html#values CONTRIBUTION"
+    },
+    "support": {
+      "title": "CREATION SUPPORT",
+      "ja": "創作を応援する",
+      "text": "この創作活動を続けるため、支援いただけると嬉しく思います。",
+      "href": "./creator.html#creation-support",
+      "source": "creator.html#creation-support"
     }
   }
 }
