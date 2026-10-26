@@ -1,7 +1,7 @@
 name: INDEX sitemap verification
 on:
   push:
-    branches: ['work/index-sitemap-20261026']
+    branches: ['work/index-two-column-20261026', 'main']
     paths: ['index.html', 'xen-ui.css', 'verify-index-sitemap.cjs', '.github/workflows/index-entry-qa.yml']
   workflow_dispatch:
     inputs:
@@ -26,18 +26,18 @@ jobs:
       - name: Prepare comparison and serve repository
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git fetch --depth=1 origin 6a9631e590a3a1a1d8e2526a60b299c34b478534
-          git show 6a9631e590a3a1a1d8e2526a60b299c34b478534:index.html > __baseline-index.html
-          git show 6a9631e590a3a1a1d8e2526a60b299c34b478534:xen-ui.css > __baseline-ui.css
-          sed -i 's|./xen-ui.css?v=20261017-compact-motion-8510c61|./__baseline-ui.css|' __baseline-index.html
+          git fetch --depth=1 origin 077aa08fd01c731185cbff3cc73da601fadae4bd
+          git show 077aa08fd01c731185cbff3cc73da601fadae4bd:index.html > __baseline-index.html
+          git show 077aa08fd01c731185cbff3cc73da601fadae4bd:xen-ui.css > __baseline-ui.css
+          sed -i 's|./xen-ui.css?v=20261026-sitemap1|./__baseline-ui.css|' __baseline-index.html
           npx http-server . -p 8765 -c-1 > /tmp/index-sitemap-server.log 2>&1 &
       - name: Verify responsive sitemap and preserved INDEX behavior
         env:
-          PUBLISHED: ${{ inputs.published }}
+          PUBLISHED: ${{ inputs.published || github.ref == 'refs/heads/main' }}
         run: node verify-index-sitemap.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: index-sitemap-evidence
-          path: index-sitemap-evidence/
+          name: index-two-column-evidence
+          path: index-two-column-evidence/
           retention-days: 14
