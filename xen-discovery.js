@@ -18,7 +18,7 @@
     for (const id of segments) { if (!nodes[parent]?.children?.includes(id)) return 'home'; parent = id; }
     return parent;
   }
-  function state(id, depth) { return { xenDiscovery: true, id, depth, pages: { ...pages } }; }
+  function state(id, depth, previous = history.state?.previous || null) { return { xenDiscovery: true, id, depth, previous, pages: { ...pages } }; }
   function setBusy(value) {
     busy = value; stage.setAttribute('aria-busy', String(value));
     words.inert = value;
@@ -112,7 +112,7 @@
     if(!nodes[id]||busy||id===current)return;
     const previous=current;
     history.replaceState(state(current,history.state?.xenDiscovery?history.state.depth:0),'',hashFor(current));
-    history.pushState(state(id,(history.state?.depth||0)+1),'',hashFor(id));
+    history.pushState(state(id,(history.state?.depth||0)+1,previous),'',hashFor(id));
     render(id,focus,previous);
   }
   async function select(id,button) {
@@ -136,9 +136,18 @@
     if(history.state?.xenDiscovery&&history.state.depth>0)history.back();
     else {const parent=parents[current]||'home';history.replaceState(state(parent,0),'',hashFor(parent));render(parent,true,current);}
   }
+  function dismissDetail() {
+    if (!dialog.open) return;
+    const parent = parents[current] || 'home', previous = current;
+    // Related details can follow another detail in history. Closing must still
+    // reveal the parent constellation, rather than leave a different panel open.
+    if (history.state?.previous === parent) { goBack(); return; }
+    history.replaceState(state(parent,history.state?.depth||0),'',hashFor(parent));
+    render(parent,true,previous);
+  }
   back.addEventListener('click',goBack);home.addEventListener('click',()=>navigate('home'));
-  dialog.querySelector('.xd-close').addEventListener('click',goBack);
-  dialog.addEventListener('cancel',event=>{event.preventDefault();goBack();});
+  dialog.querySelector('.xd-close').addEventListener('click',dismissDetail);
+  dialog.addEventListener('cancel',event=>{event.preventDefault();dismissDetail();});
   controls.querySelectorAll('button').forEach(button=>button.addEventListener('click',()=>{
     if(busy)return;const count=Math.ceil(nodes[branch].children.length/capacity());
     pages[branch]=((pages[branch]||0)+Number(button.dataset.page)+count)%count;
