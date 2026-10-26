@@ -26,7 +26,8 @@ for(const engine of [chromium,webkit]){
   const entry=page.locator('.xen-index-discovery a');
   ok(await entry.count()===1&&await entry.innerText()==='DISCOVER XEN','one renamed INDEX entrance');
   ok(await entry.getAttribute('href')==='./what-is-xen.html','INDEX destination retained');
-  ok(await entry.evaluate(a=>{const s=getComputedStyle(a),r=a.getBoundingClientRect();return s.borderTopWidth==='1px'&&s.borderRadius==='0px'&&s.backgroundColor==='rgba(0, 0, 0, 0)'&&Math.abs(r.left+r.width/2-document.documentElement.clientWidth/2)<1}),'INDEX centered transparent rectangular border');
+  const entryStyle=await entry.evaluate(a=>{const s=getComputedStyle(a),r=a.getBoundingClientRect(),p=a.parentElement.getBoundingClientRect();return{border:s.borderTopWidth,radius:s.borderRadius,background:s.backgroundColor,centerOffset:Math.abs(r.left+r.width/2-p.left-p.width/2)}});
+  ok(entryStyle.border==='1px'&&entryStyle.radius==='0px'&&entryStyle.background==='rgba(0, 0, 0, 0)'&&entryStyle.centerOffset<1,'INDEX centered transparent rectangular border '+JSON.stringify(entryStyle));
   ok(await page.locator('.orbit>a').count()===15,'INDEX orbit links retained');
   ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'INDEX no horizontal overflow');
   await page.locator('.xen-header-toggle').click();
