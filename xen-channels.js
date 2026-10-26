@@ -5,7 +5,7 @@
   let data;
   function load() { return data ||= fetch('./xen-channels.json').then(r => { if (!r.ok) throw new Error('Channel data unavailable'); return r.json(); }); }
   function artwork(channel, type) {
-    const img = el('img', `xc-${type}`);
+    const img = el('img', `xc-${type}${type === 'avatar' && channel.whiteLogo ? ' xc-avatar-white' : ''}`);
     img.src = channel[type]; img.alt = `${channel.label} 公式${type === 'banner' ? 'バナー' : 'チャンネルアイコン'}`;
     img.width = type === 'banner' ? (channel.imageWidth || 2560) : 900; img.height = type === 'banner' ? (channel.imageHeight || 424) : 900;
     img.loading = 'lazy'; img.decoding = 'async'; return img;

@@ -3,6 +3,18 @@
   "method": "Official YouTube rendered banner/avatar image URLs; original bytes, no recoloring or regeneration. Repository image filenames and existing covers inspected; dedicated assets were absent.",
   "assets": [
     {
+      "file": "XEN_logo_fixed_black.svg",
+      "source": "Existing official repository XEN logo; unchanged SVG geometry, displayed white with section-scoped CSS brightness(0) invert(1). No raster generation or specialist logo reuse.",
+      "sha256": "ff7c20ef344b7d0e3e6fce48bb8827801242bd7335f8f47b4041deea50c8317b"
+    },
+    {
+      "file": "xen-channel-main-banner.jpg",
+      "source": "https://yt3.googleusercontent.com/YOz6ddPbxEXc0-YvyVICcopnrrRUAyFOGhEQIfxD9b8a5nRyvPnytODMdJVzS2RiIJ15w-DA=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
+      "channel": "https://www.youtube.com/@XEN_CSJ",
+      "method": "Official YouTube page banner image source; downloaded bytes unchanged. Matched to supplied IMG_9901.jpeg.",
+      "sha256": "f50170480453eb2d803f09e5eed9c4773be521ee99fb8134d0e574e71d5993eb"
+    },
+    {
       "file": "xen-channel-amber-banner.jpg",
       "source": "https://yt3.googleusercontent.com/rnxHORB26dX6E62LwpTnzDAqHb6WDAzBvLcmQzhhgHtcdyq0VxsMi3Rl5gkDHR6H44C-xIGzI_0=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
       "sha256": "3ad4589d76f56a7443097a02d4244eace80db2b881f1f81e423f89af87eb9a32"
