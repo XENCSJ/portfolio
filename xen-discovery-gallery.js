@@ -124,15 +124,22 @@
    if(e.button!==0)return;if(active?.cell===cell){settle(dominantIncoming());schedule();}
    gestures.set(cell,{id:e.pointerId,x:e.clientX,y:e.clientY,moved:false,work:cell.work});
   });
-  node.addEventListener('pointermove',e=>{const g=gestures.get(cell);if(g&&Math.hypot(e.clientX-g.x,e.clientY-g.y)>10)g.moved=true;});
-  const release=(e,cancel)=>{const g=gestures.get(cell);if(!g)return;if(cancel)g.moved=true;setTimeout(()=>{if(gestures.get(cell)===g)gestures.delete(cell);},500);};
-  node.addEventListener('pointerup',e=>release(e,false));node.addEventListener('pointercancel',e=>release(e,true));
   node.addEventListener('click',e=>{
    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
    e.preventDefault();const gesture=gestures.get(cell);gestures.delete(cell);if(gesture?.moved)return;selectWork(cell,gesture?.work);
   });
   node.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();selectWork(cell);}});
  }
+ // Track the full gesture even when a mouse or pen leaves its original tile.
+ addEventListener('pointermove',e=>{gestures.forEach(g=>{if(g.id===e.pointerId&&Math.hypot(e.clientX-g.x,e.clientY-g.y)>10)g.moved=true;});},{passive:true});
+ const releaseGesture=e=>gestures.forEach((g,cell)=>{
+  if(g.id!==e.pointerId)return;
+  if(e.type==='pointercancel'||!cell.node.contains(e.target))g.moved=true;
+  setTimeout(()=>{if(gestures.get(cell)===g)gestures.delete(cell);},500);
+ });
+ addEventListener('pointerup',releaseGesture,{passive:true});
+ addEventListener('pointercancel',releaseGesture,{passive:true});
+ addEventListener('blur',()=>{gestures.clear();hovered.clear();});
  toggle.addEventListener('click',()=>{
   if(reduced.matches){manualWaiting=false;pump();next(true);status.textContent='1枚の作品を切り替えます。';return;}
   paused=!paused;stop();if(!paused){pump();schedule();}status.textContent=paused?'作品の切り替えを停止しました。':'作品の切り替えを再開しました。';
@@ -152,7 +159,7 @@
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
- fetch('./xen-discovery-gallery.json?v=20261026-mosaic1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
+ fetch('./xen-discovery-gallery.json?v=20261026-mosaic2').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
   works=data.works.filter(w=>w.id&&w.title&&w.image&&w.href);groups=data.genres.map(g=>works.filter(w=>w.genre===g)).filter(g=>g.length);
   cells=[...grid.querySelectorAll('.xd-tile')].map(node=>({node,work:works.find(w=>w.id===node.dataset.work)}));
   if(cells.some(c=>!c.work))throw new Error('Static catalog mismatch');
