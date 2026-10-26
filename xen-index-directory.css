@@ -1,4 +1,4 @@
-/* The existing directory shares NEWS' outer edges and 24% / 76% divider. */
+/* INDEX only: preserve NEWS-aligned edges and the existing two-column divider. */
 body#top.home-page #home #creative-index {
   width: min(760px, calc(100% - 36px));
   max-width: 760px;
@@ -25,16 +25,37 @@ body#top.home-page #creative-index .index-heading {
   padding: 8px 16px 8px 0;
   text-align: left;
 }
-body#top.home-page #creative-index .index-heading :is(.index-en,.index-ja) {
+body#top.home-page #creative-index .index-category-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 8px 16px 8px 0;
+}
+/* Every left label uses the same icon-above / English / Japanese alignment. */
+body#top.home-page #creative-index .index-directory :is(.index-heading,.index-category-label) .index-en {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-start;
+  gap: 4px;
   text-align: left;
   color: #c9aa78;
-}
-body#top.home-page #creative-index .index-heading .index-en {
   font-size: clamp(13px, 2vw, 17px);
   letter-spacing: .06em;
+  white-space: nowrap;
+}
+body#top.home-page #creative-index .index-directory :is(.index-heading,.index-category-label) .index-ja {
+  margin: 3px 0 0;
+  text-align: left;
+  color: #c9aa78;
+  font-size: 10.5px;
+  line-height: 1.5;
+  letter-spacing: .04em;
+  white-space: nowrap;
 }
 body#top.home-page #creative-index .index-items {
+  min-width: 0;
   padding-left: clamp(12px, 3vw, 28px);
   border-left: 1px solid #c6a15b;
 }
@@ -64,44 +85,42 @@ body#top.home-page #creative-index .index-directory > .index-link {
   min-height: 44px!important;
   padding: 0!important;
 }
-body#top.home-page #creative-index .index-category-link .index-en,
-body#top.home-page #creative-index .index-directory > .index-link .index-en {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-right: 16px;
-  text-align: left;
-  color: #c9aa78;
-  font-size: clamp(13px, 2vw, 17px);
-  letter-spacing: .06em;
-}
-body#top.home-page #creative-index .index-category-link .index-ja,
-body#top.home-page #creative-index .index-directory > .index-link .index-ja {
+/* Keep the original Japanese destinations on the right, within the same link. */
+body#top.home-page #creative-index .index-single-label {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin: 0;
+  min-width: 0;
   padding: 8px 2px 8px clamp(12px, 3vw, 28px);
   border-left: 1px solid #c6a15b;
   text-align: right;
   color: #f2f2f2;
   font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .06em;
+  transition: color .2s ease;
 }
 body#top.home-page #creative-index .index-directory > .index-link { margin-bottom: 16px; }
-/* Icons remain in their original elements and all targets retain a 44px floor. */
 body#top.home-page #creative-index .index-icon { flex: 0 0 auto; }
+body#top.home-page #creative-index .index-directory .index-link:is(:hover,:focus-visible,:active) .index-single-label { color: #dfc593; }
+body#top.home-page #creative-index .index-directory .index-link:is(:hover,:focus-visible,:active) .index-category-label .index-ja { color: #dfc593; }
 @media(max-width:600px) {
   body#top.home-page #creative-index .index-category,
   body#top.home-page #creative-index .index-category-link,
   body#top.home-page #creative-index .index-directory > .index-link {
-    grid-template-columns: 23% minmax(0,1fr);
+    grid-template-columns: minmax(74px, 23%) minmax(0,1fr);
   }
   body#top.home-page #creative-index .index-heading,
-  body#top.home-page #creative-index .index-category-link .index-en,
-  body#top.home-page #creative-index .index-directory > .index-link .index-en { padding-right: 10px; }
-  body#top.home-page #creative-index .index-heading .index-en,
-  body#top.home-page #creative-index .index-category-link .index-en { font-size: clamp(9px, 2.5vw, 11px); letter-spacing: .025em; flex-direction: column; align-items: flex-start; white-space: nowrap; gap: 4px; }
-  body#top.home-page #creative-index .index-heading .index-icon,
-  body#top.home-page #creative-index .index-directory > .index-link .index-icon { width: 13px; height: 13px; }
+  body#top.home-page #creative-index .index-category-label { padding-right: 10px; }
+  body#top.home-page #creative-index .index-directory :is(.index-heading,.index-category-label) .index-en {
+    font-size: clamp(9px, 2.5vw, 11px);
+    letter-spacing: .025em;
+  }
+  body#top.home-page #creative-index .index-directory :is(.index-heading,.index-category-label) .index-ja { font-size: clamp(9px, 2.4vw, 10.5px); }
+  body#top.home-page #creative-index :is(.index-heading,.index-category-label) .index-icon { width: 13px; height: 13px; }
   body#top.home-page #creative-index .index-category { padding-block: 12px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body#top.home-page #creative-index .index-single-label { transition: none; }
 }
