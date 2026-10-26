@@ -22,6 +22,7 @@ async function close(page){await page.keyboard.press('Escape');await page.waitFo
   for(const width of [375,390,430,768,1024,1280,1440,1920]){
    const context=await browser.newContext({viewport:{width,height:width<768?844:1000},reducedMotion:'reduce',hasTouch:width<768,isMobile:width<768});const page=await context.newPage();const errors=[];page.on('pageerror',e=>{errors.push(e.message);console.error('PAGE ERROR',engine.name(),width,e.message);});
    await page.goto(base+'what-is-xen.html',{waitUntil:'domcontentloaded'});await ready(page);
+   await page.waitForFunction(()=>{const i=document.querySelector('.xd-logo');return i?.complete&&i.naturalWidth>0;});
    ok(await page.locator('.xd-logo').evaluate(i=>i.complete&&i.naturalWidth>0),'official logo loaded');await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-initial.png`,fullPage:true});await checkBounds(page,engine.name()+width+' home');
    for(const branch of ['identity','philosophy','creation','connection']){
     await select(page,branch);const seen=new Set();let count=1;
