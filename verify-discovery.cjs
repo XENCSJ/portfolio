@@ -26,7 +26,7 @@ for(const engine of [chromium,webkit]){
   const entry=page.locator('.xen-index-discovery a');
   ok(await entry.count()===1&&await entry.innerText()==='DISCOVER XEN','one renamed INDEX entrance');
   ok(await entry.getAttribute('href')==='./what-is-xen.html','INDEX destination retained');
-  ok(await entry.evaluate(a=>{const s=getComputedStyle(a),r=a.getBoundingClientRect();return s.borderTopWidth==='1px'&&s.borderRadius==='0px'&&s.backgroundColor==='rgba(0, 0, 0, 0)'&&Math.abs(r.left+r.width/2-innerWidth/2)<1}),'INDEX centered transparent rectangular border');
+  ok(await entry.evaluate(a=>{const s=getComputedStyle(a),r=a.getBoundingClientRect();return s.borderTopWidth==='1px'&&s.borderRadius==='0px'&&s.backgroundColor==='rgba(0, 0, 0, 0)'&&Math.abs(r.left+r.width/2-document.documentElement.clientWidth/2)<1}),'INDEX centered transparent rectangular border');
   ok(await page.locator('.orbit>a').count()===15,'INDEX orbit links retained');
   ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'INDEX no horizontal overflow');
   await page.locator('.xen-header-toggle').click();
@@ -127,5 +127,5 @@ for(const engine of [chromium,webkit]){
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const plain=await nojs.newPage();await plain.goto(base+'what-is-xen.html');ok(await plain.locator('.xd-panel:visible').count()===4,'no-JS content available');ok(await plain.locator('.xd-tile:visible').count()===9,'no-JS gallery links available');await nojs.close();
  await browser.close();
 }
-console.log('PASS',checks,'checks: 16 layouts, title hierarchy, section entrances, inline themes, random single-cell transitions, touch/keyboard, MUSIC drawers, exclusions, reduced motion, no-JS, source destinations');
-})().catch(error=>{console.error(error);process.exitCode=1;});
+console.log('PASS',checks,'checks: 32 INDEX/discovery layouts, title hierarchy, section entrances, inline themes, random single-cell transitions, touch/keyboard, MUSIC drawers, exclusions, reduced motion, no-JS, source destinations');
+})().catch(error=>{console.error(error);process.exit(1);});
