@@ -1,0 +1,87 @@
+name: INDEX discovery link verification
+on:
+  push:
+    branches: ['work/index-what-is-xen-link-20261026']
+    paths: ['index.html', '.github/workflows/index-entry-qa.yml']
+  workflow_dispatch:
+    inputs:
+      published:
+        description: Test the published GitHub Pages site
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  index-entry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Fetch the unchanged comparison page
+        run: |
+          git fetch --depth=1 origin ad3cbe50d82839bb9d96bf0e40f7f5bd064ab449
+          git show ad3cbe50d82839bb9d96bf0e40f7f5bd064ab449:index.html > __baseline-index.html
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/index-entry-server.log 2>&1 &
+      - name: Verify 16 layouts, 20 motion cases and actual links
+        env:
+          PUBLISHED: ${{ inputs.published }}
+        run: |
+          cat > /tmp/index-entry-check.cjs <<'JS'
+          const {chromium,webkit}=require('playwright');
+          const assert=require('node:assert/strict'),fs=require('fs');
+          const base=process.env.PUBLISHED==='true'?'https://xencsj.github.io/portfolio/':'http://127.0.0.1:8765/';
+          fs.mkdirSync('index-entry-evidence',{recursive:true});
+          const result=[];
+          async function layout(p){return p.evaluate(()=>{
+           const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,b:r.bottom}};
+           const a=document.querySelector('.xen-index-discovery a');
+           return {width:innerWidth,scroll:document.documentElement.scrollWidth,hero:rect('.hero'),logo:rect('.center-logo'),entry: a&&rect('.xen-index-discovery'),link:a&&rect('.xen-index-discovery a'),news:rect('#xen-news'),newsHTML:document.querySelector('#xen-news').outerHTML,header:document.querySelector('header').outerHTML,font:a&&getComputedStyle(a).fontSize,color:a&&getComputedStyle(a).color,text:a&&a.textContent,href:a&&a.getAttribute('href'),links:[...document.querySelectorAll('.orbit>a')].map(a=>[a.getAttribute('href'),a.textContent]),order:a&&document.querySelector('.xen-index-discovery').previousElementSibling.classList.contains('hero')&&document.querySelector('.xen-index-discovery').nextElementSibling.id==='xen-news'};
+          });}
+          (async()=>{
+           for(const engine of [chromium,webkit]){
+            const browser=await engine.launch();
+            for(const width of [375,390,430,768,1024,1280,1440,1920]){
+             const context=await browser.newContext({viewport:{width,height:width<768?844:1100},isMobile:width<768,hasTouch:width<768,deviceScaleFactor:1,reducedMotion:'reduce'});
+             const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+             await p.route('https://www.googletagmanager.com/**',r=>r.abort());
+             await p.goto('http://127.0.0.1:8765/__baseline-index.html',{waitUntil:'load'});const before=await layout(p);
+             await p.goto(base+'index.html',{waitUntil:'load'});const after=await layout(p);
+             assert.equal(after.text,'WHAT IS XEN? ↗');assert.equal(after.href,'./what-is-xen.html');assert(after.order);
+             assert.equal(after.font,'13.5px');assert(after.scroll<=width);assert.equal(after.entry.h,44);assert(after.link.w<180);
+             assert(Math.abs(after.link.x+after.link.w/2-after.entry.w/2)<1);assert(after.news.y-after.entry.b>=7&&after.news.y-after.entry.b<=9);
+             assert.deepEqual(after.hero,before.hero);assert.deepEqual(after.logo,before.logo);assert.deepEqual(after.links,before.links);assert.equal(after.links.length,15);
+             assert.equal(after.newsHTML,before.newsHTML);assert.equal(after.news.w,before.news.w);assert.equal(after.news.h,before.news.h);
+             assert(after.news.y-before.news.y<=36.1);assert(after.news.y-before.news.y>0);
+             assert.equal(await p.locator('main .xen-discovery-entry').count(),0);assert.equal(await p.locator('.xen-index-discovery').evaluate(e=>getComputedStyle(e).animationName),'none');
+             await p.screenshot({path:`index-entry-evidence/${engine.name()}-${width}.png`,fullPage:true});
+             const menu=p.locator('.xen-header-toggle');await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');await p.keyboard.press('Escape');assert.equal(await menu.getAttribute('aria-expanded'),'false');
+             if([390,1440].includes(width)){
+              await p.locator('.xen-index-discovery a').focus();await p.keyboard.press('Enter');await p.waitForURL('**/what-is-xen.html*');await p.waitForSelector('html[data-discovery-ready="true"]');assert.equal(await p.locator('h1').innerText(),'WHAT IS XEN?');
+              await p.goto(base+'index.html');await p.locator('.orbit>a[href="./sound.html"]').click();await p.waitForURL('**/sound.html');
+              await p.goto(base+'index.html');const newsHref=await p.locator('#xen-news a').first().getAttribute('href');await p.locator('#xen-news a').first().click();assert(new URL(p.url()).pathname.endsWith(newsHref.replace(/^\.\//,'')));
+             }
+             assert.deepEqual(errors,[]);result.push({engine:engine.name(),width,status:'PASS',newsShift:after.news.y-before.news.y});console.log('PASS',engine.name(),width);await context.close();
+            }
+            for(const width of [390,1440])for(let set=1;set<=5;set++){
+             const p=await browser.newPage({viewport:{width,height:1000},reducedMotion:'no-preference'});await p.goto(base+'index.html?xen-preview-set='+set,{waitUntil:'load'});
+             assert.equal(await p.locator('html').getAttribute('data-xen-index-set'),['original','sequential-trace','soft-reveal','reverse-trace','dual-reveal'][set-1]);
+             await p.waitForTimeout(4200);assert.equal(await p.locator('.center-logo').evaluate(e=>getComputedStyle(e).opacity),'1');assert.equal(await p.locator('.orbit>a').count(),15);assert.equal(await p.locator('.xen-index-discovery').evaluate(e=>getComputedStyle(e).opacity),'1');
+             assert.equal(await p.locator('.orbit').evaluate(e=>getComputedStyle(e).animationName),'spin');await p.close();console.log('PASS motion',engine.name(),width,set);
+            }
+            const p=await browser.newPage({viewport:{width:390,height:844},javaScriptEnabled:false});await p.goto(base+'index.html');assert(await p.locator('.xen-index-discovery a').isVisible());await p.close();await browser.close();
+           }
+           fs.writeFileSync('index-entry-evidence/results.json',JSON.stringify({base,result,motionCases:20,noJavaScriptCases:2},null,2));
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          NODE_PATH="$PWD/node_modules" node /tmp/index-entry-check.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: index-entry-evidence
+          path: index-entry-evidence/
+          retention-days: 14
