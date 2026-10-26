@@ -223,8 +223,8 @@ body#top.home-page #creative-index .index-link {
   touch-action: manipulation;
   transition: color .25s ease, background-color .25s ease;
 }
-body#top.home-page #creative-index :is(.index-directory, .index-category, .index-heading, .index-items, .index-items > li, .index-link)::before,
-body#top.home-page #creative-index :is(.index-directory, .index-category, .index-heading, .index-items, .index-items > li, .index-link)::after { content: none; }
+body#top.home-page #creative-index :is(.index-category, .index-heading, .index-items, .index-items > li, .index-link)::before,
+body#top.home-page #creative-index :is(.index-category, .index-heading, .index-items, .index-items > li, .index-link)::after { content: none; }
 body#top.home-page #creative-index .index-directory::before {
   content: "";
   position: absolute;
