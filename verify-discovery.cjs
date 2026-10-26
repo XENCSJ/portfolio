@@ -7,7 +7,7 @@ const themes=nodes.home.children, results=[];
 let checks=0; const failures=[];
 fs.mkdirSync('discovery-evidence',{recursive:true});
 const ok=(v,msg)=>{assert(v,msg);checks++;};
-const ready=p=>p.waitForSelector('html[data-discovery-ready="true"]');
+const ready=p=>p.waitForSelector('html[data-discovery-ready="true"]',{state:'attached'});
 const active=(p,id)=>p.waitForFunction(id=>document.querySelector('.xd-dialog[open] #xd-detail-title')?.textContent===id,id==='home'?'':nodes[id].ja);
 async function pick(p,id){await p.locator(`.xd-dialog [data-node="${id}"]`).click();await active(p,id);}
 async function close(p){await p.keyboard.press('Escape');await p.waitForSelector('.xd-dialog[open]',{state:'hidden'});}
@@ -32,6 +32,7 @@ async function bounds(p,label){
    await p.screenshot({path:`discovery-evidence/${engine.name()}-${width}-initial.png`,fullPage:true});
    for(const theme of themes){
     await p.locator(`.xd-theme[data-node="${theme}"]`).click();await active(p,theme);
+    if([390,1440].includes(width))await p.screenshot({path:`discovery-evidence/${engine.name()}-${width}-${theme}.png`});
     ok(await p.locator('.xd-theme[aria-expanded="true"]').getAttribute('data-node')===theme,'selected theme');
     ok((await p.locator('.xd-location').innerText()).includes(nodes[theme].title),'location');
     ok(await p.locator('.xd-topics .xd-topic').count()===nodes[theme].children.length,'all topics available');
