@@ -26,8 +26,14 @@ for(const engine of [chromium,webkit]){
   ok(await page.locator('.xd-logo,.xd-center').count()===0,'large center logo removed');
   const shape=await page.locator('.xd-theme').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height}}));
   if(width<768){ok(Math.abs(shape[0].y-shape[1].y)<1&&shape[2].y>shape[0].y,'2x2 mobile themes');}
-  const layout=await page.evaluate(()=>{const g=document.querySelector('.xd-gallery'),h=g.querySelector('h2'),r=h.getBoundingClientRect(),p=g.querySelector('header p').getBoundingClientRect();return {first:document.querySelector('main').firstElementChild===g,nowrap:getComputedStyle(h).whiteSpace==='nowrap',fits:r.right<=innerWidth&&h.scrollWidth<=r.width+1,jp:p.top>=r.bottom,firstImage:document.querySelector('.xd-tile').getBoundingClientRect().top<innerHeight};});
-  ok(layout.first&&layout.nowrap&&layout.fits&&layout.jp&&layout.firstImage,'gallery first, one-line title, Japanese below, images in first viewport');
+  const layout=await page.evaluate(()=>{const hero=document.querySelector('.xd-page-intro'),g=document.querySelector('.xd-gallery'),h=g.querySelector('h2'),r=h.getBoundingClientRect(),p=g.querySelector('header p').getBoundingClientRect(),intro=document.querySelector('.xd-intro'),t=document.querySelector('h1');return {first:document.querySelector('main').firstElementChild===hero,ordered:hero.getBoundingClientRect().bottom<=g.getBoundingClientRect().top&&g.getBoundingClientRect().bottom<=intro.getBoundingClientRect().top,nowrap:getComputedStyle(h).whiteSpace==='nowrap',fits:r.right<=innerWidth&&h.scrollWidth<=r.width+1,jp:p.top>=r.bottom,firstImage:document.querySelector('.xd-tile').getBoundingClientRect().top<innerHeight,larger:parseFloat(getComputedStyle(t).fontSize)>parseFloat(getComputedStyle(h).fontSize),center:Math.abs(t.getBoundingClientRect().left+t.getBoundingClientRect().width/2-innerWidth/2)<1};});
+  ok(layout.first&&layout.ordered,'page title, gallery, exploration order without overlap');
+  ok(layout.nowrap&&layout.fits&&layout.jp&&layout.firstImage,'one-line gallery title, Japanese below, images in first viewport');
+  ok(layout.larger&&layout.center,'main title centered and larger than gallery heading');
+  ok(await page.getByRole('heading',{level:1,name:'WHAT IS XEN?',exact:true}).count()===1,'one accessible page title');
+  ok(await page.locator('.xd-page-intro .xd-copy > span').count()===2,'catch copy has two lines');
+  ok(await page.locator('.xd-kicker').innerText()==='EXPLORE XEN'&&await page.locator('#xd-explore-title').innerText()==='4つのテーマから探す','separate exploration heading');
+  ok(await page.locator('.xen-footer-inquiry').getAttribute('href')==='./studio.html#contact'&&await page.locator('.xen-footer-action').nth(1).getAttribute('href')==='./price-list.html','consultation and price list links retained');
   ok(await page.locator('.xd-gallery button').count()===0,'no pause/play controls in gallery');
   for(const t of themes){
    await page.locator(`[data-theme="${t}"]`).click();
@@ -64,10 +70,17 @@ for(const engine of [chromium,webkit]){
   ok(await tile.evaluate(n=>n===document.activeElement),'focus returns to chosen work');
   ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
   await sleep(page,800);ok(JSON.stringify(before)===JSON.stringify(await visibleWorks(page)),'reduced motion remains static without controls');
-  if([390,1440].includes(width)){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-page.png`,fullPage:true});}
+  if([390,1440].includes(width)){await page.locator('#xd-page-title').click();await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`discovery-evidence/${engine.name()}-${width}-page.png`,fullPage:true});}
   ok(errors.length===0,'no JS errors '+errors.join(';'));console.log('PASS layout',engine.name(),width);await context.close();
  }
  const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});const page=await context.newPage();await ready(page);
+ const titleMotion=await page.locator('#xd-page-title > span').evaluateAll(nodes=>nodes.map(n=>({name:getComputedStyle(n).animationName,delay:parseFloat(getComputedStyle(n).animationDelay)})));
+ ok(titleMotion.length===12&&titleMotion.every(n=>n.name==='xd-title-in')&&titleMotion[11].delay>titleMotion[0].delay,'title letters enter in sequence');
+ ok(await page.locator('.xd-words').evaluate(n=>!n.classList.contains('xd-in-view')),'offscreen themes wait for their own reveal');
+ await page.locator('.xd-words').scrollIntoViewIfNeeded();await sleep(page,200);
+ ok(await page.locator('.xd-words').evaluate(n=>n.classList.contains('xd-in-view')),'theme animation starts on scroll');
+ ok(await page.locator('.xd-theme .xd-icon-identity path').evaluate(n=>getComputedStyle(n).animationName==='xd-draw'),'theme line icon drawing preserved');
+
  await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
  await page.evaluate(()=>{window.galleryEvents=[];document.querySelector('.xd-gallery').addEventListener('xen:gallery-change',e=>window.galleryEvents.push({...e.detail,time:performance.now()}));window.maxTransitions=0;window.transitionWatch=setInterval(()=>{window.maxTransitions=Math.max(window.maxTransitions,document.querySelectorAll('.xd-incoming').length)},20);});
  await page.waitForFunction(()=>window.galleryEvents.length>=16,{},{timeout:30000});
@@ -96,5 +109,5 @@ for(const engine of [chromium,webkit]){
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const plain=await nojs.newPage();await plain.goto(base+'what-is-xen.html');ok(await plain.locator('.xd-panel:visible').count()===4,'no-JS content available');ok(await plain.locator('.xd-tile:visible').count()===9,'no-JS gallery links available');await nojs.close();
  await browser.close();
 }
-console.log('PASS',checks,'checks: 16 layouts, inline themes, random single-cell transitions, touch/keyboard, MUSIC drawers, exclusions, reduced motion, no-JS, source destinations');
+console.log('PASS',checks,'checks: 16 layouts, title hierarchy, section entrances, inline themes, random single-cell transitions, touch/keyboard, MUSIC drawers, exclusions, reduced motion, no-JS, source destinations');
 })().catch(error=>{console.error(error);process.exitCode=1;});
