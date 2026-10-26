@@ -56,6 +56,7 @@ async function close(page){await page.keyboard.press('Escape');await page.waitFo
   }
   const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'no-preference'});
   await page.goto(base+'what-is-xen.html');await ready(page);
+  const retainedKeyword=await page.locator('[data-node="identity"]').elementHandle();await page.setViewportSize({width:390,height:800});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));ok(await retainedKeyword.evaluate(node=>node.isConnected),'height resize preserves active tap targets');await page.setViewportSize({width:390,height:844});
   ok(await page.locator('.xd-float').first().evaluate(n=>getComputedStyle(n).animationName)!=='none','float active');
   await page.locator('[data-node="identity"]').click({force:true});ok(await page.locator('.xd-stage').getAttribute('aria-busy')==='true','transition locks input');await scene(page,'identity');ok(await page.locator('.xd-flight').count()===0,'transition cleans up');
   await page.locator('[data-node="profile"]').click({force:true});await page.setViewportSize({width:430,height:844});await page.waitForFunction(()=>document.querySelector('.xd-stage').getAttribute('aria-busy')==='false');ok(await page.locator('.xd-flight').count()===0,'rotation cancels flight safely');

@@ -7,7 +7,7 @@
   const dialog = document.querySelector('.xd-dialog'), detail = dialog.querySelector('.xd-detail-content');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text) n.textContent = text; return n; };
-  let nodes, channels, current = 'home', branch = 'home', pages = {}, busy = false, epoch = 0, flight = null, animation = null;
+  let nodes, channels, current = 'home', branch = 'home', pages = {}, busy = false, epoch = 0, flight = null, animation = null, renderedCapacity = 0;
   const parents = {};
   const capacity = () => innerWidth < 768 ? 4 : innerWidth < 1024 ? 6 : 10;
   const pathTo = id => { const path = []; while (id && id !== 'home') { path.unshift(id); id = parents[id]; } return path; };
@@ -38,6 +38,7 @@
   }
   function renderScene() {
     const data = nodes[branch], list = data.children, cap = capacity();
+    renderedCapacity = cap;
     const total = Math.ceil(list.length/cap); pages[branch] = Math.max(0,Math.min(pages[branch] || 0,total-1));
     const start = pages[branch]*cap, visible = list.slice(start,start+cap), positions = positionList(visible.length);
     center.replaceChildren();
@@ -157,7 +158,7 @@
   function restore() {if(!nodes)return;cancelFlight();pages={...(history.state?.pages||{})};render(readHash());}
   addEventListener('popstate',restore);addEventListener('hashchange',()=>{if(nodes&&readHash()!==current)restore();});
   let resizeFrame;
-  addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(!nodes)return;cancelFlight();renderScene();});});
+  addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(!nodes)return;cancelFlight();if(capacity()!==renderedCapacity)renderScene();});});
   reduce.addEventListener('change',()=>{if(nodes)cancelFlight();});
   Promise.all([
     fetch('./xen-discovery-data.json').then(r=>{if(!r.ok)throw new Error('Discovery data unavailable');return r.json();}),
