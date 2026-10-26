@@ -60,6 +60,16 @@ async function run(browser,profile,label){
   assert(Math.abs(y-y2)<5,`switch scroll movement ${y2-y}`);
   await summaries.nth(1).click();await summaries.nth(3).click();await summaries.nth(3).click();await settled(page);
   assert.equal(await root.locator('details[open]').count(),0,'rapid reversal');
+  if(label==='chromium-1440'||label==='webkit-390'){
+   const latest=page.locator('#latest-videos'),media=[];
+   for(const img of await latest.locator('img').all()){
+    await img.scrollIntoViewIfNeeded();
+    media.push(await img.evaluate(async i=>{try{await i.decode();}catch{}return {src:i.currentSrc,loaded:i.naturalWidth>0,width:i.naturalWidth,height:i.naturalHeight};}));
+   }
+   await latest.screenshot({path:`${out}/${label}-latest-videos.jpg`,type:'jpeg',quality:90});
+   fs.writeFileSync(`${out}/${label}-latest-media.json`,JSON.stringify(media,null,2));
+   console.log('LATEST MEDIA',label,JSON.stringify(media));
+  }
   assert.equal(errors.length,0,errors.join(';'));
   cases.push({label,status:'passed'});console.log('PASS',label);
  } catch(e){await page.screenshot({path:`${out}/${label}-failure.jpg`,fullPage:true});cases.push({label,status:'failed',error:String(e)});throw e;}
