@@ -27,8 +27,8 @@ if(process.env.MUSIC_WAIT_FOR_DEPLOY==='true'){
  assert(ready,'GitHub Pages did not serve the expected HTML, CSS and all logo bytes');
  console.log('PUBLICATION VERIFIED: HTML, CSS and every directory asset match this commit');
 }
-try{for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){const browser=await engine.launch();
-try{for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[320,568],[390,500],[812,375]]){
+try{for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]].filter(([name])=>!process.env.QA_ENGINE||process.env.QA_ENGINE===name)){const browser=await engine.launch(process.env.QA_EXECUTABLE?{executablePath:process.env.QA_EXECUTABLE,args:['--no-sandbox']}:{});
+try{for(const [width,height] of [[1920,1080],[1440,900],[1280,800],[1024,768],[768,1024],[375,667],[390,844],[430,932],[320,568],[390,500],[812,375]].filter(([w])=>!process.env.QA_WIDTHS||process.env.QA_WIDTHS.split(',').includes(String(w)))){
 const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1,reducedMotion:'reduce'});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await context.route('**/*',r=>r.request().url().startsWith(base+'/')?r.continue():r.abort());
 try{
@@ -111,31 +111,28 @@ try{
  assert((await page.locator('.sound-slide[data-release-id="nights-awakening"]').getAttribute('aria-label')).startsWith('PURPLE AWAKE'));
  assert.equal(await page.locator('#nights-awakening template').evaluate(e=>e.content.querySelector('iframe').title),"NIGHT'S AWAKENING");
  assert.equal(await page.locator('#nights-awakening .video-source').getAttribute('href'),'https://youtu.be/uqQI6369VYg');
- const edm=page.locator('.sound-category-drawer[data-genre-section="edm-electronic"]');await edm.locator('summary').click();await page.locator('.music-index-link[href="#nights-awakening"]').click();await page.waitForFunction(()=>document.activeElement?.id==='nights-awakening');assert(page.url().endsWith('#nights-awakening'));assert.equal(await page.locator('#music-reader').isVisible(),false);
+ const edm=page.locator('.sound-category-drawer[data-genre-section="edm-electronic"]');await edm.locator('summary').click();await page.locator('.music-index-link[href="#nights-awakening"]').click();await page.waitForFunction(()=>document.activeElement?.id==='nights-awakening');assert(page.url().endsWith('#nights-awakening'));assert.equal(await page.locator('dialog[open]').count(),0);
  const readers=page.locator('.music-reader-open');assert.equal(await readers.count(),4);
  const sourceText=await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)]));
  for(let r=0;r<await readers.count();r++){
-  await readers.nth(r).click();const dialog=page.locator('#music-reader');await dialog.waitFor({state:'visible'});
-  // Public CDN images may decode after dialog.showModal(); measure the settled artwork.
-  await dialog.locator('.music-reader-cover').evaluate(async image=>{await image.decode();await document.fonts.ready;});
-  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  assert.equal(await dialog.locator('.music-services').count(),0);
-  const fixed=()=>dialog.evaluate(d=>[...d.querySelectorAll('.music-reader-toolbar,.music-reader-cover,#music-reader-title,.sound-artist,.sound-song-credit,.music-reader-tabs')].map(e=>{const r=e.getBoundingClientRect();return[r.x,r.y,r.width,r.height]}));
-  const before=await fixed();const tabs=dialog.getByRole('tab');assert.equal(await tabs.count(),2);
+  const drawer=page.locator('.music-text-drawer').nth(r);
+  const toggle=readers.nth(r);
+  await toggle.click();await drawer.locator('.music-text-content').waitFor({state:'visible'});
+  assert(await drawer.evaluate(d=>d.open));assert.equal(await page.locator('dialog[open]').count(),0);
+  assert.equal(await drawer.locator('.music-services,iframe,template').count(),0);
+  const tabs=drawer.getByRole('tab');assert.equal(await tabs.count(),2);
   for(let t=0;t<await tabs.count();t++){
-   await tabs.nth(t).click();const panel=dialog.locator('.music-reader-panel:not([hidden])');
-   assert.equal(await panel.evaluate(e=>e.scrollTop),0);
-   const metrics=await dialog.evaluate(d=>{const p=d.querySelector('.music-reader-panel:not([hidden])'),c=d.querySelector('.music-reader-cover'),r=d.getBoundingClientRect();return{dialog:[r.top,r.bottom],overflow:getComputedStyle(d).overflowY,panel:p.clientHeight,panelOverflow:getComputedStyle(p).overflowY,square:Math.abs(c.getBoundingClientRect().width-c.getBoundingClientRect().height),body:getComputedStyle(document.body).position};});
-   assert(metrics.dialog[0]>=-1&&metrics.dialog[1]<=height+1);assert.equal(metrics.overflow,'hidden');assert.equal(metrics.body,'fixed');assert.equal(metrics.panelOverflow,'auto');assert(metrics.panel>=Math.min(180,height*.3),JSON.stringify(metrics));assert(metrics.square<1);
+   await tabs.nth(t).click();const panel=drawer.locator('.music-reader-panel:not([hidden])');
+   const metrics=await drawer.evaluate(d=>{const p=d.querySelector('.music-reader-panel:not([hidden])');return{overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,body:getComputedStyle(document.body).position};});
+   assert(!metrics.overflow&&!metrics.pageOverflow);assert.notEqual(metrics.body,'fixed');assert(metrics.panel>0&&metrics.bottom<=metrics.end+1,JSON.stringify(metrics));
    assert.equal(await panel.locator(t===0?'.song-description':'.sound-song-lyrics').evaluate(e=>getComputedStyle(e).textAlign),t===0?'left':'center');
-   await panel.focus();await page.keyboard.press('End');await page.waitForFunction(()=>{const e=document.querySelector('.music-reader-panel:not([hidden])');return Math.abs(e.scrollHeight-e.clientHeight-e.scrollTop)<2;});
-   assert.deepEqual(await fixed(),before);assert.equal(await dialog.evaluate(e=>e.scrollTop),0);
-   await panel.evaluate(e=>e.scrollTop=e.scrollHeight);await tabs.nth(1-t).click();await tabs.nth(t).click();assert.equal(await panel.evaluate(e=>e.scrollTop),0);
+   await panel.locator('p').last().scrollIntoViewIfNeeded();assert(await panel.locator('p').last().isVisible());
+   await tabs.nth(1-t).click();await tabs.nth(t).click();assert(await panel.isVisible());
   }
-  if(r===1&&[1440,390].includes(width)&&height!==500){await tabs.nth(1).click();await page.screenshot({path:`${out}/${engineName}-${width}-fixed-reader.png`});}
-  await dialog.getByRole('button',{name:'楽曲詳細を閉じる'}).click();await dialog.waitFor({state:'hidden'});
-  // dialog.close() hides synchronously; its close event restores authored nodes on the next task.
-  await page.waitForFunction(()=>![...document.querySelectorAll('.music-reader-open')].some(e=>e.getAttribute('aria-expanded')==='true'));
+  if(r===1&&[1440,390].includes(width)&&height!==500){await toggle.scrollIntoViewIfNeeded();await page.screenshot({path:`${out}/${engineName}-${width}-inline-drawer.png`});}
+  await toggle.click();await page.waitForFunction(()=>![...document.querySelectorAll('.music-text-drawer')].some(e=>e.open));
+  assert.equal(await toggle.getAttribute('aria-expanded'),'false');
+
  }
  assert.deepEqual(await page.locator('.sound-release-card').evaluateAll(cs=>cs.map(c=>[c.id,[...c.querySelectorAll('.song-description,.sound-song-lyrics')].map(n=>n.innerHTML)])),sourceText);
 
@@ -143,7 +140,7 @@ try{
  if([1440,390].includes(width)&&height!==500){await page.locator('#listen-download').scrollIntoViewIfNeeded();await page.locator('#listen-download').screenshot({path:`${out}/${engineName}-${width}-listen-download.png`});}
  for(const id of ['sound-streaming','sound-download']){await page.locator('#'+id).scrollIntoViewIfNeeded();await page.locator('#'+id).screenshot({path:`${out}/${engineName}-${width}-${height}-${id}.png`});}
  if(!process.env.MUSIC_BASE_URL && [1440,390].includes(width)&&height!==500){await page.goto(base+'/music-logo-before.html',{waitUntil:'load'});for(const id of ['sound-streaming','sound-download']){const g=page.locator('#'+id);await g.scrollIntoViewIfNeeded();await g.locator('img').evaluateAll(is=>is.forEach(i=>i.loading='eager'));await page.waitForFunction(()=>[...document.querySelectorAll('#listen-download img')].filter(i=>i.loading==='eager').every(i=>i.complete&&i.naturalWidth));await g.screenshot({path:`${out}/${engineName}-${width}-before-${id}.png`});}}
- assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four fixed readers`);
+ assert.deepEqual(errors,[]);results.push({engine:engineName,width,height,status:'passed'});console.log(`PASS ${engineName} ${width}x${height}: 23 logos, 14 URLs, 9 disabled, ${width>=1000?6:4} columns; MUSIC regression + four independent song drawers`);
 }catch(error){await page.screenshot({path:`${out}/${engineName}-${width}x${height}-failure.png`});throw error;}finally{await context.close();}
 }}finally{await browser.close();}}
 }finally{server.close();fs.writeFileSync(`${out}/results.json`,JSON.stringify(results,null,2));}
