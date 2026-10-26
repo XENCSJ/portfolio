@@ -16,7 +16,8 @@ function measure(){
  const {execFileSync}=require('child_process');
  const base=process.env.FUSION_BASE_SHA||'HEAD^';
  for(const [source,dest] of [['studio.html','before-studio.html'],['xen-studio-fusion.css','before-fusion.css'],['xen-studio-fusion.js','before-fusion.js']]){
-  let text=execFileSync('git',['show',base+':'+source],{encoding:'utf8'});
+  // Container UID differs from checkout's UID; trust only this checkout for this read.
+  let text=execFileSync('git',['-c','safe.directory='+root,'show',base+':'+source],{encoding:'utf8'});
   if(source==='studio.html')text=text.replace(/\.\/xen-studio-fusion\.css\?v=[^"]+/, './before-fusion.css').replace(/\.\/xen-studio-fusion\.js\?v=[^"]+/, './before-fusion.js');
   fs.writeFileSync(path.join(evidence,dest),text);
  }
