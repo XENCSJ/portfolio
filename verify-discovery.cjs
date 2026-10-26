@@ -4,7 +4,7 @@ const fs=require('fs'), assert=require('node:assert/strict');
 const base=process.env.DISCOVERY_BASE_URL||'http://127.0.0.1:8765/';
 const nodes=JSON.parse(fs.readFileSync('xen-discovery-data.json','utf8')).nodes;
 const themes=nodes.home.children, results=[];
-let checks=0;
+let checks=0; const failures=[];
 fs.mkdirSync('discovery-evidence',{recursive:true});
 const ok=(v,msg)=>{assert(v,msg);checks++;};
 const ready=p=>p.waitForSelector('html[data-discovery-ready="true"]');
@@ -24,6 +24,7 @@ async function bounds(p,label){
   for(const width of [320,375,390,430,768,1024,1440,1920]){
    const context=await browser.newContext({viewport:{width,height:width<768?844:1000},reducedMotion:'reduce',isMobile:width<768,hasTouch:width<768});
    const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+   try {
    await p.goto(base+'what-is-xen.html',{waitUntil:'domcontentloaded'});await ready(p);
    await p.waitForFunction(()=>document.querySelector('.xd-logo').naturalWidth>0);
    await bounds(p,engine.name()+width);
@@ -48,16 +49,16 @@ async function bounds(p,label){
        for(const leaf of nodes[id].children){await pick(p,leaf);ok((await p.locator('.xd-detail-text').innerText())===nodes[leaf].text,'channel original text');await p.locator('.xd-detail-back').click();await active(p,id);}
       }else{
        ok((await p.locator('.xd-detail-text').innerText())===nodes[id].text,'original text '+id);
-       if(nodes[id].more){await p.locator('.xd-more summary').first().click();ok(await p.locator('.xd-more summary').first().getAttribute('aria-expanded')==='true','disclosure accessible');}
+       if(nodes[id].more){await p.locator('.xd-more summary').first().click();await p.waitForFunction(()=>document.querySelector('.xd-more summary')?.getAttribute('aria-expanded')==='true');ok(await p.locator('.xd-more summary').first().getAttribute('aria-expanded')==='true','disclosure accessible');}
       }
       await p.locator('.xd-detail-back').click();await active(p,theme);
      }
      await close(p);
     }
     // Native back/forward plus NEXT must restore content and both scroll contexts.
-    await p.evaluate(()=>scrollTo(0,180));const y=await p.evaluate(()=>scrollY);
+    await p.evaluate(()=>scrollTo(0,180));await p.locator('.xd-theme[data-node="creation"]').scrollIntoViewIfNeeded();const y=await p.evaluate(()=>scrollY);
     await p.locator('.xd-theme[data-node="creation"]').click();await active(p,'creation');
-    await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollTop=260);
+    await p.locator('.xd-dialog [data-node="storybooks"]').scrollIntoViewIfNeeded();
     const detailY=await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollTop);
     await pick(p,'storybooks');await p.goBack();await active(p,'creation');
     ok(Math.abs((await p.locator('.xd-detail-scroll').evaluate(n=>n.scrollTop))-detailY)<3,'overview scroll restored');
@@ -72,7 +73,9 @@ async function bounds(p,label){
     await close(p);await p.setViewportSize({width:844,height:390});await bounds(p,'landscape');
     await p.setViewportSize({width,height:844});await bounds(p,'portrait');
    }
-   ok(errors.length===0,errors.join(';'));results.push({engine:engine.name(),width,status:'PASS'});console.log('PASS',engine.name(),width);await context.close();
+   ok(errors.length===0,errors.join(';'));results.push({engine:engine.name(),width,status:'PASS'});console.log('PASS',engine.name(),width);
+   } catch(e) {const label=engine.name()+' '+width;failures.push(label+': '+e.message);results.push({engine:engine.name(),width,status:'FAIL',error:e.stack});console.error('FAIL',label,e);await p.screenshot({path:`discovery-evidence/${engine.name()}-${width}-failure.png`,fullPage:true});}
+   await context.close();
   }
   const p=await browser.newPage({viewport:{width:390,height:844}});await p.goto(base+'what-is-xen.html');await ready(p);
   // Resize caused by Safari toolbar must retain the exact interactive elements.
@@ -94,5 +97,5 @@ async function bounds(p,label){
  }
  // Every internal destination exists, including its named anchor.
  for(const n of Object.values(nodes))for(const href of [n.href,...(n.links||[]).map(l=>l.href)].filter(h=>h?.startsWith('./'))){const [file,anchor]=href.slice(2).split('#');ok(fs.existsSync(file),'file '+file);if(anchor)ok(fs.readFileSync(file,'utf8').includes(`id="${anchor}"`),'anchor '+href);}
- fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results},null,2));console.log(`PASS: ${checks} assertions; ${results.length} viewport/browser combinations`);
+ fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results,failures},null,2));assert(failures.length===0,failures.join('\n'));console.log(`PASS: ${checks} assertions; ${results.length} viewport/browser combinations`);
 })().catch(e=>{console.error(e);process.exit(1);});
