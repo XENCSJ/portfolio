@@ -1,71 +1,80 @@
-/* Four themes -> their full content. HTML remains the no-JavaScript experience. */
+/* Four compact theme panels share one native modal. Existing URLs stay valid. */
 (() => {
  'use strict';
- const host=document.querySelector('.xd-explorer'); if(!host)return;
- const cards=[...host.querySelectorAll('[data-theme]')],panels=[...host.querySelectorAll('.xd-panel')];
+ const host=document.querySelector('.xd-explorer'),dialog=document.querySelector('.xd-theme-dialog');
+ if(!host||!dialog||typeof dialog.showModal!=='function')return;
+ const cards=[...host.querySelectorAll('[data-theme]')],panels=[...dialog.querySelectorAll('[data-panel]')];
+ const switches=[...dialog.querySelectorAll('[data-switch]')],themes=cards.map(a=>a.dataset.theme);
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
- const nodes=JSON.parse(document.querySelector('#xd-data').textContent).nodes;
- const themes=nodes.home.children;
- let current='',returnY=scrollY,opener=cards[0],enterTimer;
- const owner=id=>themes.find(t=>t===id||nodes[t].children.includes(id)||nodes[t].children.some(c=>nodes[c].children?.includes(id)));
- const fromHash=()=>owner(location.hash.slice(1).split('/').at(-1))||'';
- function render(id,{focus=false,scroll=false}={}){
-  clearTimeout(enterTimer);current=id;
-  cards.forEach(a=>{const selected=a.dataset.theme===id;a.setAttribute('aria-expanded',String(selected));a.classList.toggle('is-selected',selected);if(selected)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
-  panels.forEach(p=>{p.hidden=p.id!==id;p.classList.remove('is-entering');p.querySelector('.xd-panel-toolbar').hidden=false;});
-  host.querySelectorAll('[data-switch]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.switch===id)));
-  const panel=panels.find(p=>p.id===id);
-  if(panel){
-   if(!reduced.matches){panel.classList.add('is-entering');enterTimer=setTimeout(()=>panel.classList.remove('is-entering'),600);}
-   if(scroll)panel.scrollIntoView({block:'start',behavior:reduced.matches?'instant':'smooth'});
-   if(focus)panel.querySelector('h2').focus({preventScroll:true});
+ const aliases={identity:'past',philosophy:'future',creation:'present',connection:'together'};
+ let current='',opener=null,pageY=0,returnHash='',closing=false,animation=null;
+ const hashTheme=()=>{const id=location.hash.slice(1).split('/').at(-1);return themes.includes(id)?id:aliases[id]||'';};
+ const announce=open=>document.dispatchEvent(new CustomEvent('xen:theme-modal',{detail:{open}}));
+ function render(id){
+  current=id;
+  cards.forEach(card=>{const selected=card.dataset.theme===id;card.setAttribute('aria-expanded',String(selected));card.classList.toggle('is-selected',selected);});
+  panels.forEach(panel=>panel.hidden=panel.dataset.panel!==id);
+  switches.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.switch===id)));
+  dialog.setAttribute('aria-labelledby',id+'-title');
+  dialog.querySelector('.xd-theme-counter').textContent=`0${themes.indexOf(id)+1} / 04 — ${id.toUpperCase()}`;
+  dialog.querySelector('.xd-theme-scroll').scrollTop=0;
+ }
+ function open(id,trigger){
+  if(!themes.includes(id)||closing)return;
+  // Never layer a theme modal over the gallery's work modal.
+  if(document.querySelector('dialog[open]:not(.xd-theme-dialog)'))return;
+  const first=!dialog.open;
+  if(first){pageY=scrollY;opener=trigger||cards.find(a=>a.dataset.theme===id);returnHash=location.hash;}
+  render(id);
+  if(first){
+   document.body.style.top=`-${pageY}px`;document.body.classList.add('xd-modal-open');
+   dialog.showModal();announce(true);
+   dialog.querySelector('.xd-theme-close').focus({preventScroll:true});
+   if(!reduced.matches)animation=dialog.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:280,easing:'ease-out'});
   }
-  host.querySelector('.xd-status').textContent=id?nodes[id].ja+'の内容を表示しました。':'4つのテーマから選べます。';
+ }
+ function close(changeHistory=true){
+  if(!dialog.open||closing)return;
+  closing=true;
+  const finish=()=>{
+   dialog.close();current='';closing=false;
+   cards.forEach(card=>{card.setAttribute('aria-expanded','false');card.classList.remove('is-selected');});
+   document.body.classList.remove('xd-modal-open');document.body.style.top='';
+   scrollTo({top:pageY,behavior:'instant'});opener?.focus({preventScroll:true});announce(false);
+   if(changeHistory){
+    if(history.state?.xdThemeModal)history.back();
+    else history.replaceState(history.state,'',location.pathname+location.search+'#explore');
+   }
+  };
+  animation?.cancel();
+  if(reduced.matches){finish();return;}
+  animation=dialog.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY(6px)'}],{duration:180,easing:'ease-in'});
+  animation.onfinish=finish;
  }
  function select(id,trigger){
-  if(id===current)return;
-  if(!current){returnY=scrollY;opener=trigger||cards.find(a=>a.dataset.theme===id);}
-  history.pushState({...history.state,xdTheme:id,xdReturnY:returnY},'', '#'+id);
-  render(id,{focus:true,scroll:true});
+  const wasOpen=dialog.open;open(id,trigger);
+  if(!dialog.open||closing)return;
+  if(wasOpen)history.replaceState(history.state,'','#'+id);
+  else history.pushState({...history.state,xdThemeModal:true},'','#'+id);
  }
- function close(){
-  history.replaceState({...history.state,xdTheme:''},'','#home');render('');
-  window.scrollTo({top:returnY,behavior:'instant'});opener?.focus({preventScroll:true});
- }
- cards.forEach(a=>{a.setAttribute('aria-controls',a.dataset.theme);a.setAttribute('aria-expanded','false');a.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();select(a.dataset.theme,a);});a.addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();a.click();}});});
- host.querySelectorAll('[data-switch]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.switch)));
- host.querySelectorAll('.xd-theme-close').forEach(b=>b.addEventListener('click',close));
- host.querySelectorAll('.xd-drawer').forEach(drawer=>{
-  const summary=drawer.querySelector('summary'),panel=drawer.querySelector('.xd-drawer-body');
-  let desiredOpen=false,animation;
-  drawer.open=false;panel.inert=true;
-  const settle=open=>{drawer.open=open;drawer.style.height='';drawer.style.overflow='';animation=null;};
-  summary.addEventListener('click',event=>{
-   event.preventDefault();desiredOpen=!desiredOpen;
-   const start=drawer.getBoundingClientRect().height;
-   if(animation){animation.cancel();animation=null;}
-   summary.setAttribute('aria-expanded',String(desiredOpen));panel.inert=!desiredOpen;
-   if(desiredOpen)drawer.open=true;
-   drawer.style.height='';
-   const end=desiredOpen?drawer.getBoundingClientRect().height:summary.getBoundingClientRect().height;
-   if(reduced.matches||!drawer.animate){settle(desiredOpen);return;}
-   drawer.style.overflow='hidden';
-   animation=drawer.animate({height:[start+'px',end+'px']},{duration:260,easing:'cubic-bezier(.22,1,.36,1)'});
-   animation.onfinish=()=>settle(desiredOpen);
-  });
-  drawer.addEventListener('toggle',()=>{if(animation)return;desiredOpen=drawer.open;panel.inert=!desiredOpen;summary.setAttribute('aria-expanded',String(desiredOpen));});
+ cards.forEach(card=>{
+  card.setAttribute('aria-haspopup','dialog');card.setAttribute('aria-controls','xd-theme-modal');card.setAttribute('aria-expanded','false');
+  card.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.altKey||event.shiftKey||event.button)return;event.preventDefault();select(card.dataset.theme,card);});
+  card.addEventListener('keydown',event=>{if(event.key===' '){event.preventDefault();card.click();}});
  });
- host.querySelectorAll('.xd-more').forEach(d=>{const s=d.querySelector('summary');s.setAttribute('aria-expanded',String(d.open));d.addEventListener('toggle',()=>s.setAttribute('aria-expanded',String(d.open)));});
- host.querySelectorAll('[data-video]').forEach(button=>button.addEventListener('click',()=>{const frame=document.createElement('iframe');frame.src='https://www.youtube-nocookie.com/embed/'+button.dataset.video;frame.title=button.dataset.title;frame.allow='encrypted-media; picture-in-picture';frame.allowFullscreen=true;frame.referrerPolicy='strict-origin-when-cross-origin';button.replaceWith(frame);}));
- addEventListener('popstate',()=>{returnY=history.state?.xdReturnY??returnY;render(fromHash());});
- addEventListener('hashchange',()=>{if(fromHash()!==current)render(fromHash());});
- addEventListener('keydown',e=>{if(e.key==='Escape'&&current&&!document.querySelector('dialog[open]')&&!document.querySelector('.xen-header-toggle[aria-expanded=true]')){e.preventDefault();close();}});
- // One-time entrance motion follows the section in view; gallery update effects stay independent.
+ dialog.id='xd-theme-modal';
+ switches.forEach(button=>button.addEventListener('click',()=>select(button.dataset.switch)));
+ dialog.querySelector('.xd-theme-close').addEventListener('click',()=>close());
+ dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
+ const sync=()=>{const id=hashTheme();if(id){if(current!==id)open(id);}else close(false);};
+ addEventListener('popstate',sync);addEventListener('hashchange',sync);
+ // Close before navigation is cached so Back restores the original exploration screen.
+ addEventListener('pagehide',()=>{if(dialog.open){animation?.cancel();dialog.close();current='';closing=false;document.body.classList.remove('xd-modal-open');document.body.style.top='';}});
+ addEventListener('pageshow',event=>{if(event.persisted){scrollTo({top:pageY,behavior:'instant'});sync();announce(dialog.open);}});
  cards.forEach((card,i)=>card.style.setProperty('--theme-order',i));
  document.querySelectorAll('.xd-tile').forEach((tile,i)=>tile.style.setProperty('--tile-order',i));
- const revealSections=document.querySelectorAll('.xd-gallery,.xd-intro,.xd-words,.xd-related-pages');
- if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('xd-in-view');observer.unobserve(entry.target);}}),{threshold:.08});revealSections.forEach(n=>observer.observe(n));}
- else revealSections.forEach(n=>n.classList.add('xd-in-view'));
- render(fromHash());
- document.documentElement.dataset.discoveryReady='true';
+ const sections=document.querySelectorAll('.xd-gallery,.xd-intro,.xd-words');
+ if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('xd-in-view');observer.unobserve(entry.target);}}),{threshold:.08});sections.forEach(n=>observer.observe(n));}
+ else sections.forEach(n=>n.classList.add('xd-in-view'));
+ sync();document.documentElement.dataset.discoveryReady='true';
 })();

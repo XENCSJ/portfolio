@@ -11,14 +11,14 @@
  const rand=(low,high)=>low+Math.random()*(high-low);
  let works=[],groups=[],cells=[],queue=[],pending=new Set(),failed=new Set(),recent=[];
  let near=false,visible=false,active=null,timer=null,lastCell=null,lastEffect='';
- let opener=null,pageY=0,detailOpen=false,changeCount=0;
+ let opener=null,pageY=0,detailOpen=false,changeCount=0,themeOpen=Boolean(document.querySelector('.xd-theme-dialog[open]'));
  const gestures=new Map(),hovered=new Set(),focused=new Set();
  const isVisible=cell=>cell.node.getClientRects().length>0;
  const locked=cell=>gestures.has(cell)||hovered.has(cell)||focused.has(cell);
- const canLoad=()=>near&&!document.hidden&&!detailOpen;
- const canRun=()=>visible&&!document.hidden&&!detailOpen&&!reduced.matches;
+ const canLoad=()=>near&&!document.hidden&&!detailOpen&&!themeOpen;
+ const canRun=()=>visible&&!document.hidden&&!detailOpen&&!themeOpen&&!reduced.matches;
  function updateState(){
-  gallery.dataset.galleryState=detailOpen?'details':document.hidden?'hidden':reduced.matches?'reduced':visible?'running':'out-of-view';
+  gallery.dataset.galleryState=detailOpen?'details':themeOpen?'theme':document.hidden?'hidden':reduced.matches?'reduced':visible?'running':'out-of-view';
 
  }
  function setCell(cell,work,image){
@@ -91,6 +91,7 @@
   image.addEventListener('animationend',finish,{once:true});active.timeout=setTimeout(finish,duration+45);
  }
  function selectWork(cell,latched){
+  if(themeOpen||document.querySelector('.xd-theme-dialog[open]'))return;
   if(active?.cell===cell)settle(dominantIncoming());
   const work=latched||cell.work;
   detailOpen=true;stop();opener=cell.node;pageY=scrollY;
@@ -141,6 +142,7 @@
   if(e.key!=='Tab')return;const first=dialog.querySelector('.xd-work-close'),last=dialog.querySelector('.xd-work-link');
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
  });
+ document.addEventListener('xen:theme-modal',event=>{themeOpen=event.detail.open;if(themeOpen)stop();else{pump();schedule();}});
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else{pump();schedule();}});
  reduced.addEventListener('change',()=>{stop();pump();schedule();});
  addEventListener('pagehide',()=>{stop();});
