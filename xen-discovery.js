@@ -60,7 +60,12 @@
  addEventListener('popstate',()=>{returnY=history.state?.xdReturnY??returnY;render(fromHash());});
  addEventListener('hashchange',()=>{if(fromHash()!==current)render(fromHash());});
  addEventListener('keydown',e=>{if(e.key==='Escape'&&current&&!document.querySelector('dialog[open]')&&!document.querySelector('.xen-header-toggle[aria-expanded=true]')){e.preventDefault();close();}});
- if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('xd-in-view');observer.unobserve(entry.target);}}),{threshold:.1});document.querySelectorAll('.xd-gallery-heading,.xd-related-pages').forEach(n=>observer.observe(n));}
+ // One-time entrance motion follows the section in view; gallery update effects stay independent.
+ cards.forEach((card,i)=>card.style.setProperty('--theme-order',i));
+ document.querySelectorAll('.xd-tile').forEach((tile,i)=>tile.style.setProperty('--tile-order',i));
+ const revealSections=document.querySelectorAll('.xd-gallery,.xd-intro,.xd-words,.xd-related-pages');
+ if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('xd-in-view');observer.unobserve(entry.target);}}),{threshold:.08});revealSections.forEach(n=>observer.observe(n));}
+ else revealSections.forEach(n=>n.classList.add('xd-in-view'));
  render(fromHash());
  document.documentElement.dataset.discoveryReady='true';
 })();
