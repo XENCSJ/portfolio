@@ -9,7 +9,7 @@ const catalog=JSON.parse(fs.readFileSync('xen-discovery-gallery.json','utf8'));
 const source=fs.readFileSync('what-is-xen.html','utf8');
 const results=[];
 const visibleWorks=page=>page.locator('.xd-tile:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.work));
-async function ready(page,fragment=''){await page.goto(base+'what-is-xen.html'+fragment);await page.waitForSelector('html[data-discovery-ready="true"]');await page.waitForSelector('[data-gallery-ready="true"]');}
+async function ready(page,fragment=''){await page.goto(base+'what-is-xen.html'+fragment);await page.waitForSelector('html[data-discovery-ready="true"]',{state:'attached'});await page.waitForSelector('[data-gallery-ready="true"]');}
 async function screenshot(page,name){await page.screenshot({path:`discovery-evidence/${name}.png`});}
 (async()=>{
 fs.mkdirSync('discovery-evidence',{recursive:true});
@@ -82,7 +82,7 @@ for(const engine of [chromium,webkit]){
   ok(await page.locator('.xen-footer-inquiry').getAttribute('href')==='./studio.html#contact','consultation intact');
   ok(await page.locator('.xen-footer-action').nth(1).getAttribute('href')==='./price-list.html','prices intact');
   if([390,1440].includes(width)){
-   await page.locator('#explore').scrollIntoViewIfNeeded();await screenshot(page,`${engine.name()}-${width}-explore`);
+   await page.locator('.xd-words').scrollIntoViewIfNeeded();await screenshot(page,`${engine.name()}-${width}-explore`);
    await page.evaluate(()=>scrollTo(0,0));await screenshot(page,`${engine.name()}-${width}-top`);
   }
   ok(errors.length===0,'no JS errors '+errors.join(';'));
