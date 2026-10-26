@@ -157,8 +157,8 @@
   }));
   function restore() {if(!nodes)return;cancelFlight();pages={...(history.state?.pages||{})};render(readHash());}
   addEventListener('popstate',restore);addEventListener('hashchange',()=>{if(nodes&&readHash()!==current)restore();});
-  let resizeFrame;
-  addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(!nodes)return;cancelFlight();if(capacity()!==renderedCapacity)renderScene();});});
+  let resizeFrame, viewportWidth = innerWidth;
+  addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(!nodes || innerWidth===viewportWidth)return;viewportWidth=innerWidth;cancelFlight();if(capacity()!==renderedCapacity)renderScene();});});
   reduce.addEventListener('change',()=>{if(nodes)cancelFlight();});
   Promise.all([
     fetch('./xen-discovery-data.json').then(r=>{if(!r.ok)throw new Error('Discovery data unavailable');return r.json();}),
