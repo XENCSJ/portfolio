@@ -9,8 +9,30 @@
  // APPAREL (1).png is the ABC TV 'Miss Target' episode 3 media collage;
  // APPAREL (1).JPG and the separate grey hoodie are different, allowed works.
  const excludedCategories=new Set(['cinematic','snsmanagement','snap']);
- const excludedWorkIds=new Set(['apparel-ccc341888110']);
- const excludedImages=new Set(['apparel (1).png','xen-preview-6e9cfc944d27281a.webp']);
+ // Red-X references IMG_9947 through IMG_9954: 17 whole images, not their separate works.
+ // Stable work IDs plus original/preview paths keep ordering and URL aliases irrelevant.
+ const excludedAssets=[
+  ['apparel-ccc341888110','APPAREL (1).png','xen-preview-6e9cfc944d27281a.webp'], // existing Miss Target exclusion
+  ["design-e7a94102467b", "DESIGN (1).png", "xen-preview-a72f67e01dba78a8.webp"],
+  ["design-88900d525066", "DESIGN (4).jpg", "xen-preview-6f26cf8bfee67f8d.webp"],
+  ["architecture-2424aea1ca35", "ARCHITECTURE (3).PNG", "xen-preview-2e434359d95c5f34.webp"],
+  ["architecture-b3a885b4a868", "ARCHITECTURE (7).PNG", "xen-preview-037ce0d518f1845a.webp"],
+  ["architecture-cd8cdcdb14d0", "ARCHITECTURE (8).PNG", "xen-preview-af910ba9d31b9b0e.webp"],
+  ["architecture-ebc64cb39540", "ARCHITECTURE (6).PNG", "xen-preview-672e0557b511f605.webp"],
+  ["architecture-1e49dea01c50", "ARCHITECTURE (5).PNG", "xen-preview-f77333dc61ed2f87.webp"],
+  ["architecture-b2dbd0707f0f", "ARCHITECTURE (10).PNG", "xen-preview-4575b1287cca4e7e.webp"],
+  ["architecture-fb17daedd9df", "ARCHITECTURE (11).PNG", "xen-preview-13caa425cdd86b2b.webp"],
+  ["architecture-1d5d294c4bd0", "ARCHITECTURE (4).jpg", "xen-preview-47fd91971437be69.webp"],
+  ["architecture-f18cf5c8997b", "ARCHITECTURE (5).jpg", "xen-preview-92008f2425eaed58.webp"],
+  ["architecture-0a6065abe276", "ARCHITECTURE (1).jpg", "xen-preview-5245c11466c25fd4.webp"],
+  ["architecture-590ec40e476e", "ARCHITECTURE (3).jpg", "xen-preview-317f870787c07f32.webp"],
+  ["architecture-8b0fe09e46a9", "ARCHITECTURE (6).jpg", "xen-preview-450130aa0b1ba695.webp"],
+  ["architecture-9d4659851c16", "ARCHITECTURE-S (1).jpg", "xen-preview-99b2ffd5fd9341f5.webp"],
+  ["architecture-639e72800da4", "ARCHITECTURE-S (3).jpg", "xen-preview-7b9c541511702cf2.webp"],
+  ["architecture-70b86bed2ebf", "ARCHITECTURE-S (2).jpg", "xen-preview-8d235bd5c952128a.webp"],
+ ];
+ const excludedWorkIds=new Set(excludedAssets.map(([id])=>id));
+ const excludedImages=new Set(excludedAssets.flatMap(([, ...paths])=>paths.map(path=>path.normalize('NFKC').toLowerCase())));
  const categoryKey=value=>String(value||'').normalize('NFKC').toLowerCase().replace(/[\s_\-–—/]+/g,'');
  function imageName(value){
   try{return decodeURIComponent(new URL(value,document.baseURI).pathname).split('/').pop().normalize('NFKC').toLowerCase();}catch{return '';}
@@ -175,7 +197,7 @@
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
- fetch('./xen-discovery-gallery.json?v=20261026-exclusions2').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
+ fetch('./xen-discovery-gallery.json?v=20261027-redx17').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
   // Filter before grouping, selection, decoding, preloading or queuing.
   works=(Array.isArray(data.works)?data.works:[]).filter(eligibleWork);
   groups=[...new Set(works.map(w=>w.genre))].map(genre=>works.filter(w=>w.genre===genre));

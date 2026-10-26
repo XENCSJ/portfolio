@@ -7,13 +7,40 @@ const themes=['past','present','future','together'];let checks=0;
 const ok=(value,message)=>{assert(value,message);checks++};
 const catalog=JSON.parse(fs.readFileSync('xen-discovery-gallery.json','utf8'));
 const source=fs.readFileSync('what-is-xen.html','utf8');
+// The 17 whole images marked with red X in IMG_9947-IMG_9954.
+const redXAssets=[
+ ["design-e7a94102467b", "DESIGN (1).png", "xen-preview-a72f67e01dba78a8.webp"],
+ ["design-88900d525066", "DESIGN (4).jpg", "xen-preview-6f26cf8bfee67f8d.webp"],
+ ["architecture-2424aea1ca35", "ARCHITECTURE (3).PNG", "xen-preview-2e434359d95c5f34.webp"],
+ ["architecture-b3a885b4a868", "ARCHITECTURE (7).PNG", "xen-preview-037ce0d518f1845a.webp"],
+ ["architecture-cd8cdcdb14d0", "ARCHITECTURE (8).PNG", "xen-preview-af910ba9d31b9b0e.webp"],
+ ["architecture-ebc64cb39540", "ARCHITECTURE (6).PNG", "xen-preview-672e0557b511f605.webp"],
+ ["architecture-1e49dea01c50", "ARCHITECTURE (5).PNG", "xen-preview-f77333dc61ed2f87.webp"],
+ ["architecture-b2dbd0707f0f", "ARCHITECTURE (10).PNG", "xen-preview-4575b1287cca4e7e.webp"],
+ ["architecture-fb17daedd9df", "ARCHITECTURE (11).PNG", "xen-preview-13caa425cdd86b2b.webp"],
+ ["architecture-1d5d294c4bd0", "ARCHITECTURE (4).jpg", "xen-preview-47fd91971437be69.webp"],
+ ["architecture-f18cf5c8997b", "ARCHITECTURE (5).jpg", "xen-preview-92008f2425eaed58.webp"],
+ ["architecture-0a6065abe276", "ARCHITECTURE (1).jpg", "xen-preview-5245c11466c25fd4.webp"],
+ ["architecture-590ec40e476e", "ARCHITECTURE (3).jpg", "xen-preview-317f870787c07f32.webp"],
+ ["architecture-8b0fe09e46a9", "ARCHITECTURE (6).jpg", "xen-preview-450130aa0b1ba695.webp"],
+ ["architecture-9d4659851c16", "ARCHITECTURE-S (1).jpg", "xen-preview-99b2ffd5fd9341f5.webp"],
+ ["architecture-639e72800da4", "ARCHITECTURE-S (3).jpg", "xen-preview-7b9c541511702cf2.webp"],
+ ["architecture-70b86bed2ebf", "ARCHITECTURE-S (2).jpg", "xen-preview-8d235bd5c952128a.webp"],
+];
+const blockedIds=new Set(redXAssets.map(([id])=>id));
+const blockedNames=new Set(redXAssets.flatMap(([, ...paths])=>paths.map(p=>p.toLowerCase())));
+const eligibleCatalog=catalog.works.filter(w=>!blockedIds.has(w.id));
+
 const results=[];
 const visibleWorks=page=>page.locator('.xd-tile:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.work));
 async function ready(page,fragment=''){await page.goto(base+'what-is-xen.html'+fragment);await page.waitForSelector('html[data-discovery-ready="true"]',{state:'attached'});await page.waitForSelector('[data-gallery-ready="true"]');}
 async function screenshot(page,name){await page.screenshot({path:`discovery-evidence/${name}.png`});}
 (async()=>{
 fs.mkdirSync('discovery-evidence',{recursive:true});
-ok(catalog.works.length===160,'160 existing images retained');
+ok(catalog.works.length===160,'160 catalog records retained');
+ok(eligibleCatalog.length===143,'143 eligible works after 17 exclusions');
+const fallbackIds=[...source.matchAll(/class="xd-tile"[^>]*data-work="([^"]+)"/g)].map(m=>m[1]);
+ok(fallbackIds.length===12&&fallbackIds.every(id=>eligibleCatalog.some(w=>w.id===id)),'all 12 static tiles eligible, including no-JS initial display');
 ok(catalog.works.every(w=>!['CINEMATIC','SNS MANAGEMENT','SNAP'].includes(w.genre)&&w.id!=='apparel-ccc341888110'&&!w.image.includes('6e9cfc944d27281a')),'exclusions retained');
 ok(!/xd-panels|xd-drawer|id="xd-data"/.test(source),'retired inline content removed');
 for(const match of source.matchAll(/href="(\.\/[^"]+\.html(?:#[^"]+)?)"/g)){
@@ -107,7 +134,7 @@ for(const engine of [chromium,webkit]){
  console.log('PASS',engine.name(),'mobile',events.events.length,'draws; excluded=0 after catalog check');
  ok(events.max===1,'one random tile changes at a time');
  ok(new Set(events.events.map(e=>e.cell)).size>=4,'random cells');
- ok(events.events.every(e=>catalog.works.some(w=>w.id===e.id)),'dynamic works approved');
+ ok(events.events.every(e=>eligibleCatalog.some(w=>w.id===e.id)),'dynamic works approved');
  ok(events.events.every(e=>['crossfade','mask','zoom','vertical','blur'].includes(e.effect)),'existing five effects');
  ok(events.events.slice(1).every((e,i)=>e.time-events.events[i].time>500),'existing slower cadence preserved');
  await page.locator('[data-theme="together"]').click();await page.waitForTimeout(300);const frozen=await visibleWorks(page);await page.waitForTimeout(1800);ok(JSON.stringify(frozen)===JSON.stringify(await visibleWorks(page)),'animated mode gallery pauses for theme');
@@ -130,7 +157,15 @@ for(const engine of [chromium,webkit]){
   {id:'excluded-original',genre:'APPAREL',image:'./APPAREL%20%281%29.png'},
   {id:'excluded-original-alias',genre:'SHOP',originalImage:'./APPAREL%20(1).png'}
  ].map((overrides,index)=>({...catalog.works[0],id:'blocked-'+index,image:'./blocked-discovery-fixture-'+index+'.png',...overrides}));
- desktopPage.on('request',request=>{if(/blocked-discovery-fixture|6e9cfc944d27281a|APPAREL%20(?:%28|\()1(?:%29|\))\.png/i.test(request.url()))blockedRequests.push(request.url());});
+ const redXVariants=redXAssets.flatMap(([id,...paths],index)=>[
+  {...catalog.works[0],id},
+  ...paths.flatMap((path,alias)=>[
+   {...catalog.works[0],id:`redx-path-${index}-${alias}`,image:`./${encodeURIComponent(path)}?v=old#alias`},
+   {...catalog.works[0],id:`redx-original-${index}-${alias}`,image:`./blocked-discovery-fixture-redx-${index}-${alias}.png`,originalImage:`https://xencsj.github.io/portfolio/${encodeURIComponent(path)}`}
+  ])
+ ]);
+ variants.push(...redXVariants);
+ desktopPage.on('request',request=>{const name=decodeURIComponent(new URL(request.url()).pathname).split('/').pop().toLowerCase();if(blockedNames.has(name))blockedRequests.push(request.url());if(/blocked-discovery-fixture|6e9cfc944d27281a|APPAREL%20(?:%28|\()1(?:%29|\))\.png/i.test(request.url()))blockedRequests.push(request.url());});
  await desktopPage.route('**/xen-discovery-gallery.json?*',route=>route.fulfill({json:{...catalog,works:[...catalog.works,...variants],genres:[...catalog.genres,' cinematic ','SNS_MANAGEMENT','ＳＮＡＰ','APPAREL']}}));
  await ready(desktopPage);await desktopPage.reload();await desktopPage.waitForSelector('[data-gallery-ready="true"]');
  ok(await desktopPage.locator('.xd-tile:visible').count()===12,'desktop retains 12 tiles after reload');
@@ -140,7 +175,7 @@ for(const engine of [chromium,webkit]){
  await desktopPage.evaluate(()=>{window.exclusionEvents=[];document.querySelector('.xd-gallery').addEventListener('xen:gallery-change',event=>window.exclusionEvents.push(event.detail));});
  await desktopPage.waitForFunction(()=>window.exclusionEvents.length>=100,{},{timeout:240000});
  const desktopEvents=await desktopPage.evaluate(()=>window.exclusionEvents);
- ok(desktopEvents.every(event=>catalog.works.some(work=>work.id===event.id)),'100 desktop draws reject injected exclusions');
+ ok(desktopEvents.every(event=>eligibleCatalog.some(work=>work.id===event.id)),'100 desktop draws reject injected exclusions');
  ok(blockedRequests.length===0,'excluded images never preloaded or requested');
  ok(await desktopPage.locator('.xd-gallery button').count()===0,'no pause control added');
  await desktopPage.locator('[data-theme="past"]').click();await desktopPage.keyboard.press('Escape');await desktopPage.locator('.xd-theme-dialog').waitFor({state:'hidden'});
@@ -151,6 +186,6 @@ for(const engine of [chromium,webkit]){
  await desktop.close();
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const plain=await nojs.newPage();await plain.goto(base+'what-is-xen.html');ok(await plain.locator('.xd-theme[href]').count()===4,'no-JS navigation available');ok(await plain.locator('.xd-tile:visible').count()===9,'no-JS gallery');await nojs.close();await browser.close();
 }
-fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({checks,results,unresolved:['PAST origin unpublished','Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
+fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({checks,results,newExclusions:17,eligibleWorks:143,unresolved:['PAST origin unpublished','Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
 console.log('PASS',checks,'checks');
 })().catch(error=>{console.error(error);process.exit(1)});
