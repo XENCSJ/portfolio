@@ -15,6 +15,8 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +24,6 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-save --package-lock=false playwright@1.56.1
-      - run: npx playwright install --with-deps chromium webkit
       - run: node --check xen-mvv-pyramid.js && node verify-mvv.cjs
         env:
           MVV_PUBLIC_URL: ${{ inputs.public_url }}
