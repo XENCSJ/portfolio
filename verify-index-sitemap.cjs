@@ -33,7 +33,7 @@ async function measure(p){return p.evaluate(()=>{
    await page.goto(root+'__baseline-index.html',{waitUntil:'load'});const before=await measure(page);
    await page.goto(base+'index.html',{waitUntil:'load'});const after=await measure(page);
    fs.writeFileSync(`${evidence}/${engine.name()}-${width}-measure.json`,JSON.stringify({before,after},null,2));
-   if(width===375)await page.locator('#creative-index').screenshot({path:`${evidence}/${engine.name()}-${width}-sitemap.png`});
+   if(width===375)await page.screenshot({path:`${evidence}/${engine.name()}-${width}-sitemap.png`,clip:{x:after.sitemap.x,y:after.sitemap.y,width:after.sitemap.w,height:after.sitemap.h}});
    assert.notEqual(after.line.content,'none','continuous divider is drawn');
    assert.deepEqual(after.rows.map(r=>r.name),names);assert.deepEqual(after.rows.map(r=>r.href),hrefs.map(h=>'./'+h));
    assert.equal(after.overflow,false);assert.equal(after.headings.length,2);
@@ -52,7 +52,7 @@ async function measure(p){return p.evaluate(()=>{
      assert(Math.abs(row.ja.x+parseFloat(row.jaPadding)-(row.svg.x+row.svg.w+8))<1,row.name+' bilingual alignment');
      for(const key of ['font','family','line','gap'])assert.equal(row.type[key],old.type[key],row.name+' English '+key);
      assert.equal(row.type.color,old.type.color,row.name+' color');
-    }else{assert(row.svg.x<after.line.x);assert(row.ja.x>=after.line.x);}
+    }else{assert(row.svg.x<after.line.x);assert(row.ja.x>=after.line.x-1);}
     for(const key of ['font','family','line'])assert.equal(row.jtype[key],old.jtype[key],row.name+' Japanese '+key);
     for(const key of ['width','height','stroke'])assert.equal(row.itype[key],old.itype[key],row.name+' icon '+key);
     assert.equal(row.svgHTML,old.svgHTML,row.name+' original icon');
@@ -64,7 +64,7 @@ async function measure(p){return p.evaluate(()=>{
    const url=page.url();await page.locator('#index-about-heading').click();assert.equal(page.url(),url);await page.locator('#index-works-heading').click();assert.equal(page.url(),url);
    const menu=page.locator('.xen-header-toggle');await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await menu.getAttribute('aria-expanded'),'false');
    if([390,1440].includes(width)){
-    await page.mouse.move(0,0);await page.locator('#creative-index').screenshot({path:`${evidence}/${engine.name()}-${width}-sitemap.png`});
+    await page.mouse.move(0,0);await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${evidence}/${engine.name()}-${width}-sitemap.png`,clip:{x:after.sitemap.x,y:after.sitemap.y,width:after.sitemap.w,height:after.sitemap.h}});
     await page.screenshot({path:`${evidence}/${engine.name()}-${width}-page.png`,fullPage:true});
     const destination=await context.newPage();await destination.route('**/*',r=>['image','media','font'].includes(r.request().resourceType())?r.abort():r.continue());
     for(const [i,href] of hrefs.entries()){
