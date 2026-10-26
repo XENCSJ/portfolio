@@ -13,7 +13,7 @@
  let near=false,visible=false,active=null,timer=null,lastCell=null,lastEffect='';
  let opener=null,pageY=0,detailOpen=false,changeCount=0;
  const gestures=new Map(),hovered=new Set(),focused=new Set();
- const isVisible=cell=>cells.indexOf(cell)<9;
+ const isVisible=cell=>cell.node.getClientRects().length>0;
  const locked=cell=>gestures.has(cell)||hovered.has(cell)||focused.has(cell);
  const canLoad=()=>near&&!document.hidden&&!detailOpen;
  const canRun=()=>visible&&!document.hidden&&!detailOpen&&!reduced.matches;
