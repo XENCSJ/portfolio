@@ -1,5 +1,5 @@
 /* Confined to MUSIC: original catalogue, genre rows and carousel stay intact. */
-body#top.sound-page main .music-reader-ready > details { display:none; }
+body#top.sound-page main .music-reader-ready > details:not(.music-text-drawer) { display:none; }
 body#top.sound-page main .music-services { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; width:100%; max-width:440px; list-style:none; margin:24px auto 0; padding:0; }
 body#top.sound-page main .music-services li { margin:0; padding:0; min-width:0; }
 body#top.sound-page main .music-service { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; width:100%; min-height:94px; padding:4px 0; color:#292929; background:none; border:0; text-decoration:none; }
@@ -185,3 +185,32 @@ body#top.sound-page main .music-player-panel .video-source { display:block; marg
 /* BLUE SLEEP videos share the card's existing independent playback drawers. */
 body#top.sound-page main #blue-sleep .music-playback > .sound-video-item { padding-top:20px; }
 body#top.sound-page main #blue-sleep .music-playback-heading { margin-bottom:0; }
+
+/* VIEW DETAILS expands within its own release, using the existing 260ms drawer tempo. */
+body#top.sound-page main .music-text-drawer { display:block; width:100%; min-width:0; overflow:hidden; overflow-anchor:none; }
+body#top.sound-page main .music-text-drawer > summary {
+  box-sizing:border-box; margin:14px 0 0; border-color:var(--music-line); list-style:none;
+  color:var(--music-gold); touch-action:manipulation;
+}
+.music-text-drawer > summary::-webkit-details-marker { display:none; }
+.music-text-drawer > summary::marker { content:''; }
+.music-text-drawer > summary svg { flex:0 0 auto; color:var(--music-ink); transition:transform 260ms ease; }
+.music-text-drawer > summary[aria-expanded="true"] svg { transform:rotate(180deg); }
+body#top.sound-page main .music-text-content { min-width:0; padding:12px 0 24px; }
+body#top.sound-page main .music-text-content .music-reader-tabs {
+  display:flex; justify-content:center; gap:28px; border-bottom:1px solid var(--music-line);
+}
+body#top.sound-page main .music-text-content .music-reader-tabs :is(button,h4) {
+  display:flex; flex-direction:column; gap:5px; min-height:52px; margin:0; padding:8px 0 12px;
+  border:0; border-bottom:2px solid transparent; background:none; color:var(--music-muted);
+  font:11px/1.6 Arial,"Helvetica Neue","Noto Sans JP",sans-serif; letter-spacing:.08em;
+}
+body#top.sound-page main .music-text-content .music-reader-tabs button { cursor:pointer; }
+body#top.sound-page main .music-text-content .music-reader-tabs small { font-size:11px; letter-spacing:.02em; }
+body#top.sound-page main .music-text-content .music-reader-tabs [aria-selected="true"] {
+  color:var(--music-gold); border-bottom-color:var(--music-gold);
+}
+body#top.sound-page main .music-text-content .music-reader-panel { padding:24px 0 0; min-width:0; }
+body#top.sound-page main .music-text-content .music-reader-panel[hidden] { display:none; }
+.music-text-drawer :is(summary,button):focus-visible { outline:2px solid var(--music-gold); outline-offset:-2px; }
+@media(prefers-reduced-motion:reduce) { .music-text-drawer > summary svg { transition:none; } }

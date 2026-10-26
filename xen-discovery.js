@@ -5,11 +5,23 @@
  if(!host||!dialog||typeof dialog.showModal!=='function')return;
  const cards=[...host.querySelectorAll('[data-theme]')],panels=[...dialog.querySelectorAll('[data-panel]')];
  const switches=[...dialog.querySelectorAll('[data-switch]')],themes=cards.map(a=>a.dataset.theme);
+ const originTrigger=dialog.querySelector('[data-origin-open]'),originDetail=dialog.querySelector('#xd-origin-detail');
+ const pastPanel=dialog.querySelector('[data-panel="past"]');
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const aliases={identity:'past',philosophy:'future',creation:'present',connection:'together'};
  let current='',opener=null,pageY=0,returnHash='',closing=false,animation=null;
- const hashTheme=()=>{const id=location.hash.slice(1).split('/').at(-1);return themes.includes(id)?id:aliases[id]||'';};
+ const hashTheme=()=>{const parts=location.hash.slice(1).split('/');const id=parts[0]==='past'&&parts[1]==='origin'?'past':parts.at(-1);return themes.includes(id)?id:aliases[id]||'';};
  const announce=open=>document.dispatchEvent(new CustomEvent('xen:theme-modal',{detail:{open}}));
+ function renderOrigin(active,focus=false){
+  active=Boolean(active&&current==='past');
+  pastPanel.querySelector(':scope > .xd-theme-heading').hidden=active;
+  pastPanel.querySelector('.xd-sign-grid').hidden=active;
+  originDetail.hidden=!active;
+  originTrigger.setAttribute('aria-expanded',String(active));
+  dialog.setAttribute('aria-labelledby',active?'xd-origin-title':current+'-title');
+  dialog.querySelector('.xd-theme-scroll').scrollTop=0;
+  if(focus)(active?dialog.querySelector('#xd-origin-title'):originTrigger).focus({preventScroll:true});
+ }
  function render(id){
   current=id;
   cards.forEach(card=>{const selected=card.dataset.theme===id;card.setAttribute('aria-expanded',String(selected));card.classList.toggle('is-selected',selected);});
@@ -18,6 +30,7 @@
   dialog.setAttribute('aria-labelledby',id+'-title');
   dialog.querySelector('.xd-theme-counter').textContent=`0${themes.indexOf(id)+1} / 04 — ${id.toUpperCase()}`;
   dialog.querySelector('.xd-theme-scroll').scrollTop=0;
+  renderOrigin(false);
  }
  function open(id,trigger){
   if(!themes.includes(id)||closing)return;
@@ -64,9 +77,19 @@
  });
  dialog.id='xd-theme-modal';
  switches.forEach(button=>button.addEventListener('click',()=>select(button.dataset.switch)));
+ originTrigger.addEventListener('click',event=>{
+  if(event.metaKey||event.ctrlKey||event.altKey||event.shiftKey||event.button)return;
+  event.preventDefault();
+  history.replaceState(history.state,'','#past/origin');
+  renderOrigin(true,true);
+ });
+ originDetail.querySelector('.xd-origin-back').addEventListener('click',()=>{
+  history.replaceState(history.state,'','#past');
+  renderOrigin(false,true);
+ });
  dialog.querySelector('.xd-theme-close').addEventListener('click',()=>close());
  dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
- const sync=()=>{const id=hashTheme();if(id){if(current!==id)open(id);}else close(false);};
+ const sync=()=>{const id=hashTheme();if(id){if(current!==id)open(id);renderOrigin(location.hash==='#past/origin');}else close(false);};
  addEventListener('popstate',sync);addEventListener('hashchange',sync);
  // Close before navigation is cached so Back restores the original exploration screen.
  addEventListener('pagehide',()=>{if(dialog.open){animation?.cancel();dialog.close();current='';closing=false;document.body.classList.remove('xd-modal-open');document.body.style.top='';}});

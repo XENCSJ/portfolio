@@ -144,6 +144,9 @@
   dialog.dataset.work=work.id;dialog.querySelector('.xd-work-image').src=work.image;dialog.querySelector('.xd-work-image').alt=work.title;
   dialog.querySelector('#xd-work-title').textContent=work.title;dialog.querySelector('.xd-work-genre').textContent=work.genre;
   const description=dialog.querySelector('.xd-work-description');description.textContent=work.description;description.hidden=!work.description;
+  const originLink=dialog.querySelector('.xd-work-origin-link');
+  originLink.hidden=!work.originHref;
+  if(work.originHref)originLink.href=work.originHref;
   const link=dialog.querySelector('.xd-work-link');link.href=work.href;
   if(work.href.startsWith('https:')){link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','作品の詳細を見る（新しいタブで開く）');}else{link.removeAttribute('target');link.removeAttribute('rel');link.removeAttribute('aria-label');}
   document.body.style.top=`-${pageY}px`;document.body.classList.add('xd-modal-open');dialog.showModal();
@@ -185,7 +188,7 @@
  dialog.querySelector('.xd-work-close').addEventListener('click',closeDetail);
  dialog.addEventListener('cancel',e=>{e.preventDefault();closeDetail();});
  dialog.addEventListener('keydown',e=>{
-  if(e.key!=='Tab')return;const first=dialog.querySelector('.xd-work-close'),last=dialog.querySelector('.xd-work-link');
+  if(e.key!=='Tab')return;const first=dialog.querySelector('.xd-work-close'),last=dialog.querySelector('.xd-work-origin-link:not([hidden])')||dialog.querySelector('.xd-work-link');
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
  });
  document.addEventListener('xen:theme-modal',event=>{themeOpen=event.detail.open;if(themeOpen)stop();else{pump();schedule();}});
@@ -197,7 +200,7 @@
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
- fetch('./xen-discovery-gallery.json?v=20261027-redx17').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
+ fetch('./xen-discovery-gallery.json?v=20261027-integrated1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
   // Filter before grouping, selection, decoding, preloading or queuing.
   works=(Array.isArray(data.works)?data.works:[]).filter(eligibleWork);
   groups=[...new Set(works.map(w=>w.genre))].map(genre=>works.filter(w=>w.genre===genre));
