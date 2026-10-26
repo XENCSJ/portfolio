@@ -26,9 +26,10 @@ function measure(){
  for(const [w,h] of sizes){const p=await browser.newPage({viewport:{width:w,height:h}});let errors=[];p.on('pageerror',e=>errors.push(e.message));await p.route('**/*',r=>(r.request().url().startsWith(url)||r.request().url().startsWith('https://xencsj.github.io/portfolio/'))?r.continue():r.abort());await p.goto(process.env.FUSION_PUBLIC_URL||url+'/studio.html');await p.waitForTimeout(3500);
  if(w===390){
  if(await p.locator('.studio-fusion-sheen').count())errors.push('Removed diagonal overlay returned');
- const initial=await p.evaluate(()=>document.querySelector('.studio-fusion-logo-drift').getAnimations()[0]?.currentTime);await p.waitForTimeout(180);
- const advanced=await p.evaluate(()=>document.querySelector('.studio-fusion-logo-drift').getAnimations()[0]?.currentTime);
- if(!(advanced>initial))errors.push('Ambient logo motion did not advance');
+ // The current logo uses a finite entry sequence, then returns to static artwork.
+ await p.waitForFunction(()=>document.querySelector('.studio-fusion-logo').dataset.studioLogoState==='complete',{},{timeout:5000});
+ const settled=await p.locator('.studio-fusion-logo').evaluate(n=>({trace:n.querySelectorAll('.studio-logo-trace').length,animations:n.getAnimations({subtree:true}).length,image:n.querySelector('img').naturalWidth,opacity:getComputedStyle(n.querySelector('.studio-fusion-logo-drift')).opacity}));
+ if(settled.trace||settled.animations||!settled.image||settled.opacity!=='1')errors.push('Finite logo sequence did not restore static artwork');
  const hrefs=await p.locator('.studio-fusion a').evaluateAll(es=>es.map(e=>e.href));
  for(const href of hrefs){const response=await p.request.get(href);if(!response.ok())errors.push('Broken service link '+href);}
  }
