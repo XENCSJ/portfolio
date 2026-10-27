@@ -34,7 +34,8 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
       assert.equal(await lapis.count(),1);
       assert.equal(await lapis.locator('.base-product-price').innerText(),'価格未定');
       assert.equal(await lapis.locator('.base-product-cta').isDisabled(),true);
-      assert.equal(await lapis.locator('a[href]').count(),0);
+      assert.deepEqual(await lapis.locator('a[href]').evaluateAll(links => links.map(link => link.getAttribute('href'))),
+        ['./design.html#lapis-lazuli-ring', './design.html#lapis-lazuli-ring']);
 
       for (const [id,file] of [[156850693,'signet-ring-20261023-8a2ce834d1'],[156851036,'sculpted-choker-20261023-7605c8856a']]) {
         const img=page.locator(`#base-product-${id} img`);
