@@ -71,7 +71,6 @@
       Object.entries({class:cls,cx:300,cy:300,r:291}).forEach(([k,v]) => c.setAttribute(k,v));
       ring.append(c); return c;
     };
-    const outline = circle('xim-orbit-line'); outline.setAttribute('pathLength','1');
     const accent = circle('xim-orbit-accent'); accent.setAttribute('stroke-dasharray','62 1767');
     wheel.prepend(ring);
     let first = false;
@@ -81,7 +80,6 @@
     } catch (_) { first = performance.getEntriesByType('navigation')[0]?.type === 'navigate'; }
     if (first) {
       animate(ambient,[{opacity:0},{opacity:1}],100,1400);
-      animate(outline,[{strokeDasharray:'1',strokeDashoffset:1},{strokeDasharray:'1',strokeDashoffset:0}],150,1600);
       const cta = body.querySelector('.xen-index-discovery > a');
       reveal(cta,1050,18); type(cta?.querySelector('span'),1250);
       reveal(body.querySelector('.xen-header-cart'),80,6);
