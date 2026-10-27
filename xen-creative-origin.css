@@ -1,4 +1,4 @@
-/* CREATOR: keep the complete photograph and the existing prose/motion system. */
+/* CREATOR: display the photograph at 3:2 within the existing prose/motion system. */
 body#top.creator-page #creative-origin {
   scroll-margin-top: 16px;
 }
@@ -22,7 +22,9 @@ body#top.creator-page .cp-origin-image img {
   display: block;
   width: 100%;
   height: auto;
-  object-fit: contain;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: 50% 50%;
 }
 body#top.creator-page .cp-origin-copy {
   min-width: 0;

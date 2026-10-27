@@ -32,6 +32,9 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    await page.locator('.mies-person-link').scrollIntoViewIfNeeded();await page.waitForTimeout(400);
    ok(await page.locator('#creative-origin .cp-copy p').textContent()===copy,'origin text unchanged');
    const order=await page.locator(sections.map(x=>'#'+x).join(',')).evaluateAll(es=>es.map(e=>e.id));ok(order.join()===sections.join(),'12 sections unchanged');
+   const origin=await page.locator('.cp-origin-image img').evaluate(i=>({width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,fit:getComputedStyle(i).objectFit,position:getComputedStyle(i).objectPosition}));
+   ok(Math.abs(origin.width/origin.height-1.5)<.005&&origin.fit==='cover'&&origin.position==='50% 50%','origin uses centered 3:2 cover');
+   ok(await page.locator('#mies-origin-title').count()===0,'duplicate origin removed');
    const y=await page.evaluate(()=>scrollY);
    await page.locator('.mies-person-link').click();await page.waitForTimeout(350);
    ok(await page.locator('#mies-detail').evaluate(e=>e.open),'modal opens');
