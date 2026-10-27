@@ -2,7 +2,7 @@
    Called by verify-music-motion.cjs in both Chromium and WebKit, locally and on Pages. */
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const output='music-motion-qa/integrated';fs.mkdirSync(output,{recursive:true});
-const blocked=new Set(["design-e7a94102467b", "design-88900d525066", "architecture-2424aea1ca35", "architecture-b3a885b4a868", "architecture-cd8cdcdb14d0", "architecture-ebc64cb39540", "architecture-1e49dea01c50", "architecture-b2dbd0707f0f", "architecture-fb17daedd9df", "architecture-1d5d294c4bd0", "architecture-f18cf5c8997b", "architecture-0a6065abe276", "architecture-590ec40e476e", "architecture-8b0fe09e46a9", "architecture-9d4659851c16", "architecture-639e72800da4", "architecture-70b86bed2ebf"]);
+const blocked=new Set(["space-3cdf06737385", "design-e7a94102467b", "design-88900d525066", "architecture-2424aea1ca35", "architecture-b3a885b4a868", "architecture-cd8cdcdb14d0", "architecture-ebc64cb39540", "architecture-1e49dea01c50", "architecture-b2dbd0707f0f", "architecture-fb17daedd9df", "architecture-1d5d294c4bd0", "architecture-f18cf5c8997b", "architecture-0a6065abe276", "architecture-590ec40e476e", "architecture-8b0fe09e46a9", "architecture-9d4659851c16", "architecture-639e72800da4", "architecture-70b86bed2ebf"]);
 const screenshot=async(page,name)=>{await page.waitForFunction(()=>document.getAnimations().every(a=>!a.effect?.target?.matches('[data-ql-motion]')||a.playState!=='running'),null,{timeout:15000});return page.screenshot({path:output+'/'+name+'.png',fullPage:false});};
 async function pageChecks(page){
  const state=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,ids:[...document.querySelectorAll('[id]')].map(x=>x.id)}));
@@ -32,10 +32,10 @@ module.exports=async function(page,base,width,label){
    await page.waitForFunction(()=>Number(document.querySelector('.xd-gallery').dataset.changeCount)>=3,{},{timeout:20000});
    const updated=await page.locator('.xd-tile').evaluateAll(els=>els.map(e=>e.dataset.work));assert(updated.every(x=>!blocked.has(x)));
    await page.locator('.xd-tile').first().click();await page.locator('.xd-work-dialog[open]').waitFor();const firstWork=await page.locator('.xd-tile').first().getAttribute('data-work');assert.equal(await page.locator('.xd-work-origin-link').isVisible(),firstWork==='artworks-9c96fa42b34a','Origin link belongs to Mies only');await page.locator('.xd-work-dialog .xd-work-close').click();
-   await page.locator('[data-theme="past"]').click();await page.locator('[data-origin-open]').click();await page.locator('#xd-origin-detail .xd-open-link').click();await page.waitForURL('**/creator.html#creative-origin');
+   await page.locator('[data-theme="past"]').click();await page.locator('[data-sign="past-1"] a').click();await page.waitForURL('**/creator.html#creative-origin');
    await page.waitForTimeout(1600);
    const originTop=await page.locator('#creative-origin').evaluate(e=>e.getBoundingClientRect().top);assert(originTop>=0&&originTop<220,'Origin anchor not visible '+originTop);
-   await page.goBack();await page.locator('#xd-origin-detail:not([hidden])').waitFor();await page.locator('.xd-theme-close').click();await page.waitForTimeout(350);
+   await page.goBack();await page.locator('[data-panel="past"]:not([hidden])').waitFor();assert.equal(await page.locator('#xd-origin-detail').count(),0);await page.locator('.xd-theme-close').click();await page.waitForTimeout(350);
    for(const theme of ['present','future','together']){await page.locator('[data-theme="'+theme+'"]').click();await page.locator('[data-panel="'+theme+'"]:not([hidden])').waitFor();await page.locator('.xd-theme-close').click();await page.waitForTimeout(300);}
    await page.reload();await page.locator('[data-gallery-ready="true"]').waitFor();assert((await page.locator('.xd-tile').evaluateAll(els=>els.map(e=>e.dataset.work))).every(x=>!blocked.has(x)));
    await page.goto(base+'/sound.html');await page.locator('.music-text-drawer').first().waitFor();await pageChecks(page);

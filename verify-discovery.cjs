@@ -7,8 +7,9 @@ const themes=['past','present','future','together'];let checks=0;
 const ok=(value,message)=>{assert(value,message);checks++};
 const catalog=JSON.parse(fs.readFileSync('xen-discovery-gallery.json','utf8'));
 const source=fs.readFileSync('what-is-xen.html','utf8');
-// The 17 whole images marked with red X in IMG_9947-IMG_9954.
+// Existing 17 red-X images plus ARCHITECTURE work 18 (classified as SPACE).
 const redXAssets=[
+ ["space-3cdf06737385", "IMG_8369.PNG", "xen-preview-67719606a928b04a.webp"],
  ["design-e7a94102467b", "DESIGN (1).png", "xen-preview-a72f67e01dba78a8.webp"],
  ["design-88900d525066", "DESIGN (4).jpg", "xen-preview-6f26cf8bfee67f8d.webp"],
  ["architecture-2424aea1ca35", "ARCHITECTURE (3).PNG", "xen-preview-2e434359d95c5f34.webp"],
@@ -35,10 +36,54 @@ const results=[];
 const visibleWorks=page=>page.locator('.xd-tile:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.work));
 async function ready(page,fragment=''){await page.goto(base+'what-is-xen.html'+fragment);await page.waitForSelector('html[data-discovery-ready="true"]',{state:'attached'});await page.waitForSelector('[data-gallery-ready="true"]');}
 async function screenshot(page,name){await page.screenshot({path:`discovery-evidence/${name}.png`});}
+const creatorOrder=['profile','about','creative-origin','background','philosophy','creative-fields','latest-videos','youtube-channels','personal','concept-project','discover-xen','creation-support'];
+const originCopy='幼い頃から絵を描くことが好きで、将来は画家になることを夢見ていた。将来の進路を考えるなかで、画家として生計を立てることの難しさを意識し、同じ芸術分野である建築に目を向けた。当時、インテリアを見ることが好きだった。なかでも強く惹かれたのが、バルセロナチェアのデザイン。その作者を調べたことで、ドイツの建築家ミース・ファン・デル・ローエを知った。一脚の椅子との出会いが、建築への興味を深めるきっかけとなった。';
+async function verifyCreator(page,width,engine){
+ await page.locator('#latest-videos:not([hidden])').waitFor();
+ const sections=await page.locator(creatorOrder.map(id=>'#'+id).join(',')).evaluateAll(es=>es.map(e=>({id:e.id,top:e.getBoundingClientRect().top})));
+ ok(sections.map(s=>s.id).join()===creatorOrder.join(),'CREATOR exact 12-section DOM order');
+ ok(sections.every((s,i)=>!i||s.top>sections[i-1].top),'CREATOR exact visual section order');
+ const ids=await page.locator('[id]').evaluateAll(es=>es.map(e=>e.id));ok(new Set(ids).size===ids.length,'CREATOR unique IDs');
+ ok(await page.locator('#profile #connect').count()===1,'SNS remains within PROFILE');
+ ok(await page.locator('#creative-origin .cp-copy p').count()===1,'one compact origin paragraph');
+ ok(await page.locator('#creative-origin .cp-copy p').textContent()===originCopy,'exact confirmed origin copy');
+ ok(await page.locator('.cp-origin-discover').count()===0,'removed reverse origin link');
+ await page.locator('#creative-origin img').evaluate(i=>i.decode());
+ const photo=await page.locator('#creative-origin img').evaluate(i=>({natural:i.naturalWidth,ratio:i.width/i.height,expected:i.naturalWidth/i.naturalHeight}));
+ ok(photo.natural===1535&&Math.abs(photo.ratio-photo.expected)<.01,'origin original resolution and ratio');
+ ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'CREATOR no horizontal overflow');
+ if([390,1440].includes(width))await screenshot(page,`${engine}-${width}-creator-origin`);
+ const nav=page.locator('.cp-jump a[href^="#"]');
+ ok((await nav.evaluateAll(es=>es.map(e=>e.hash))).join()==='#about,#creative-origin,#background,#philosophy,#creative-fields','ordered in-page navigation');
+ for(const link of await nav.all()){
+  const hash=await link.getAttribute('href');await link.click();await page.waitForTimeout(450);
+  const visible=await page.locator(hash+' h2').evaluate(e=>{const r=e.getBoundingClientRect();return r.top>=document.querySelector('#xen-site-header').getBoundingClientRect().bottom-1&&r.top<innerHeight;});
+  ok(visible,'heading below fixed header '+hash);
+ }
+ for(const entry of await page.locator('#creative-fields details').all()){
+  await entry.locator('summary').click();await page.waitForTimeout(350);ok(await entry.getAttribute('open')!==null,'field accordion opens');
+  await entry.locator('summary').click();await page.waitForTimeout(350);ok(await entry.getAttribute('open')===null,'field accordion closes');
+ }
+ await page.locator('#latest-videos').scrollIntoViewIfNeeded();
+ const cards=await page.locator('.xen-latest-grid > li').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {left:r.left,top:r.top};}));
+ ok(cards.length===4,'all four latest videos retained');
+ if(width<600)ok(Math.abs(cards[0].top-cards[1].top)<1&&cards[2].top>cards[0].top,'mobile latest videos keep two columns');
+ const media=await page.locator('.xen-latest-play').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return r.width/r.height;}));
+ ok(media.length===4&&media.every(r=>Math.abs(r-16/9)<.03),'video thumbnails keep 16:9');
+ if([390,1440].includes(width)){
+  const thumbnails=await page.locator('.xen-latest-grid img').evaluateAll(async es=>Promise.all(es.map(async i=>{try{await i.decode();}catch{}return{src:i.currentSrc,loaded:i.naturalWidth>0};})));
+  fs.writeFileSync(`discovery-evidence/${engine}-${width}-thumbnails.json`,JSON.stringify(thumbnails,null,2));
+  await screenshot(page,`${engine}-${width}-creator-videos`);
+ }
+ const project=page.locator('#concept-project details');await project.locator('summary').click();await page.waitForTimeout(350);
+ ok(await project.getAttribute('open')!==null&&await project.innerText().then(t=>t.includes('XEN FREQUENCY LOUNGE')),'concept project and lounge preserved');
+ await project.locator('summary').click();await page.waitForTimeout(350);ok(await project.getAttribute('open')===null,'concept project closes');
+ ok(await page.locator('#creation-support').isVisible()&&await page.locator('.xen-footer-inquiry').count()===1,'support and contact retained');
+}
 (async()=>{
 fs.mkdirSync('discovery-evidence',{recursive:true});
 ok(catalog.works.length===160,'160 catalog records retained');
-ok(eligibleCatalog.length===143,'143 eligible works after 17 exclusions');
+ok(eligibleCatalog.length===142,'142 eligible works after 18 exclusions');
 const fallbackIds=[...source.matchAll(/class="xd-tile"[^>]*data-work="([^"]+)"/g)].map(m=>m[1]);
 ok(fallbackIds.length===12&&fallbackIds.every(id=>eligibleCatalog.some(w=>w.id===id)),'all 12 static tiles eligible, including no-JS initial display');
 ok(catalog.works.every(w=>!['CINEMATIC','SNS MANAGEMENT','SNAP'].includes(w.genre)&&w.id!=='apparel-ccc341888110'&&!w.image.includes('6e9cfc944d27281a')),'exclusions retained');
@@ -57,9 +102,10 @@ for(const engine of [chromium,webkit]){
   ok(await page.title()==='DISCOVER XEN | XEN CSJ','page title');
   ok((await page.locator('.xd-theme').evaluateAll(nodes=>nodes.map(n=>n.dataset.theme))).join()===themes.join(),'four themes in order');
   ok(await page.locator('.xd-sign').count()===16,'16 signs');
-  ok(await page.locator('.xd-sign-main[href]').count()===15,'15 verified primary destinations');
-  ok(await page.locator('.xd-sign-unavailable').count()===1&&await page.locator('.xd-sign-unavailable').innerText().then(s=>s.includes('情報未掲載')),'origin honestly held');
-  ok(await page.locator('.xd-sign-main[href] .xd-sign-icon').count()===15,'linked signs include icon and text');
+  ok(await page.locator('.xd-sign-main[href]').count()===16,'16 verified primary destinations');
+  ok(await page.locator('#xd-origin-detail,[data-origin-open],.xd-sign-unavailable').count()===0,'ORIGIN detail popup removed');
+  ok(await page.locator('[data-sign="past-1"] a').getAttribute('href')==='./creator.html#creative-origin','ORIGIN direct destination');
+  ok(await page.locator('.xd-sign-main[href] .xd-sign-icon').count()===16,'linked signs include icon and text');
   ok(await page.locator('.xd-gallery button').count()===0,'no pause controls');
   const order=await page.evaluate(()=>['.xd-page-intro','.xd-gallery','.xd-intro','.xd-explorer','.xen-common-footer'].map(selector=>document.querySelector(selector).getBoundingClientRect().top));
   ok(order.every((y,i)=>!i||y>order[i-1]),'page information order');
@@ -98,11 +144,16 @@ for(const engine of [chromium,webkit]){
   ok(await page.locator('#creative-fields').evaluate(n=>{const r=n.getBoundingClientRect();return r.top>=0&&r.top<innerHeight}),'activity anchor on screen');
   if([390,1440].includes(width))await screenshot(page,`${engine.name()}-${width}-studio`);
   await ready(page);
+  await page.locator('[data-theme="past"]').click();await page.locator('[data-sign="past-1"] a').click();await page.waitForURL('**/creator.html#creative-origin');
+  await verifyCreator(page,width,engine.name());
+  await page.goto(base+'what-is-xen.html#past/origin');await page.waitForURL('**/creator.html#creative-origin');ok(true,'legacy ORIGIN URL redirects');
+  await ready(page);
   await page.locator('.xd-tile:visible').first().click();await page.locator('.xd-work-dialog').waitFor({state:'visible'});
   ok(await page.locator('dialog[open]').count()===1,'gallery opens single work modal');
   const work=await page.locator('.xd-work-dialog').getAttribute('data-work');const item=catalog.works.find(w=>w.id===work);
   ok(await page.locator('.xd-work-link').getAttribute('href')===item.href,'work exact destination');
   ok(await page.locator('#xd-work-title').innerText()===item.title,'work exact title');
+  ok(!blockedIds.has(work),'work popup excludes all blocked assets');
   await page.keyboard.press('Escape');await page.locator('.xd-work-dialog').waitFor({state:'hidden'});
   await page.locator('.xen-header-toggle').click();ok(await page.locator('.xen-header-toggle').getAttribute('aria-expanded')==='true','shared menu intact');await page.keyboard.press('Escape');
   ok(await page.locator('.xen-header-cart').getAttribute('href')==='https://xen.official.ec/','shop cart intact');
@@ -186,6 +237,6 @@ for(const engine of [chromium,webkit]){
  await desktop.close();
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const plain=await nojs.newPage();await plain.goto(base+'what-is-xen.html');ok(await plain.locator('.xd-theme[href]').count()===4,'no-JS navigation available');ok(await plain.locator('.xd-tile:visible').count()===9,'no-JS gallery');await nojs.close();await browser.close();
 }
-fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({checks,results,newExclusions:17,eligibleWorks:143,unresolved:['PAST origin unpublished','Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
+fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results,newExclusions:18,eligibleWorks:142,creatorOrder,unresolved:['Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
 console.log('PASS',checks,'checks');
 })().catch(error=>{console.error(error);process.exit(1)});
