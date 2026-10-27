@@ -3,6 +3,10 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const {chromium, webkit} = require('playwright');
 const titles = require('./category-titles.json');
+// Page titles and navigation descriptions serve different roles.
+const navigation = key => key === 'price-list'
+ ? {en:'PRICING',ja:'料金案内'}
+ : {en:titles[key].en,ja:titles[key].navigationJa || titles[key].ja};
 module.exports = async function verifyCategoryTitles() {
  const results=[]; fs.mkdirSync('news-qa',{recursive:true});
  for (const [device,engine,width,height] of [['desktop',chromium,1440,1000],['iphone',webkit,390,844],['small-phone',chromium,375,812],['large-phone',chromium,430,932],['tablet',chromium,768,1024]]) {
@@ -37,8 +41,8 @@ module.exports = async function verifyCategoryTitles() {
      assert.equal(await ring.getAttribute('aria-label'),label.en+'｜'+label.ja);
      assert.deepEqual((await ring.locator('textPath').allTextContents()).map(x=>x.trim()),[label.en,label.ja]);
      const directory=page.locator('.index-directory a[href="./'+key+'.html"]');
-     assert.equal((await directory.locator('.index-en').textContent()).trim(),label.en);
-     assert.equal((await directory.locator('.index-ja').textContent()).trim(),label.ja);
+     assert.equal((await directory.locator('.index-en').textContent()).trim(),navigation(key).en);
+     assert.equal((await directory.locator('.index-ja').textContent()).trim(),navigation(key).ja);
     }
     const ring=await page.locator('.orbit').evaluate(el=>{
      const outer=el.querySelector('#circle').getTotalLength(),inner=el.querySelector('#circle-ja').getTotalLength();
@@ -54,8 +58,8 @@ module.exports = async function verifyCategoryTitles() {
    assert.equal(await page.locator('.xen-header-toggle').getAttribute('aria-expanded'),'true');
    for(const [key,label] of Object.entries(titles)) {
     const link=page.locator('#xen-menu a[href="./'+key+'.html"]');
-    assert.equal((await link.locator('.xen-menu-en').textContent()).trim(),label.en);
-    assert.equal((await link.locator('.xen-menu-ja').textContent()).trim(),label.ja);
+    assert.equal((await link.locator('.xen-menu-en').textContent()).trim(),navigation(key).en);
+    assert.equal((await link.locator('.xen-menu-ja').textContent()).trim(),navigation(key).ja);
     assert.equal(await link.locator('.xen-menu-icon').count(),1,'icon '+slug+' '+key);
    }
    if(slug==='index')await page.screenshot({path:'news-qa/categories-'+device+'-menu.png'});
