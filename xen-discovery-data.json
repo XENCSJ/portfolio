@@ -273,7 +273,7 @@
     },
     "cinematic": {
       "title": "CINEMATIC",
-      "ja": "映像制作",
+      "ja": "映像作品",
       "text": "ラグジュアリーやストリートの世界観を映像で表現するCINEMATIC。既存の映像制作ページでは、30秒・60秒・90秒の作品を紹介しています。気になる映像からご覧ください。",
       "href": "./cinematic.html",
       "source": "cinematic.html",
@@ -294,9 +294,9 @@
       ]
     },
     "photography": {
-      "title": "SNAP",
-      "ja": "写真 / PHOTOGRAPHY",
-      "text": "写真のポートフォリオをまとめたSNAP。XENの写真作品を、画像を中心にご覧いただけます。気になった一枚から、写真という表現を通してXENの世界に触れてみてください。",
+      "title": "PHOTOGRAPHY",
+      "ja": "写真",
+      "text": "写真のポートフォリオをまとめたPHOTOGRAPHY。XENの写真作品を、画像を中心にご覧いただけます。気になった一枚から、写真という表現を通してXENの世界に触れてみてください。",
       "href": "./snap.html",
       "source": "snap.html",
       "related": [
@@ -317,7 +317,7 @@
     },
     "apparel": {
       "title": "SHOP",
-      "ja": "アパレル / APPAREL",
+      "ja": "ショップ",
       "text": "「余白をまとう」。禅の思想をベースに、不要を削ぎ落とし、静寂と洗練をまとうミニマルデザイン。SHOPページから、アイテムの紹介や公式オンラインショップへ進めます。",
       "href": "./apparel.html",
       "source": "apparel.html",

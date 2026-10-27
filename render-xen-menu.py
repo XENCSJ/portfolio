@@ -12,11 +12,11 @@ HOME = ("INDEX", "トップページ", "./index.html")
 # Stable URL stems are separate from the canonical display labels.
 TITLES = json.loads((ROOT / "category-titles.json").read_text())
 def category(slug):
-    return (TITLES[slug]["en"], TITLES[slug]["ja"], "./" + slug + ".html")
+    return (TITLES[slug]["en"], TITLES[slug].get("navigationJa", TITLES[slug].get("navigationJa", TITLES[slug].get("navigationJa", TITLES[slug]["ja"]))), "./" + slug + ".html")
 ABOUT = [("DISCOVER XEN", "XENを知る", "./what-is-xen.html")] + [category(slug) for slug in ("studio", "creator")]
 WORKS = [category(slug) for slug in TITLES if slug not in ("studio", "creator", "price-list")]
 GROUPS = [("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", WORKS),
-          ("PRICE LIST", "料金一覧", "./price-list.html"),
+          ("PRICING", "料金案内", "./price-list.html"),
           ("CONTACT", "制作相談", "./studio.html#contact")]
 
 
