@@ -117,7 +117,7 @@ body#top .xen-unified-footer .xen-footer-credits p {
   text-align: center;
 }
 body#top .xen-unified-footer .xen-footer-powered { font-size: 12px; }
-body#top .xen-unified-footer .xen-footer-copyright { font-size: 11px; }
+body#top .xen-unified-footer .xen-footer-legal { font-size: 11px; }
 body#top .xen-unified-footer .xen-footer-signature a:focus-visible {
   outline: 1px solid #d8d8dc;
   outline-offset: 6px;
@@ -135,7 +135,7 @@ body#top .xen-unified-footer .xen-footer-signature a:focus-visible {
   body#top .xen-unified-footer .xen-footer-chevron { width: 20px; }
   body#top .xen-unified-footer a.xen-footer-symbol { width: 64px; margin-top: 32px; }
   body#top .xen-unified-footer .xen-footer-credits { margin-top: 24px; }
-  body#top .xen-unified-footer .xen-footer-copyright { font-size: 10px; letter-spacing: .04em; }
+  body#top .xen-unified-footer .xen-footer-legal { font-size: 10px; letter-spacing: .04em; }
 }
 @media (prefers-reduced-motion: reduce) {
   body#top .xen-unified-footer .xen-footer-signature *,

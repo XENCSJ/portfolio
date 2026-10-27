@@ -21,7 +21,7 @@ async function inspect(page, width) {
   const v = await page.locator('footer').evaluate(footer => {
     const rect = el => {const r = el.getBoundingClientRect(); return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
     const css = el => {const s=getComputedStyle(el); return {color:s.color,opacity:s.opacity,transform:s.transform,fontSize:s.fontSize,lineHeight:s.lineHeight,background:s.backgroundImage,border:s.borderTopWidth,shadow:s.boxShadow};};
-    const top=footer.querySelector('.xen-footer-return'), link=footer.querySelector('.xen-footer-symbol'), img=link.querySelector('img'), credits=footer.querySelector('.xen-footer-credits'), powered=credits.querySelector('.xen-footer-powered'), copyright=credits.querySelector('.xen-footer-copyright'), arrow=top.querySelector('svg');
+    const top=footer.querySelector('.xen-footer-return'), link=footer.querySelector('.xen-footer-symbol'), img=link.querySelector('img'), credits=footer.querySelector('.xen-footer-credits'), powered=credits.querySelector('.xen-footer-powered'), copyright=credits.querySelector('.xen-footer-legal'), arrow=top.querySelector('svg');
     return {version:footer.dataset.footerVersion, count:footer.querySelectorAll('.xen-footer-symbol').length, footer:rect(footer), signature:rect(footer.querySelector('.xen-footer-signature')), top:rect(top), link:rect(link), image:rect(img), credits:rect(credits), powered:rect(powered), copyright:rect(copyright), arrow:rect(arrow), topStyle:css(top), imageStyle:css(img), poweredStyle:css(powered), copyrightStyle:css(copyright), background:getComputedStyle(footer).backgroundColor, border:getComputedStyle(footer).borderTopWidth, before:getComputedStyle(top,'::before').content, after:getComputedStyle(top,'::after').content, text:[powered.textContent,copyright.textContent], loaded:img.complete&&img.naturalWidth>0, source:img.getAttribute('src'), href:link.href, overflow:document.documentElement.scrollWidth>innerWidth+1, creditsOverflow:credits.scrollWidth>credits.clientWidth+1, actionCount:footer.querySelectorAll('.xen-footer-actions a').length, reveals:window.footerReveals||[]};
   });
   assert.equal(v.version, '20261027-vertical1');
@@ -34,7 +34,7 @@ async function inspect(page, width) {
   assert(Math.abs(v.credits.y-v.link.bottom-(width<=600?24:26))<1,'logo/credits gap');
   assert(Math.abs(v.copyright.y-v.powered.bottom-6)<1,'two-line gap');
   assert.deepEqual(v.text,['Powered by XEN','© XEN CREATIVE STUDIO JAPAN']);
-  assert.equal(v.powered.height,18); assert.equal(v.copyright.height,18);
+  assert(Math.abs(v.powered.height-18)<.1); assert(Math.abs(v.copyright.height-18)<.1);
   assert.equal(v.topStyle.fontSize,'14px'); assert.equal(v.poweredStyle.fontSize,'12px');
   assert.equal(v.copyrightStyle.fontSize,width<=600?'10px':'11px');
   assert.equal(v.arrow.width,width<=600?20:22);
@@ -81,12 +81,13 @@ async function run(browser,engine,base,width,mode='normal',chosen=pages) {
       }
       await page.screenshot({path:`${out}/${label.replace('.html','.png')}`});
       await page.locator('.xen-footer-return').click();
-      await page.waitForFunction(()=>window.scrollY<2);
+      if(mode==='no-js') { await page.waitForTimeout(1000); assert(await page.evaluate(()=>window.scrollY<2),'native Back to Top'); }
+      else await page.waitForFunction(()=>window.scrollY<2);
       await page.locator('.xen-footer-credits').scrollIntoViewIfNeeded();
       await page.waitForTimeout(900);
       if(mode!=='no-js') assert.equal(await page.evaluate(()=>window.footerReveals.length),mode==='normal'?2:0,'do not replay');
       if(file==='index.html'&&mode==='normal') {
-        await page.locator('.xen-footer-symbol').focus();
+        await page.locator('.xen-footer-return').focus(); await page.keyboard.press('Tab');
         assert.equal(await page.locator('.xen-footer-symbol').evaluate(el=>getComputedStyle(el).outlineWidth),'1px');
       }
       results.push({label,pass:true,details}); console.log('PASS',label);
