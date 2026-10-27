@@ -51,6 +51,11 @@ const overlap=(a,b)=>a.filter(id=>b.includes(id)).length;
  const app=await boot();
  const pool=app.test.works;
  check(pool.length===142,'current 19 individual and three category exclusions retained');
+ for(let repeat=0;repeat<100;repeat++){
+  const finalScreen=pool.slice(0,12).map(w=>w.id);
+  const saturated=app.test.drawVisit(pool,12,{seen:pool.map(w=>w.id),order:finalScreen});
+  check(overlap(saturated.map(w=>w.id),finalScreen)===0,'long visits still avoid the last displayed screen');
+ }
  for(let size=1;size<=30;size++)for(let seen=0;seen<=size;seen++)for(let repeat=0;repeat<20;repeat++){
   const subset=pool.slice(0,size),history={seen:subset.slice(0,seen).map(w=>w.id),order:[]};
   const count=Math.min(12,size),draw=app.test.drawVisit(subset,count,history),ids=draw.map(w=>w.id);
@@ -100,7 +105,7 @@ async function browserChecks(pool){
    const context=await browser.newContext({viewport:{width,height:width<768?844:1000},isMobile:width<768,hasTouch:width<768,reducedMotion:'reduce'});
    const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
    await page.goto(base+'what-is-xen.html');await ready(page);
-   check(await page.locator('script[src*="20261027-random-visit1"]').count()===1,'published random visit revision');
+   check(await page.locator('script[src*="20261027-random-visit2"]').count()===1,'published random visit revision');
    let prior=await ids(page);
    check(prior.length===12&&new Set(prior).size===12&&prior.every(id=>allowed.has(id)),'published initial draw');
    check(await page.locator('.xd-tile:visible').count()===(width>=1024?12:9),'unchanged responsive count');

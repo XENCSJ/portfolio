@@ -61,7 +61,7 @@
  let opener=null,pageY=0,detailOpen=false,changeCount=0,themeOpen=Boolean(document.querySelector('.xd-theme-dialog[open]'));
  // Persist this visit's displayed works, including animated replacements.
  const historyKey='xen:discovery-gallery:last-visit:v1';
- let visitSeen=new Set(),previousSeen=new Set(),visitGeneration=0;
+ let visitSeen=new Set(),previousSeen=new Set(),previousOrder=new Set(),visitGeneration=0;
  function readHistory(){
   for(const name of ['localStorage','sessionStorage']){
    try{
@@ -85,11 +85,12 @@
   return result;
  }
  function drawVisit(pool,count,history){
-  const previous=new Set(history.seen);
+  const previous=new Set(history.seen),lastScreen=new Set(history.order);
   // Exhaust unseen works before taking the minimum unavoidable repeats.
   const fresh=shuffled(pool.filter(work=>!previous.has(work.id)));
-  const repeated=shuffled(pool.filter(work=>previous.has(work.id)));
-  const selected=shuffled([...fresh,...repeated].slice(0,count));
+  const earlier=shuffled(pool.filter(work=>previous.has(work.id)&&!lastScreen.has(work.id)));
+  const last=shuffled(pool.filter(work=>previous.has(work.id)&&lastScreen.has(work.id)));
+  const selected=shuffled([...fresh,...earlier,...last].slice(0,count));
   if(!selected.length)return selected;
   // Preserve the existing number of slots even with a very small catalog.
   while(selected.length<count)selected.push(selected[selected.length%pool.length]);
@@ -100,7 +101,7 @@
   if(!works.length||!cells.length)return;
   stop();
   const history=readHistory();
-  previousSeen=new Set(history.seen);visitSeen=new Set();visitGeneration++;
+  previousSeen=new Set(history.seen);previousOrder=new Set(history.order);visitSeen=new Set();visitGeneration++;
   queue=[];pending.clear();recent=[];lastCell=null;gestures.clear();hovered.clear();focused.clear();
   const selection=drawVisit(works.filter(work=>!failed.has(work.id)),cells.length,history);
   selection.forEach((work,index)=>{
@@ -148,7 +149,8 @@
   const occupied=new Set([...cells.map(c=>c.work.id),...queue.map(q=>q.work.id),...pending,...failed,active?.work.id,...recent]);
   const available=groups.map(group=>group.filter(w=>!occupied.has(w.id))).filter(group=>group.length);
   const fresh=available.map(group=>group.filter(w=>!previousSeen.has(w.id))).filter(group=>group.length);
-  const choices=fresh.length?fresh:available;
+  const earlier=available.map(group=>group.filter(w=>!previousOrder.has(w.id))).filter(group=>group.length);
+  const choices=fresh.length?fresh:earlier.length?earlier:available;
   return choices.length?random(random(choices)):null;
  }
  function decode(work){
