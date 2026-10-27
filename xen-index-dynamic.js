@@ -34,7 +34,11 @@
       if (!node.querySelector('.xim-type')) {
         [...node.childNodes].filter(n => n.nodeType === Node.TEXT_NODE && /[A-Za-z]/.test(n.textContent)).forEach(text => {
           const wrap = make('span','xim-type');
-          const readable = make('span','xim-sr',wrap); readable.textContent = text.textContent;
+          if (node.matches('#creative-index .studio-heading .title-en')) {
+            node.closest('h1').setAttribute('aria-label', text.textContent);
+          } else {
+            const readable = make('span','xim-sr',wrap); readable.textContent = text.textContent;
+          }
           const visual = make('span','xim-visual',wrap); visual.setAttribute('aria-hidden','true');
           text.textContent.split(/(\s+)/).forEach(word => {
             if (/^\s+$/.test(word)) {visual.append(document.createTextNode(word)); return;}
