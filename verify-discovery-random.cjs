@@ -111,6 +111,8 @@ async function browserChecks(pool){
    }
    await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>[...document.querySelectorAll('.xd-tile')].filter(n=>n.getClientRects().length).every(n=>n.querySelector('img').complete&&n.querySelector('img').naturalWidth>0));
+   await page.locator('.xd-tile img').evaluateAll(images=>Promise.all(images.map(image=>image.decode())));
+   await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
    await page.screenshot({path:`discovery-random-evidence/${engine.name()}-${width}.png`});
    await page.locator('.xd-tile:visible').first().click();await page.locator('.xd-work-dialog[open]').waitFor();
    const selected=await page.locator('.xd-work-dialog').getAttribute('data-work');check(prior.includes(selected),'detail corresponds to selected work');
