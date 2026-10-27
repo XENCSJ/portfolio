@@ -59,6 +59,56 @@
  let works=[],groups=[],cells=[],queue=[],pending=new Set(),failed=new Set(),recent=[];
  let near=false,visible=false,active=null,timer=null,lastCell=null,lastEffect='';
  let opener=null,pageY=0,detailOpen=false,changeCount=0,themeOpen=Boolean(document.querySelector('.xd-theme-dialog[open]'));
+ // Persist this visit's displayed works, including animated replacements.
+ const historyKey='xen:discovery-gallery:last-visit:v1';
+ let visitSeen=new Set(),previousSeen=new Set(),visitGeneration=0;
+ function readHistory(){
+  for(const name of ['localStorage','sessionStorage']){
+   try{
+    const saved=JSON.parse(window[name].getItem(historyKey));
+    if(saved&&Array.isArray(saved.seen)&&Array.isArray(saved.order))return saved;
+   }catch{/* Storage may be disabled or contain invalid JSON. */}
+  }
+  return {seen:[...visitSeen],order:cells.map(cell=>cell.work.id)};
+ }
+ function rememberVisit(){
+  if(!cells.length)return;
+  cells.forEach(cell=>visitSeen.add(cell.work.id));
+  const value=JSON.stringify({seen:[...visitSeen],order:cells.map(cell=>cell.work.id)});
+  for(const name of ['localStorage','sessionStorage']){
+   try{window[name].setItem(historyKey,value);}catch{/* Randomization still works without storage. */}
+  }
+ }
+ function shuffled(list){
+  const result=[...list];
+  for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]];}
+  return result;
+ }
+ function drawVisit(pool,count,history){
+  const previous=new Set(history.seen);
+  // Exhaust unseen works before taking the minimum unavoidable repeats.
+  const fresh=shuffled(pool.filter(work=>!previous.has(work.id)));
+  const repeated=shuffled(pool.filter(work=>previous.has(work.id)));
+  const selected=shuffled([...fresh,...repeated].slice(0,count));
+  if(!selected.length)return selected;
+  // Preserve the existing number of slots even with a very small catalog.
+  while(selected.length<count)selected.push(selected[selected.length%pool.length]);
+  if(selected.length>1&&selected.every((work,i)=>work.id===history.order[i]))selected.push(selected.shift());
+  return selected;
+ }
+ function startVisit(){
+  if(!works.length||!cells.length)return;
+  stop();
+  const history=readHistory();
+  previousSeen=new Set(history.seen);visitSeen=new Set();visitGeneration++;
+  queue=[];pending.clear();recent=[];lastCell=null;gestures.clear();hovered.clear();focused.clear();
+  const selection=drawVisit(works.filter(work=>!failed.has(work.id)),cells.length,history);
+  selection.forEach((work,index)=>{
+   const image=new Image();image.width=640;image.height=640;image.decoding='async';image.src=work.image;
+   setCell(cells[index],work,image);
+  });
+  rememberVisit();pump();schedule();updateState();
+ }
  const gestures=new Map(),hovered=new Set(),focused=new Set();
  const isVisible=cell=>cell.node.getClientRects().length>0;
  const locked=cell=>gestures.has(cell)||hovered.has(cell)||focused.has(cell);
@@ -86,6 +136,7 @@
   clearTimeout(transition.timeout);transition.image.removeEventListener('animationend',transition.done);
   if(commit){
    setCell(transition.cell,transition.work,transition.image);recent.push(transition.work.id);recent=recent.slice(-24);
+   rememberVisit();
    changeCount++;gallery.dataset.changeCount=String(changeCount);
    gallery.dispatchEvent(new CustomEvent('xen:gallery-change',{detail:{cell:cells.indexOf(transition.cell),id:transition.work.id,effect:transition.effect}}));
   }else transition.image.remove();
@@ -96,7 +147,9 @@
  function candidate(){
   const occupied=new Set([...cells.map(c=>c.work.id),...queue.map(q=>q.work.id),...pending,...failed,active?.work.id,...recent]);
   const available=groups.map(group=>group.filter(w=>!occupied.has(w.id))).filter(group=>group.length);
-  return available.length?random(random(available)):null;
+  const fresh=available.map(group=>group.filter(w=>!previousSeen.has(w.id))).filter(group=>group.length);
+  const choices=fresh.length?fresh:available;
+  return choices.length?random(random(choices)):null;
  }
  function decode(work){
   return new Promise((resolve,reject)=>{
@@ -109,11 +162,12 @@
  function pump(){
   if(!works.length||!canLoad())return;
   while(queue.length+pending.size<7&&pending.size<3){
-   const work=candidate();if(!work)break;pending.add(work.id);
+   const work=candidate();if(!work)break;pending.add(work.id);const generation=visitGeneration;
    decode(work).then(image=>{
+    if(generation!==visitGeneration)return;
     pending.delete(work.id);queue.push({work,image});
     pump();schedule();
-   }).catch(()=>{pending.delete(work.id);failed.add(work.id);pump();});
+   }).catch(()=>{if(generation!==visitGeneration)return;pending.delete(work.id);failed.add(work.id);pump();});
   }
  }
  function schedule(delay=rand(800,1500)){
@@ -196,19 +250,23 @@
  document.addEventListener('xen:theme-modal',event=>{themeOpen=event.detail.open;if(themeOpen)stop();else{pump();schedule();}});
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else{pump();schedule();}});
  reduced.addEventListener('change',()=>{stop();pump();schedule();});
- addEventListener('pagehide',()=>{stop();});
- addEventListener('pageshow',()=>{pump();schedule();});
+ addEventListener('pagehide',()=>{stop();rememberVisit();});
+ // Normal navigation initializes after fetch; BFCache restores the same document.
+ addEventListener('pageshow',event=>{if(event.persisted)startVisit();else{pump();schedule();}});
  if('IntersectionObserver'in window){
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
  fetch('./xen-discovery-gallery.json?v=20261027-integrated1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
   // Filter before grouping, selection, decoding, preloading or queuing.
-  works=(Array.isArray(data.works)?data.works:[]).filter(eligibleWork);
+  const ids=new Set();
+  works=(Array.isArray(data.works)?data.works:[]).filter(work=>{
+   if(!eligibleWork(work)||ids.has(work.id))return false;ids.add(work.id);return true;
+  });
   groups=[...new Set(works.map(w=>w.genre))].map(genre=>works.filter(w=>w.genre===genre));
   cells=[...grid.querySelectorAll('.xd-tile')].map(node=>({node,work:works.find(w=>w.id===node.dataset.work)}));
   if(cells.some(c=>!c.work))throw new Error('Static catalog mismatch');
   cells.forEach(bind);gallery.dataset.galleryReady='true';gallery.dataset.changeCount='0';gallery.dataset.transitioning='0';
-  pump();schedule();updateState();
+  startVisit();
  }).catch(()=>{status.textContent='画像から掲載ページへ進めます。';});
 })();
