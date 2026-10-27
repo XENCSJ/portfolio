@@ -1,0 +1,132 @@
+/* INDEX motion only. Logo artwork, five entrances and orbit rotation have their own owners. */
+body#top.home-page {
+  --xim-ease: cubic-bezier(.22,1,.36,1);
+  --xim-gold: #c9aa78;
+  isolation: isolate;
+}
+body#top.home-page .xim-ambient {
+  position: fixed; inset: -6%; z-index: -1; overflow: hidden;
+  pointer-events: none; transform: translate3d(var(--xim-x,0px),var(--xim-y,0px),0);
+  transition: transform 1.3s var(--xim-ease);
+}
+.home-page .xim-ambient i {
+  position: absolute; width: min(110vw,1300px); height: min(100vh,1000px);
+  left: -12%; top: -12%; opacity: .065;
+  background: radial-gradient(ellipse at center,#b28c4e 0%,#79603b 24%,transparent 65%);
+  animation: xim-light-drift 18s ease-in-out infinite alternate;
+}
+.home-page .xim-ambient i + i {
+  left: auto; right: -28%; top: 20%; opacity: .035;
+  animation-duration: 15s; animation-delay: -7s; animation-direction: alternate-reverse;
+}
+@keyframes xim-light-drift {
+  from { transform: translate3d(-3%,-2%,0) scale(.94); }
+  to { transform: translate3d(6%,8%,0) scale(1.04); }
+}
+body#top.home-page .wheel .xim-orbit-frame {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
+  overflow: visible; pointer-events: none; fill: none; stroke: var(--xim-gold);
+}
+.home-page .xim-orbit-frame circle { vector-effect: non-scaling-stroke; }
+.home-page .xim-orbit-line { stroke-width: .65; opacity: .21; }
+.home-page .xim-orbit-accent {
+  stroke-width: 1.3; stroke-linecap: round; opacity: 0;
+  transform-origin: 300px 300px;
+  transition: transform .55s var(--xim-ease), opacity .35s ease;
+}
+.home-page .xim-orbit-frame[data-active] .xim-orbit-accent { opacity: .8; }
+body#top.home-page .orbit a text {
+  transform-box: fill-box; transform-origin: center;
+  transition: fill .35s ease, transform .35s var(--xim-ease);
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  body#top.home-page .orbit a:hover text { transform: scale(1.025); }
+}
+@media (prefers-reduced-motion:no-preference) {
+  body#top.home-page .orbit a:focus-visible text,
+  body#top.home-page .orbit a:active text { transform: scale(1.025); }
+}
+.home-page .xim-type { display: inline-block; }
+.home-page .xim-word { display: inline-block; white-space: nowrap; }
+.home-page .xim-letter { display: inline-block; }
+.home-page .xim-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+/* All rules occupy existing border space. No new layout rows or changed padding. */
+body#top.home-page .xim-rule-host { position: relative; }
+.home-page .xim-rule {
+  position: absolute; display: block; pointer-events: none;
+  height: 1px; left: 0; right: 0; top: -1px;
+  background: linear-gradient(90deg,#c9aa78,rgba(198,161,91,.18));
+  opacity: .45; transform-origin: left center;
+}
+.home-page .xim-rule-vertical {
+  width: 1px; height: auto; left: -1px; right: auto; top: 0; bottom: 0;
+  background: #c6a15b; opacity: 1; transform-origin: center top;
+}
+body#top.home-page .xim-rule-host.xim-has-vertical { border-left-color: transparent!important; }
+body#top.home-page .xim-rule-host.xim-has-horizontal { border-top-color: transparent!important; }
+.home-page .xen-news-label .xim-rule { top: auto; bottom: 0; right: 16px; }
+body#top.home-page .xen-index-discovery > a {
+  transition: color .25s ease, border-color .25s ease, translate .2s var(--xim-ease);
+}
+/* Reuse the existing border sweep instead of stacking another border animation. */
+body#top.home-page .xen-index-discovery > a::before { animation-duration: 4.8s; }
+body#top.home-page .xen-index-discovery > a::after {
+  content: ""; position: absolute; inset: 1px; pointer-events: none;
+  background: linear-gradient(105deg,transparent 35%,rgb(223 197 147 / 7%) 49%,transparent 63%);
+  clip-path: inset(0); opacity: 0;
+  animation: xim-cta-sweep 4.8s ease-in-out 1.6s infinite;
+}
+@keyframes xim-cta-sweep {
+  0%,60% { transform: scaleX(.15); opacity: 0; }
+  70% { opacity: 1; }
+  90%,100% { transform: scaleX(1); opacity: 0; }
+}
+body#top.home-page :is(.xen-back-top,.index-items .index-icon) {
+  transition: color .25s ease, translate .25s var(--xim-ease);
+}
+body#top.home-page .xen-back-top {
+  background: linear-gradient(var(--xim-gold),var(--xim-gold)) center bottom / 0 1px no-repeat;
+  transition: color .25s ease, background-size .35s var(--xim-ease), translate .2s ease;
+}
+body#top.home-page .xen-back-top:is(:hover,:focus-visible) { background-size: 80% 1px; }
+@media (hover:hover) and (pointer:fine) {
+  body#top.home-page .xen-index-discovery > a:hover { translate: 0 -2px; }
+  body#top.home-page .index-items .index-link:hover .index-icon { translate: -2px 0; }
+}
+body#top.home-page :is(.xen-index-discovery > a,.xen-back-top):active { translate: 0 1px; }
+body#top.home-page #xen-site-header .xen-header-toggle span {
+  transition: transform .25s var(--xim-ease), opacity .2s ease, background-color .2s ease;
+}
+body#top.home-page #xen-site-header :is(.xen-header-cart,.xen-header-toggle) {
+  transition: color .25s ease, background-color .25s ease;
+}
+body#top.home-page #xen-site-header :is(.xen-header-home,.xen-header-cart,.xen-header-toggle):is(:hover,:focus-visible,:active) {
+  background: rgb(201 170 120 / 7%);
+}
+body#top.home-page #xen-site-header .xen-header-cart:is(:hover,:focus-visible,:active) { color: var(--xim-gold); }
+/* Existing native page transitions: no click interception, timers or navigation delay. */
+::view-transition-old(root) { animation-duration: .2s; }
+::view-transition-new(root) { animation-duration: .2s; }
+body#top.home-page.xim-paused .xim-ambient i,
+body#top.home-page.xim-paused .xen-index-discovery > a::before,
+body#top.home-page.xim-paused .xen-index-discovery > a::after,
+body#top.home-page.xim-paused .xen-discovery-compass path { animation-play-state: paused; }
+@media (max-width:600px) {
+  .home-page .xim-ambient i { opacity: .05; }
+  .home-page .xim-ambient i + i { opacity: .03; }
+  .home-page .xim-orbit-line { opacity: .16; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body#top.home-page .xim-ambient,
+  body#top.home-page .xim-orbit-frame,
+  body#top.home-page .xen-index-discovery > a::after { display: none; }
+  body#top.home-page [class*="xim-"] { animation: none!important; transition: none!important; }
+  body#top.home-page .orbit a text { transform: none!important; }
+  ::view-transition-old(root),::view-transition-new(root) { animation: none; }
+}
+@media print {
+  .home-page .xim-ambient,.home-page .xim-orbit-frame { display: none; }
+}
