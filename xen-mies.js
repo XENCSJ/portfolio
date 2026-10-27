@@ -41,18 +41,35 @@
   }
   // The published breathing-architecture work currently lives in CREATOR.
   // Open only its existing archive when arriving at this exact deep link.
+  let stopProject=()=>{};
   const revealProject=()=>{
+    stopProject();
     if(location.hash!=='#breathing-architecture')return;
     const heading=document.getElementById('breathing-architecture');
     const archive=heading?.closest('details');if(!heading||!archive)return;
     archive.open=true;
-    requestAnimationFrame(()=>{
-      const header=document.getElementById('xen-site-header');
-      const offset=(header?.getBoundingClientRect().height||0)+16;
-      // Existing entrance animations translate ancestors; use untransformed layout.
-      let top=0;for(let node=heading;node;node=node.offsetParent)top+=node.offsetTop;
-      scrollTo({top:top-offset,behavior:'instant'});
-    });
+    let frame=0,timer=0,observer;
+    const events=['wheel','touchstart','pointerdown','keydown'];
+    const align=()=>{
+      cancelAnimationFrame(frame);
+      frame=requestAnimationFrame(()=>{
+        if(location.hash!=='#breathing-architecture')return;
+        const header=document.getElementById('xen-site-header');
+        const offset=(header?.getBoundingClientRect().height||0)+16;
+        // Existing entrance animations translate ancestors; use layout offsets.
+        let top=0;for(let node=heading;node;node=node.offsetParent)top+=node.offsetTop;
+        scrollTo({top:top-offset,behavior:'instant'});
+      });
+    };
+    stopProject=()=>{
+      cancelAnimationFrame(frame);clearTimeout(timer);observer?.disconnect();
+      events.forEach(event=>removeEventListener(event,stopProject));
+    };
+    // The existing latest-videos feed can change height after page load.
+    // Follow its layout briefly, but stop immediately on deliberate user input.
+    if('ResizeObserver' in window){observer=new ResizeObserver(align);observer.observe(document.querySelector('main'));}
+    events.forEach(event=>addEventListener(event,stopProject,{passive:true}));
+    timer=setTimeout(stopProject,10000);align();
   };
   addEventListener('hashchange',revealProject);addEventListener('pageshow',revealProject);
   if(document.readyState==='complete')revealProject();else addEventListener('load',revealProject,{once:true});
