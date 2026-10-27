@@ -60,7 +60,7 @@ body.creator-page.xen-polished.detail-page main .cp-identity h1{font-size:clamp(
 .creator-page .cp-jump{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0 24px;padding:0 0 22px}
 .creator-page .cp-jump a{display:inline-flex;align-items:center;min-height:44px;font-size:9px;letter-spacing:.09em;color:#666}
 .creator-page .cp-jump a:hover{text-decoration:underline;text-underline-offset:5px}
-.creator-page .cp-section{border-top:1px solid var(--cp-line);padding:42px 0;margin:0;scroll-margin-top:90px}
+.creator-page .cp-section{border-top:1px solid var(--cp-line);padding:42px 0;margin:0;scroll-margin-top:16px}
 .creator-page .cp-section-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin:0 0 24px;padding:0;border:0;font-size:15px;font-weight:400;letter-spacing:.1em;line-height:1.6;text-align:left;background:transparent}
 .creator-page .cp-section-heading small{font-size:11px;font-weight:400;letter-spacing:.04em;color:var(--cp-muted)}
 .creator-page .cp-copy{font-size:14px;line-height:2.1;color:#505050}
@@ -157,9 +157,10 @@ body.creator-page.xen-polished.detail-page .creation-support>h2{font-size:11px;p
  .creator-page .cp-facts{padding:15px 0;gap:10px}
  .creator-page .cp-facts dt{font-size:9px}
  .creator-page .cp-facts dd{font-size:13px}
- .creator-page .cp-jump{justify-content:space-between;gap:0 10px;padding-bottom:12px}
+ .creator-page .cp-jump{flex-wrap:nowrap;justify-content:flex-start;gap:0 20px;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+ .creator-page .cp-jump a{flex:0 0 auto;white-space:nowrap}
  .creator-page .cp-jump a{font-size:8px;letter-spacing:.035em}
- .creator-page .cp-section{padding:30px 0;scroll-margin-top:80px}
+ .creator-page .cp-section{padding:30px 0;scroll-margin-top:16px}
  .creator-page .cp-section-heading{font-size:13px;gap:8px 12px;margin-bottom:20px}
  .creator-page .cp-section-heading small{font-size:10px}
  .creator-page .cp-copy{font-size:13px}

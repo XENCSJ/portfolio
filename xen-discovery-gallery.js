@@ -12,6 +12,7 @@
  // Red-X references IMG_9947 through IMG_9954: 17 whole images, not their separate works.
  // Stable work IDs plus original/preview paths keep ordering and URL aliases irrelevant.
  const excludedAssets=[
+  ["space-3cdf06737385", "IMG_8369.PNG", "xen-preview-67719606a928b04a.webp"], // ARCHITECTURE 作品 18: interior perspectives, plans and planting
   ['apparel-ccc341888110','APPAREL (1).png','xen-preview-6e9cfc944d27281a.webp'], // existing Miss Target exclusion
   ["design-e7a94102467b", "DESIGN (1).png", "xen-preview-a72f67e01dba78a8.webp"],
   ["design-88900d525066", "DESIGN (4).jpg", "xen-preview-6f26cf8bfee67f8d.webp"],
@@ -140,6 +141,7 @@
   if(themeOpen||document.querySelector('.xd-theme-dialog[open]'))return;
   if(active?.cell===cell)settle(dominantIncoming());
   const work=latched||cell.work;
+  if(!eligibleWork(work))return;
   detailOpen=true;stop();opener=cell.node;pageY=scrollY;
   dialog.dataset.work=work.id;dialog.querySelector('.xd-work-image').src=work.image;dialog.querySelector('.xd-work-image').alt=work.title;
   dialog.querySelector('#xd-work-title').textContent=work.title;dialog.querySelector('.xd-work-genre').textContent=work.genre;

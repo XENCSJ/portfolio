@@ -1,6 +1,6 @@
 /* CREATOR: keep the complete photograph and the existing prose/motion system. */
 body#top.creator-page #creative-origin {
-  scroll-margin-top: calc(var(--xen-header-height, 64px) + 24px);
+  scroll-margin-top: 16px;
 }
 body#top.creator-page #creative-origin .cp-section-heading {
   display: flex;
@@ -27,19 +27,8 @@ body#top.creator-page .cp-origin-image img {
 body#top.creator-page .cp-origin-copy {
   min-width: 0;
 }
-body#top.creator-page .cp-origin-discover {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  margin-top: 8px;
-  color: #c5af82;
-  font-size: 12px;
-  line-height: 1.8;
-  text-underline-offset: 5px;
-}
 body#top.creator-page .cp-origin-copy h3 {
-  margin: 0 0 20px;
+  margin: 0 0 12px;
   color: #fff;
   font-size: clamp(18px, 2vw, 22px);
   font-weight: 400;
@@ -52,4 +41,8 @@ body#top.creator-page .cp-origin-copy h3 {
     grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
+}
+
+body#top.creator-page .cp-origin-copy .xen-description {
+  margin-block: 0;
 }
