@@ -105,7 +105,7 @@ async function browserChecks(pool){
    const context=await browser.newContext({viewport:{width,height:width<768?844:1000},isMobile:width<768,hasTouch:width<768,reducedMotion:'reduce'});
    const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
    await page.goto(base+'what-is-xen.html');await ready(page);
-   check(await page.locator('script[src*="20261027-random-visit2"]').count()===1,'published random visit revision');
+   check(await page.locator('script[src*="20261027-random-visit3"]').count()===1,'published random visit revision');
    let prior=await ids(page);
    check(prior.length===12&&new Set(prior).size===12&&prior.every(id=>allowed.has(id)),'published initial draw');
    check(await page.locator('.xd-tile:visible').count()===(width>=1024?12:9),'unchanged responsive count');

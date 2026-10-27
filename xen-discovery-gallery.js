@@ -105,7 +105,8 @@
   queue=[];pending.clear();recent=[];lastCell=null;gestures.clear();hovered.clear();focused.clear();
   const selection=drawVisit(works.filter(work=>!failed.has(work.id)),cells.length,history);
   selection.forEach((work,index)=>{
-   const image=new Image();image.width=640;image.height=640;image.decoding='async';image.src=work.image;
+   // Keep the opening grid's image and surrounding tile in the same paint.
+   const image=new Image();image.width=640;image.height=640;image.decoding='sync';image.src=work.image;
    setCell(cells[index],work,image);
   });
   rememberVisit();pump();schedule();updateState();
