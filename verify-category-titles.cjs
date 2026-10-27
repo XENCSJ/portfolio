@@ -154,4 +154,9 @@ module.exports = async function verifyCategoryTitles() {
  fs.writeFileSync('news-qa/category-results.json',JSON.stringify(results,null,2));
  console.log('CATEGORY CHECKS PASSED: '+results.length+' page/viewport combinations');
 };
-if(require.main===module)module.exports().catch(e=>{console.error(e);process.exit(1)});
+if(require.main===module)module.exports().catch(e=>{
+ fs.mkdirSync('news-qa',{recursive:true});
+ fs.writeFileSync('news-qa/category-error.txt',e.stack || String(e));
+ if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'Category verification failure:\n```text\n'+(e.stack || String(e))+'\n```\n');
+ console.error(e);process.exit(1);
+});
