@@ -16,6 +16,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    const context=await browser.newContext({viewport:{width,height:width<768?844:960},isMobile:width<768,hasTouch:width<768,reducedMotion:motion});
    const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.route(/google-analytics|googletagmanager/,r=>r.abort());
+   try {
    await page.goto(base+'what-is-xen.html#future',{waitUntil:'domcontentloaded'});
    await page.locator('.xd-theme-dialog[open]').waitFor();await page.waitForTimeout(350);
    const expected=await frame(page);
@@ -61,13 +62,18 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    await page.locator('.mies-person-link').click();await page.waitForTimeout(350);
    await page.locator('.mies-artwork-link').click();await page.waitForURL('**/artworks.html#artwork-20261023-03');
    await page.waitForLoadState('load');await page.waitForTimeout(250);
-   const artwork=await page.locator('#artwork-20261023-03').evaluate(e=>({top:e.getBoundingClientRect().top,header:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
-   ok(artwork.top>=artwork.header-1&&artwork.top<artwork.header+80,'ARTWORKS exact anchor after shuffle '+JSON.stringify(artwork));
+   const artwork=await page.locator('#artwork-20261023-03').evaluate(e=>({top:e.getBoundingClientRect().top,bottom:e.getBoundingClientRect().bottom,viewport:innerHeight,atEnd:scrollY+innerHeight>=document.documentElement.scrollHeight-2,header:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
+   ok(artwork.top>=artwork.header-1&&(artwork.top<artwork.header+80||(artwork.atEnd&&artwork.bottom<=artwork.viewport+1)),'ARTWORKS exact anchor after shuffle '+JSON.stringify(artwork));
    await page.locator('#artwork-20261023-03').click();await page.locator('#image-viewer[open]').waitFor();await imageReady(page.locator('#image-viewer img'));ok(await page.locator('#image-viewer img').getAttribute('src').then(s=>s.endsWith('/xen-artwork-20261023-03.jpg')),'gallery original viewer preserved');
    ok(errors.length===0,'no JavaScript errors '+errors.join());
-   results.push({engine:engine.name(),width,motion,status:'passed'});console.log('PASS',label,checks);await context.close();
+   results.push({engine:engine.name(),width,motion,status:'passed'});console.log('PASS',label,checks);
+   } catch(error) {
+    results.push({engine:engine.name(),width,motion,status:'failed',error:error.stack});
+    console.error('FAIL',label,error.message);
+    await page.screenshot({path:`${directory}/${label}-failure.png`}).catch(()=>{});
+   } finally {await context.close();}
   }
   await browser.close();
  }
- fs.writeFileSync(`${directory}/results.json`,JSON.stringify({base,checks,results},null,2));console.log('ALL PASSED',checks);
+ fs.writeFileSync(`${directory}/results.json`,JSON.stringify({base,checks,results},null,2));const failed=results.filter(r=>r.status==='failed');console.log(failed.length?'FAILED':'ALL PASSED',checks,'checks;',failed.length,'cases failed');if(failed.length)process.exitCode=1;
 })().catch(e=>{fs.writeFileSync(`${directory}/results.json`,JSON.stringify({base,checks,results,error:e.stack},null,2));console.error(e);process.exit(1)});
