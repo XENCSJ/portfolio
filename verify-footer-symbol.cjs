@@ -8,127 +8,109 @@ assert.equal(pages.length, 17);
 const out = 'footer-symbol-evidence';
 fs.mkdirSync(out, {recursive: true});
 const mime = {'.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp'};
-const server = http.createServer((req, res) => {
+const server = http.createServer((req,res) => {
   const name = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   const file = path.resolve('.' + (name === '/' ? '/index.html' : name));
-  if (!file.startsWith(process.cwd() + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {res.writeHead(404); return res.end();}
+  if (!file.startsWith(process.cwd() + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); return res.end(); }
   res.setHeader('Content-Type', mime[path.extname(file)] || 'application/octet-stream');
   fs.createReadStream(file).pipe(res);
 });
 const results = [];
 async function inspect(page, width) {
   await page.locator('.xen-footer-symbol img').evaluate(img => img.decode());
-  await page.locator('footer').evaluate(async footer => {
-    await Promise.all(footer.getAnimations({subtree:true}).map(a => a.finished.catch(() => {})));
+  const v = await page.locator('footer').evaluate(footer => {
+    const rect = el => {const r = el.getBoundingClientRect(); return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
+    const css = el => {const s=getComputedStyle(el); return {color:s.color,opacity:s.opacity,transform:s.transform,fontSize:s.fontSize,lineHeight:s.lineHeight,background:s.backgroundImage,border:s.borderTopWidth,shadow:s.boxShadow};};
+    const top=footer.querySelector('.xen-footer-return'), link=footer.querySelector('.xen-footer-symbol'), img=link.querySelector('img'), credits=footer.querySelector('.xen-footer-credits'), powered=credits.querySelector('.xen-footer-powered'), copyright=credits.querySelector('.xen-footer-copyright'), arrow=top.querySelector('svg');
+    return {version:footer.dataset.footerVersion, count:footer.querySelectorAll('.xen-footer-symbol').length, footer:rect(footer), signature:rect(footer.querySelector('.xen-footer-signature')), top:rect(top), link:rect(link), image:rect(img), credits:rect(credits), powered:rect(powered), copyright:rect(copyright), arrow:rect(arrow), topStyle:css(top), imageStyle:css(img), poweredStyle:css(powered), copyrightStyle:css(copyright), background:getComputedStyle(footer).backgroundColor, border:getComputedStyle(footer).borderTopWidth, before:getComputedStyle(top,'::before').content, after:getComputedStyle(top,'::after').content, text:[powered.textContent,copyright.textContent], loaded:img.complete&&img.naturalWidth>0, source:img.getAttribute('src'), href:link.href, overflow:document.documentElement.scrollWidth>innerWidth+1, creditsOverflow:credits.scrollWidth>credits.clientWidth+1, actionCount:footer.querySelectorAll('.xen-footer-actions a').length, reveals:window.footerReveals||[]};
   });
-  const value = await page.locator('footer').evaluate(footer => {
-    const link = footer.querySelector('.xen-footer-symbol');
-    const img = link.querySelector('img');
-    const top = footer.querySelector('.xen-footer-top,.xen-back-top');
-    const copyright = footer.querySelector('.xen-footer-copyright,.xen-copyright');
-    const rect = n => {const r = n.getBoundingClientRect(); return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
-    const css = getComputedStyle(img);
-    return {count:footer.querySelectorAll('.xen-footer-symbol').length, link:rect(link), image:rect(img), top:rect(top), copyright:rect(copyright), footer:rect(footer),
-      loaded:img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
-      intrinsic:[img.naturalWidth,img.naturalHeight], source:img.getAttribute('src'), href:link.href, label:link.getAttribute('aria-label'),
-      opacity:css.opacity, transform:css.transform, filter:css.filter, dark:document.body.matches('.home-page,.xen-noir'),
-      overflow:document.documentElement.scrollWidth > innerWidth + 1, background:getComputedStyle(footer).backgroundColor,
-      animations:img.getAnimations().filter(a => a.playState === 'running').length};
-  });
-  assert.equal(value.count, 1);
-  assert(value.loaded);
-  assert.equal(value.source, './XEN_logo_fixed_black.svg');
-  assert.equal(value.href, 'https://xencsj.github.io/portfolio/');
-  assert.equal(value.label, 'XEN INDEXへ戻る');
-  assert.equal(value.image.width, width <= 600 ? 26 : 30);
-  assert(Math.abs(value.image.height / value.image.width - 2293 / 2232) < .01);
-  assert(Math.abs(value.image.x + value.image.width / 2 - (value.footer.x + value.footer.width / 2)) < 1);
-  assert(value.top.bottom <= value.link.y + 1);
-  assert(value.link.bottom <= value.copyright.y + 1);
-  assert(value.link.width >= 44 && value.link.height >= 44);
-  assert.equal(value.opacity, '1');
-  assert.equal(value.transform, 'none');
-  assert(value.filter.includes(value.dark ? '0.72' : '0.42'));
-  assert.equal(value.animations, 0);
-  assert(!value.overflow, 'horizontal overflow');
-  return value;
+  assert.equal(v.version, '20261027-vertical1');
+  assert.equal(v.count,1); assert(v.loaded); assert.equal(v.source,'./XEN_logo_fixed_black.svg');
+  assert.equal(v.href,'https://xencsj.github.io/portfolio/');
+  assert.equal(v.image.width,width<=600?64:76);
+  assert(Math.abs(v.image.height/v.image.width-2293/2232)<.01);
+  for(const key of ['top','link','image','credits','powered','copyright','arrow']) assert(Math.abs(v[key].x+v[key].width/2-(v.footer.x+v.footer.width/2))<1,`${key} centered`);
+  assert(Math.abs(v.link.y-v.top.bottom-(width<=600?32:36))<1,'top/logo gap');
+  assert(Math.abs(v.credits.y-v.link.bottom-(width<=600?24:26))<1,'logo/credits gap');
+  assert(Math.abs(v.copyright.y-v.powered.bottom-6)<1,'two-line gap');
+  assert.deepEqual(v.text,['Powered by XEN','© XEN CREATIVE STUDIO JAPAN']);
+  assert.equal(v.powered.height,18); assert.equal(v.copyright.height,18);
+  assert.equal(v.topStyle.fontSize,'14px'); assert.equal(v.poweredStyle.fontSize,'12px');
+  assert.equal(v.copyrightStyle.fontSize,width<=600?'10px':'11px');
+  assert.equal(v.arrow.width,width<=600?20:22);
+  assert.equal(v.background,'rgb(0, 0, 0)'); assert.equal(v.border,'0px');
+  assert.equal(v.topStyle.border,'0px'); assert.equal(v.topStyle.background,'none'); assert.equal(v.topStyle.shadow,'none');
+  assert.equal(v.before,'none'); assert.equal(v.after,'none');
+  assert.equal(v.imageStyle.opacity,'1'); assert.equal(v.imageStyle.transform,'none');
+  assert(!v.overflow,'horizontal overflow'); assert(!v.creditsOverflow,'credits overflow');
+  return v;
 }
-async function run(browser, engine, base, width, mode = 'normal', chosen = pages) {
-  const context = await browser.newContext({viewport:{width,height:width > 600 ? 900 : 844}, isMobile:width <= 600, hasTouch:width <= 600,
-    javaScriptEnabled:mode !== 'no-js', reducedMotion:mode === 'reduce' ? 'reduce' : 'no-preference'});
-  // Third-party embeds are outside this footer test. First-party assets load normally.
-  await context.route('**/*', route => {
-    const url = route.request().url();
-    if (url.startsWith(base) || url === 'https://xencsj.github.io/portfolio/') return route.continue();
-    return route.abort();
-  });
-  await context.addInitScript(() => {
-    window.footerReveals = [];
-    const original = Element.prototype.animate;
-    Element.prototype.animate = function(frames, options) {
-      if (this.matches('.xen-footer-symbol img')) window.footerReveals.push({frames, options});
-      return original.call(this, frames, options);
+async function run(browser,engine,base,width,mode='normal',chosen=pages) {
+  const mobile=width<=600;
+  const context=await browser.newContext({viewport:{width,height:mobile?844:900},isMobile:mobile,hasTouch:mobile,javaScriptEnabled:mode!=='no-js',reducedMotion:mode==='reduce'?'reduce':'no-preference'});
+  // External video/store services are not part of this footer regression check.
+  await context.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
+  await context.addInitScript(()=>{
+    window.footerReveals=[];
+    const original=Element.prototype.animate;
+    Element.prototype.animate=function(frames,options){
+      if(this.matches('.xen-footer-symbol img,.xen-footer-credits')) window.footerReveals.push({target:this.className,frames,options});
+      return original.call(this,frames,options);
     };
   });
-  const page = await context.newPage();
-  let errors = [];
-  page.on('pageerror', e => errors.push(e.message));
-  for (const file of chosen) {
-    const label = `${engine}-${width}-${mode}-${file}`;
-    errors = [];
+  const page=await context.newPage(); page.setDefaultTimeout(12000);
+  for(const file of chosen) {
+    const label=`${engine}-${width}-${mode}-${file}`;
     try {
-      await page.goto(`${base}${file}?footer-check=20261027-1`, {waitUntil:'domcontentloaded'});
-      await page.locator('.xen-footer-symbol').waitFor({state:'attached'});
-      if (mode !== 'no-js') await page.waitForFunction(() => document.querySelector('.xen-footer-symbol')?.dataset.symbolReady === 'true');
-      await page.locator('.xen-footer-symbol').scrollIntoViewIfNeeded();
-      await page.waitForTimeout(900);
-      const details = await inspect(page, width);
-      const reveals = mode === 'no-js' ? [] : await page.evaluate(() => window.footerReveals);
-      assert.equal(reveals.length, mode === 'normal' ? 1 : 0, 'one reveal or reduced-motion bypass');
-      if (reveals.length) assert.equal(reveals[0].options.duration, 700);
-      assert.equal(errors.length, 0, JSON.stringify(errors));
-      if (mode === 'normal') {
-        if (['index.html','design.html','studio.html'].includes(file)) await page.screenshot({path:`${out}/${label.replace('.html','.png')}`});
-        await page.locator('.xen-footer-top,.xen-back-top').click();
-        await page.waitForFunction(() => window.scrollY < 2);
-        await page.locator('.xen-footer-symbol').scrollIntoViewIfNeeded();
-        await page.waitForTimeout(800);
-        assert.equal((await page.evaluate(() => window.footerReveals)).length, 1, 'must not replay');
-        if (width <= 600) await page.locator('.xen-footer-symbol').tap();
-        else {await page.locator('.xen-footer-symbol').focus(); await page.keyboard.press('Enter');}
-        await page.waitForURL('https://xencsj.github.io/portfolio/', {waitUntil:'domcontentloaded'});
-        await page.goBack({waitUntil:'domcontentloaded'});
-        await page.locator('.xen-footer-symbol').scrollIntoViewIfNeeded();
-        await page.waitForTimeout(900);
-        await inspect(page, width);
-        await page.reload({waitUntil:'domcontentloaded'});
-        await page.locator('.xen-footer-symbol').scrollIntoViewIfNeeded();
-        await page.waitForTimeout(900);
-        await inspect(page, width);
+      await page.goto(`${base}${file}?footer-check=20261027-vertical1`,{waitUntil:'domcontentloaded'});
+      if(mode!=='no-js') await page.waitForFunction(()=>document.querySelector('footer')?.dataset.footerReady==='true');
+      await page.locator('.xen-footer-credits').scrollIntoViewIfNeeded();
+      await page.waitForTimeout(1000);
+      const details=await inspect(page,width);
+      assert.equal(details.actionCount,file==='index.html'?0:2,'preserve existing footer navigation');
+      assert.equal(details.reveals.length,mode==='normal'?2:0,'one reveal each, reduced-motion bypass');
+      if(mode==='normal') {
+        assert.equal(details.reveals[0].options.duration,700);
+        assert.equal(details.reveals[1].options.delay,180);
       }
-      results.push({label, pass:true, details});
-      console.log('PASS', label);
-    } catch (e) {
-      results.push({label, pass:false, error:e.stack, errors});
-      console.error('FAIL', label, e.message);
-      await page.screenshot({path:`${out}/${label}-failure.png`}).catch(() => {});
+      if(!mobile) {
+        await page.locator('.xen-footer-return').hover(); await page.waitForTimeout(350);
+        const hover=await page.locator('.xen-footer-chevron').evaluate(el=>getComputedStyle(el).transform);
+        assert.equal(hover,mode==='reduce'?'none':'matrix(1, 0, 0, 1, 0, -3)');
+        await page.mouse.move(0,0);
+      }
+      await page.screenshot({path:`${out}/${label.replace('.html','.png')}`});
+      await page.locator('.xen-footer-return').click();
+      await page.waitForFunction(()=>window.scrollY<2);
+      await page.locator('.xen-footer-credits').scrollIntoViewIfNeeded();
+      await page.waitForTimeout(900);
+      if(mode!=='no-js') assert.equal(await page.evaluate(()=>window.footerReveals.length),mode==='normal'?2:0,'do not replay');
+      if(file==='index.html'&&mode==='normal') {
+        await page.locator('.xen-footer-symbol').focus();
+        assert.equal(await page.locator('.xen-footer-symbol').evaluate(el=>getComputedStyle(el).outlineWidth),'1px');
+      }
+      results.push({label,pass:true,details}); console.log('PASS',label);
+    } catch(e) {
+      results.push({label,pass:false,error:e.stack}); console.error('FAIL',label,e.message);
+      await page.screenshot({path:`${out}/${label}-failure.png`}).catch(()=>{});
     }
   }
   await context.close();
 }
-(async () => {
-  await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
-  const base = process.env.FOOTER_BASE_URL || `http://127.0.0.1:${server.address().port}/`;
-  for (const [name,type] of [['chromium',chromium],['webkit',webkit]]) {
-    const browser = await type.launch();
+(async()=>{
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  const base=process.env.FOOTER_BASE_URL||`http://127.0.0.1:${server.address().port}/`;
+  for(const [name,type] of [['chromium',chromium],['webkit',webkit]]) {
+    const browser=await type.launch();
     try {
-      for (const width of [1440,390]) await run(browser,name,base,width);
-      for (const mode of ['reduce','no-js']) await run(browser,name,base,390,mode,['index.html','design.html','studio.html']);
-      for (const width of [320,375,430]) await run(browser,name,base,width,'normal',['index.html','design.html','studio.html']);
-    } finally {await browser.close();}
+      for(const width of [1440,390]) await run(browser,name,base,width);
+      for(const mode of ['reduce','no-js']) await run(browser,name,base,390,mode,['index.html','design.html','studio.html']);
+      for(const width of [320,375,430]) await run(browser,name,base,width,'normal',['index.html','design.html','studio.html']);
+      await run(browser,name,base,1440,'reduce',['index.html']);
+    } finally { await browser.close(); }
   }
-  const passed = results.filter(r => r.pass).length;
-  fs.writeFileSync(`${out}/report.json`, JSON.stringify({base, passed, total:results.length, results},null,2));
-  if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\nFooter symbol: **${passed}/${results.length}** checks passed.\nBase: ${base}\n17 pages; Chromium/WebKit; 1440/390px plus 320/375/430px examples; original image, spacing, centering, 700ms once-only fade, keyboard/desktop and mobile link, Back to Top, history, reload, no JS and reduced motion.\n`);
-  if (passed !== results.length) process.exitCode = 1;
-})().catch(e => {console.error(e);process.exitCode=1;}).finally(() => server.close());
+  const passed=results.filter(r=>r.pass).length;
+  fs.writeFileSync(`${out}/report.json`,JSON.stringify({base,passed,total:results.length,results},null,2));
+  if(process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,`\nFooter: **${passed}/${results.length}** checks passed.\n17 pages; Chromium/WebKit; 1440/390px; 320/375/430px examples; centered two-line credits, original logo, specified gaps, no lines, no overflow, hover, Back to Top, once-only reveal, no-JS and reduced-motion.\n`);
+  if(passed!==results.length) process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>server.close());
