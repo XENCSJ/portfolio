@@ -1,0 +1,81 @@
+name: INDEX label publication QA
+on:
+  push:
+    branches: [work/index-label-qa-20261027]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 12
+    steps:
+      - run: npm install --no-save playwright@1.56.1
+      - name: Verify published labels, title, responsive layout and links
+        shell: bash
+        run: |
+          mkdir -p evidence
+          cat > verify.cjs <<'JS'
+          const {chromium,webkit}=require('playwright');
+          const assert=require('node:assert/strict'),fs=require('node:fs');
+          const base='https://xencsj.github.io/portfolio/';
+          const title='XEN | CREATIVE STUDIO JAPAN';
+          const labels=[['HOME','ホーム'],['VIEW PRICING','料金を見る'],['GET IN TOUCH','制作のご相談']];
+          const hrefs=['index.html','what-is-xen.html','studio.html','creator.html','storybooks.html','animation.html','sound.html','cinematic.html','snap.html','design.html','apparel.html','architecture.html','space.html','artworks.html','sns-management.html','price-list.html','studio.html#contact'];
+          const results=[];
+          (async()=>{
+            for(const engine of [chromium,webkit]) {
+              const browser=await engine.launch();
+              for(const width of [375,390,430,1280,1440]) {
+                const ctx=await browser.newContext({viewport:{width,height:width<768?844:1100},isMobile:width<768,hasTouch:width<768,deviceScaleFactor:1});
+                const page=await ctx.newPage(); const errors=[];
+                page.on('pageerror',e=>errors.push(e.message));
+                await page.route('https://www.googletagmanager.com/**',r=>r.abort());
+                const response=await page.goto(base,{waitUntil:'load'});assert(response.ok());
+                assert.deepEqual(await page.locator('.index-single-label').evaluateAll(es=>es.map(e=>[e.querySelector('.index-destination-en').textContent,e.querySelector('.index-destination-ja').textContent])),labels);
+                assert.deepEqual(await page.locator('.index-directory a').evaluateAll(es=>es.map(e=>e.getAttribute('href'))),hrefs.map(h=>'./'+h));
+                await page.locator('#creative-index .studio-heading').scrollIntoViewIfNeeded();
+                await page.waitForTimeout(1700);
+                assert.equal(await page.locator('#creative-index .studio-heading').textContent(),title);
+                assert.equal(await page.getByRole('heading',{name:title,exact:true}).count(),1);
+                assert.equal(await page.locator('#creative-index .studio-heading .xim-sr').count(),0);
+                assert.equal(await page.locator('#creative-index .studio-heading .xim-letter').count(),23);
+                const layout=await page.locator('.index-single-label').evaluateAll(es=>es.map(e=>{
+                  const en=e.querySelector('.index-destination-en'),ja=e.querySelector('.index-destination-ja');
+                  const a=en.getBoundingClientRect(),b=ja.getBoundingClientRect(),r=e.getBoundingClientRect(),c=getComputedStyle(e);
+                  return {english:en.textContent,japanese:ja.textContent,twoRows:b.top>=a.bottom-.1,rightAligned:Math.abs(a.right-b.right)<1,inside:a.left>=r.left&&a.right<=r.right+1&&b.left>=r.left&&b.right<=r.right+1,enFont:parseFloat(getComputedStyle(en).fontSize),jaFont:parseFloat(getComputedStyle(ja).fontSize),border:c.borderLeftWidth,borderColor:c.borderLeftColor};
+                }));
+                for(const r of layout){assert(r.twoRows&&r.rightAligned&&r.inside,JSON.stringify(r));assert(r.enFont>r.jaFont);assert.equal(r.border,'1px');assert.equal(r.borderColor,'rgb(198, 161, 91)');}
+                assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+                assert.deepEqual(errors,[]);
+                await page.locator('#creative-index').screenshot({path:`evidence/${engine.name()}-${width}-sitemap.png`});
+                if([390,1440].includes(width)) {
+                  const nav=await ctx.newPage();
+                  await nav.route('**/*',r=>['image','media','font'].includes(r.request().resourceType())?r.abort():r.continue());
+                  for(let i=0;i<hrefs.length;i++) {
+                    await nav.goto(base,{waitUntil:'domcontentloaded'});
+                    await Promise.all([nav.waitForNavigation({waitUntil:'domcontentloaded'}),nav.locator('.index-directory a').nth(i).click()]);
+                    assert.equal(new URL(nav.url()).pathname,new URL(hrefs[i],base).pathname);
+                    assert.equal(new URL(nav.url()).hash,new URL(hrefs[i],base).hash);
+                    assert(!/404|page not found/i.test(await nav.title()));
+                    if(hrefs[i].includes('#'))assert.equal(await nav.locator('#contact').count(),1);
+                  }
+                  await nav.close();
+                }
+                results.push({engine:engine.name(),width,status:'PASS',layout});
+                console.log('PASS',engine.name(),width,'labels, title, alignment, divider and overflow');
+                await ctx.close();
+              }
+              await browser.close();
+            }
+            fs.writeFileSync('evidence/results.json',JSON.stringify({base,results,linkNavigations:68},null,2));
+            console.log('PASS: 10 published responsive layouts and 68 link navigations');
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node verify.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: index-label-publication-evidence
+          path: evidence/
