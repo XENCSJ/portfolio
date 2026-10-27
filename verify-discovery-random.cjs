@@ -85,4 +85,60 @@ const overlap=(a,b)=>a.filter(id=>b.includes(id)).length;
  for(const genre of ['CINEMATIC','SNS_MANAGEMENT','ＳＮＡＰ'])check(app.test.excludedWork({...pool[0],genre}),'excluded genre');
  check((html.match(/class="xd-mosaic"/g)||[]).length===1,'no duplicate gallery');
  console.log(JSON.stringify({checks,visits:100,eligible:pool.length,slots:12,result:'PASS'},null,2));
+ if(process.env.DISCOVERY_BROWSER_CHECK)await browserChecks(pool);
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+async function browserChecks(pool){
+ const {chromium,webkit}=require('playwright');
+ const base='https://xencsj.github.io/portfolio/',allowed=new Set(pool.map(w=>w.id)),results=[];
+ fs.mkdirSync('discovery-random-evidence',{recursive:true});
+ const ids=page=>page.locator('.xd-tile').evaluateAll(nodes=>nodes.map(n=>n.dataset.work));
+ const ready=page=>page.waitForSelector('[data-gallery-ready="true"]');
+ for(const engine of [chromium,webkit]){
+  const browser=await engine.launch({ignoreDefaultArgs:['--disable-back-forward-cache']});
+  for(const width of [375,390,430,768,1440]){
+   const context=await browser.newContext({viewport:{width,height:width<768?844:1000},isMobile:width<768,hasTouch:width<768,reducedMotion:'reduce'});
+   const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+   await page.goto(base+'what-is-xen.html');await ready(page);
+   check(await page.locator('script[src*="20261027-random-visit1"]').count()===1,'published random visit revision');
+   let prior=await ids(page);
+   check(prior.length===12&&new Set(prior).size===12&&prior.every(id=>allowed.has(id)),'published initial draw');
+   check(await page.locator('.xd-tile:visible').count()===(width>=1024?12:9),'unchanged responsive count');
+   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
+   for(let reload=0;reload<3;reload++){
+    await page.reload();await ready(page);const current=await ids(page);
+    check(overlap(current,prior)===0,'published reload has zero repeats');check(current.every(id=>allowed.has(id)),'reload exclusions');prior=current;
+   }
+   await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
+   await page.waitForFunction(()=>[...document.querySelectorAll('.xd-tile')].filter(n=>n.getClientRects().length).every(n=>n.querySelector('img').complete&&n.querySelector('img').naturalWidth>0));
+   await page.screenshot({path:`discovery-random-evidence/${engine.name()}-${width}.png`});
+   await page.locator('.xd-tile:visible').first().click();await page.locator('.xd-work-dialog[open]').waitFor();
+   const selected=await page.locator('.xd-work-dialog').getAttribute('data-work');check(prior.includes(selected),'detail corresponds to selected work');
+   await page.keyboard.press('Escape');
+   await page.goto(base+'creator.html');await page.goBack();await ready(page);
+   await page.waitForFunction(previous=>[...document.querySelectorAll('.xd-tile')].every(n=>!previous.includes(n.dataset.work)),prior);
+   const returned=await ids(page);check(overlap(returned,prior)===0,'published back/revisit has zero repeats');
+   await page.goto(base+'creator.html');await page.goto(base+'what-is-xen.html');await ready(page);
+   const revisited=await ids(page);check(overlap(revisited,returned)===0,'published direct revisit has zero repeats');
+   check(errors.length===0,'no JS errors: '+errors.join(';'));
+   results.push({engine:engine.name(),width,visible:width>=1024?12:9,reloads:3,revisits:2,repeats:0,status:'PASS'});
+   console.log('PASS published',engine.name(),width,'reload/revisit/exclusions/images/layout');await context.close();
+  }
+  for(const width of [390,1440]){
+   const context=await browser.newContext({viewport:{width,height:1000},isMobile:width<768,hasTouch:width<768});
+   const page=await context.newPage();await page.goto(base+'what-is-xen.html');await ready(page);
+   await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
+   await page.waitForFunction(()=>Number(document.querySelector('.xd-gallery').dataset.changeCount)>=3);
+   const current=await ids(page),saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);
+   check(current.every(id=>saved.seen.includes(id)),'animation saves displayed works');
+   check(current.every(id=>allowed.has(id)),'animated exclusions');
+   check(await page.locator('.xd-incoming').count()<=1,'serialized existing animation');
+   await page.reload();await ready(page);
+   const redrawn=await ids(page);check(overlap(redrawn,saved.seen)===0,'reloaded draw avoids animated visit');
+   console.log('PASS motion',engine.name(),width);await context.close();
+  }
+  await browser.close();
+ }
+ fs.writeFileSync('discovery-random-evidence/results.json',JSON.stringify({checks,results,realIPhoneTested:false},null,2));
+ console.log('PASS all published browser checks',checks);
+}
