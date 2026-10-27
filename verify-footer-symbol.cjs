@@ -29,13 +29,15 @@ async function inspect(page, width) {
     const rect = n => {const r = n.getBoundingClientRect(); return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
     const css = getComputedStyle(img);
     return {count:footer.querySelectorAll('.xen-footer-symbol').length, link:rect(link), image:rect(img), top:rect(top), copyright:rect(copyright), footer:rect(footer),
-      loaded:img.complete && img.naturalWidth === 2232 && img.naturalHeight === 2293, href:link.href, label:link.getAttribute('aria-label'),
+      loaded:img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
+      intrinsic:[img.naturalWidth,img.naturalHeight], source:img.getAttribute('src'), href:link.href, label:link.getAttribute('aria-label'),
       opacity:css.opacity, transform:css.transform, filter:css.filter, dark:document.body.matches('.home-page,.xen-noir'),
       overflow:document.documentElement.scrollWidth > innerWidth + 1, background:getComputedStyle(footer).backgroundColor,
       animations:img.getAnimations().filter(a => a.playState === 'running').length};
   });
   assert.equal(value.count, 1);
   assert(value.loaded);
+  assert.equal(value.source, './XEN_logo_fixed_black.svg');
   assert.equal(value.href, 'https://xencsj.github.io/portfolio/');
   assert.equal(value.label, 'XEN INDEXへ戻る');
   assert.equal(value.image.width, width <= 600 ? 26 : 30);
