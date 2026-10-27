@@ -26,7 +26,9 @@ const server=http.createServer((req,res)=>{
 const layout=()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,
   nodes:[...document.querySelectorAll('header,footer,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].map(e=>{
     const r=e.getBoundingClientRect(),viewportCoordinates=getComputedStyle(e).position==='fixed'||!e.getClientRects().length;
-    return [e.tagName,e.id,r.x+(viewportCoordinates?0:scrollX),r.y+(viewportCoordinates?0:scrollY),r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
+    // A navigation-only ID on the existing heading does not change its layout.
+    const id=e.matches('h3#breathing-architecture')?'':e.id;
+    return [e.tagName,id,r.x+(viewportCoordinates?0:scrollX),r.y+(viewportCoordinates?0:scrollY),r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
   })});
 (async()=>{
   await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;
