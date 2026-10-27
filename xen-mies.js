@@ -47,8 +47,10 @@
     archive.open=true;
     requestAnimationFrame(()=>{
       const header=document.getElementById('xen-site-header');
-      const offset=(header?.getBoundingClientRect().bottom||0)+16;
-      scrollTo({top:heading.getBoundingClientRect().top+scrollY-offset,behavior:'instant'});
+      const offset=(header?.getBoundingClientRect().height||0)+16;
+      // Existing entrance animations translate ancestors; use untransformed layout.
+      let top=0;for(let node=heading;node;node=node.offsetParent)top+=node.offsetTop;
+      scrollTo({top:top-offset,behavior:'instant'});
     });
   };
   addEventListener('hashchange',revealProject);addEventListener('pageshow',revealProject);

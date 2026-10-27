@@ -26,7 +26,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    await page.waitForFunction(()=>document.querySelector('.cp-project-archive').open);
    await page.waitForTimeout(300);
    const target=await page.locator('#breathing-architecture').evaluate(e=>({top:e.getBoundingClientRect().top,bar:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
-   ok(target.top>=target.bar&&target.top<target.bar+80,'breathing architecture below header: '+label);
+   ok(target.top>=target.bar&&target.top<target.bar+80,'breathing architecture below header: '+label+' '+JSON.stringify(target));
    await page.goto(base+'creator.html#creative-origin',{waitUntil:'domcontentloaded'});
    await page.locator('.mies-person-link').scrollIntoViewIfNeeded();await page.waitForTimeout(400);
    ok(await page.locator('#creative-origin .cp-copy p').textContent()===copy,'origin text unchanged');
@@ -62,7 +62,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    await page.locator('.mies-artwork-link').click();await page.waitForURL('**/artworks.html#artwork-20261023-03');
    await page.waitForLoadState('load');await page.waitForTimeout(250);
    const artwork=await page.locator('#artwork-20261023-03').evaluate(e=>({top:e.getBoundingClientRect().top,header:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
-   ok(artwork.top>=artwork.header-1&&artwork.top<artwork.header+80,'ARTWORKS exact anchor after shuffle');
+   ok(artwork.top>=artwork.header-1&&artwork.top<artwork.header+80,'ARTWORKS exact anchor after shuffle '+JSON.stringify(artwork));
    await page.locator('#artwork-20261023-03').click();await page.locator('#image-viewer[open]').waitFor();await imageReady(page.locator('#image-viewer img'));ok(await page.locator('#image-viewer img').getAttribute('src').then(s=>s.endsWith('/xen-artwork-20261023-03.jpg')),'gallery original viewer preserved');
    ok(errors.length===0,'no JavaScript errors '+errors.join());
    results.push({engine:engine.name(),width,motion,status:'passed'});console.log('PASS',label,checks);await context.close();
