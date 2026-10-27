@@ -102,9 +102,6 @@ body#top.home-page #xen-site-header .xen-header-toggle span {
 body#top.home-page #xen-site-header :is(.xen-header-cart,.xen-header-toggle) {
   transition: color .25s ease, background-color .25s ease;
 }
-body#top.home-page #xen-site-header :is(.xen-header-home,.xen-header-cart,.xen-header-toggle):is(:hover,:focus-visible,:active) {
-  background: rgb(201 170 120 / 7%);
-}
 body#top.home-page #xen-site-header .xen-header-cart:is(:hover,:focus-visible,:active) { color: var(--xim-gold); }
 /* Existing native page transitions: no click interception, timers or navigation delay. */
 ::view-transition-old(root) { animation-duration: .2s; }
