@@ -1,11 +1,13 @@
 {
   "studio": {
     "en": "STUDIO",
-    "ja": "スタジオ"
+    "ja": "スタジオ",
+    "navigationJa": "スタジオについて"
   },
   "creator": {
     "en": "CREATOR",
-    "ja": "クリエイター"
+    "ja": "クリエイター",
+    "navigationJa": "クリエイター紹介"
   },
   "storybooks": {
     "en": "STORYBOOKS",
@@ -17,14 +19,15 @@
   },
   "sound": {
     "en": "MUSIC",
-    "ja": "楽曲制作"
+    "ja": "楽曲制作",
+    "navigationJa": "音楽"
   },
   "cinematic": {
     "en": "CINEMATIC",
-    "ja": "映像制作"
+    "ja": "映像作品"
   },
   "snap": {
-    "en": "SNAP",
+    "en": "PHOTOGRAPHY",
     "ja": "写真"
   },
   "design": {
@@ -41,11 +44,13 @@
   },
   "space": {
     "en": "SPACE",
-    "ja": "空間"
+    "ja": "空間",
+    "navigationJa": "空間デザイン"
   },
   "artworks": {
     "en": "ART GALLERY",
-    "ja": "アートギャラリー"
+    "ja": "アートギャラリー",
+    "navigationJa": "アート作品"
   },
   "sns-management": {
     "en": "SNS MANAGEMENT",

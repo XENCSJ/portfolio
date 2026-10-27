@@ -76,7 +76,7 @@ SOFTWARE. */
   };
   menu.querySelectorAll('.xen-menu-en').forEach(label => {
     const name = label.textContent.replace(/\s*↗\s*$/, '').trim();
-    const artwork = menuIcons[({ MUSIC: 'SOUND', SHOP: 'APPAREL', 'ART GALLERY': 'ARTWORKS' })[name] || name];
+    const artwork = menuIcons[({ MUSIC: 'SOUND', PHOTOGRAPHY: 'SNAP', PRICING: 'PRICE LIST', SHOP: 'APPAREL', 'ART GALLERY': 'ARTWORKS' })[name] || name];
     const row = label.parentElement;
     if (!artwork || row.querySelector('.xen-menu-icon')) return;
     const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
