@@ -247,7 +247,7 @@ body#top.home-page #creative-index :is(.index-en, .index-ja, .home-ja) {
 }
 body#top.home-page #creative-index .index-link:is(:hover, :focus-visible, :active) {
   color: #d9bd90;
-  background: rgb(201 170 120 / 5%);
+  background: transparent;
   transform: none;
 }
 body#top.home-page #creative-index .index-link:is(:hover, :focus-visible, :active) .index-ja { color: #d0c1a9; }
@@ -255,7 +255,7 @@ body#top.home-page #creative-index .index-link:focus-visible {
   outline: 2px solid #c9aa78;
   outline-offset: 2px;
 }
-body#top.home-page #creative-index .index-link:active { background: rgb(201 170 120 / 10%); }
+body#top.home-page #creative-index .index-link:active { background: transparent; }
 body#top.home-page #creative-index .index-category-link { min-height: 48px!important; }
 body#top.home-page #xen-footer {
   padding: 16px 20px calc(40px + env(safe-area-inset-bottom, 0px))!important;
