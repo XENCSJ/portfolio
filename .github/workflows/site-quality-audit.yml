@@ -29,14 +29,16 @@ jobs:
           AUDIT_BASE: ${{ inputs.base_url }}
           AUDIT_FOCUS: ${{ github.event_name == 'push' && 'webkit' || inputs.focus }}
         run: |
-          npx http-server . -p 8765 -a 127.0.0.1 -c-1 >/tmp/quality-http.log 2>&1 &
+          mkdir -p /tmp/xen-quality-root
+          ln -s "$PWD" /tmp/xen-quality-root/portfolio
+          npx http-server /tmp/xen-quality-root -p 8765 -a 127.0.0.1 -c-1 >/tmp/quality-http.log 2>&1 &
           cat > quality-audit.cjs <<'AUDIT_JS'
           const fs=require('node:fs');
           const {chromium,webkit}=require('playwright');
-          const base=(process.env.AUDIT_BASE||'http://127.0.0.1:8765').replace(/\/$/,'');
+          const base=(process.env.AUDIT_BASE||'http://127.0.0.1:8765/portfolio').replace(/\/$/,'');
           const out='quality-audit-evidence';fs.mkdirSync(out,{recursive:true});
           const allPages=['index','what-is-xen','creator','studio','sound','storybooks','animation','cinematic','snap','design','apparel','architecture','space','artworks','sns-management','price-list'];
-          const pages=process.env.AUDIT_FOCUS==='webkit'?['what-is-xen','snap']:allPages;
+          const pages=process.env.AUDIT_FOCUS==='webkit'?['index','what-is-xen','snap']:allPages;
           const widths=base.includes('127.0.0.1')?[1920,1440,1280,1024,768,390,375,360]:[1440,390];
           const result={base,sha:process.env.GITHUB_SHA,started:new Date().toISOString(),cases:[],interactions:[],auxiliary:[],externalThumbnails:[]};
           const save=()=>fs.writeFileSync(out+'/results.json',JSON.stringify(result,null,2));
@@ -70,10 +72,10 @@ jobs:
                if(width===1440||width===390){
                 await p.waitForTimeout(1600);await p.screenshot({path:`${out}/${engineName}-${width}-${slug}-top.jpg`,quality:65});
                }
-               await p.locator('.xen-header-toggle').click();await p.waitForTimeout(380);
+               await p.locator('.xen-header-toggle').click();await p.waitForFunction(()=>document.getAnimations().every(a=>a.effect?.target!==document.querySelector('#xen-drawer')||a.playState!=='running'));
                rec.menuOpen=await p.locator('.xen-header-toggle').getAttribute('aria-expanded')==='true';
                rec.menuBounds=await p.locator('#xen-drawer').evaluate(e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,sw:e.scrollWidth,cw:e.clientWidth};});
-               await p.keyboard.press('Escape');await p.waitForTimeout(380);rec.menuClosed=await p.locator('.xen-header-toggle').getAttribute('aria-expanded')==='false';
+               await p.keyboard.press('Escape');await p.waitForFunction(()=>!document.querySelector('#xen-drawer').open&&document.querySelector('.xen-header-toggle')===document.activeElement);rec.menuClosed=await p.locator('.xen-header-toggle').getAttribute('aria-expanded')==='false';
                rec.focusRestored=await p.locator('.xen-header-toggle').evaluate(e=>e===document.activeElement);
                // Visit the full document to trigger each existing reveal and lazy image.
                if(width===1440||width===390){
