@@ -34,6 +34,7 @@ body.creator-page.mies-modal-open{position:fixed;width:100%;overflow:hidden}
 .mies-artwork figure{max-width:470px;margin:0 auto 20px}
 .mies-artwork-link{display:inline-flex;flex-direction:column;gap:5px;min-height:44px;border-bottom:1px solid #6f5b3b;padding:10px 0;font-size:12px;letter-spacing:.08em;line-height:1.7}
 .mies-artwork-link small{font-size:11px;letter-spacing:.02em}
+html:has(#breathing-architecture:target){scroll-behavior:auto!important}
 #breathing-architecture{scroll-margin-top:16px}
 @media(max-width:767px){.mies-dialog .xd-work-bar{min-height:55px}.mies-dialog .xd-work-bar>span{font-size:9px}.mies-dialog .mies-scroll{padding-bottom:22px}.mies-dialog p{font-size:13px}.mies-dialog .mies-section{margin-top:22px;padding-top:21px}.mies-works{grid-template-columns:minmax(0,1fr);gap:25px}.mies-works figure{height:auto;max-height:none}.mies-works figure img{width:100%;height:auto;max-height:380px}.mies-dialog .mies-works p{font-size:13px}.mies-dialog .mies-works .mies-credit{font-size:10px}}
 @media(prefers-reduced-motion:no-preference){.mies-dialog[open]::backdrop{animation:mies-backdrop-in .28s ease-out both}.mies-dialog[open].is-closing::backdrop{animation:mies-backdrop-out .18s ease-in both}}
