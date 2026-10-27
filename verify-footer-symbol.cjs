@@ -18,6 +18,9 @@ const server = http.createServer((req, res) => {
 const results = [];
 async function inspect(page, width) {
   await page.locator('.xen-footer-symbol img').evaluate(img => img.decode());
+  await page.locator('footer').evaluate(async footer => {
+    await Promise.all(footer.getAnimations({subtree:true}).map(a => a.finished.catch(() => {})));
+  });
   const value = await page.locator('footer').evaluate(footer => {
     const link = footer.querySelector('.xen-footer-symbol');
     const img = link.querySelector('img');
