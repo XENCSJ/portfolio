@@ -101,11 +101,11 @@ for(const engine of [chromium,webkit]){
   await ready(page);
   ok(await page.title()==='DISCOVER XEN | XEN CSJ','page title');
   ok((await page.locator('.xd-theme').evaluateAll(nodes=>nodes.map(n=>n.dataset.theme))).join()===themes.join(),'four themes in order');
-  ok(await page.locator('.xd-sign').count()===15,'15 signs');
-  ok(await page.locator('.xd-sign-main[href]').count()===15,'15 verified primary destinations');
+  ok(await page.locator('.xd-sign').count()===16,'16 signs');
+  ok(await page.locator('.xd-sign-main[href]').count()===16,'16 verified primary destinations');
   ok(await page.locator('#xd-origin-detail,[data-origin-open],.xd-sign-unavailable').count()===0,'ORIGIN detail popup removed');
   ok(await page.locator('[data-sign="past-1"] a').getAttribute('href')==='./creator.html#creative-origin','ORIGIN direct destination');
-  ok(await page.locator('.xd-sign-main[href] .xd-sign-icon').count()===15,'linked signs include icon and text');
+  ok(await page.locator('.xd-sign-main[href] .xd-sign-icon').count()===16,'linked signs include icon and text');
   ok(await page.locator('.xd-gallery button').count()===0,'no pause controls');
   const order=await page.evaluate(()=>['.xd-page-intro','.xd-gallery','.xd-intro','.xd-explorer','.xen-common-footer'].map(selector=>document.querySelector(selector).getBoundingClientRect().top));
   ok(order.every((y,i)=>!i||y>order[i-1]),'page information order');
@@ -122,11 +122,12 @@ for(const engine of [chromium,webkit]){
    const grid=page.locator(`[data-panel="${theme}"] .xd-sign`);
    const r=await grid.evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height}}));
    if(theme==='together'){
-    ok(r.length===3&&r[0].y===r[1].y&&r[2].y>r[0].y&&r[2].w>r[0].w*1.9,'TOGETHER two cards plus full-width contact');
-    ok((await grid.locator('.xd-sign-title').allTextContents()).join()==='共創,信頼,制作相談','TOGETHER retained cards');
-    ok((await grid.locator('.xd-sign-number').allTextContents()).join()==='01,02,03','TOGETHER continuous numbering');
-    ok(await page.locator('[data-panel="together"] a[href*="creation-support"],[data-panel="together"] a[href*="#connect"]').count()===0,'removed support and connection links');
-   }else ok(r.length===4&&r[0].y===r[1].y&&r[2].y===r[3].y&&r[2].y>r[0].y,'2x2 signs');
+    ok((await grid.locator('.xd-sign-title').allTextContents()).join()==='共創,創作を応援する,信頼,制作相談','TOGETHER retained cards');
+    ok((await grid.locator('.xd-sign-number').allTextContents()).join()==='01,02,03,04','TOGETHER continuous numbering');
+    ok(await page.locator('[data-sign="together-2"] .xd-sign-main').getAttribute('href')==='./creator.html#creation-support','restored support destination');
+    ok(await page.locator('[data-panel="together"] a[href*="#connect"]').count()===0,'connection sublink remains removed');
+   }
+   ok(r.length===4&&r[0].y===r[1].y&&r[2].y===r[3].y&&r[2].y>r[0].y,'2x2 signs');
    ok(await dialog.evaluate(d=>{const r=d.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight+1&&r.left>=0&&r.right<=innerWidth+1}),'modal in viewport');
    ok(await page.locator('.xd-theme-scroll').evaluate(n=>n.scrollWidth<=n.clientWidth),'no modal horizontal overflow');
    ok(await page.locator('.xd-theme-close').evaluate(n=>{const r=n.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight}),'close always visible');
