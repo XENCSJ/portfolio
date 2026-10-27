@@ -43,8 +43,8 @@ jobs:
                 assert.equal(await page.locator('#creative-index .studio-heading .xim-letter').count(),23);
                 const layout=await page.locator('.index-single-label').evaluateAll(es=>es.map(e=>{
                   const en=e.querySelector('.index-destination-en'),ja=e.querySelector('.index-destination-ja');
-                  const a=en.getBoundingClientRect(),b=ja.getBoundingClientRect(),r=e.getBoundingClientRect(),c=getComputedStyle(e);
-                  return {english:en.textContent,japanese:ja.textContent,twoRows:b.top>=a.bottom-.1,rightAligned:Math.abs(a.right-b.right)<1,inside:a.left>=r.left&&a.right<=r.right+1&&b.left>=r.left&&b.right<=r.right+1,enFont:parseFloat(getComputedStyle(en).fontSize),jaFont:parseFloat(getComputedStyle(ja).fontSize),border:c.borderLeftWidth,borderColor:c.borderLeftColor};
+                  const a=en.getBoundingClientRect(),b=ja.getBoundingClientRect(),r=e.getBoundingClientRect(),c=getComputedStyle(e),line=e.querySelector('.xim-rule-vertical');
+                  return {english:en.textContent,japanese:ja.textContent,twoRows:b.top>=a.bottom-.1,rightAligned:Math.abs(a.right-b.right)<1,inside:a.left>=r.left&&a.right<=r.right+1&&b.left>=r.left&&b.right<=r.right+1,enFont:parseFloat(getComputedStyle(en).fontSize),jaFont:parseFloat(getComputedStyle(ja).fontSize),border:line?getComputedStyle(line).width:c.borderLeftWidth,borderColor:line?getComputedStyle(line).backgroundColor:c.borderLeftColor};
                 }));
                 for(const r of layout){assert(r.twoRows&&r.rightAligned&&r.inside,JSON.stringify(r));assert(r.enFont>r.jaFont);assert.equal(r.border,'1px');assert.equal(r.borderColor,'rgb(198, 161, 91)');}
                 assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
