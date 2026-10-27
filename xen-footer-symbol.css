@@ -1,5 +1,6 @@
 /* One shared signature for INDEX and every existing site footer. */
-body#top footer.xen-unified-footer {
+body#top footer.xen-unified-footer,
+body#top.home-page footer#xen-footer.xen-unified-footer {
   --footer-ink: #f4f4f4;
   --footer-muted: #b8b8be;
   box-sizing: border-box;
@@ -127,7 +128,8 @@ body#top .xen-unified-footer .xen-footer-signature a:focus-visible {
   body#top .xen-unified-footer .xen-footer-return:hover .xen-footer-chevron { transform: translateY(-3px); }
 }
 @media (max-width: 600px) {
-  body#top footer.xen-unified-footer {
+  body#top footer.xen-unified-footer,
+body#top.home-page footer#xen-footer.xen-unified-footer {
     padding-top: 36px !important;
     padding-bottom: max(32px, env(safe-area-inset-bottom)) !important;
   }
