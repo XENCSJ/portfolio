@@ -1,1 +1,109 @@
-
+name: Full site quality audit
+on:
+  push:
+    branches: ['work/site-quality-audit-20261027']
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Optional published base URL; blank audits this checkout locally'
+        default: ''
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1 http-server@14.1.1
+      - name: Audit every public page and requested viewport
+        env:
+          AUDIT_BASE: ${{ inputs.base_url }}
+        run: |
+          npx http-server . -p 8765 -a 127.0.0.1 -c-1 >/tmp/quality-http.log 2>&1 &
+          cat > quality-audit.cjs <<'AUDIT_JS'
+          const fs=require('node:fs');
+          const {chromium,webkit}=require('playwright');
+          const base=(process.env.AUDIT_BASE||'http://127.0.0.1:8765').replace(/\/$/,'');
+          const out='quality-audit-evidence';fs.mkdirSync(out,{recursive:true});
+          const pages=['index','what-is-xen','creator','studio','sound','storybooks','animation','cinematic','snap','design','apparel','architecture','space','artworks','sns-management','price-list'];
+          const widths=[1920,1440,1280,1024,768,390,375,360];
+          const result={base,sha:process.env.GITHUB_SHA,started:new Date().toISOString(),cases:[],interactions:[],auxiliary:[]};
+          const save=()=>fs.writeFileSync(out+'/results.json',JSON.stringify(result,null,2));
+          (async()=>{
+           for(const [engineName,engine,sizes] of [['chromium',chromium,widths],['webkit',webkit,[1440,390]]]){
+            const browser=await engine.launch();
+            for(const width of sizes){
+             const ctx=await browser.newContext({viewport:{width,height:width<500?844:1000},deviceScaleFactor:1});
+             // Local rendering isolates the authored site; external services are measured separately on Pages.
+             if(base.includes('127.0.0.1'))await ctx.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());
+             const p=await ctx.newPage();p.setDefaultTimeout(12000);
+             for(const slug of pages){
+              const rec={slug,engine:engineName,width,errors:[],failedResources:[]};
+              const onError=e=>rec.errors.push(e.message);const onResponse=r=>{if(r.status()>=400)rec.failedResources.push({url:r.url(),status:r.status()});};
+              p.on('pageerror',onError);p.on('response',onResponse);
+              try{
+               const response=await p.goto(base+'/'+slug+'.html',{waitUntil:'load',timeout:45000});rec.status=response.status();
+               await p.waitForTimeout(700);
+               rec.initial=await p.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,title:document.title,h1:[...document.querySelectorAll('h1')].map(e=>e.textContent.trim()),footer:document.querySelector('footer')?.innerText,footerLogos:document.querySelectorAll('footer .xen-footer-symbol,footer .xen-footer-logo').length,nav:performance.getEntriesByType('navigation').map(n=>({domContentLoaded:n.domContentLoadedEventEnd,load:n.loadEventEnd,transferSize:n.transferSize})),images:[...document.images].filter(i=>i.getBoundingClientRect().top<innerHeight&&i.getBoundingClientRect().bottom>0&&i.getBoundingClientRect().width>0).map(i=>({src:i.getAttribute('src'),ok:i.complete&&i.naturalWidth>0})),ids:[...document.querySelectorAll('[id]')].map(e=>e.id)}));
+               rec.duplicateIds=rec.initial.ids.filter((x,i,a)=>a.indexOf(x)!==i);delete rec.initial.ids;
+               if(width===1440||width===390){
+                await p.waitForTimeout(1600);await p.screenshot({path:`${out}/${engineName}-${width}-${slug}-top.jpg`,quality:65});
+               }
+               await p.locator('.xen-header-toggle').click();await p.waitForTimeout(380);
+               rec.menuOpen=await p.locator('.xen-header-toggle').getAttribute('aria-expanded')==='true';
+               rec.menuBounds=await p.locator('#xen-drawer').evaluate(e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,sw:e.scrollWidth,cw:e.clientWidth};});
+               await p.keyboard.press('Escape');await p.waitForTimeout(380);rec.menuClosed=await p.locator('.xen-header-toggle').getAttribute('aria-expanded')==='false';
+               rec.focusRestored=await p.locator('.xen-header-toggle').evaluate(e=>e===document.activeElement);
+               // Visit the full document to trigger each existing reveal and lazy image.
+               if(width===1440||width===390){
+                for(let y=0;y<await p.evaluate(()=>document.body.scrollHeight);y+=800){await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);await p.waitForTimeout(60);}
+                await p.waitForTimeout(1500);
+                rec.afterScroll=await p.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,brokenImages:[...document.images].filter(i=>i.getAttribute('src')&&i.getBoundingClientRect().width>0&&i.complete&&!i.naturalWidth).map(i=>i.getAttribute('src')),links:[...document.querySelectorAll('a[href]')].map(a=>({href:a.getAttribute('href'),text:a.textContent.trim()}))}));
+                await p.screenshot({path:`${out}/${engineName}-${width}-${slug}-footer.jpg`,quality:65});
+               }
+               rec.ok=rec.status===200&&rec.initial.overflow<=1&&rec.menuOpen&&rec.menuClosed&&rec.focusRestored&&!rec.errors.length&&!rec.duplicateIds.length;
+              }catch(e){rec.exception=e.message;rec.ok=false;}
+              p.off('pageerror',onError);p.off('response',onResponse);result.cases.push(rec);save();console.log(JSON.stringify({slug,engine:engineName,width,ok:rec.ok,exception:rec.exception,errors:rec.errors,overflow:rec.initial?.overflow}));
+             }
+             if(width===1440||width===390){
+              async function test(name,fn){const r={name,engine:engineName,width};try{r.details=await fn();r.ok=true;}catch(e){r.ok=false;r.error=e.message;}result.interactions.push(r);save();console.log('INTERACTION',JSON.stringify(r));}
+              await test('DISCOVER four chapters and random reload/revisit',async()=>{
+               await p.goto(base+'/what-is-xen.html');await p.locator('[data-gallery-ready="true"]').waitFor();
+               const ids=()=>p.locator('.xd-tile').evaluateAll(es=>es.map(e=>e.dataset.work));const first=await ids();await p.reload();await p.locator('[data-gallery-ready="true"]').waitFor();const second=await ids();
+               if(first.some(x=>second.includes(x)))throw Error('Initial/reload overlap');
+               for(const theme of ['past','present','future','together']){await p.locator(`[data-theme="${theme}"]`).click();await p.locator(`[data-panel="${theme}"]:not([hidden])`).waitFor();await p.keyboard.press('Escape');await p.waitForTimeout(350);}
+               await p.goto(base+'/creator.html');await p.goBack();await p.locator('[data-gallery-ready="true"]').waitFor();const third=await ids();if(second.some(x=>third.includes(x)))throw Error('Revisit overlap');
+               await p.locator('.xd-tile').first().click();await p.locator('.xd-work-dialog[open]').waitFor();await p.keyboard.press('Escape');await p.waitForTimeout(400);if(await p.locator('.xd-work-dialog[open]').count())throw Error('Work popup did not close');return{slots:first.length,first,second,third};
+              });
+              await test('CREATOR section order and origin',async()=>{await p.goto(base+'/creator.html#creative-origin');await p.waitForTimeout(1800);const d=await p.evaluate(()=>({sections:[...document.querySelectorAll('main section[id],.creator-section[id]')].map(e=>({id:e.id,title:e.querySelector('h2')?.textContent})),originTop:document.querySelector('#creative-origin').getBoundingClientRect().top}));if(d.originTop<0||d.originTop>250)throw Error('Origin hidden by header: '+d.originTop);return d;});
+              await test('MUSIC genre and song drawers',async()=>{await p.goto(base+'/sound.html');let count=0;for(const q of ['.sound-category-drawer > summary','.music-text-drawer > summary']){for(const s of await p.locator(q).all()){await s.click();await p.waitForTimeout(360);if(!await s.evaluate(e=>e.parentElement.open))throw Error('Drawer did not open');await s.click();await p.waitForTimeout(360);count++;}}if(/BIG\s*UP!?/i.test(await p.locator('body').innerText()))throw Error('Disallowed visible provider name');return{count};});
+              await test('SHOP three character deep links',async()=>{const states=[];for(const id of ['156849283','157783299','157787639']){await p.goto(base+'/apparel.html#base-product-'+id);await p.locator('#base-product-'+id).waitFor();await p.waitForTimeout(1400);states.push(await p.locator('#base-product-'+id).evaluate(e=>({id:e.id,top:e.getBoundingClientRect().top,visible:!!e.getClientRects().length})));}if(states.some(x=>!x.visible||x.top<0||x.top>500))throw Error(JSON.stringify(states));return states;});
+              for(const slug of ['snap','artworks','architecture','space'])await test(slug+' image viewer',async()=>{await p.goto(base+'/'+slug+'.html');const item=p.locator('.gallery-item').first();await item.click();await p.locator('#image-viewer[open]').waitFor();await p.locator('.viewer-next').click();await p.keyboard.press('Escape');await p.waitForTimeout(400);if(await p.locator('#image-viewer[open]').count())throw Error('Viewer remains open');return true;});
+              await test('Reduced motion pages',async()=>{await p.emulateMedia({reducedMotion:'reduce'});const states=[];for(const slug of ['index','what-is-xen','creator','studio','sound']){await p.goto(base+'/'+slug+'.html');await p.waitForTimeout(800);states.push(await p.evaluate(()=>({path:location.pathname,overflow:document.documentElement.scrollWidth-innerWidth,running:document.getAnimations().filter(a=>a.playState==='running').length,bodyOpacity:getComputedStyle(document.body).opacity})));}await p.emulateMedia({reducedMotion:'no-preference'});return states;});
+             }
+             await ctx.close();
+            }
+            await browser.close();
+           }
+           // Keep auxiliary previews in the audit without treating them as published navigation pages.
+           const browser=await chromium.launch();const p=await browser.newPage({viewport:{width:390,height:844}});
+           for(const file of fs.readdirSync('.').filter(f=>f.endsWith('.html')&&!pages.includes(f.slice(0,-5)))){try{const r=await p.goto(base+'/'+file,{waitUntil:'domcontentloaded',timeout:30000});result.auxiliary.push({file,status:r.status(),title:await p.title()});}catch(e){result.auxiliary.push({file,error:e.message});}save();}
+           await browser.close();result.finished=new Date().toISOString();save();
+           const failed=result.cases.filter(x=>!x.ok).length+result.interactions.filter(x=>!x.ok).length;
+           fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY||out+'/summary.md',`## Quality audit\nSource: ${result.sha}\nBase: ${base}\nPage/viewport cases: ${result.cases.length}\nInteractions: ${result.interactions.length}\nFailed checks: ${failed}\nSee results.json and screenshots for observations.\n`);
+           console.log('AUDIT COMPLETE',result.cases.length,result.interactions.length,failed);if(failed)process.exitCode=1;
+          })().catch(e=>{save();console.error(e);process.exitCode=1;});
+          AUDIT_JS
+          node quality-audit.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-audit-evidence
+          path: quality-audit-evidence/
+          retention-days: 14
