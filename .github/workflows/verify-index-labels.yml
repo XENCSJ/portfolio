@@ -41,6 +41,8 @@ jobs:
                 assert.equal(await page.getByRole('heading',{name:title,exact:true}).count(),1);
                 assert.equal(await page.locator('#creative-index .studio-heading .xim-sr').count(),0);
                 assert.equal(await page.locator('#creative-index .studio-heading .xim-letter').count(),23);
+                for(const row of await page.locator('.index-directory a').all()) await row.scrollIntoViewIfNeeded();
+                await page.waitForTimeout(1800);
                 const layout=await page.locator('.index-single-label').evaluateAll(es=>es.map(e=>{
                   const en=e.querySelector('.index-destination-en'),ja=e.querySelector('.index-destination-ja');
                   const a=en.getBoundingClientRect(),b=ja.getBoundingClientRect(),r=e.getBoundingClientRect(),c=getComputedStyle(e),line=e.querySelector('.xim-rule-vertical');
