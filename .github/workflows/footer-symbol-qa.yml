@@ -1,0 +1,42 @@
+name: Footer symbol verification
+on:
+  push:
+    branches: [main, work/footer-symbol-20261027]
+    paths: ['*.html', 'xen-footer-symbol.*', 'verify-footer-symbol.cjs', '.github/workflows/footer-symbol-qa.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - name: Wait for the published footer update
+        if: github.ref == 'refs/heads/main'
+        run: |
+          for attempt in $(seq 1 40); do
+            if curl -fsSL "https://xencsj.github.io/portfolio/index.html?footer-build=$GITHUB_SHA" | grep -q 'class="xen-footer-symbol"'; then exit 0; fi
+            sleep 10
+          done
+          exit 1
+      - name: Verify the branch locally
+        if: github.ref != 'refs/heads/main'
+        run: node verify-footer-symbol.cjs
+      - name: Verify the published site
+        if: github.ref == 'refs/heads/main'
+        env:
+          FOOTER_BASE_URL: https://xencsj.github.io/portfolio/
+        run: node verify-footer-symbol.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: footer-symbol-evidence
+          path: footer-symbol-evidence/
+          retention-days: 14
