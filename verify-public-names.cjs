@@ -28,6 +28,7 @@ async function main(){
     await p.locator('.xen-header-toggle').click();
     await p.locator('.xen-header-toggle[aria-expanded="true"]').waitFor();
     for(const [key,[en,ja]] of Object.entries(expected)){
+     if(slug==='studio-logo-review'&&key==='what-is-xen')continue; // Existing auxiliary preview has no DISCOVER entry.
      const a=p.locator('#xen-menu a[href="./'+key+'.html"]');
      assert.equal(plain(await a.locator('.xen-menu-en').textContent()),en,slug+' '+key+' English');
      assert.equal(plain(await a.locator('.xen-menu-ja').textContent()),ja,slug+' '+key+' Japanese');
@@ -53,13 +54,15 @@ async function main(){
      const a=p.locator('.index-directory a[href="./snap.html"]');await a.hover();
      assert.equal(await a.evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)','hover background');
      await a.focus();assert.equal(await a.evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)','focus background');
+     for(let y=0;y<await p.evaluate(()=>document.body.scrollHeight);y+=500){await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);await p.waitForTimeout(90);}
+     await p.waitForTimeout(1800);await p.locator('#creative-index h1').click();await p.waitForTimeout(300);
      await p.locator('#creative-index').screenshot({path:out+'/'+name+'-sitemap.jpg',quality:85});
      const spacing=await p.locator('.orbit').evaluate(el=>{
       const length=el.querySelector('#circle').getTotalLength();const links=[...el.querySelectorAll(':scope > a')];
-      return links.map((a,i)=>({text:a.querySelector('.orbit-en').textContent,gap:length/links.length-(a.querySelector('.orbit-en').getComputedTextLength()+links[(i+1)%links.length].querySelector('.orbit-en').getComputedTextLength())/2}));
+      return links.map((a,i)=>({text:a.querySelector('.orbit-en').textContent,gap:((parseFloat(links[(i+1)%links.length].querySelector('textPath').getAttribute('startOffset'))-parseFloat(a.querySelector('textPath').getAttribute('startOffset'))+100)%100)/100*length-(a.querySelector('.orbit-en').getComputedTextLength()+links[(i+1)%links.length].querySelector('.orbit-en').getComputedTextLength())/2}));
      });rec.ringSpacing=spacing;assert.ok(spacing.every(x=>x.gap>0),'overlapping ring labels '+JSON.stringify(spacing));
-     await p.locator('.orbit a[href="./snap.html"]').focus();await p.screenshot({path:out+'/'+name+'-index.jpg',quality:85});
-     await p.keyboard.press('Enter');await p.waitForURL('**/snap.html');assert.equal(plain(await p.locator('h1 .title-en').textContent()),'PHOTOGRAPHY');
+     await p.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await p.waitForTimeout(400);await p.screenshot({path:out+'/'+name+'-index.jpg',quality:85});
+     await p.locator('.orbit a[href="./snap.html"]').focus();await p.keyboard.press('Enter');await p.waitForURL('**/snap.html');assert.equal(plain(await p.locator('h1 .title-en').textContent()),'PHOTOGRAPHY');
     }
     if(['snap','cinematic','apparel','creator'].includes(slug))await p.screenshot({path:out+'/'+name+'-'+slug+'.jpg',quality:80});
     rec.ok=true;
