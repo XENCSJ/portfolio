@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['apparel.html', '*base-products*', '*base_products*', '.github/workflows/base-products.yml']
+    paths: ['apparel.html', 'verify-base-published.cjs', '*base-products*', '*base_products*', '.github/workflows/base-products.yml']
   pull_request:
-    paths: ['apparel.html', '*base-products*', '*base_products*', '.github/workflows/base-products.yml']
+    paths: ['apparel.html', 'verify-base-published.cjs', '*base-products*', '*base_products*', '.github/workflows/base-products.yml']
 
 permissions:
   contents: read
