@@ -33,7 +33,8 @@
     trigger.addEventListener('keydown',event=>{if(event.key===' '){event.preventDefault();open();}});
     dialog.querySelector('.mies-close').addEventListener('click',close);
     dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
-    dialog.addEventListener('close',()=>{if(document.body.classList.contains('mies-modal-open'))finish();});
+    // A queued close event may arrive after the user has already reopened it.
+    dialog.addEventListener('close',()=>{if(!dialog.open&&document.body.classList.contains('mies-modal-open'))finish();});
     reduced.addEventListener('change',()=>{if(reduced.matches){if(closing)finish();else animation?.cancel();}});
     addEventListener('pagehide',()=>{if(dialog.open)finish();});
     if(location.hash==='#mies-detail')open();
