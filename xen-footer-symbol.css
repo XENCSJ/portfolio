@@ -1,0 +1,42 @@
+/* Reuse the original symbol without changing its geometry or existing footer. */
+body#top footer a.xen-footer-symbol {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 2px auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+body#top footer a.xen-footer-symbol::before,
+body#top footer a.xen-footer-symbol::after { content: none; }
+body#top footer .xen-footer-symbol img {
+  display: block;
+  width: 30px;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+  filter: brightness(0) invert(.42);
+}
+body#top.home-page footer .xen-footer-symbol img,
+body#top.xen-noir footer .xen-footer-symbol img {
+  filter: brightness(0) invert(.72);
+}
+body#top footer a.xen-footer-symbol:focus-visible {
+  outline: 2px solid #6b6b6b;
+  outline-offset: 2px;
+}
+body#top.home-page footer a.xen-footer-symbol:focus-visible,
+body#top.xen-noir footer a.xen-footer-symbol:focus-visible {
+  outline-color: #b8b8b8;
+}
+@media (max-width: 600px) {
+  body#top footer .xen-footer-symbol img { width: 26px; }
+}
