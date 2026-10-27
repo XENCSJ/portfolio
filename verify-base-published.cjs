@@ -14,6 +14,7 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
     const results = [];
     for (const width of [375,390,768,1440]) {
       const page = await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'});
+      page.setDefaultTimeout(30000);
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
       await page.goto(origin+'apparel.html?verify='+Date.now(), {waitUntil:'domcontentloaded'});
@@ -45,15 +46,20 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
         const box=await img.boundingBox();assert.ok(Math.abs(box.width-box.height)<1);
       }
       assert.equal(await page.locator('#base-product-156851056 img').getAttribute('src'),'./xen-jewelry-bangle-white.jpg');
-      for(const id of [156850693,156851036,156851056]) {
+      for(const [id,target] of [[156850693,'k18-signet-ring'],[156851036,'product'],[156851056,'product']]) {
         const cta=page.locator(`#base-product-${id} > .base-product-cta`);
         assert.equal(await cta.isVisible(),true);
         assert.equal(await cta.getAttribute('target'),'_blank');
-        const summary=page.locator(`#base-product-${id} summary`);
-        await summary.click();assert.equal(await summary.getAttribute('aria-expanded'),'true');
-        assert.equal(await cta.isVisible(),true);
-        assert.equal(await page.locator(`#base-product-${id} .jewelry-store`).isVisible(),true);
-        await summary.press('Enter');assert.equal(await summary.getAttribute('aria-expanded'),'false');
+        const details=page.locator(`#base-product-${id} .base-product-design-link`);
+        assert.equal(await details.isVisible(),true);
+        assert.equal(await details.getAttribute('href'),`./design.html#${target}`);
+        await details.click();
+        await page.waitForURL(url => url.pathname.endsWith('/design.html') && url.hash === `#${target}`);
+        assert.equal(await page.locator(`#${target}`).count(),1);
+        await page.goBack({waitUntil:'domcontentloaded'});
+        await page.waitForSelector(`#base-product-${id} > .base-product-cta`);
+        await page.locator(`#base-product-${id}`).scrollIntoViewIfNeeded();
+        assert.equal(await page.locator(`#base-product-${id} > .base-product-cta`).isVisible(),true);
       }
       const positions=await page.locator('.catalog-product').evaluateAll(cards=>cards.map(card=>{
         const box=el=>{const r=el.getBoundingClientRect();return {top:r.top,width:r.width,height:r.height};};
@@ -82,7 +88,7 @@ const origin = process.env.BASE_PUBLIC_URL || 'https://xencsj.github.io/portfoli
       assert.equal(await page.locator('footer').count(),1);
       assert.deepEqual(errors,[]);
       await catalog.screenshot({path:`base-products-qa/published-${width}.png`});
-      results.push({width,cards:ids.length+2,columns:3,rows:Math.ceil((ids.length+2)/3),imagesLoaded:ids.length+2,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,alignedRows:true,drawers:4,films:3,pageErrors:errors});
+      results.push({width,cards:ids.length+2,columns:3,rows:Math.ceil((ids.length+2)/3),imagesLoaded:ids.length+2,horizontalOverflow:false,namesAndPricesMatch:true,linksMatch:true,alignedRows:true,designDetails:4,films:3,pageErrors:errors});
       await page.close();
     }
     // Confirm that every destination and the one shop link return successful pages.
