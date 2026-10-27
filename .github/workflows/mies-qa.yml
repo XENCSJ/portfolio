@@ -1,0 +1,38 @@
+name: Mies modal verification
+on:
+  push:
+    branches: ['work/mies-future-20261027']
+    paths: ['creator.html', 'artworks.html', 'what-is-xen.html', 'xen-mies.*', 'xen-artwork-anchor.js', 'mies-barcelona-chair-cl3phact0.jpg', 'verify-mies.cjs', '.github/workflows/mies-qa.yml']
+  workflow_dispatch:
+    inputs:
+      published:
+        description: Test the published GitHub Pages site
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.56.1 http-server@14.1.1
+      - name: Serve repository
+        if: ${{ !inputs.published }}
+        run: npx http-server . -p 8765 -c-1 > /tmp/mies-server.log 2>&1 &
+      - name: Verify Mies popup and links
+        env:
+          MIES_BASE_URL: ${{ inputs.published && 'https://xencsj.github.io/portfolio/' || 'http://127.0.0.1:8765/' }}
+        run: node verify-mies.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mies-evidence
+          path: mies-evidence/
+          retention-days: 14

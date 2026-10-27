@@ -169,9 +169,9 @@ for(const engine of [chromium,webkit]){
  const context=await browser.newContext({viewport:{width:390,height:667},isMobile:true,hasTouch:true});const page=await context.newPage();await ready(page);
  await page.locator('[data-theme="present"]').click();await page.waitForTimeout(450);
  ok(await page.locator('.xd-theme-close').evaluate(n=>n.getBoundingClientRect().bottom<innerHeight),'short iPhone close stays reachable');
- await page.locator('[data-switch="future"]').click();await page.locator('[data-sign="future-4"] a').click();await page.waitForURL('**/studio.html#value-evolution');
- ok(await page.locator('#values').isVisible(),'nested VALUES fragment opens parent panel');
- ok(await page.locator('#value-evolution').innerText().then(t=>t.includes('可能性を、拓く。')),'possibility uses published text');
+ await page.locator('[data-switch="future"]').click();await page.locator('[data-sign="future-4"] a').click();await page.waitForURL('**/creator.html#breathing-architecture');
+ ok(await page.locator('.cp-project-archive').evaluate(e=>e.open),'possibility opens existing project archive');
+ ok(await page.locator('#breathing-architecture').innerText().then(t=>t==='呼吸する建築'),'possibility uses existing architecture work');
  await page.goto(base+'studio.html#value-contribution');ok(await page.locator('#values').isVisible(),'trust parent visible');
  ok(await page.locator('#value-contribution').innerText().then(t=>t.includes('長期的な信頼')),'trust uses published content');
  await page.goto(base+'studio.html#vision');ok(await page.locator('#vision').isVisible(),'direction opens VISION');
