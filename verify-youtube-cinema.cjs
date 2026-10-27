@@ -23,8 +23,10 @@ const server=http.createServer((req,res)=>{
     res.setHeader('Content-Type',types[path.extname(file).toLowerCase()]||'application/octet-stream');res.end(bytes);
   }catch{res.writeHead(404).end();}
 });
-const layout=()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,
-  nodes:[...document.querySelectorAll('header,footer,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].map(e=>{
+// Footer dimensions are intentionally verified by verify-footer-symbol.cjs.
+// Keep this comparison focused on unchanged header/main content and media.
+const layout=()=>({width:document.documentElement.scrollWidth,
+  nodes:[...document.querySelectorAll('header,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].map(e=>{
     const r=e.getBoundingClientRect(),viewportCoordinates=getComputedStyle(e).position==='fixed'||!e.getClientRects().length;
     return [e.tagName,e.id,r.x+(viewportCoordinates?0:scrollX),r.y+(viewportCoordinates?0:scrollY),r.width,r.height].map(v=>typeof v==='number'?Math.round(v*100)/100:v);
   })});
