@@ -2,7 +2,7 @@
    Called by verify-music-motion.cjs in both Chromium and WebKit, locally and on Pages. */
 const fs=require('node:fs'),assert=require('node:assert/strict');
 const output='music-motion-qa/integrated';fs.mkdirSync(output,{recursive:true});
-const blocked=new Set(["space-3cdf06737385", "design-e7a94102467b", "design-88900d525066", "architecture-2424aea1ca35", "architecture-b3a885b4a868", "architecture-cd8cdcdb14d0", "architecture-ebc64cb39540", "architecture-1e49dea01c50", "architecture-b2dbd0707f0f", "architecture-fb17daedd9df", "architecture-1d5d294c4bd0", "architecture-f18cf5c8997b", "architecture-0a6065abe276", "architecture-590ec40e476e", "architecture-8b0fe09e46a9", "architecture-9d4659851c16", "architecture-639e72800da4", "architecture-70b86bed2ebf"]);
+const blocked=new Set(["space-ee2b661d3cb7", "apparel-ccc341888110", "space-3cdf06737385", "design-e7a94102467b", "design-88900d525066", "architecture-2424aea1ca35", "architecture-b3a885b4a868", "architecture-cd8cdcdb14d0", "architecture-ebc64cb39540", "architecture-1e49dea01c50", "architecture-b2dbd0707f0f", "architecture-fb17daedd9df", "architecture-1d5d294c4bd0", "architecture-f18cf5c8997b", "architecture-0a6065abe276", "architecture-590ec40e476e", "architecture-8b0fe09e46a9", "architecture-9d4659851c16", "architecture-639e72800da4", "architecture-70b86bed2ebf"]);
 const screenshot=async(page,name)=>{await page.waitForFunction(()=>document.getAnimations().every(a=>!a.effect?.target?.matches('[data-ql-motion]')||a.playState!=='running'),null,{timeout:15000});return page.screenshot({path:output+'/'+name+'.png',fullPage:false});};
 async function pageChecks(page){
  const state=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,ids:[...document.querySelectorAll('[id]')].map(x=>x.id)}));
@@ -10,7 +10,8 @@ async function pageChecks(page){
  assert.equal(state.ids.length,new Set(state.ids).size,'Duplicate IDs');
 }
 module.exports=async function(page,base,width,label){
-   await page.goto(base+'/index.html');await page.locator('body.ql-ready').waitFor();
+   await page.goto(base+'/index.html',{waitUntil:'load'});await page.locator('body[data-xim-ready]').waitFor({state:'attached'});
+   await page.locator('#creative-index .index-directory').waitFor();
    await page.locator('#creative-index').scrollIntoViewIfNeeded();await page.waitForTimeout(1800);await pageChecks(page);
    const layout=await page.evaluate(()=>{const b=s=>document.querySelector(s).getBoundingClientRect();return {news:b('#xen-news').toJSON(),directory:b('#creative-index').toJSON(),head:b('#index-about-heading').toJSON(),items:b('#index-about-heading + .index-items').toJSON()}});
    assert(Math.abs(layout.news.left-layout.directory.left)<1,'NEWS left edge');assert(Math.abs(layout.news.width-layout.directory.width)<1,'NEWS width');
@@ -29,6 +30,7 @@ module.exports=async function(page,base,width,label){
    await page.goto(base+'/what-is-xen.html');await page.locator('[data-gallery-ready="true"]').waitFor();await pageChecks(page);
    const title=await page.locator('.xd-gallery h2').evaluate(e=>({height:e.getBoundingClientRect().height,line:parseFloat(getComputedStyle(e).lineHeight)}));assert(title.height<title.line*1.8,'English gallery heading wrapped');
    const initial=await page.locator('.xd-tile').evaluateAll(els=>els.map(e=>e.dataset.work));assert(initial.every(x=>!blocked.has(x)));
+   await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>Number(document.querySelector('.xd-gallery').dataset.changeCount)>=3,{},{timeout:20000});
    const updated=await page.locator('.xd-tile').evaluateAll(els=>els.map(e=>e.dataset.work));assert(updated.every(x=>!blocked.has(x)));
    await page.locator('.xd-tile').first().click();await page.locator('.xd-work-dialog[open]').waitFor();const firstWork=await page.locator('.xd-tile').first().getAttribute('data-work');assert.equal(await page.locator('.xd-work-origin-link').isVisible(),firstWork==='artworks-9c96fa42b34a','Origin link belongs to Mies only');await page.locator('.xd-work-dialog .xd-work-close').click();
