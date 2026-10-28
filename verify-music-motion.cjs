@@ -72,9 +72,9 @@ async function run(browser,engine,width,height,base){
   await page.waitForFunction(()=>document.activeElement?.id==='tochu-no-mamade');
   assert.equal(await page.locator('dialog[open]').count(),0);
   await page.locator('#tochu-no-mamade .music-reader-open').click();
-  await page.locator('#tochu-no-mamade .music-text-drawer[open]').waitFor();
-  await page.locator('#tochu-no-mamade-about-tab').focus();await page.keyboard.press('Escape');
-  await page.locator('#tochu-no-mamade .music-text-drawer[open]').waitFor({state:'hidden'});
+  await page.locator('#music-reader[open]').waitFor();
+  await page.locator('#music-about-tab').focus();await page.keyboard.press('Escape');
+  await page.locator('#music-reader[open]').waitFor({state:'hidden'});
   assert.equal(await page.locator('dialog[open]').count(),0);
   await sweep(page);await visible(page);const entrances=await records(page);
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await settled(page);

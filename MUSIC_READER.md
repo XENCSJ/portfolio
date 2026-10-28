@@ -36,3 +36,32 @@ Use the existing card data URL attributes. Empty or invalid destinations become 
 ## Verification
 
 Run node verify-music-reader.cjs with Playwright Chromium and WebKit installed. Optional MUSIC_BASE_URL points to the published site. The 22 browser/viewport cases cover 1920, 1440, 1280, 1024, 768, 430, 390, 375 and 320 widths, short screens and landscape. Each case checks all eight releases, opens the four releases with published text, tests tab/scroll/focus behavior, validates exact content preservation and icon loading, verifies the release link matrix, genre disclosure and carousel navigation. Screenshots/results are written to music-reader-qa/. Ten additional future-content cases check about-only, lyrics-only, whitespace, placeholders and valid text containing the word 未掲載. Physical iPhone Safari and audio delivery through third-party services require separate device/network verification.
+
+
+## Confirmed fixed-reader contract — restored 2026-10-28
+
+This is a behavior restoration, not a redesign. All current catalogue content, service URLs, assets, genre/player disclosures and shared animations remain the current main version. Only the text-reader implementation from the last pre-regression main commit is restored.
+
+### Verified cause
+
+- Last main commit retaining the fixed reader: `5c06e607c6624c967bed21098bc5739bfc5fe849`.
+- Regression: `9d1bbaa2af964ee1d34e97fc8fc830fdbd944144` (2026-10-27 05:09 JST), a 13-file CREATOR / INDEX / DISCOVER / MUSIC integration change.
+- `xen-music-reader.js`: removed the native dialog, stationary toolbar/close control, borrowed-content restoration and body position/scroll restoration; generated per-release inline `details.music-text-drawer` instead.
+- `xen-music-reader.css`: added inline drawer styles; the original `#music-reader` flex/min-height/overflow styles remained but no longer matched a generated dialog. This was direct replacement of MUSIC behavior, not a demonstrated cross-page CSS collision.
+- `sound.html`: changed both reader asset versions to `20261027-inline-details1`.
+- Later `5b30450` and `756a164` changed regression expectations to inline drawers. The dedicated reader workflow still targeted only an old work branch, so main/shared-style updates did not automatically run it.
+- Git history establishes the code change. It does not establish why the change was considered authorized.
+
+### Invariants for future changes
+
+Keep one shared `#music-reader` modal for every release with published text. Its toolbar and bilingual ABOUT THE SONG / 楽曲解説 and LYRICS / 歌詞 labels remain outside the scrolling panel. Preserve the bounded viewport height, flex column, non-shrinking controls, `min-height:0`, panel `overflow-y:auto`, and overscroll containment. Do not move the scrolling responsibility to the dialog or page. Native modal top-layer behavior keeps the close control above the background; no new z-index or !important override is needed.
+
+Opening locks the page using its saved scroll offset; closing via the button or Escape restores body styles, original content nodes, scroll position and opener focus. Lyrics retain their exact HTML, authored line/paragraph breaks and centered alignment. The reader uses MUSIC-specific selectors and must remain excluded from shared entrance motion.
+
+Current inventory: eight releases, four with both published texts (途中のままで, ひかりのありか, 新しい輪郭, 空に溶ける); the other four have no published reader text and keep their existing no-button behavior. 遠くへ is absent from current main and is not fabricated or added.
+
+### Required regression checks
+
+`node verify-music-reader.cjs` runs Chromium and WebKit at eleven viewport sizes plus five future-content fixtures per engine. It verifies heading/close coordinates before and after actual panel scrolling, bottom reachability, overscroll/background locking, exact content restoration, click/Escape close, focus and page-position restoration, portrait/landscape resizing, service links/icons, carousel and genre/player behavior. Single-text short-content fixtures preserve the same fixed header/panel structure.
+
+The workflow now runs on main and pull requests for HTML/JS/CSS changes, including shared UI edits. The main published job first verifies exact deployed bytes for sound.html and both reader assets, then runs the same browser checks against GitHub Pages. WebKit with mobile emulation is automated coverage; physical iPhone Safari and real finger gestures require separate device verification.
