@@ -2,9 +2,9 @@ name: MUSIC shared motion
 on:
   push:
     branches: [main, work/music-shared-motion-20261026]
-    paths: [sound.html, xen-sound.css, xen-immersive.js, verify-music-motion.cjs, verify-header-logo.cjs, xen-header.css, .github/workflows/music-motion-qa.yml]
+    paths: [sound.html, xen-sound.css, xen-immersive.js, verify-music-motion.cjs, verify-site-integration.cjs, verify-header-logo.cjs, xen-header.css, .github/workflows/music-motion-qa.yml]
   pull_request:
-    paths: [sound.html, xen-sound.css, xen-immersive.js, verify-music-motion.cjs, verify-header-logo.cjs, xen-header.css, .github/workflows/music-motion-qa.yml]
+    paths: [sound.html, xen-sound.css, xen-immersive.js, verify-music-motion.cjs, verify-site-integration.cjs, verify-header-logo.cjs, xen-header.css, .github/workflows/music-motion-qa.yml]
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npm install --no-save --package-lock=false playwright@1.57.0
       - run: npx playwright install --with-deps chromium webkit
       - run: node --check xen-immersive.js && node verify-header-logo.cjs && node verify-music-motion.cjs
       - run: node verify-music-reader.cjs
@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --package-lock=false playwright@1.56.1
+      - run: npm install --no-save --package-lock=false playwright@1.57.0
       - run: npx playwright install --with-deps chromium webkit
       - run: node verify-music-motion.cjs && node verify-header-logo.cjs
         env:
