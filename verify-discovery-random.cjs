@@ -99,7 +99,7 @@ const overlap=(a,b)=>a.filter(id=>b.includes(id)).length;
  check((html.match(/class="xd-mosaic"/g)||[]).length===1,'no duplicate gallery');
  console.log(JSON.stringify({checks,visits:100,eligible:pool.length,slots:12,result:'PASS'},null,2));
  if(process.env.DISCOVERY_BROWSER_CHECK)await browserChecks(pool);
-})().catch(error=>{console.error(error);process.exitCode=1;});
+})().catch(error=>{console.error(error);process.exit(1);});
 
 async function browserChecks(pool){
  const {chromium,webkit}=require('playwright');
@@ -161,9 +161,9 @@ async function browserChecks(pool){
    check(await page.locator('.xd-work-genre').innerText()===work.genre,'popup category retained');
    check(await page.locator('.xd-work-link').getAttribute('href')===work.href,'popup detail link retained');
    check(await page.locator('.xd-work-image').getAttribute('src')===work.image,'popup image retained');
-   check(await page.locator('.xd-work-close').isVisible(),'popup close visible');
+   check(await page.locator('.xd-work-dialog .xd-work-close').isVisible(),'popup close visible');
    await page.screenshot({path:`discovery-random-evidence/popup-${engine.name()}-${width}.png`});
-   await page.locator('.xd-work-close').click();await page.locator('.xd-work-dialog').waitFor({state:'hidden'});
+   await page.locator('.xd-work-dialog .xd-work-close').click();await page.locator('.xd-work-dialog').waitFor({state:'hidden'});
    await page.goto(base+'creator.html');await page.goBack();await ready(page);
    await page.waitForFunction(previous=>[...document.querySelectorAll('.xd-tile')].every(n=>!previous.includes(n.dataset.work)),prior);
    const returned=await ids(page);check(overlap(returned,prior)===0&&returned.every(id=>allowed.has(id)),'published back/revisit has zero repeats and retains exclusions');
