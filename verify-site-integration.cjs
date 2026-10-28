@@ -37,8 +37,8 @@ module.exports=async function(page,base,width,label){
    await page.locator('[data-theme="past"]').click();await page.locator('[data-sign="past-1"] a').click();await page.waitForURL('**/creator.html#creative-origin');
    await page.waitForTimeout(1600);
    const originTop=await page.locator('#creative-origin').evaluate(e=>e.getBoundingClientRect().top);assert(originTop>=0&&originTop<220,'Origin anchor not visible '+originTop);
-   await page.goBack();await page.locator('[data-panel="past"]:not([hidden])').waitFor();assert.equal(await page.locator('#xd-origin-detail').count(),0);await page.locator('.xd-theme-close').click();await page.waitForTimeout(350);
-   for(const theme of ['present','future','together']){await page.locator('[data-theme="'+theme+'"]').click();await page.locator('[data-panel="'+theme+'"]:not([hidden])').waitFor();await page.locator('.xd-theme-close').click();await page.waitForTimeout(300);}
+   await page.goBack();await page.locator('[data-panel="past"]:not([hidden])').waitFor();assert.equal(await page.locator('#xd-origin-detail').count(),0);await page.locator('.xd-theme-close').click();await page.waitForFunction(()=>!document.querySelector('.xd-theme-dialog').open&&!/^#(past|present|future|together)$/.test(location.hash));
+   for(const theme of ['present','future','together']){await page.locator('[data-theme="'+theme+'"]').click();await page.locator('[data-panel="'+theme+'"]:not([hidden])').waitFor();await page.locator('.xd-theme-close').click();await page.waitForFunction(()=>!document.querySelector('.xd-theme-dialog').open&&!/^#(past|present|future|together)$/.test(location.hash));}
    await page.reload();await page.locator('[data-gallery-ready="true"]').waitFor();assert((await page.locator('.xd-tile').evaluateAll(els=>els.map(e=>e.dataset.work))).every(x=>!blocked.has(x)));
    await page.goto(base+'/sound.html');await page.locator('.music-reader-open').first().waitFor();await pageChecks(page);
    const cards=await page.locator('.sound-release-card').count();assert.equal(cards,8);
