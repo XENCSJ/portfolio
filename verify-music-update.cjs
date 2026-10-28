@@ -1,8 +1,8 @@
 /* Focused MUSIC regression: node verify-music-update.cjs (Playwright Chromium/WebKit). */
 const {chromium,webkit,devices}=require(process.env.PLAYWRIGHT_PACKAGE||'playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),{execFileSync}=require('node:child_process');
-const baseline='738d011e26d60e05ab9461e82492154c25593c9e';
-// Keep the historical geometry reference available in shallow CI checkouts.
+const baseline='6004e29306734c6dae2ad8ffbe4d8695768d8670';
+// Keep the confirmed October 28 geometry reference available in shallow CI checkouts.
 try { execFileSync('git',['cat-file','-e',baseline],{stdio:'ignore'}); } catch { execFileSync('git',['fetch','--depth=1','origin',baseline],{stdio:'inherit'}); }
 const out=process.env.MUSIC_QA_OUT||'music-update-qa';fs.mkdirSync(out,{recursive:true});
 const paragraphs=['青が茜に溶け、茜が夜へと消えていく。','夕暮れの空がゆっくりと色を変えるように、何気ない日々も少しずつ過去になっていく。','何でもない会話も、隣にいる温もりも、いつか振り返ればかけがえのない記憶になる。','移ろいゆく空のグラデーションに、言葉にならない感情と、二度と戻らない時間を重ねた、一瞬の美しさと儚さを描く楽曲。'];
