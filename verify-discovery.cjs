@@ -7,8 +7,9 @@ const themes=['past','present','future','together'];let checks=0;
 const ok=(value,message)=>{assert(value,message);checks++};
 const catalog=JSON.parse(fs.readFileSync('xen-discovery-gallery.json','utf8'));
 const source=fs.readFileSync('what-is-xen.html','utf8');
-// Existing 17 red-X images plus ARCHITECTURE work 18 (classified as SPACE).
+// Existing red-X images, ARCHITECTURE work 18 and the pink SPACE shopping-arcade proposal.
 const redXAssets=[
+ ["space-ee2b661d3cb7", "SPACE (1).jpg", "xen-preview-e68077eee5863d4c.webp"],
  ["space-3cdf06737385", "IMG_8369.PNG", "xen-preview-67719606a928b04a.webp"],
  ["design-e7a94102467b", "DESIGN (1).png", "xen-preview-a72f67e01dba78a8.webp"],
  ["design-88900d525066", "DESIGN (4).jpg", "xen-preview-6f26cf8bfee67f8d.webp"],
@@ -83,7 +84,7 @@ async function verifyCreator(page,width,engine){
 (async()=>{
 fs.mkdirSync('discovery-evidence',{recursive:true});
 ok(catalog.works.length===160,'160 catalog records retained');
-ok(eligibleCatalog.length===142,'142 eligible works after 18 exclusions');
+ok(eligibleCatalog.length===141,'141 eligible works after 19 catalog exclusions');
 const fallbackIds=[...source.matchAll(/class="xd-tile"[^>]*data-work="([^"]+)"/g)].map(m=>m[1]);
 ok(fallbackIds.length===12&&fallbackIds.every(id=>eligibleCatalog.some(w=>w.id===id)),'all 12 static tiles eligible, including no-JS initial display');
 ok(catalog.works.every(w=>!['CINEMATIC','SNS MANAGEMENT','SNAP'].includes(w.genre)&&w.id!=='apparel-ccc341888110'&&!w.image.includes('6e9cfc944d27281a')),'exclusions retained');
@@ -243,6 +244,6 @@ for(const engine of [chromium,webkit]){
  await desktop.close();
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});const plain=await nojs.newPage();await plain.goto(base+'what-is-xen.html');ok(await plain.locator('.xd-theme[href]').count()===4,'no-JS navigation available');ok(await plain.locator('.xd-tile:visible').count()===9,'no-JS gallery');await nojs.close();await browser.close();
 }
-fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results,newExclusions:18,eligibleWorks:142,creatorOrder,unresolved:['Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
+fs.writeFileSync('discovery-evidence/results.json',JSON.stringify({base,checks,results,newExclusions:19,eligibleWorks:141,creatorOrder,unresolved:['Real iPhone Safari not available; tested WebKit engine'],galleryCadence:'existing 800-1500ms retained'},null,2));
 console.log('PASS',checks,'checks');
 })().catch(error=>{console.error(error);process.exit(1)});

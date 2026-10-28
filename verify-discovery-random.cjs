@@ -50,7 +50,15 @@ const overlap=(a,b)=>a.filter(id=>b.includes(id)).length;
  }
  const app=await boot();
  const pool=app.test.works;
- check(pool.length===142,'current 19 individual and three category exclusions retained');
+ check(pool.length===141,'20 individual and three category exclusions retained');
+ const removed=catalog.works.find(w=>w.id==='space-ee2b661d3cb7');
+ check(removed&&app.test.excludedWork(removed),'pink shopping-arcade SPACE (1) excluded by stable ID');
+ for(const image of ['./SPACE%20%281%29.jpg','./space%20(1).JPG?cached=1#old','./xen-preview-e68077eee5863d4c.webp?v=old']){
+  check(app.test.excludedWork({...removed,id:'renamed-work',image}),'target image alias excluded');
+  check(app.test.excludedWork({...removed,id:'renamed-work',image:pool[0].image,originalImage:image}),'target originalImage alias excluded');
+ }
+ check(pool.some(w=>w.id==='space-1b1ba281a1a9'),'different SPACE (1).png remains eligible');
+ check(fs.readFileSync('space.html','utf8').includes('id="discovery-work-ee2b661d3cb7"'),'original remains on SPACE page');
  for(let repeat=0;repeat<100;repeat++){
   const finalScreen=pool.slice(0,12).map(w=>w.id);
   const saturated=app.test.drawVisit(pool,12,{seen:pool.map(w=>w.id),order:finalScreen});
@@ -95,7 +103,19 @@ const overlap=(a,b)=>a.filter(id=>b.includes(id)).length;
 
 async function browserChecks(pool){
  const {chromium,webkit}=require('playwright');
- const base='https://xencsj.github.io/portfolio/',allowed=new Set(pool.map(w=>w.id)),results=[];
+ const base=process.env.DISCOVERY_BASE_URL||'http://127.0.0.1:8765/',allowed=new Set(pool.map(w=>w.id)),results=[];
+ if(process.env.DISCOVERY_WAIT_FOR_DEPLOY==='true'){
+  const hash=b=>require('node:crypto').createHash('sha256').update(b).digest('hex');
+  let ready=false;
+  for(let attempt=0;attempt<30;attempt++){
+   try{for(const file of ['index.html','what-is-xen.html','xen-discovery-gallery.js']){
+    const response=await fetch(base+file+'?discovery-qa='+Date.now(),{signal:AbortSignal.timeout(20000)});
+    check(response.ok,'published file available');
+    assert.equal(hash(Buffer.from(await response.arrayBuffer())),hash(fs.readFileSync(file)),file);
+   }ready=true;break;}catch(error){console.log('Waiting for Pages:',error.message.split('\n')[0]);await new Promise(resolve=>setTimeout(resolve,10000));}
+  }
+  check(ready,'Pages serves the exact tested revision');
+ }
  fs.mkdirSync('discovery-random-evidence',{recursive:true});
  const ids=page=>page.locator('.xd-tile').evaluateAll(nodes=>nodes.map(n=>n.dataset.work));
  const ready=page=>page.waitForSelector('[data-gallery-ready="true"]');
@@ -104,8 +124,22 @@ async function browserChecks(pool){
   for(const width of [375,390,430,768,1440]){
    const context=await browser.newContext({viewport:{width,height:width<768?844:1000},isMobile:width<768,hasTouch:width<768,reducedMotion:'reduce'});
    const page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
-   await page.goto(base+'what-is-xen.html');await ready(page);
-   check(await page.locator('script[src*="20261027-random-visit3"]').count()===1,'published random visit revision');
+   await page.goto(base+'index.html');
+   const entry=page.locator('.xen-index-discovery>a');await entry.waitFor();
+   await entry.scrollIntoViewIfNeeded();
+   const label=await entry.evaluate(a=>{
+    const en=a.querySelector('.xen-index-discovery-en'),ja=a.querySelector('.xen-index-discovery-ja');
+    return {href:a.getAttribute('href'),text:ja.textContent,color:getComputedStyle(ja).color,
+     below:ja.getBoundingClientRect().top>=en.getBoundingClientRect().bottom,
+     gold:getComputedStyle(a).color,border:getComputedStyle(a).borderTopWidth,
+     compass:a.querySelectorAll('.xen-discovery-compass').length};
+   });
+   check(label.text==='XENを知る'&&label.color==='rgb(153, 153, 153)'&&label.below,'Japanese subtitle below English in #999999');
+   check(label.href==='./what-is-xen.html'&&label.gold==='rgb(200, 171, 117)'&&label.border==='1px'&&label.compass===1,'existing link, gold frame and icon retained');
+   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'INDEX no horizontal overflow');
+   await page.screenshot({path:`discovery-random-evidence/index-${engine.name()}-${width}.png`});
+   await entry.click();await ready(page);
+   check(await page.locator('script[src*="20261028-space-exclusion1"]').count()===1,'published exclusion revision');
    let prior=await ids(page);
    check(prior.length===12&&new Set(prior).size===12&&prior.every(id=>allowed.has(id)),'published initial draw');
    check(await page.locator('.xd-tile:visible').count()===(width>=1024?12:9),'unchanged responsive count');
@@ -121,12 +155,20 @@ async function browserChecks(pool){
    await page.screenshot({path:`discovery-random-evidence/${engine.name()}-${width}.png`});
    await page.locator('.xd-tile:visible').first().click();await page.locator('.xd-work-dialog[open]').waitFor();
    const selected=await page.locator('.xd-work-dialog').getAttribute('data-work');check(prior.includes(selected),'detail corresponds to selected work');
-   await page.keyboard.press('Escape');
+   const work=catalog.works.find(w=>w.id===selected);
+   check(allowed.has(selected),'popup only opens eligible work');
+   check(await page.locator('#xd-work-title').innerText()===work.title,'popup title retained');
+   check(await page.locator('.xd-work-genre').innerText()===work.genre,'popup category retained');
+   check(await page.locator('.xd-work-link').getAttribute('href')===work.href,'popup detail link retained');
+   check(await page.locator('.xd-work-image').getAttribute('src')===work.image,'popup image retained');
+   check(await page.locator('.xd-work-close').isVisible(),'popup close visible');
+   await page.screenshot({path:`discovery-random-evidence/popup-${engine.name()}-${width}.png`});
+   await page.locator('.xd-work-close').click();await page.locator('.xd-work-dialog').waitFor({state:'hidden'});
    await page.goto(base+'creator.html');await page.goBack();await ready(page);
    await page.waitForFunction(previous=>[...document.querySelectorAll('.xd-tile')].every(n=>!previous.includes(n.dataset.work)),prior);
-   const returned=await ids(page);check(overlap(returned,prior)===0,'published back/revisit has zero repeats');
+   const returned=await ids(page);check(overlap(returned,prior)===0&&returned.every(id=>allowed.has(id)),'published back/revisit has zero repeats and retains exclusions');
    await page.goto(base+'creator.html');await page.goto(base+'what-is-xen.html');await ready(page);
-   const revisited=await ids(page);check(overlap(revisited,returned)===0,'published direct revisit has zero repeats');
+   const revisited=await ids(page);check(overlap(revisited,returned)===0&&revisited.every(id=>allowed.has(id)),'published direct revisit has zero repeats and retains exclusions');
    check(errors.length===0,'no JS errors: '+errors.join(';'));
    results.push({engine:engine.name(),width,visible:width>=1024?12:9,reloads:3,revisits:2,repeats:0,status:'PASS'});
    console.log('PASS published',engine.name(),width,'reload/revisit/exclusions/images/layout');await context.close();
@@ -146,6 +188,6 @@ async function browserChecks(pool){
   }
   await browser.close();
  }
- fs.writeFileSync('discovery-random-evidence/results.json',JSON.stringify({checks,results,realIPhoneTested:false},null,2));
+ fs.writeFileSync('discovery-random-evidence/results.json',JSON.stringify({base,checks,results,eligible:pool.length,removed:'space-ee2b661d3cb7',realIPhoneTested:false},null,2));
  console.log('PASS all published browser checks',checks);
 }

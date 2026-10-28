@@ -11,7 +11,9 @@
  const excludedCategories=new Set(['cinematic','snsmanagement','snap']);
  // Red-X references IMG_9947 through IMG_9954: 17 whole images, not their separate works.
  // Stable work IDs plus original/preview paths keep ordering and URL aliases irrelevant.
+ // SPACE (1).jpg is the pink shopping-arcade proposal; the different SPACE (1).png stays eligible.
  const excludedAssets=[
+  ["space-ee2b661d3cb7", "SPACE (1).jpg", "xen-preview-e68077eee5863d4c.webp"],
   ["space-3cdf06737385", "IMG_8369.PNG", "xen-preview-67719606a928b04a.webp"], // ARCHITECTURE 作品 18: interior perspectives, plans and planting
   ['apparel-ccc341888110','APPAREL (1).png','xen-preview-6e9cfc944d27281a.webp'], // existing Miss Target exclusion
   ["design-e7a94102467b", "DESIGN (1).png", "xen-preview-a72f67e01dba78a8.webp"],
