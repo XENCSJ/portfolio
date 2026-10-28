@@ -16,12 +16,57 @@ async function squares(locator){
  return values;
 }
 async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:88});}
+// Regression contract: both languages and CLOSE remain stationary while only text moves.
+async function fixedPanel(page, selector) {
+ const panel=page.locator(selector);
+ const state=()=>page.locator('#music-reader').evaluate(d=>{
+  const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
+  const p=d.querySelector('.music-reader-panel:not([hidden])');
+  return {dialog:rect(d),labels:[...d.querySelectorAll('.music-reader-tabs,.music-reader-heading,.music-reader-close')].map(rect),
+   background:rect(document.querySelector('main')),pageY:scrollY,body:getComputedStyle(document.body).position,
+   overflow:getComputedStyle(p).overflowY,min:getComputedStyle(p).minHeight,
+   panel:rect(p),end:p.scrollTop+p.clientHeight,total:p.scrollHeight,scroll:p.scrollTop,
+   touch:getComputedStyle(p).touchAction,chain:getComputedStyle(p).overscrollBehaviorY,
+   viewport:{width:innerWidth,height:innerHeight}};
+ });
+ const before=await state();
+ assert.equal(before.body,'fixed');assert.equal(before.overflow,'auto');assert.equal(before.min,'0px');
+ assert.equal(before.touch,'pan-y');assert.equal(before.chain,'contain');
+ assert(before.dialog.y>=-1&&before.dialog.y+before.dialog.height<=before.viewport.height+1);
+ assert(before.dialog.x>=-1&&before.dialog.x+before.dialog.width<=before.viewport.width+1);
+ assert(before.panel.height>=100,'Reader must retain a usable text area');
+ for(const box of before.labels)assert(box.y>=-1&&box.y+box.height<=before.viewport.height+1,'Fixed controls must fit in viewport');
+ await panel.evaluate(e=>{e.scrollTop=e.scrollHeight;});
+ const after=await state();
+ assert.deepEqual(after.labels,before.labels,'Bilingual headings and close must not move');
+ assert.deepEqual(after.dialog,before.dialog);assert.deepEqual(after.background,before.background);
+ assert.equal(after.pageY,before.pageY);assert(after.end>=after.total-2,'Final line is reachable');
+ if(after.total>before.panel.height+2)assert(after.scroll>0,'Long text must actually scroll');
+ const box=await panel.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.wheel(0,700);
+ await page.waitForTimeout(120);
+ const chained=await state();assert.equal(chained.pageY,before.pageY);assert.deepEqual(chained.background,before.background);
+ assert.deepEqual(chained.labels,before.labels,'Overscroll must not move the fixed controls');
+ assert(await page.locator('.music-reader-close').isVisible());
+}
 (async()=>{
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const base=process.env.MUSIC_BASE_URL||`http://127.0.0.1:${server.address().port}`;
- for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]].filter(([name])=>!process.env.QA_ENGINE||process.env.QA_ENGINE===name)){
-  const browser=await engine.launch(process.env.QA_EXECUTABLE?{executablePath:process.env.QA_EXECUTABLE,args:['--no-sandbox']}:{});
-  for(const [width,height] of profiles.filter(([w])=>!process.env.QA_WIDTHS||process.env.QA_WIDTHS.split(',').includes(String(w)))){
+ if(process.env.MUSIC_WAIT_FOR_DEPLOY==='true'){
+  const hash=b=>require('node:crypto').createHash('sha256').update(b).digest('hex');
+  let ready=false;
+  for(let attempt=0;attempt<30;attempt++){
+   try{for(const f of ['sound.html','xen-music-reader.css','xen-music-reader.js']){
+    const r=await fetch(base+'/'+f+'?reader-qa='+Date.now(),{signal:AbortSignal.timeout(20000)});
+    assert(r.ok);assert.equal(hash(Buffer.from(await r.arrayBuffer())),hash(fs.readFileSync(f)),f);
+   }ready=true;break;}catch(e){console.log('Waiting for Pages:',e.message.split('\n')[0]);await new Promise(r=>setTimeout(r,10000));}
+  }
+  assert(ready,'Published MUSIC files do not match the tested commit');
+  console.log('PUBLICATION VERIFIED: sound.html and both reader assets match this commit');
+ }
+
+ for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){
+  const browser=await engine.launch();
+  for(const [width,height] of profiles){
    const context=await browser.newContext({viewport:{width,height},isMobile:width<701,hasTouch:width<701,deviceScaleFactor:1});
    context.setDefaultTimeout(15000);
    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -69,39 +114,47 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
     for(const original of originals){
      const card=page.locator('#'+original.id),open=card.locator('.music-reader-open');
      if(!original.about&&!original.lyrics){assert.equal(await open.count(),0);continue;}
-     const drawer=card.locator('.music-text-drawer');
-     const aboutPanel=card.locator('#'+original.id+'-about-content');
-     const lyricsPanel=card.locator('#'+original.id+'-lyrics-content');
-     const aboutTab=card.locator('#'+original.id+'-about-tab');
-     const lyricsTab=card.locator('#'+original.id+'-lyrics-tab');
-     await open.click();await aboutPanel.waitFor({state:'visible'});
-     await page.waitForFunction(id=>!document.querySelector('#'+id+' .music-text-drawer').getAnimations().some(a=>a.playState==='running'),original.id);
-     assert(await drawer.evaluate(d=>d.open));assert.equal(await page.locator('dialog[open]').count(),0);
-     assert.equal(await open.getAttribute('aria-expanded'),'true');
-     assert.equal(await open.getAttribute('aria-controls'),original.id+'-details');
-     assert.equal(await aboutPanel.locator('.song-description').innerHTML(),original.about);
-     assert.equal(await drawer.locator('iframe,template,details,.music-playback').count(),0);
-     assert.equal(await drawer.getByText('楽曲解説は未掲載です。',{exact:true}).count(),0);
+     await open.scrollIntoViewIfNeeded();await page.waitForTimeout(350);const pageY=await page.evaluate(()=>scrollY);
+     const originalBodyStyle=await page.locator('body').getAttribute('style');
+     await open.click();const dialog=page.locator('#music-reader');await dialog.waitFor({state:'visible'});
+     assert.equal(await page.locator('#music-reader-title').textContent(),original.title);
+     await page.locator('.music-reader-cover').evaluate(img=>img.decode());
+     assert.equal(await page.locator('.music-reader-cover').getAttribute('src'),original.cover);
+     assert.equal(await page.locator('#music-about-panel .song-description').innerHTML(),original.about);
+     assert.equal(await dialog.locator('iframe,template,details,.music-playback').count(),0);
+     assert.equal(await dialog.getByText('楽曲解説は未掲載です。',{exact:true}).count(),0);
      assert(await page.evaluate(()=>window.__musicPlaybackNodes.every(({node,parent,source})=>node.isConnected&&node.parentNode===parent&&node.getAttribute('src')===source)),'reader must not relocate or replace any player');
-     const geometry=await drawer.evaluate(d=>{const p=d.querySelector('[role="tabpanel"]'),a=p.querySelector('.song-description p');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
-     assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>0,`${label}: empty reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'14px');assert(Math.abs(parseFloat(geometry.line)-28)<.01);
-     await lyricsTab.click();assert.equal(await lyricsPanel.locator('.sound-song-lyrics').innerHTML(),original.lyrics);
-     assert(await lyricsPanel.locator('.sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
-     if(width>=1280){const firstVerse=await lyricsPanel.locator('.sound-lyric-section p').first().evaluate(p=>({height:p.getBoundingClientRect().height,line:parseFloat(getComputedStyle(p).lineHeight),lines:p.querySelectorAll('br').length+1}));assert(Math.abs(firstVerse.height-firstVerse.line*firstVerse.lines)<2,'authored lyric breaks must render once');}
-     await lyricsPanel.locator('p').last().scrollIntoViewIfNeeded();
-     assert(await lyricsPanel.evaluate(el=>el.scrollWidth<=el.clientWidth+1));
-     await lyricsTab.focus();await page.keyboard.press('ArrowLeft');assert.equal(await aboutTab.getAttribute('aria-selected'),'true');
-     await page.keyboard.press('End');assert.equal(await lyricsTab.getAttribute('aria-selected'),'true');await page.keyboard.press('Home');
+     await fixedPanel(page,'#music-about-panel');
+     await squares(page.locator('.music-reader-cover'));
+     const before=await page.locator('.music-reader-cover').boundingBox();
+     const geometry=await dialog.evaluate(d=>{const p=d.querySelector('#music-about-panel'),a=p.querySelector('.song-description');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
+     assert(!geometry.overflow&&!geometry.pageOverflow,JSON.stringify(geometry));assert(geometry.panel>=100,`${label}: ${geometry.panel}px reading area`);assert(geometry.bottom<=geometry.end+1);assert.equal(geometry.font,'14px');assert(Math.abs(parseFloat(geometry.line)-28)<.01);
+     await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-panel .sound-song-lyrics').innerHTML(),original.lyrics);
+     assert(await page.locator('#music-lyrics-panel .sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
+     if(width>=1280){const firstVerse=await page.locator('#music-lyrics-panel .sound-lyric-section p').first().evaluate(p=>({height:p.getBoundingClientRect().height,line:parseFloat(getComputedStyle(p).lineHeight),lines:p.querySelectorAll('br').length+1}));assert(Math.abs(firstVerse.height-firstVerse.line*firstVerse.lines)<2,'authored lyric breaks must render once');}
+     await fixedPanel(page,'#music-lyrics-panel');
+     assert.deepEqual(await page.locator('.music-reader-cover').boundingBox(),before);
+     const extent=await page.locator('#music-lyrics-panel').evaluate(el=>({end:el.scrollTop+el.clientHeight,total:el.scrollHeight,overflow:el.scrollWidth>el.clientWidth+1}));assert(!extent.overflow);assert(extent.end>=extent.total-2);
+     await page.locator('#music-lyrics-tab').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#music-about-tab').getAttribute('aria-selected'),'true');
+     await page.keyboard.press('End');assert.equal(await page.locator('#music-lyrics-tab').getAttribute('aria-selected'),'true');await page.keyboard.press('Home');
      if(['hikari-no-arika','sora-ni-tokeru'].includes(original.id)&&[1440,390,375].includes(width)){
-      await open.scrollIntoViewIfNeeded();await shot(page,label+'-'+original.id+'-about');await lyricsTab.click();await open.scrollIntoViewIfNeeded();await shot(page,label+'-'+original.id+'-lyrics');
+      await shot(page,label+'-'+original.id+'-about');await page.locator('#music-lyrics-tab').click();await page.locator('#music-lyrics-panel').evaluate(el=>el.scrollTop=0);await shot(page,label+'-'+original.id+'-lyrics');
      }
-     await lyricsTab.focus();await page.keyboard.press('Escape');
-     await page.waitForFunction(id=>!document.querySelector('#'+id+' .music-text-drawer').open,original.id);
-     assert.equal(await open.getAttribute('aria-expanded'),'false');
+     if(width===390&&original.id==='tochu-no-mamade'){
+      await page.locator('#music-lyrics-tab').click();
+      await page.setViewportSize({width:844,height:390});await fixedPanel(page,'#music-lyrics-panel');
+      await page.setViewportSize({width,height});await fixedPanel(page,'#music-lyrics-panel');
+     }
+     if(original.id==='hikari-no-arika')await page.locator('.music-reader-close').click();
+     else await page.keyboard.press('Escape');
+     await dialog.waitFor({state:'hidden'});
+     await page.waitForFunction(id=>document.querySelector('#'+id+' .music-reader-open').getAttribute('aria-expanded')==='false',original.id);
      assert(await open.evaluate(el=>document.activeElement===el));
+     assert(Math.abs(await page.evaluate(()=>scrollY)-pageY)<=1,'Close must restore the original page position');
+     assert.equal((await page.locator('body').getAttribute('style'))||'',originalBodyStyle||'');
      assert.equal(await card.locator('.song-description').innerHTML(),original.about);assert.equal(await card.locator('.sound-song-lyrics').innerHTML(),original.lyrics);
     }
-    await page.locator('.sound-category-drawer').first().locator('summary').click();await page.locator('.sound-category-links a').first().click();await page.waitForFunction(()=>document.activeElement?.id==='tochu-no-mamade');assert(page.url().endsWith('#tochu-no-mamade'));assert.equal(await page.locator('dialog[open]').count(),0);assert(await page.locator('.sound-category-drawer').first().evaluate(el=>el.open));
+    await page.locator('.sound-category-drawer').first().locator('summary').click();await page.locator('.sound-category-links a').first().click();await page.waitForFunction(()=>document.activeElement?.id==='tochu-no-mamade');assert(page.url().endsWith('#tochu-no-mamade'));assert.equal(await page.locator('#music-reader').isVisible(),false);assert(await page.locator('.sound-category-drawer').first().evaluate(el=>el.open));
     await page.locator('.sound-category-drawer').first().locator('summary').click();
     const stage=page.locator('.sound-showcase-stage');await stage.scrollIntoViewIfNeeded();const previous=await stage.getAttribute('data-active-release');await page.locator('.sound-slide[data-position="next"]').click();assert.notEqual(await stage.getAttribute('data-active-release'),previous);
     const afterTap=await stage.getAttribute('data-active-release');
@@ -136,7 +189,7 @@ async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,
    try{
     await page.goto(base+'/sound.html',{waitUntil:'domcontentloaded'});await page.locator('#tochu-no-mamade.music-reader-ready').waitFor();
     const button=page.locator('#tochu-no-mamade .music-reader-open');assert.equal(await button.count(),count);
-    if(count){await button.click();const drawer=page.locator('#tochu-no-mamade .music-text-drawer');assert.equal(await drawer.locator('[role="tablist"]').count(),0);assert.equal(await drawer.locator('.music-reader-panel').count(),1);assert.equal(await drawer.locator('.music-reader-tabs h4').count(),1);assert.equal(await page.locator('dialog[open]').count(),0);}
+    if(count){await button.click();assert.equal(await page.locator('#music-reader [role="tablist"]').count(),0);assert.equal(await page.locator('#music-reader .music-reader-panel').count(),1);assert.equal(await page.locator('#music-reader .music-reader-heading').count(),1);await fixedPanel(page,'#music-reader .music-reader-panel');await page.locator('.music-reader-close').click();}
     results.push({label,pass:true});console.log('PASS',label);
    }catch(e){results.push({label,pass:false,error:e.stack});console.error('FAIL',label,e);}await context.close();
   }

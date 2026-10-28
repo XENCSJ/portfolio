@@ -2,6 +2,7 @@
    Release URLs belong to each card. An empty URL is deliberately not a link. */
 (() => {
   'use strict';
+  if (!window.HTMLDialogElement || !HTMLDialogElement.prototype.showModal) return;
   const main = document.querySelector('.sound-page main');
   const cards = [...document.querySelectorAll('.sound-release-card')];
   if (!main || !cards.length) return;
@@ -158,81 +159,117 @@
     if (drawer?.open) { stopOthers(drawer); resumeMedia(drawer); }
   }, 0));
 
-  // Each release owns its inline drawer; genre navigation and players stay separate.
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  cards.forEach(card => {
+  // Confirmed MUSIC contract: fixed headings/close control, only the active panel scrolls.
+  // Keep this shared modal and body scroll lock when changing other pages or disclosures.
+  const dialog = document.createElement('dialog');
+  dialog.id = 'music-reader'; dialog.setAttribute('aria-labelledby', 'music-reader-title');
+  dialog.innerHTML = `<div class="music-reader-toolbar"><span lang="en">XEN / MUSIC</span><button class="music-reader-close" type="button" aria-label="楽曲詳細を閉じる" autofocus>閉じる <span aria-hidden="true">×</span></button></div>
+    <div class="music-reader-layout"><div class="music-reader-identity"></div><div class="music-reader-text"></div></div>`;
+  main.append(dialog);
+  const identity = dialog.querySelector('.music-reader-identity');
+  const textArea = dialog.querySelector('.music-reader-text');
+  let tabs = [], panels = [];
+  let activeCard, opener, pageY = 0, restored = [], bodyStyle = '';
+  function selectTab(index, focus = false) {
+    if (!panels[index]) return;
+    panels.forEach((panel, i) => {
+      panel.hidden = i !== index;
+      if (tabs[i]) {
+        tabs[i].setAttribute('aria-selected', String(i === index));
+        tabs[i].tabIndex = i === index ? 0 : -1;
+      }
+    });
+    panels[index].scrollTop = 0;
+    if (focus) tabs[index]?.focus({preventScroll:true});
+  }
+  function borrow(node, target) {
+    const marker = document.createComment('music-reader-return');
+    node.before(marker); restored.push({node, marker}); target.append(node);
+  }
+  function openReader(card, trigger) {
+    if (dialog.open) return false;
     const entries = contents(card);
+    // A release with no published text has no detail action or empty reader.
+    if (!entries.length) return false;
+    activeCard = card; opener = trigger; pageY = window.scrollY;
+    identity.replaceChildren(); textArea.replaceChildren();
+    tabs = []; panels = [];
+    const image = card.querySelector('.sound-song-cover').cloneNode(true);
+    image.className = 'music-reader-cover'; image.loading = 'eager';
+    const heading = document.createElement('h2'); heading.id = 'music-reader-title';
+    heading.textContent = card.querySelector('.sound-song-title').textContent;
+    identity.append(image, heading);
+    ['.sound-artist', '.sound-song-credit'].forEach(selector => {
+      const source = card.querySelector(selector);
+      if (source) { const copy = source.cloneNode(true); copy.removeAttribute('id'); identity.append(copy); }
+    });
+    // Distribution links belong only to the catalogue, never to the text reader.
+    const multiple = entries.length > 1;
+    let tablist;
+    if (multiple) {
+      tablist = document.createElement('div'); tablist.className = 'music-reader-tabs';
+      tablist.setAttribute('role', 'tablist'); tablist.setAttribute('aria-label', '楽曲の文章');
+      textArea.append(tablist);
+    }
+    entries.forEach((entry, index) => {
+      const label = document.createElement(multiple ? 'button' : 'h3');
+      label.id = 'music-' + entry.key + (multiple ? '-tab' : '-heading');
+      label.innerHTML = '<span lang="en">' + entry.en + '</span><small>' + entry.name + '</small>';
+      const panel = document.createElement('div'); panel.id = 'music-' + entry.key + '-panel';
+      panel.className = 'music-reader-panel'; panel.tabIndex = 0;
+      panel.setAttribute('aria-labelledby', label.id);
+      if (multiple) {
+        label.type = 'button'; label.setAttribute('role', 'tab');
+        label.setAttribute('aria-controls', panel.id); panel.setAttribute('role', 'tabpanel');
+        label.addEventListener('click', () => selectTab(index));
+        label.addEventListener('keydown', e => {
+          let next;
+          if (e.key === 'ArrowRight') next = (index + 1) % entries.length;
+          if (e.key === 'ArrowLeft') next = (index + entries.length - 1) % entries.length;
+          if (e.key === 'Home') next = 0;
+          if (e.key === 'End') next = entries.length - 1;
+          if (next !== undefined) { e.preventDefault(); selectTab(next, true); }
+        });
+        tabs.push(label); tablist.append(label);
+      } else {
+        label.className = 'music-reader-heading'; panel.setAttribute('role', 'region');
+        textArea.append(label);
+      }
+      panels.push(panel); borrow(entry.node, panel); textArea.append(panel);
+    });
+    selectTab(0);
+    bodyStyle = document.body.getAttribute('style') || '';
+    document.body.style.position = 'fixed'; document.body.style.top = -pageY + 'px';
+    document.body.style.width = '100%'; document.body.style.overflow = 'hidden';
+    card.querySelector('.music-reader-open')?.setAttribute('aria-expanded', 'true');
+    dialog.dataset.release = card.id; dialog.showModal();
+    return true;
+  }
+  dialog.querySelector('.music-reader-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => {
+    restored.forEach(({node, marker}) => marker.replaceWith(node)); restored = [];
+    identity.replaceChildren(); textArea.replaceChildren();
+    tabs = []; panels = [];
+    document.body.setAttribute('style', bodyStyle);
+    window.scrollTo({top:pageY, behavior:'instant'});
+    activeCard?.querySelector('.music-reader-open')?.setAttribute('aria-expanded', 'false');
+    opener?.focus({preventScroll:true}); activeCard = null;
+  });
+  cards.forEach(card => {
     const row = serviceRow(card);
+    const entries = contents(card);
     const anchor = card.querySelector('details, .music-playback');
     if (anchor) anchor.before(row); else card.append(row);
     if (entries.length) {
-      const drawer = document.createElement('details');
-      drawer.className = 'music-text-drawer';
-      const toggle = document.createElement('summary');
-      toggle.className = 'music-reader-open';
-      toggle.innerHTML = '<span lang="en">VIEW DETAILS</span><small>' + entries.map(entry => entry.name).join('・') + '</small><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
-      toggle.setAttribute('aria-label', card.querySelector('.sound-song-title').textContent + 'の楽曲詳細');
-      const content = document.createElement('div');
-      content.className = 'music-text-content'; content.id = card.id + '-details';
-      toggle.setAttribute('aria-controls', content.id);
-      const tabs = [], panels = [];
-      const multiple = entries.length > 1;
-      const labels = document.createElement('div'); labels.className = 'music-reader-tabs';
-      if (multiple) { labels.setAttribute('role','tablist'); labels.setAttribute('aria-label','楽曲の文章'); }
-      content.append(labels);
-      function selectTab(index, focus = false) {
-        panels.forEach((panel,i) => {
-          panel.hidden = i !== index;
-          if (multiple) { tabs[i].setAttribute('aria-selected',String(i === index)); tabs[i].tabIndex = i === index ? 0 : -1; }
-        });
-        if (focus) tabs[index].focus({preventScroll:true});
-      }
-      entries.forEach((entry,index) => {
-        const label = document.createElement(multiple ? 'button' : 'h4');
-        label.id = card.id + '-' + entry.key + '-tab';
-        label.innerHTML = '<span lang="en">' + entry.en + '</span><small>' + entry.name + '</small>';
-        const panel = document.createElement('div');
-        panel.className = 'music-reader-panel'; panel.id = card.id + '-' + entry.key + '-content';
-        panel.setAttribute('aria-labelledby',label.id);
-        panel.setAttribute('role',multiple ? 'tabpanel' : 'region');
-        if (multiple) {
-          label.type = 'button'; label.setAttribute('role','tab'); label.setAttribute('aria-controls',panel.id);
-          label.addEventListener('click',() => selectTab(index));
-          label.addEventListener('keydown',event => {
-            let next;
-            if (event.key === 'ArrowRight') next = (index + 1) % entries.length;
-            if (event.key === 'ArrowLeft') next = (index + entries.length - 1) % entries.length;
-            if (event.key === 'Home') next = 0;
-            if (event.key === 'End') next = entries.length - 1;
-            if (next !== undefined) { event.preventDefault(); selectTab(next,true); }
-          });
-        }
-        tabs.push(label); labels.append(label); panel.append(entry.node); panels.push(panel); content.append(panel);
-      });
-      selectTab(0); drawer.append(toggle,content); row.after(drawer);
-      let target = false, animation;
-      function settle() {
-        if (animation) { animation.onfinish = null; animation.cancel(); animation = null; }
-        drawer.open = target; drawer.style.height = '';
-        content.inert = !target; toggle.setAttribute('aria-expanded',String(target));
-      }
-      toggle.addEventListener('click',event => {
-        event.preventDefault();
-        const start = drawer.getBoundingClientRect().height;
-        if (animation) { animation.onfinish = null; animation.cancel(); animation = null; }
-        target = !target;
-        content.inert = !target; toggle.setAttribute('aria-expanded',String(target));
-        if (reduced.matches || !drawer.animate) { settle(); return; }
-        drawer.open = true;
-        const end = target ? drawer.getBoundingClientRect().height : toggle.getBoundingClientRect().height + parseFloat(getComputedStyle(toggle).marginTop);
-        animation = drawer.animate([{height:start+'px'},{height:end+'px'}],{duration:260,easing:'cubic-bezier(.22,.68,0,1)',fill:'both'});
-        animation.onfinish = settle;
-      });
-      content.addEventListener('keydown',event => { if (event.key === 'Escape') { target = false; settle(); toggle.focus({preventScroll:true}); } });
-      reduced.addEventListener('change',settle);
-      window.addEventListener('resize',settle,{passive:true});
-      settle();
+      const button = document.createElement('button');
+      button.className = 'music-reader-open'; button.type = 'button';
+      button.innerHTML = '<span lang="en">VIEW DETAILS</span><small>' + entries.map(entry => entry.name).join('・') + '</small><span aria-hidden="true">↗</span>';
+      button.setAttribute('aria-label', card.querySelector('.sound-song-title').textContent + 'の楽曲詳細を開く');
+      button.setAttribute('aria-haspopup', 'dialog'); button.setAttribute('aria-controls', dialog.id); button.setAttribute('aria-expanded', 'false');
+      button.addEventListener('click', () => openReader(card, button));
+      row.after(button);
     }
     card.classList.add('music-reader-ready');
   });
+  // VIEW DETAILS exclusively owns the reader; catalogue selection stays on the page.
 })();

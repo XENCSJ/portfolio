@@ -1,5 +1,5 @@
 /* Confined to MUSIC: original catalogue, genre rows and carousel stay intact. */
-body#top.sound-page main .music-reader-ready > details:not(.music-text-drawer) { display:none; }
+body#top.sound-page main .music-reader-ready > details { display:none; }
 body#top.sound-page main .music-services { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; width:100%; max-width:440px; list-style:none; margin:24px auto 0; padding:0; }
 body#top.sound-page main .music-services li { margin:0; padding:0; min-width:0; }
 body#top.sound-page main .music-service { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; width:100%; min-height:94px; padding:4px 0; color:#292929; background:none; border:0; text-decoration:none; }
@@ -10,6 +10,9 @@ body#top.sound-page main .music-service[aria-disabled="true"] { cursor:default; 
 body#top.sound-page main a.music-service:hover .music-service-status { text-decoration:underline; }
 body#top.sound-page main .music-reader-open { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; width:100%; min-height:48px; padding:12px 0; margin:14px 0 0; border:0; border-top:1px solid #e6e2da; background:transparent; color:#756341; cursor:pointer; font-size:11px; letter-spacing:.1em; }
 body#top.sound-page main .music-reader-open small { font-size:10px; letter-spacing:.03em; }
+/* Fixed-reader contract: toolbar and bilingual headings stay outside the scrolling
+   panel. Preserve the bounded flex layout, min-height:0 and panel overflow.
+   Do not replace it with a page-flow drawer; see MUSIC_READER.md and its CI checks. */
 #music-reader { color:#171719; background:#fff; border:1px solid #e6e2da; padding:0 clamp(20px,3vw,44px) 30px; width:min(1080px,calc(100% - 64px)); height:min(780px,calc(100vh - 64px)); height:min(780px,calc(100dvh - 64px)); max-width:none; max-height:none; overflow:hidden; margin:auto; box-sizing:border-box; }
 #music-reader::backdrop { background:rgb(0 0 0 / .5); }
 #music-reader[open] { display:flex; flex-direction:column; }
@@ -185,32 +188,3 @@ body#top.sound-page main .music-player-panel .video-source { display:block; marg
 /* BLUE SLEEP videos share the card's existing independent playback drawers. */
 body#top.sound-page main #blue-sleep .music-playback > .sound-video-item { padding-top:20px; }
 body#top.sound-page main #blue-sleep .music-playback-heading { margin-bottom:0; }
-
-/* VIEW DETAILS expands within its own release, using the existing 260ms drawer tempo. */
-body#top.sound-page main .music-text-drawer { display:block; width:100%; min-width:0; overflow:hidden; overflow-anchor:none; }
-body#top.sound-page main .music-text-drawer > summary {
-  box-sizing:border-box; margin:14px 0 0; border-color:var(--music-line); list-style:none;
-  color:var(--music-gold); touch-action:manipulation;
-}
-.music-text-drawer > summary::-webkit-details-marker { display:none; }
-.music-text-drawer > summary::marker { content:''; }
-.music-text-drawer > summary svg { flex:0 0 auto; color:var(--music-ink); transition:transform 260ms ease; }
-.music-text-drawer > summary[aria-expanded="true"] svg { transform:rotate(180deg); }
-body#top.sound-page main .music-text-content { min-width:0; padding:12px 0 24px; }
-body#top.sound-page main .music-text-content .music-reader-tabs {
-  display:flex; justify-content:center; gap:28px; border-bottom:1px solid var(--music-line);
-}
-body#top.sound-page main .music-text-content .music-reader-tabs :is(button,h4) {
-  display:flex; flex-direction:column; gap:5px; min-height:52px; margin:0; padding:8px 0 12px;
-  border:0; border-bottom:2px solid transparent; background:none; color:var(--music-muted);
-  font:11px/1.6 Arial,"Helvetica Neue","Noto Sans JP",sans-serif; letter-spacing:.08em;
-}
-body#top.sound-page main .music-text-content .music-reader-tabs button { cursor:pointer; }
-body#top.sound-page main .music-text-content .music-reader-tabs small { font-size:11px; letter-spacing:.02em; }
-body#top.sound-page main .music-text-content .music-reader-tabs [aria-selected="true"] {
-  color:var(--music-gold); border-bottom-color:var(--music-gold);
-}
-body#top.sound-page main .music-text-content .music-reader-panel { padding:24px 0 0; min-width:0; }
-body#top.sound-page main .music-text-content .music-reader-panel[hidden] { display:none; }
-.music-text-drawer :is(summary,button):focus-visible { outline:2px solid var(--music-gold); outline-offset:-2px; }
-@media(prefers-reduced-motion:reduce) { .music-text-drawer > summary svg { transition:none; } }

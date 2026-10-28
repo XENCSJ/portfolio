@@ -38,14 +38,16 @@ module.exports=async function(page,base,width,label){
    await page.goBack();await page.locator('[data-panel="past"]:not([hidden])').waitFor();assert.equal(await page.locator('#xd-origin-detail').count(),0);await page.locator('.xd-theme-close').click();await page.waitForTimeout(350);
    for(const theme of ['present','future','together']){await page.locator('[data-theme="'+theme+'"]').click();await page.locator('[data-panel="'+theme+'"]:not([hidden])').waitFor();await page.locator('.xd-theme-close').click();await page.waitForTimeout(300);}
    await page.reload();await page.locator('[data-gallery-ready="true"]').waitFor();assert((await page.locator('.xd-tile').evaluateAll(els=>els.map(e=>e.dataset.work))).every(x=>!blocked.has(x)));
-   await page.goto(base+'/sound.html');await page.locator('.music-text-drawer').first().waitFor();await pageChecks(page);
+   await page.goto(base+'/sound.html');await page.locator('.music-reader-open').first().waitFor();await pageChecks(page);
    const cards=await page.locator('.sound-release-card').count();assert.equal(cards,8);
    const lyricsBefore=await page.locator('.sound-song-lyrics').allTextContents();
-   const drawers=await page.locator('.music-text-drawer').all();
-   for(const drawer of drawers){await drawer.locator('summary').click();await page.waitForTimeout(300);assert(await drawer.getAttribute('open')!==null);assert.equal(await page.locator('dialog[open]').count(),0);await drawer.locator('summary').click();await page.waitForTimeout(300);assert.equal(await drawer.getAttribute('open'),null);}
-   const detail=page.locator('#tochu-no-mamade .music-text-drawer');await detail.locator('summary').click();await page.waitForTimeout(300);await detail.getByRole('tab',{name:'LYRICS 歌詞'}).click();
+   const readers=await page.locator('.music-reader-open').all();assert.equal(readers.length,4);
+   const detail=page.locator('#music-reader');
+   for(const reader of readers){await reader.click();await detail.waitFor({state:'visible'});assert.equal(await detail.evaluate(d=>getComputedStyle(document.body).position),'fixed');await detail.locator('.music-reader-close').click();await detail.waitFor({state:'hidden'});await page.waitForFunction(()=>getComputedStyle(document.body).position!=='fixed');}
+   await page.locator('#tochu-no-mamade .music-reader-open').click();await detail.getByRole('tab',{name:'LYRICS 歌詞'}).click();
    assert.equal(await detail.locator('.sound-song-lyrics').evaluate(e=>getComputedStyle(e).textAlign),'center');await pageChecks(page);await screenshot(page,label+'-music');
    await detail.getByRole('tab',{name:'ABOUT THE SONG 楽曲解説'}).click();assert.equal(await detail.locator('.song-description p').first().evaluate(e=>getComputedStyle(e).fontSize),'14px');
+   await detail.locator('.music-reader-close').click();await page.waitForFunction(()=>!document.querySelector('#music-reader').open && getComputedStyle(document.body).position!=='fixed');
    assert.deepEqual(await page.locator('.sound-song-lyrics').allTextContents(),lyricsBefore);
    assert(!/BIG\s*UP!?/i.test(await page.locator('body').innerText()));
    console.log('PASS integrated',label,'INDEX / CREATOR / DISCOVER / MUSIC');
