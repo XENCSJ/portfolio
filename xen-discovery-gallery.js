@@ -262,7 +262,7 @@
   new IntersectionObserver(entries=>{near=entries[0].isIntersecting;if(near)pump();},{rootMargin:'240px'}).observe(grid);
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(!visible)stop();else{pump();schedule();}},{threshold:.05}).observe(grid);
  }else{near=visible=true;}
- fetch('./xen-discovery-gallery.json?v=20261029-space-images1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
+ fetch('./xen-discovery-gallery.json?v=20261029-space-asanoha1').then(r=>{if(!r.ok)throw new Error('Catalog unavailable');return r.json();}).then(data=>{
   // Filter before grouping, selection, decoding, preloading or queuing.
   const ids=new Set();
   works=(Array.isArray(data.works)?data.works:[]).filter(work=>{
