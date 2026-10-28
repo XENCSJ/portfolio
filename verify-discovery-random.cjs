@@ -118,7 +118,13 @@ async function browserChecks(pool){
  }
  fs.mkdirSync('discovery-random-evidence',{recursive:true});
  const ids=page=>page.locator('.xd-tile').evaluateAll(nodes=>nodes.map(n=>n.dataset.work));
- const ready=page=>page.waitForSelector('[data-gallery-ready="true"]');
+ const ready=async page=>{
+  // The catalog can initialize before navigation resources finish affecting layout.
+  // Measure the rendered page after load, fonts and two paint frames on every visit.
+  await page.waitForLoadState('load');
+  await page.waitForSelector('[data-gallery-ready="true"]');
+  await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+ };
  for(const engine of [chromium,webkit]){
   const browser=await engine.launch({ignoreDefaultArgs:['--disable-back-forward-cache']});
   for(const width of [375,390,430,768,1440]){
@@ -143,7 +149,13 @@ async function browserChecks(pool){
    let prior=await ids(page);
    check(prior.length===12&&new Set(prior).size===12&&prior.every(id=>allowed.has(id)),'published initial draw');
    check(await page.locator('.xd-tile:visible').count()===(width>=1024?12:9),'unchanged responsive count');
-   check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
+   const layout=await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
+    overflowing:[...document.querySelectorAll('body *')].filter(e=>e.getClientRects().length&&e.getBoundingClientRect().right>innerWidth+1).map(e=>({tag:e.tagName,class:e.className,right:e.getBoundingClientRect().right})).slice(0,20)}));
+   if(layout.scrollWidth>layout.width){
+    fs.writeFileSync(`discovery-random-evidence/overflow-${engine.name()}-${width}.json`,JSON.stringify(layout,null,2));
+    await page.screenshot({path:`discovery-random-evidence/overflow-${engine.name()}-${width}.png`});
+   }
+   check(layout.scrollWidth<=layout.width,'no horizontal overflow: '+JSON.stringify(layout));
    for(let reload=0;reload<3;reload++){
     await page.reload();await ready(page);const current=await ids(page);
     check(overlap(current,prior)===0,'published reload has zero repeats');check(current.every(id=>allowed.has(id)),'reload exclusions');prior=current;
