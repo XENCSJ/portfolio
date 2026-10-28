@@ -16,14 +16,14 @@ jobs:
   audit:
     runs-on: ubuntu-24.04
     container:
-      image: mcr.microsoft.com/playwright:v1.56.1-noble
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --package-lock=false playwright@1.56.1 http-server@14.1.1
+      - run: npm install --no-save --package-lock=false playwright@1.57.0 http-server@14.1.1
       - name: Audit every public page and requested viewport
         env:
           AUDIT_BASE: ${{ inputs.base_url }}
@@ -139,13 +139,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --package-lock=false playwright@1.56.1 http-server@14.1.1
+      - run: npm install --no-save --package-lock=false playwright@1.57.0 http-server@14.1.1
       - run: npx playwright install --with-deps chromium webkit
       - name: Verify current contracts without changing the authored UI
         env:
           SUITE: ${{ matrix.suite }}
           QA_WIDTHS: '375,390,430,768,1440'
-          DEBUG: 'pw:browser'
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           if [ "$SUITE" = index-sitemap ]; then
