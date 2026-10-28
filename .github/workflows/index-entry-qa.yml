@@ -29,7 +29,7 @@ jobs:
           git fetch --depth=1 origin 6004e29306734c6dae2ad8ffbe4d8695768d8670
           git show 6004e29306734c6dae2ad8ffbe4d8695768d8670:index.html > __baseline-index.html
           git show 6004e29306734c6dae2ad8ffbe4d8695768d8670:xen-ui.css > __baseline-ui.css
-          sed -i 's|./xen-ui.css?v=20261017-compact-motion-8510c61|./__baseline-ui.css|' __baseline-index.html
+          sed -i 's|./xen-ui.css?v=[^" ]*|./__baseline-ui.css|' __baseline-index.html
           npx http-server . -p 8765 -c-1 > /tmp/index-sitemap-server.log 2>&1 &
       - name: Verify responsive sitemap and preserved INDEX behavior
         env:
