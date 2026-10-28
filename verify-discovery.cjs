@@ -179,10 +179,10 @@ for(const engine of [chromium,webkit]){
  await page.locator('[data-switch="future"]').click();await page.locator('[data-sign="future-4"] a').click();await page.waitForURL('**/creator.html#breathing-architecture');
  ok(await page.locator('.cp-project-archive').evaluate(e=>e.open),'possibility opens existing project archive');
  ok(await page.locator('#breathing-architecture').innerText().then(t=>t==='呼吸する建築'),'possibility uses existing architecture work');
- await page.goto(base+'studio.html#value-contribution');ok(await page.locator('#values').isVisible(),'trust parent visible');
+ await page.goto(base+'studio.html#value-contribution',{waitUntil:'load'});await page.locator('#values').waitFor({state:'visible'});await page.waitForFunction(key=>document.querySelector('#mvv-'+key+'-button')?.getAttribute('aria-expanded')==='true','values');ok(await page.locator('#values').isVisible(),'trust parent visible');
  ok(await page.locator('#value-contribution').innerText().then(t=>t.includes('長期的な信頼')),'trust uses published content');
- await page.goto(base+'studio.html#vision');ok(await page.locator('#vision').isVisible(),'direction opens VISION');
- await page.goto(base+'studio.html#mission');ok(await page.locator('#mission').isVisible(),'social value opens MISSION');
+ await page.goto(base+'studio.html#vision',{waitUntil:'load'});await page.locator('#vision').waitFor({state:'visible'});await page.waitForFunction(key=>document.querySelector('#mvv-'+key+'-button')?.getAttribute('aria-expanded')==='true','vision');ok(await page.locator('#vision').isVisible(),'direction opens VISION');
+ await page.goto(base+'studio.html#mission',{waitUntil:'load'});await page.locator('#mission').waitFor({state:'visible'});await page.waitForFunction(key=>document.querySelector('#mvv-'+key+'-button')?.getAttribute('aria-expanded')==='true','mission');ok(await page.locator('#mission').isVisible(),'social value opens MISSION');
  await ready(page,'#past');ok(await page.locator('.xd-theme-dialog').isVisible(),'direct theme hash');await page.locator('.xd-theme-close').click();await page.locator('.xd-theme-dialog').waitFor({state:'hidden'});
  await ready(page);await page.locator('[data-theme="past"]').click();await page.goBack();await page.locator('.xd-theme-dialog').waitFor({state:'hidden'});ok(true,'browser Back closes modal');
  await page.locator('.xd-mosaic').scrollIntoViewIfNeeded();
