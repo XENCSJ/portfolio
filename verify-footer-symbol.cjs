@@ -75,15 +75,20 @@ async function run(browser,engine,base,width,mode='normal',chosen=pages) {
         assert.equal(details.reveals[1].options.delay,180);
       }
       if(!mobile) {
-        await page.locator('.xen-footer-return').hover(); await page.waitForTimeout(350);
+        await page.locator('.xen-footer-return').hover();
+        await page.waitForFunction(expected => getComputedStyle(document.querySelector('.xen-footer-chevron')).transform === expected, mode==='reduce'?'none':'matrix(1, 0, 0, 1, 0, -3)');
         const hover=await page.locator('.xen-footer-chevron').evaluate(el=>getComputedStyle(el).transform);
         assert.equal(hover,mode==='reduce'?'none':'matrix(1, 0, 0, 1, 0, -3)');
         await page.mouse.move(0,0);
       }
       await page.screenshot({path:`${out}/${label.replace('.html','.png')}`});
       await page.locator('.xen-footer-return').click();
-      if(mode==='no-js') { await page.waitForTimeout(1000); assert(await page.evaluate(()=>window.scrollY<2),'native Back to Top'); }
-      else await page.waitForFunction(()=>window.scrollY<2);
+      // Page timers do not run when JavaScript is disabled: poll from the test host.
+      if(mode==='no-js') {
+        const deadline=Date.now()+12000;
+        while(await page.evaluate(()=>window.scrollY>=2) && Date.now()<deadline) await new Promise(resolve=>setTimeout(resolve,100));
+        assert(await page.evaluate(()=>window.scrollY<2),'native Back to Top');
+      } else await page.waitForFunction(()=>window.scrollY<2);
       await page.locator('.xen-footer-credits').scrollIntoViewIfNeeded();
       await page.waitForTimeout(900);
       if(mode!=='no-js') assert.equal(await page.evaluate(()=>window.footerReveals.length),mode==='normal'?2:0,'do not replay');

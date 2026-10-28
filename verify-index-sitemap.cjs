@@ -5,7 +5,7 @@ const base=process.env.PUBLISHED==='true'?'https://xencsj.github.io/portfolio/':
 const root='http://127.0.0.1:8765/';
 const evidence='index-sitemap-evidence';fs.mkdirSync(evidence,{recursive:true});
 const widths=[375,390,430,768,1024,1280,1440,1920];
-const names=['INDEX','DISCOVER XEN','STUDIO','CREATOR','STORYBOOKS','ANIMATION','MUSIC','CINEMATIC','SNAP','DESIGN','SHOP','ARCHITECTURE','SPACE','ART GALLERY','SNS MANAGEMENT','PRICE LIST','CONTACT'];
+const names=['INDEX','DISCOVER XEN','STUDIO','CREATOR','STORYBOOKS','ANIMATION','MUSIC','CINEMATIC','PHOTOGRAPHY','DESIGN','SHOP','ARCHITECTURE','SPACE','ART GALLERY','SNS MANAGEMENT','PRICING','CONTACT'];
 const hrefs=['index.html','what-is-xen.html','studio.html','creator.html','storybooks.html','animation.html','sound.html','cinematic.html','snap.html','design.html','apparel.html','architecture.html','space.html','artworks.html','sns-management.html','price-list.html','studio.html#contact'];
 const results=[];
 async function measure(p){return p.evaluate(()=>{
@@ -28,14 +28,15 @@ async function measure(p){return p.evaluate(()=>{
    assert.equal(await page.locator('#index-about-heading + ul a').count(),3);assert.equal(await page.locator('#index-works-heading + ul a').count(),11);
    for(const [i,row] of after.rows.entries()){
     assert(row.rect.h>=44,`${row.name} target height ${row.rect.h}`);assert(!row.overflow,row.name+' wraps');
-    assert(Math.abs(row.svg.x-after.rows[0].svg.x)<1,row.name+' icon alignment');
-    assert(Math.abs(row.ja.x+Number.parseFloat(row.jaPadding)-(row.svg.x+row.svg.w+8))<1,row.name+' bilingual alignment');
+    assert(row.ja.y>=row.en.b-1,row.name+' Japanese below English');
     const old=before.rows.find(b=>b.name===row.name);if(old){
      for(const key of ['font','family','line','gap'])assert.equal(row.type[key],old.type[key],row.name+' English '+key);
      for(const key of ['font','family','line'])assert.equal(row.jtype[key],old.jtype[key],row.name+' Japanese '+key);
      for(const key of ['width','height','stroke'])assert.equal(row.itype[key],old.itype[key],row.name+' icon '+key);
      assert.equal(row.type.color,old.type.color,row.name+' color');
-     assert(Math.abs(Number.parseFloat(row.padding)/Number.parseFloat(old.padding)-.8)<.01,row.name+' vertical space');
+     assert.equal(row.padding,old.padding,row.name+' confirmed vertical space');
+     assert.deepEqual(row.rect,old.rect,row.name+' confirmed row geometry');
+     assert.deepEqual(row.svg,old.svg,row.name+' confirmed icon alignment');
     }
     if(i>0)assert(row.rect.y>=after.rows[i-1].rect.b-.1,'no overlapping tap targets');
    }
@@ -72,5 +73,5 @@ async function measure(p){return p.evaluate(()=>{
   await browser.close();
  }
  fs.writeFileSync(`${evidence}/results.json`,JSON.stringify({base,results,linkNavigationCases:68,engines:2},null,2));
- console.log('PASS: 16 responsive layouts, 68 actual link navigations, unchanged INDEX hero/news/header/footer, icon/type preservation, 20% vertical padding reduction, keyboard/menu/orbit/no-JS checks. Physical iPhone Safari is not tested.');
+ console.log('PASS: 16 responsive layouts, 68 actual link navigations, unchanged INDEX hero/news/header/footer, icon/type preservation, confirmed current spacing, keyboard/menu/orbit/no-JS checks. Physical iPhone Safari is not tested.');
 })().catch(e=>{console.error(e);process.exit(1)});

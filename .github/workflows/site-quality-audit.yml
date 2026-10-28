@@ -1,7 +1,7 @@
 name: Full site quality audit
 on:
   push:
-    branches: ['work/site-quality-audit-20261027']
+    branches: ['work/final-quality-20261028']
   workflow_dispatch:
     inputs:
       base_url:
@@ -16,18 +16,18 @@ jobs:
   audit:
     runs-on: ubuntu-24.04
     container:
-      image: mcr.microsoft.com/playwright:v1.56.1-noble
-    timeout-minutes: 30
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --no-save --package-lock=false playwright@1.56.1 http-server@14.1.1
+      - run: npm install --no-save --package-lock=false playwright@1.57.0 http-server@14.1.1
       - name: Audit every public page and requested viewport
         env:
           AUDIT_BASE: ${{ inputs.base_url }}
-          AUDIT_FOCUS: ${{ github.event_name == 'push' && 'webkit' || inputs.focus }}
+          AUDIT_FOCUS: ${{ inputs.focus }}
         run: |
           mkdir -p /tmp/xen-quality-root
           ln -s "$PWD" /tmp/xen-quality-root/portfolio
@@ -39,21 +39,22 @@ jobs:
           const out='quality-audit-evidence';fs.mkdirSync(out,{recursive:true});
           const allPages=['index','what-is-xen','creator','studio','sound','storybooks','animation','cinematic','snap','design','apparel','architecture','space','artworks','sns-management','price-list'];
           const pages=process.env.AUDIT_FOCUS==='webkit'?['index','what-is-xen','snap']:allPages;
-          const widths=base.includes('127.0.0.1')?[1920,1440,1280,1024,768,390,375,360]:[1440,390];
+          const widths=[375,390,430,768,1440];
           const result={base,sha:process.env.GITHUB_SHA,started:new Date().toISOString(),cases:[],interactions:[],auxiliary:[],externalThumbnails:[]};
           const save=()=>fs.writeFileSync(out+'/results.json',JSON.stringify(result,null,2));
           (async()=>{
            if(process.env.AUDIT_FOCUS==='supplement'){
             const auxiliary=fs.readdirSync('.').filter(f=>f.endsWith('.html')&&!allPages.includes(f.slice(0,-5)));
-            const b=await chromium.launch();const c=await b.newContext();if(base.includes('127.0.0.1'))await c.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());const p=await c.newPage();
-            for(const width of [1920,1440,1280,1024,768,390,375,360])for(const file of auxiliary){const rec={slug:file,engine:'chromium',width};try{await p.setViewportSize({width,height:width<500?844:1000});const r=await p.goto(base+'/'+file,{waitUntil:'load',timeout:30000});await p.waitForTimeout(700);rec.status=r.status();rec.overflow=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);rec.title=await p.title();rec.ok=rec.status===200&&rec.overflow<=1;if(width===1440||width===390)await p.screenshot({path:`${out}/aux-${width}-${file}.jpg`,quality:65});}catch(e){rec.ok=false;rec.error=e.message;}result.cases.push(rec);save();console.log(JSON.stringify(rec));}
-            await b.close();
+            for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){
+            const b=await engine.launch();const c=await b.newContext();if(base.includes('127.0.0.1'))await c.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());const p=await c.newPage();
+            for(const width of widths)for(const file of auxiliary){const rec={slug:file,engine:engineName,width};try{await p.setViewportSize({width,height:width<500?844:1000});const r=await p.goto(base+'/'+file,{waitUntil:'load',timeout:30000});await p.waitForTimeout(700);rec.status=r.status();rec.overflow=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);rec.title=await p.title();rec.ok=rec.status===200&&rec.overflow<=1;if(width===1440||width===390)await p.screenshot({path:`${out}/aux-${engineName}-${width}-${file}.jpg`,quality:65});}catch(e){rec.ok=false;rec.error=e.message;}result.cases.push(rec);save();console.log(JSON.stringify(rec));}
+            await b.close();}
             for(const [engineName,engine] of [['chromium',chromium],['webkit',webkit]]){const b=await engine.launch();const c=await b.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});if(base.includes('127.0.0.1'))await c.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());const p=await c.newPage();p.setDefaultTimeout(12000);
              for(const slug of allPages){const rec={name:slug+' touch and rotation',engine:engineName,width:390};try{await p.setViewportSize({width:390,height:844});await p.goto(base+'/'+slug+'.html',{waitUntil:'load'});await p.locator('.xen-header-toggle').tap();await p.locator('#xen-drawer[open]').waitFor();await p.waitForTimeout(450);await p.locator('.xen-drawer-close').tap();await p.waitForFunction(()=>!document.querySelector('#xen-drawer').open);rec.portrait=await p.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,visibleGallery:[...document.querySelectorAll('.xd-tile')].filter(e=>e.getClientRects().length).length}));await p.setViewportSize({width:844,height:390});await p.waitForTimeout(400);rec.landscape=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);await p.setViewportSize({width:390,height:844});await p.waitForTimeout(400);rec.restored=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);rec.ok=rec.portrait.overflow<=1&&rec.landscape<=1&&rec.restored<=1;if(slug==='what-is-xen'&&rec.portrait.visibleGallery!==9)rec.ok=false;}catch(e){rec.ok=false;rec.error=e.message;}result.interactions.push(rec);save();console.log(JSON.stringify(rec));}await b.close();
             }
             result.finished=new Date().toISOString();save();const failed=result.cases.filter(x=>!x.ok).length+result.interactions.filter(x=>!x.ok).length;fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY||out+'/summary.md',`## Supplementary quality audit\nSource: ${result.sha}\nAuxiliary page/width cases: ${result.cases.length}\nTouch and rotation cases: ${result.interactions.length}\nFailed checks: ${failed}\n`);if(failed)process.exitCode=1;return;
            }
-           for(const [engineName,engine,sizes] of (process.env.AUDIT_FOCUS==='webkit'?[['webkit',webkit,[1440,390]]]:[['chromium',chromium,widths],['webkit',webkit,[1440,390]]])){
+           for(const [engineName,engine,sizes] of (process.env.AUDIT_FOCUS==='webkit'?[['webkit',webkit,[1440,390]]]:[['chromium',chromium,widths],['webkit',webkit,widths]])){
             const browser=await engine.launch();
             for(const width of sizes){
              const ctx=await browser.newContext({viewport:{width,height:width<500?844:1000},deviceScaleFactor:1});
@@ -78,13 +79,13 @@ jobs:
                await p.keyboard.press('Escape');await p.waitForFunction(()=>!document.querySelector('#xen-drawer').open&&document.querySelector('.xen-header-toggle')===document.activeElement);rec.menuClosed=await p.locator('.xen-header-toggle').getAttribute('aria-expanded')==='false';
                rec.focusRestored=await p.locator('.xen-header-toggle').evaluate(e=>e===document.activeElement);
                // Visit the full document to trigger each existing reveal and lazy image.
-               if(width===1440||width===390){
+               {
                 for(let y=0;y<await p.evaluate(()=>document.body.scrollHeight);y+=800){await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),y);await p.waitForTimeout(60);}
                 await p.waitForTimeout(1500);
                 rec.afterScroll=await p.evaluate(()=>({overflow:document.documentElement.scrollWidth-innerWidth,brokenImages:[...document.images].filter(i=>i.getAttribute('src')&&i.getBoundingClientRect().width>0&&i.complete&&!i.naturalWidth).map(i=>i.getAttribute('src')),links:[...document.querySelectorAll('a[href]')].map(a=>({href:a.getAttribute('href'),text:a.textContent.trim()}))}));
                 await p.screenshot({path:`${out}/${engineName}-${width}-${slug}-footer.jpg`,quality:65});
                }
-               rec.ok=rec.status===200&&rec.initial.overflow<=1&&rec.menuOpen&&rec.menuClosed&&rec.focusRestored&&!rec.errors.length&&!rec.duplicateIds.length;
+               rec.ok=rec.status===200&&rec.initial.overflow<=1&&rec.menuOpen&&rec.menuClosed&&rec.focusRestored&&!rec.errors.length&&!rec.duplicateIds.length&&rec.afterScroll.overflow<=1&&!rec.afterScroll.brokenImages.some(src=>!base.includes('127.0.0.1')||!/^https?:/.test(src))&&!rec.failedResources.some(r=>r.url.startsWith(base));
               }catch(e){rec.exception=e.message;rec.ok=false;}
               p.off('pageerror',onError);p.off('response',onResponse);result.cases.push(rec);save();console.log(JSON.stringify({slug,engine:engineName,width,ok:rec.ok,exception:rec.exception,errors:rec.errors,overflow:rec.initial?.overflow}));
              }
@@ -125,3 +126,53 @@ jobs:
           name: quality-audit-evidence
           path: quality-audit-evidence/
           retention-days: 14
+
+  regressions:
+    if: inputs.base_url == '' && inputs.focus == ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [music-motion, music-update, index-sitemap, discovery, mvv, music-reader, footer-symbol, mies]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --package-lock=false playwright@1.57.0 http-server@14.1.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Verify current contracts without changing the authored UI
+        env:
+          SUITE: ${{ matrix.suite }}
+          QA_WIDTHS: '375,390,430,768,1440'
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          if [ "$SUITE" = index-sitemap ]; then
+            git fetch --depth=1 origin 6004e29306734c6dae2ad8ffbe4d8695768d8670
+            git show 6004e29306734c6dae2ad8ffbe4d8695768d8670:index.html > __baseline-index.html
+            git show 6004e29306734c6dae2ad8ffbe4d8695768d8670:xen-ui.css > __baseline-ui.css
+            sed -i 's|./xen-ui.css?v=[^" ]*|./__baseline-ui.css|' __baseline-index.html
+          fi
+          case "$SUITE" in
+            index-sitemap|discovery|footer-symbol|mies)
+              npx http-server . -p 8765 -a 127.0.0.1 -c-1 >/tmp/regression-http.log 2>&1 &
+              ;;
+          esac
+          node --check "verify-$SUITE.cjs"
+          node "verify-$SUITE.cjs"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regression-${{ matrix.suite }}
+          path: |
+            *-qa/
+            *-evidence/
+          retention-days: 14
+  news:
+    if: inputs.base_url == '' && inputs.focus == ''
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m unittest -v test_news.py
+      - run: python news.py --check

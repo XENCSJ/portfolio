@@ -1,8 +1,8 @@
 /* Focused MUSIC regression: node verify-music-update.cjs (Playwright Chromium/WebKit). */
 const {chromium,webkit,devices}=require(process.env.PLAYWRIGHT_PACKAGE||'playwright');
 const fs=require('node:fs'),http=require('node:http'),path=require('node:path'),assert=require('node:assert/strict'),{execFileSync}=require('node:child_process');
-const baseline='738d011e26d60e05ab9461e82492154c25593c9e';
-// Keep the historical geometry reference available in shallow CI checkouts.
+const baseline='6004e29306734c6dae2ad8ffbe4d8695768d8670';
+// Keep the confirmed October 28 geometry reference available in shallow CI checkouts.
 try { execFileSync('git',['cat-file','-e',baseline],{stdio:'ignore'}); } catch { execFileSync('git',['fetch','--depth=1','origin',baseline],{stdio:'inherit'}); }
 const out=process.env.MUSIC_QA_OUT||'music-update-qa';fs.mkdirSync(out,{recursive:true});
 const paragraphs=['青が茜に溶け、茜が夜へと消えていく。','夕暮れの空がゆっくりと色を変えるように、何気ない日々も少しずつ過去になっていく。','何でもない会話も、隣にいる温もりも、いつか振り返ればかけがえのない記憶になる。','移ろいゆく空のグラデーションに、言葉にならない感情と、二度と戻らない時間を重ねた、一瞬の美しさと儚さを描く楽曲。'];
@@ -24,9 +24,18 @@ try{
  // A vertical gesture must not select another jacket.
  const same=await p.locator('.sound-showcase-stage').getAttribute('data-active-release');await p.locator('.sound-showcase-stage').dispatchEvent('pointerdown',{isPrimary:true,button:0,pointerId:77,clientX:160,clientY:300});await p.locator('.sound-showcase-stage').dispatchEvent('pointerup',{isPrimary:true,button:0,pointerId:77,clientX:170,clientY:160});assert.equal(await p.locator('.sound-showcase-stage').getAttribute('data-active-release'),same);
  for(const drawer of await p.locator('.sound-category-drawer').all()){await drawer.locator('summary').click();assert(await drawer.evaluate(n=>n.open));await drawer.locator('summary').click()}
- for(const selector of ['#sora-ni-tokeru .sound-about-accordion','#sora-ni-tokeru .sound-lyrics-accordion','#hikari-no-arika [data-service="spotify"]']){const d=p.locator(selector);await d.locator('summary').click();await p.waitForTimeout(450);assert(await d.evaluate(n=>n.open));await d.locator('summary').click();await p.waitForTimeout(450)}
+ // Confirmed 2026-10-28 reader: fixed bilingual headings, independently scrolling text.
+ const open=p.locator('#sora-ni-tokeru .music-reader-open');await open.click();const reader=p.locator('#music-reader');await reader.waitFor({state:'visible'});
+ for(const [tab,panel] of [['ABOUT THE SONG 楽曲解説','#music-about-panel'],['LYRICS 歌詞','#music-lyrics-panel']]){
+  await reader.getByRole('tab',{name:tab}).click();const body=reader.locator(panel);await body.waitFor({state:'visible'});
+  const before=await reader.locator('.music-reader-tabs').boundingBox();await body.evaluate(e=>e.scrollTop=e.scrollHeight);
+  assert.deepEqual(await reader.locator('.music-reader-tabs').boundingBox(),before,'Reader headings remain fixed');assert(await reader.locator('.music-reader-close').isVisible());
+  assert.equal(await body.evaluate(e=>getComputedStyle(e).overflowY),'auto');assert.equal(await p.locator('body').evaluate(e=>getComputedStyle(e).position),'fixed');
+ }
+ await reader.locator('.music-reader-close').click();await reader.waitFor({state:'hidden'});await p.waitForFunction(()=>getComputedStyle(document.body).position!=='fixed');
+ const player=p.locator('#nova-pulse .music-player-drawer[data-service="spotify"]');await player.locator('summary').click();await p.waitForFunction(()=>document.querySelector('#nova-pulse .music-player-drawer[data-service="spotify"]').open);assert(await player.isVisible());await player.locator('summary').click();await p.waitForFunction(()=>!document.querySelector('#nova-pulse .music-player-drawer[data-service="spotify"]').open);
  await p.evaluate(()=>scrollTo(0,0));await p.locator('.sound-showcase-stage').focus();await p.waitForTimeout(700);await p.screenshot({path:`${out}/${label}-MUSIC.jpg`,type:'jpeg',quality:90});
- await p.locator('#sora-ni-tokeru .sound-about-accordion summary').click();await p.locator('#sora-ni-tokeru-about-panel').scrollIntoViewIfNeeded();await p.waitForTimeout(700);await p.screenshot({path:`${out}/${label}-description.jpg`,type:'jpeg',quality:90});
+ await open.click();await reader.waitFor({state:'visible'});await reader.getByRole('tab',{name:'ABOUT THE SONG 楽曲解説'}).click();assert.deepEqual(await reader.locator('.song-description p').allTextContents(),paragraphs);await p.screenshot({path:`${out}/${label}-description.jpg`,type:'jpeg',quality:90});await reader.locator('.music-reader-close').click();await reader.waitFor({state:'hidden'});
  await p.goto(base+'music-motion-preview.html');await p.waitForFunction(()=>document.querySelector('.sound-showcase').dataset.entryState==='complete');
  const settled=await geometry(p);const pixel=[];
  for(let i=1;i<=5;i++){

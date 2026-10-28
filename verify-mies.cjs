@@ -17,7 +17,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.route(/google-analytics|googletagmanager/,r=>r.abort());
    try {
-   await page.goto(base+'what-is-xen.html#future',{waitUntil:'domcontentloaded'});
+   await page.goto(base+'what-is-xen.html#future',{waitUntil:'load'});
    await page.locator('.xd-theme-dialog[open]').waitFor();await page.waitForTimeout(350);
    const expected=await frame(page);
    const links=await page.locator('[data-panel="future"] .xd-sign-main').evaluateAll(es=>es.map(e=>e.getAttribute('href')));
@@ -28,7 +28,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    await page.waitForTimeout(300);
    const target=await page.locator('#breathing-architecture').evaluate(e=>({top:e.getBoundingClientRect().top,bar:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
    ok(target.top>=target.bar&&target.top<target.bar+80,'breathing architecture below header: '+label+' '+JSON.stringify(target));
-   await page.goto(base+'creator.html#creative-origin',{waitUntil:'domcontentloaded'});
+   await page.goto(base+'creator.html#creative-origin',{waitUntil:'load'});
    await page.locator('.mies-person-link').scrollIntoViewIfNeeded();await page.waitForTimeout(400);
    ok(await page.locator('#creative-origin .cp-copy p').textContent()===copy,'origin text unchanged');
    const order=await page.locator(sections.map(x=>'#'+x).join(',')).evaluateAll(es=>es.map(e=>e.id));ok(order.join()===sections.join(),'12 sections unchanged');
@@ -36,7 +36,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    ok(Math.abs(origin.width/origin.height-1.5)<.005&&origin.fit==='cover'&&origin.position==='50% 50%','origin uses centered 3:2 cover');
    ok(await page.locator('#mies-origin-title').count()===0,'duplicate origin removed');
    const y=await page.evaluate(()=>scrollY);
-   await page.locator('.mies-person-link').click();await page.waitForTimeout(350);
+   await page.locator('.mies-person-link').click();await page.locator('#mies-detail[open]').waitFor();await page.waitForFunction(()=>document.querySelector('#mies-detail').getAnimations().every(a=>a.playState!=='running'));
    ok(await page.locator('#mies-detail').evaluate(e=>e.open),'modal opens');
    const actual=await frame(page);
    ok(actual.width===expected.width&&actual.border===expected.border&&actual.background===expected.background,'FUTURE modal frame shared');
@@ -62,7 +62,7 @@ async function imageReady(locator){await locator.evaluate(async image=>{image.lo
    ok(Math.abs(await page.evaluate(()=>scrollY)-y)<2,'scroll position restored');
    await page.locator('.mies-person-link').press('Enter');await page.locator('#mies-detail[open]').waitFor();await page.waitForTimeout(350);
    await page.locator('.mies-close').click();await page.waitForFunction(()=>!document.querySelector('#mies-detail').open);ok(true,'button closes');
-   await page.locator('.mies-person-link').click();await page.waitForTimeout(350);
+   await page.locator('.mies-person-link').click();await page.locator('#mies-detail[open]').waitFor();await page.waitForFunction(()=>document.querySelector('#mies-detail').getAnimations().every(a=>a.playState!=='running'));
    await page.locator('.mies-artwork-link').click();await page.waitForURL('**/artworks.html#artwork-20261023-03');
    await page.waitForLoadState('load');await page.waitForTimeout(250);
    const artwork=await page.locator('#artwork-20261023-03').evaluate(e=>({top:e.getBoundingClientRect().top,bottom:e.getBoundingClientRect().bottom,viewport:innerHeight,atEnd:scrollY+innerHeight>=document.documentElement.scrollHeight-2,header:document.querySelector('#xen-site-header').getBoundingClientRect().bottom}));
