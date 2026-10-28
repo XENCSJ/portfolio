@@ -83,9 +83,12 @@ async function run(browser,engine,base,width,mode='normal',chosen=pages) {
       }
       await page.screenshot({path:`${out}/${label.replace('.html','.png')}`});
       await page.locator('.xen-footer-return').click();
-      // Native smooth scrolling and the JS path must both reach the actual top.
-      // Await completion instead of assuming a one-second animation budget.
-      await page.waitForFunction(()=>window.scrollY<2);
+      // Page timers do not run when JavaScript is disabled: poll from the test host.
+      if(mode==='no-js') {
+        const deadline=Date.now()+12000;
+        while(await page.evaluate(()=>window.scrollY>=2) && Date.now()<deadline) await new Promise(resolve=>setTimeout(resolve,100));
+        assert(await page.evaluate(()=>window.scrollY<2),'native Back to Top');
+      } else await page.waitForFunction(()=>window.scrollY<2);
       await page.locator('.xen-footer-credits').scrollIntoViewIfNeeded();
       await page.waitForTimeout(900);
       if(mode!=='no-js') assert.equal(await page.evaluate(()=>window.footerReveals.length),mode==='normal'?2:0,'do not replay');
