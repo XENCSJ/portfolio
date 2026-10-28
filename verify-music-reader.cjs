@@ -17,7 +17,7 @@ async function squares(locator){
 }
 async function shot(page,name){await page.screenshot({path:`${out}/${name}.jpg`,type:'jpeg',quality:88});}
 // Regression contract: both languages and CLOSE remain stationary while only text moves.
-async function fixedPanel(page, selector) {
+async function fixedPanel(page, selector, wheelSupported=true) {
  const panel=page.locator(selector);
  const state=()=>page.locator('#music-reader').evaluate(d=>{
   const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
@@ -42,7 +42,10 @@ async function fixedPanel(page, selector) {
  assert.deepEqual(after.dialog,before.dialog);assert.deepEqual(after.background,before.background);
  assert.equal(after.pageY,before.pageY);assert(after.end>=after.total-2,'Final line is reachable');
  if(after.total>before.panel.height+2)assert(after.scroll>0,'Long text must actually scroll');
- const box=await panel.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.wheel(0,700);
+ // Playwright mobile WebKit has no mouse-wheel API. DOM scrolling above still
+ // checks the exact bottom/heading/background geometry; End exercises its focused panel.
+ if(wheelSupported){const box=await panel.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.wheel(0,700);}
+ else await panel.press('End');
  await page.waitForTimeout(120);
  const chained=await state();assert.equal(chained.pageY,before.pageY);assert.deepEqual(chained.background,before.background);
  assert.deepEqual(chained.labels,before.labels,'Overscroll must not move the fixed controls');
@@ -124,7 +127,7 @@ async function fixedPanel(page, selector) {
      assert.equal(await dialog.locator('iframe,template,details,.music-playback').count(),0);
      assert.equal(await dialog.getByText('楽曲解説は未掲載です。',{exact:true}).count(),0);
      assert(await page.evaluate(()=>window.__musicPlaybackNodes.every(({node,parent,source})=>node.isConnected&&node.parentNode===parent&&node.getAttribute('src')===source)),'reader must not relocate or replace any player');
-     await fixedPanel(page,'#music-about-panel');
+     await fixedPanel(page,'#music-about-panel',engineName!=='webkit'||width>=701);
      await squares(page.locator('.music-reader-cover'));
      const before=await page.locator('.music-reader-cover').boundingBox();
      const geometry=await dialog.evaluate(d=>{const p=d.querySelector('#music-about-panel'),a=p.querySelector('.song-description');return {overflow:d.scrollWidth>d.clientWidth+1,pageOverflow:document.documentElement.scrollWidth>innerWidth+1,panel:p.clientHeight,bottom:p.getBoundingClientRect().bottom,end:d.getBoundingClientRect().bottom,font:getComputedStyle(a).fontSize,line:getComputedStyle(a).lineHeight};});
@@ -132,7 +135,7 @@ async function fixedPanel(page, selector) {
      await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-panel .sound-song-lyrics').innerHTML(),original.lyrics);
      assert(await page.locator('#music-lyrics-panel .sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
      if(width>=1280){const firstVerse=await page.locator('#music-lyrics-panel .sound-lyric-section p').first().evaluate(p=>({height:p.getBoundingClientRect().height,line:parseFloat(getComputedStyle(p).lineHeight),lines:p.querySelectorAll('br').length+1}));assert(Math.abs(firstVerse.height-firstVerse.line*firstVerse.lines)<2,'authored lyric breaks must render once');}
-     await fixedPanel(page,'#music-lyrics-panel');
+     await fixedPanel(page,'#music-lyrics-panel',engineName!=='webkit'||width>=701);
      assert.deepEqual(await page.locator('.music-reader-cover').boundingBox(),before);
      const extent=await page.locator('#music-lyrics-panel').evaluate(el=>({end:el.scrollTop+el.clientHeight,total:el.scrollHeight,overflow:el.scrollWidth>el.clientWidth+1}));assert(!extent.overflow);assert(extent.end>=extent.total-2);
      await page.locator('#music-lyrics-tab').focus();await page.keyboard.press('ArrowLeft');assert.equal(await page.locator('#music-about-tab').getAttribute('aria-selected'),'true');
@@ -142,8 +145,8 @@ async function fixedPanel(page, selector) {
      }
      if(width===390&&original.id==='tochu-no-mamade'){
       await page.locator('#music-lyrics-tab').click();
-      await page.setViewportSize({width:844,height:390});await fixedPanel(page,'#music-lyrics-panel');
-      await page.setViewportSize({width,height});await fixedPanel(page,'#music-lyrics-panel');
+      await page.setViewportSize({width:844,height:390});await fixedPanel(page,'#music-lyrics-panel',engineName!=='webkit'||width>=701);
+      await page.setViewportSize({width,height});await fixedPanel(page,'#music-lyrics-panel',engineName!=='webkit'||width>=701);
      }
      if(original.id==='hikari-no-arika')await page.locator('.music-reader-close').click();
      else await page.keyboard.press('Escape');
