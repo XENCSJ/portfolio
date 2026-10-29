@@ -25,12 +25,3 @@ body.architecture-page #residential-renovation .xen-three-image-grid img {
 body.architecture-page #residential-renovation .xen-three-image-grid {
   --xen-three-image-ratio: 2 / 3;
 }
-@media (max-width: 650px) {
-  body.design-page #neon-sign-design .xen-three-image-grid,
-  body.architecture-page #residential-renovation .xen-three-image-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  body.architecture-page #residential-renovation .xen-three-image-grid img {
-    aspect-ratio: auto;
-  }
-}
