@@ -164,6 +164,60 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
 <script src="./xen-mies.js?v=20261027-mies1" defer></script>
 <link rel="stylesheet" href="./xen-footer-symbol.css?v=20261027-vertical1">
 <script src="./xen-footer-symbol.js?v=20261027-vertical1" defer></script>
+<style id="xen-creative-evolution-style">
+
+/* CREATIVE EVOLUTION: isolated to BACKGROUND. Static, complete content is the fallback. */
+#background .ce-evolution{--ce-gold:var(--ql-gold,#c6a15b);--ce-pinned:0;color:#fff;background:#000;margin-top:30px}
+#background .ce-sticky{position:relative;padding:0 0 12px}
+#background .ce-title{margin:0 0 28px;text-align:center;font-size:12px;font-weight:400;line-height:1.65;letter-spacing:.16em;color:var(--ce-gold)}
+#background .ce-title span{display:block;margin-top:5px;color:#b8b8be;font-size:11px;letter-spacing:.13em}
+#background .ce-graph{position:relative;isolation:isolate;max-width:940px;margin-inline:auto;padding:10px 12px 0}
+#background .ce-paths{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:-1}
+#background .ce-paths path{fill:none;stroke:var(--ce-gold);stroke-width:1;stroke-opacity:.72;vector-effect:non-scaling-stroke}
+#background .ce-stages{list-style:none;padding:0;margin:0;display:grid;gap:37px}
+#background .ce-stage{list-style:none;text-align:center;margin:0;padding:0;min-width:0;opacity:var(--ce-opacity,1)}
+#background .ce-stage h4{display:table;position:relative;margin:0 auto;color:#b8b8be;background:#000;padding:0 12px;font-size:10px;line-height:1.5;font-weight:400;letter-spacing:.14em;max-width:100%;overflow-wrap:normal}
+#background .ce-nodes{display:flex;justify-content:center;gap:12px;list-style:none;margin:0;padding:22px 0 0}
+#background .ce-node{flex:1;list-style:none;min-width:0;max-width:190px;margin:0;padding:0;font-size:14px;font-weight:400;line-height:1.6;letter-spacing:.025em}
+#background .ce-node span{display:inline-block;background:#000;padding:0 8px;text-wrap:balance}
+#background .ce-stage.ce-single .ce-nodes{padding-top:7px}
+#background .ce-finale{text-align:center;margin:47px 0 0;padding:0;opacity:var(--ce-opacity,1)}
+#background .ce-finale span{display:inline-block;padding:0 18px;background:#000;color:#fff;font-size:clamp(34px,4.2vw,52px);line-height:1.2;font-weight:400;letter-spacing:.16em;text-indent:.16em}
+#background .ce-context{max-width:760px;margin:38px auto 0;color:#b8b8be}
+#background .ce-context p{font-size:14px;line-height:2;margin:0 0 10px}
+#background .ce-context .cp-related-link{margin-top:18px}
+#background .ce-context a{display:inline-block;min-height:44px;padding:9px 0;color:#fff}
+#background #career-entertainment{scroll-margin-top:100px}
+@media(min-width:701px) and (min-height:760px){
+ #background .ce-evolution{--ce-pinned:1}
+ #background .ce-evolution.ce-enhanced::after{content:"";display:block;height:720px}
+ #background .ce-enhanced .ce-sticky{position:sticky;top:82px}
+}
+@media(max-width:700px){
+ #background .ce-title{font-size:11px;margin-bottom:23px;letter-spacing:.12em}
+ #background .ce-graph{padding:8px 0 0}
+ #background .ce-stages{gap:31px}
+ #background .ce-stage h4{font-size:9px;letter-spacing:.09em;padding-inline:7px}
+ #background .ce-nodes{gap:12px 2px;padding-top:21px;flex-wrap:wrap}
+ #background .ce-node{font-size:12px;flex:0 0 calc(50% - 2px);max-width:none}
+ #background .ce-node span{padding-inline:4px}
+ #background .ce-expansion .ce-node:nth-child(n+3){flex-basis:calc(33.333% - 2px)}
+ #background .ce-single .ce-node{flex-basis:100%}
+ #background .ce-finale{margin-top:37px}
+ #background .ce-context{margin-top:30px}
+}
+@media(max-width:700px) and (min-height:800px){
+ #background .ce-evolution{--ce-pinned:1}
+ #background .ce-evolution.ce-enhanced::after{content:"";display:block;height:650px}
+ #background .ce-enhanced .ce-sticky{position:sticky;top:75px}
+}
+@media(prefers-reduced-motion:reduce){
+ #background .ce-evolution.ce-enhanced::after{display:none}
+ #background .ce-enhanced .ce-sticky{position:relative;top:auto}
+ #background .ce-stage,#background .ce-finale{opacity:1!important}
+ #background .ce-paths path{stroke-dashoffset:0!important}
+}
+</style>
 </head><body id="top" class="xen-noir detail-page creator-page xen-polished"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" target="_blank" rel="noopener noreferrer" aria-label="XEN公式オンラインショップ（新しいタブで開く）"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false"><use href="./xen-shop-icon.svg#cart"></use></svg></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
 <section class="xen-menu-category"><h2 class="xen-menu-heading"><span class="xen-menu-en" lang="en">ABOUT XEN</span><span class="xen-menu-ja" lang="ja">XENについて</span></h2><ul class="xen-menu-items"><li><a class="xen-menu-link xen-menu-icon-row" href="./what-is-xen.html"><svg class="xen-menu-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5Z"/></svg><span class="xen-menu-en" lang="en">DISCOVER XEN</span><span class="xen-menu-ja" lang="ja">XENを知る</span></a></li><li><a class="xen-menu-link " href="./studio.html"><span class="xen-menu-en" lang="en">STUDIO</span><span class="xen-menu-ja" lang="ja">スタジオについて</span></a></li><li><a class="xen-menu-link " href="./creator.html" aria-current="page"><span class="xen-menu-en" lang="en">CREATOR</span><span class="xen-menu-ja" lang="ja">クリエイター紹介</span></a></li></ul></section>
@@ -219,7 +273,28 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
   </div>
 </section>
 <section class="cp-section" id="background" aria-labelledby="creator-career"><h2 class="cp-section-heading" id="creator-career"><span>BACKGROUND</span><small>経歴</small></h2>
- <ol class="cp-career"><li data-cp-reveal><span class="cp-era">01 / ARCHITECTURE</span><h3>建築設計</h3><p class="xen-description">建築設計を経て、光と影、構造の<span class="xen-tail">美しさを理解。</span></p><p class="cp-related-link"><a href="./architecture.html">建築設計を見る <span aria-hidden="true">↗</span></a></p></li><li data-cp-reveal id="career-entertainment" style="scroll-margin-top:80px"><span class="cp-era">02 / ENTERTAINMENT</span><h3>エンターテインメント</h3><p class="xen-description">その後、エンターテインメント業界で多様な人の感情や心地よさを学び、“魅せる表現”の基礎を体得する。</p></li><li data-cp-reveal><span class="cp-era">03 / CREATIVE STUDIO</span><h3>XEN | CREATIVE STUDIO JAPAN</h3><p class="xen-description"><span class="xen-phrase">XEN | </span><span class="xen-phrase">CREATIVE STUDIO JAPAN </span><span class="xen-phrase">として、</span><span class="xen-phrase">世界観設計から</span><span class="xen-phrase">作品制作までを</span><span class="xen-phrase">手がけている。</span></p></li></ol>
+ <div class="ce-evolution" aria-labelledby="creative-evolution-title">
+  <div class="ce-sticky">
+   <h3 class="ce-title" id="creative-evolution-title">CREATIVE EVOLUTION<span lang="ja">創造の軌跡</span></h3>
+   <div class="ce-graph">
+    <svg class="ce-paths" aria-hidden="true" focusable="false"></svg>
+    <ol class="ce-stages" aria-label="活動を開始した順に広がる5つの創作領域">
+     <li class="ce-stage ce-single"><h4 lang="en">ARCHITECTURE</h4><ul class="ce-nodes"><li class="ce-node"><span>建築設計</span></li></ul></li>
+     <li class="ce-stage ce-single"><h4 lang="en">SPACE DESIGN</h4><ul class="ce-nodes"><li class="ce-node"><span>空間デザイン</span></li></ul></li>
+     <li class="ce-stage ce-expansion"><h4 lang="en">CREATIVE EXPANSION</h4><ul class="ce-nodes"><li class="ce-node"><span>エンターテインメント</span></li><li class="ce-node"><span>デザイン</span></li><li class="ce-node"><span>アパレル</span></li><li class="ce-node"><span>アート作品</span></li><li class="ce-node"><span>SNS運用</span></li></ul></li>
+     <li class="ce-stage"><h4 lang="en">VISUAL STORYTELLING</h4><ul class="ce-nodes"><li class="ce-node"><span>写真</span></li><li class="ce-node"><span>映像</span></li><li class="ce-node"><span>絵本</span></li><li class="ce-node"><span>アニメーション</span></li></ul></li>
+     <li class="ce-stage"><h4 lang="en">MULTIDISCIPLINARY CREATION</h4><ul class="ce-nodes"><li class="ce-node"><span>音楽</span></li><li class="ce-node"><span>サイトデザイン</span></li><li class="ce-node"><span>キャラクターデザイン</span></li></ul></li>
+    </ol>
+    <p class="ce-finale"><span>XEN CSJ</span></p>
+   </div>
+  </div>
+ </div>
+ <div class="ce-context">
+  <p>建築設計を通じて、光と影、構造の美しさを理解。</p>
+  <p id="career-entertainment">エンターテインメント業界では、多様な人の感情や心地よさを学び、“魅せる表現”の基礎を体得する。</p>
+  <p>それぞれの経験を重ね、XEN CSJとして、世界観設計から作品制作までを手がけている。</p>
+  <p class="cp-related-link"><a href="./architecture.html">建築設計を見る <span aria-hidden="true">↗</span></a></p>
+ </div>
  </section>
 <section class="cp-section cp-philosophy" id="philosophy" aria-labelledby="philosophy-title"><h2 class="cp-section-heading" id="philosophy-title"><span>PHILOSOPHY</span><small>創作への想い</small></h2>
  <div data-cp-reveal><blockquote class="xen-description">頭の中にあるものを少しずつ形にしていく。</blockquote>
@@ -370,4 +445,90 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
     <p class="mies-sources">参考：<a href="https://www.moma.org/artists/7166-ludwig-mies-van-der-rohe" target="_blank" rel="noopener noreferrer">MoMA</a> / <a href="https://miesbcn.com/the-pavilion/" target="_blank" rel="noopener noreferrer">Fundació Mies van der Rohe</a> / <a href="https://www.knoll.com/barcelona-chair" target="_blank" rel="noopener noreferrer">Knoll</a></p>
   </div>
 </dialog>
+<script id="xen-creative-evolution-script">
+
+/* Native scroll + sticky; no input interception, scroll locking, timers or dependencies. */
+(() => {
+ 'use strict';
+ const root = document.querySelector('#background .ce-evolution');
+ if (!root) return;
+ const graph = root.querySelector('.ce-graph');
+ const svg = root.querySelector('.ce-paths');
+ const panel = root.querySelector('.ce-sticky');
+ const stages = Array.from(root.querySelectorAll('.ce-stage'));
+ const finale = root.querySelector('.ce-finale');
+ const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+ const clamp = v => Math.max(0, Math.min(1, v));
+ const ease = v => { v = clamp(v); return v * v * (3 - 2 * v); };
+ let paths = [], frame = 0, pinned = false, measuring = false;
+ function full() {
+  root.classList.remove('ce-enhanced');
+  [...stages, finale].forEach(el => el.style.removeProperty('--ce-opacity'));
+  paths.forEach(item => item.el.style.strokeDashoffset = '0');
+ }
+ function draw(d, phase) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  el.setAttribute('d', d); el.setAttribute('pathLength', '1');
+  el.style.strokeDasharray = '1';
+  svg.appendChild(el); paths.push({el, phase});
+ }
+ function measure() {
+  if (measuring) return;
+  measuring = true;
+  try {
+   const g = graph.getBoundingClientRect(), center = g.width / 2;
+   const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-g.left+r.width/2,top:r.top-g.top,bottom:r.bottom-g.top}; };
+   svg.replaceChildren(); paths = [];
+   svg.setAttribute('viewBox', `0 0 ${g.width} ${g.height}`);
+   let previous = [];
+   stages.forEach((stage, i) => {
+    const head = rect(stage.querySelector('h4'));
+    const nodes = Array.from(stage.querySelectorAll('.ce-node span')).map(rect);
+    if (previous.length) {
+     const target = head.top - 7;
+     previous.forEach(p => draw(`M ${p.x} ${p.bottom+5} C ${p.x} ${target-12} ${center} ${target-12} ${center} ${target}`, i));
+    }
+    if (nodes.length > 1) {
+     const start = head.bottom + 5;
+     nodes.forEach(p => draw(`M ${center} ${start} C ${center} ${start+8} ${p.x} ${p.top-13} ${p.x} ${p.top-5}`, i));
+    }
+    previous = nodes;
+   });
+   const end = rect(finale.querySelector('span'));
+   previous.forEach(p => draw(`M ${p.x} ${p.bottom+5} C ${p.x} ${end.top-17} ${center} ${end.top-17} ${center} ${end.top-6}`, 5));
+   pinned = getComputedStyle(root).getPropertyValue('--ce-pinned').trim() === '1';
+   if (motion.matches) full(); else { root.classList.add('ce-enhanced'); update(); }
+  } catch (error) { full(); }
+  measuring = false;
+ }
+ function update() {
+  frame = 0;
+  if (motion.matches) return;
+  try {
+   let values;
+   if (pinned) {
+    const top = parseFloat(getComputedStyle(panel).top) || 0;
+    const distance = Math.max(1, root.offsetHeight - panel.offsetHeight);
+    const progress = clamp((top - root.getBoundingClientRect().top) / distance);
+    values = stages.map((_, i) => ease((progress - i * .16 + .055) / .11));
+    values.push(ease((progress - .84) / .12));
+    paths.forEach(({el, phase}) => { el.style.strokeDashoffset = String(1 - ease((progress - phase * .16 + .10) / .13)); });
+   } else {
+    const threshold = innerHeight * .86;
+    values = [...stages, finale].map(el => ease((threshold - el.getBoundingClientRect().top) / Math.min(150, innerHeight * .2)));
+    paths.forEach(({el, phase}) => { el.style.strokeDashoffset = String(1 - values[phase]); });
+   }
+   [...stages, finale].forEach((el, i) => el.style.setProperty('--ce-opacity', String(values[i])));
+  } catch (error) { full(); }
+ }
+ function queue() { if (!frame && !motion.matches) frame = requestAnimationFrame(update); }
+ window.addEventListener('scroll', queue, {passive:true});
+ window.addEventListener('resize', measure, {passive:true});
+ window.addEventListener('pageshow', measure);
+ motion.addEventListener('change', measure);
+ if ('ResizeObserver' in window) new ResizeObserver(measure).observe(graph);
+ if (document.fonts) document.fonts.ready.then(measure);
+ measure();
+})();
+</script>
 </body></html>
