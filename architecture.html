@@ -50,7 +50,7 @@ body.architecture-page .arch-residential-description { margin: 0 0 26px; font-si
 body.architecture-page .arch-project.arch-residential-project .arch-project-gallery { grid-template-columns: 1fr; }
 body.architecture-page .arch-residential-project figcaption { margin: 12px 0 0; font-size: 12px; line-height: 1.9; color: #737373; text-align: left; overflow-wrap: anywhere; }
 @media (max-width: 650px) {
- body.architecture-page .arch-residential-description { margin-bottom: 22px; font-size: 13px; }
+ body.architecture-page .arch-residential-description { margin-bottom: 22px; }
  body.architecture-page .arch-residential-project figcaption { font-size: 11px; }
 }
 
@@ -99,11 +99,11 @@ body.architecture-page .arch-project-gallery > .arch-figure:first-child { grid-c
 body.architecture-page .arch-project:last-child .arch-project-gallery { grid-template-columns: 1fr; }
 body.architecture-page .arch-figure { min-width: 0; margin: 0; }
 body.architecture-page .arch-project-body { min-width: 0; }
-body.architecture-page .arch-project-description { margin: 0 0 clamp(24px, 3vw, 32px); }
-body.architecture-page .arch-project-description h4 { margin: 0 0 16px; font-size: 12px; font-weight: 500; line-height: 1.7; letter-spacing: .14em; color: #897348; }
-body.architecture-page .arch-project-description h4 small { display: block; margin-top: 3px; font-size: 10px; font-weight: 400; letter-spacing: .08em; color: #737373; }
-body.architecture-page .arch-project-description p { margin: 0; font-size: 14px; line-height: 2; letter-spacing: .03em; color: #555; overflow-wrap: anywhere; }
+body.architecture-page .arch-project-description { margin: 0 0 26px; }
+body.architecture-page .arch-project-description p { margin: 0; }
+body.architecture-page :is(.arch-project-description p, .arch-residential-description) { font-weight: 400; letter-spacing: .015em; color: #555; }
 body.architecture-page .arch-project-description p + p { margin-top: 12px; }
+body.architecture-page .arch-project.arch-sharehouse-project .arch-project-gallery { grid-template-columns: 1fr; }
 /* Match SNAP's shared three-column, 3:4 tiles and quiet interactions.
    xen-gallery.css owns the grid and crop; the fullscreen viewer shows originals. */
 body.architecture-page .snap-gallery > .gallery-item,
@@ -137,6 +137,7 @@ body.architecture-page .image-viewer.is-fullscreen-gallery {
  body.architecture-page .arch-project { grid-template-columns: 1fr; gap: 20px; margin-top: 24px; }
  body.architecture-page .arch-project-heading { display: grid; grid-template-columns: 24px minmax(0, 1fr); column-gap: 10px; align-items: baseline; }
  body.architecture-page .arch-project-heading h3 { margin: 0; font-size: 16px; }
+ body.architecture-page .arch-project-description { margin-bottom: 22px; }
  body.architecture-page .arch-project-heading p { grid-column: 2; margin-top: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -189,22 +190,27 @@ body.architecture-page .image-viewer.is-fullscreen-gallery {
 </section>
 <section class="project-group arch-section " aria-labelledby="arch-design">
 <h2 id="arch-design"><span>建築設計</span><small lang="en">ARCHITECTURAL DESIGN</small></h2>
-<article class="arch-project" aria-labelledby="arch-project-1">
-<header class="arch-project-heading"><span class="arch-project-number" aria-hidden="true">01</span><h3 id="arch-project-1">集合住宅</h3><p lang="en">HOUSING</p></header>
+<article class="arch-project arch-sharehouse-project" aria-labelledby="arch-project-1">
+<header class="arch-project-heading"><span class="arch-project-number" aria-hidden="true">01</span><h3 id="arch-project-1">集合住宅設計｜シェアハウス</h3><p lang="en">SHARE HOUSE</p></header>
+<div class="arch-project-body">
+<div class="arch-project-description">
+<p class="xen-description">異なる高さや傾きを持つ屋根を重ね、住まいの内外に多様な居場所を生み出す集合住宅の提案です。屋根は雨風をしのぐだけでなく、人が集い、行き交い、時には立ち止まる場所として機能します。</p>
+<p class="xen-description">住戸をつなぐ階段やテラス、屋根の隙間に生まれる空間が、暮らしの距離感をゆるやかに調整します。個々の生活を尊重しながら、偶然の出会いや交流が自然に育まれる住環境を目指しました。</p>
+</div>
 <div class="image-gallery arch-project-gallery">
-<figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%284%29.jpg" aria-label="ARCHITECTURE 作品 14を拡大"><img style="scroll-margin-top:90px" id="discovery-work-1d5d294c4bd0" src="./xen-preview-47fd91971437be69.webp" alt="ARCHITECTURE 作品 14" loading="lazy" decoding="async" width="1600" height="1131"></a></figure>
-<figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%285%29.jpg" aria-label="ARCHITECTURE 作品 12を拡大"><img style="scroll-margin-top:90px" id="discovery-work-f18cf5c8997b" src="./xen-preview-92008f2425eaed58.webp" alt="ARCHITECTURE 作品 12" loading="lazy" decoding="async" width="972" height="665"></a></figure>
-<figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%289%29.png" aria-label="ARCHITECTURE 作品 15を拡大"><img style="scroll-margin-top:90px" id="discovery-work-42fe4a1332d2" src="./xen-preview-de18c394273662b2.webp" alt="ARCHITECTURE 作品 15" loading="lazy" decoding="async" width="1600" height="1095"></a></figure>
+<figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%284%29.jpg?v=20261029-sharehouse3" aria-label="集合住宅設計｜シェアハウス 杉板張りの外観CGパースを拡大"><img style="scroll-margin-top:90px" id="discovery-work-1d5d294c4bd0" src="./xen-preview-47fd91971437be69.webp?v=20261029-sharehouse3" alt="集合住宅設計｜シェアハウス 杉板張りの外観CGパース" loading="lazy" decoding="async" width="1491" height="1055"></a></figure>
+<figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%285%29.jpg?v=20261029-sharehouse3" aria-label="集合住宅設計｜シェアハウス 建築プレゼンシート03を拡大"><img style="scroll-margin-top:90px" id="discovery-work-f18cf5c8997b" src="./xen-preview-92008f2425eaed58.webp?v=20261029-sharehouse3" alt="集合住宅設計｜シェアハウス 建築プレゼンシート03" loading="lazy" decoding="async" width="1491" height="1055"></a></figure>
+<figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%289%29.png?v=20261029-sharehouse3" aria-label="集合住宅設計｜シェアハウス 建築プレゼンシート04を拡大"><img style="scroll-margin-top:90px" id="discovery-work-42fe4a1332d2" src="./xen-preview-de18c394273662b2.webp?v=20261029-sharehouse3" alt="集合住宅設計｜シェアハウス 建築プレゼンシート04" loading="lazy" decoding="async" width="1491" height="1055"></a></figure>
+</div>
 </div>
 </article>
 <article class="arch-project" aria-labelledby="arch-project-2">
 <header class="arch-project-heading"><span class="arch-project-number" aria-hidden="true">02</span><h3 id="arch-project-2">複合施設</h3><p lang="en">MIXED-USE</p></header>
 <div class="arch-project-body">
-<section class="arch-project-description" aria-labelledby="arch-mixed-use-concept">
-<h4 id="arch-mixed-use-concept"><span lang="en">CONCEPT</span><small>コンセプト</small></h4>
-<p>近年、ネット社会により働き方やライフスタイルが多様化し、場所を選ばない生活が可能になった一方で、都市の中で自然と触れ合い、偶発的な出会いや交流が生まれる場は少なくなっています。</p>
-<p>本提案は、緑に包まれた円環状の建築によって、人と自然、人と人がゆるやかにつながる、新しいワークプレイスを提案します。</p>
-</section>
+<div class="arch-project-description">
+<p class="xen-description">近年、ネット社会により働き方やライフスタイルが多様化し、場所を選ばない生活が可能になった一方で、都市の中で自然と触れ合い、偶発的な出会いや交流が生まれる場は少なくなっています。</p>
+<p class="xen-description">本提案は、緑に包まれた円環状の建築によって、人と自然、人と人がゆるやかにつながる、新しいワークプレイスを提案します。</p>
+</div>
 <div class="image-gallery arch-project-gallery">
 <figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%281%29.jpg?v=20261029-mixed-use1" aria-label="ARCHITECTURE 作品 16を拡大"><img style="scroll-margin-top:90px" id="discovery-work-0a6065abe276" src="./xen-preview-5245c11466c25fd4.webp?v=20261029-mixed-use1" alt="ARCHITECTURE 作品 16" loading="lazy" decoding="async" width="1491" height="1055"></a></figure>
 <figure class="arch-figure"><a class="gallery-item" href="./ARCHITECTURE%20%284%29.PNG?v=20261029-mixed-use1" aria-label="ARCHITECTURE 作品 8を拡大"><img style="scroll-margin-top:90px" id="discovery-work-8816cd02694f" src="./xen-preview-120731584051152a.webp?v=20261029-mixed-use1" alt="ARCHITECTURE 作品 8" loading="lazy" decoding="async" width="1536" height="858"></a></figure>
@@ -215,7 +221,7 @@ body.architecture-page .image-viewer.is-fullscreen-gallery {
 <article class="arch-project arch-residential-project" aria-labelledby="arch-project-3">
 <header class="arch-project-heading"><span class="arch-project-number" aria-hidden="true">03</span><h3 id="arch-project-3">集合住宅設計</h3><p lang="en">COLLECTIVE HOUSING DESIGN</p></header>
 <div class="arch-project-content">
-<p class="arch-residential-description">共有スペースを中心に、入居者とオーナー、地域の人々が自然につながる集合住宅の提案。六角形の平面構成に、地域に開かれたピロティ、食卓を囲むダイニングキッチン、上下階をつなぐ吹き抜け、緑に囲まれた屋上テラスを組み合わせました。それぞれの暮らしを大切にしながら、日常の交流が生まれる住まいを計画しています。</p>
+<p class="arch-residential-description xen-description">共有スペースを中心に、入居者とオーナー、地域の人々が自然につながる集合住宅の提案。六角形の平面構成に、地域に開かれたピロティ、食卓を囲むダイニングキッチン、上下階をつなぐ吹き抜け、緑に囲まれた屋上テラスを組み合わせました。それぞれの暮らしを大切にしながら、日常の交流が生まれる住まいを計画しています。</p>
 <div class="image-gallery arch-project-gallery">
 <figure class="arch-figure"><a class="gallery-item" href="./architecture-shared-housing-board-20261029.jpg" aria-label="集合住宅設計｜計画・プレゼンテーションを拡大"><img style="scroll-margin-top:90px" id="discovery-work-590ec40e476e" src="./architecture-shared-housing-board-20261029.jpg" alt="集合住宅設計｜計画・プレゼンテーション" loading="lazy" decoding="async" width="1491" height="1055"></a><figcaption>計画・プレゼンテーション｜六角形の構成と、暮らしをつなぐ共有スペース。</figcaption></figure>
 <figure class="arch-figure"><a class="gallery-item" href="./architecture-shared-housing-exterior-20261029.jpg" aria-label="集合住宅設計｜外観イメージを拡大"><img style="scroll-margin-top:90px" id="discovery-work-8b0fe09e46a9" src="./architecture-shared-housing-exterior-20261029.jpg" alt="集合住宅設計｜外観イメージ" loading="lazy" decoding="async" width="1536" height="1024"></a><figcaption>外観イメージ｜周囲の緑を映す鏡面と深緑の外壁が、森の風景と響き合う。</figcaption></figure>
@@ -225,7 +231,7 @@ body.architecture-page .image-viewer.is-fullscreen-gallery {
 <article class="arch-project arch-residential-project" aria-labelledby="arch-project-4">
 <header class="arch-project-heading"><span class="arch-project-number" aria-hidden="true">04</span><h3 id="arch-project-4">戸建住宅設計</h3><p lang="en">PRIVATE HOUSE DESIGN</p></header>
 <div class="arch-project-content">
-<p class="arch-residential-description">家族の距離をつなぐ、立体的な住まいの提案。床の高さを変えたスキップフロアと吹き抜けによって、異なる場所で過ごす家族の気配が緩やかに伝わる空間を計画しました。階段や段差を、読書やくつろぎのための居場所として活用。大きな開口から光と緑を取り込み、一人の時間と家族の交流が共存する暮らしを描いています。</p>
+<p class="arch-residential-description xen-description">家族の距離をつなぐ、立体的な住まいの提案。床の高さを変えたスキップフロアと吹き抜けによって、異なる場所で過ごす家族の気配が緩やかに伝わる空間を計画しました。階段や段差を、読書やくつろぎのための居場所として活用。大きな開口から光と緑を取り込み、一人の時間と家族の交流が共存する暮らしを描いています。</p>
 <div class="image-gallery arch-project-gallery">
 <figure class="arch-figure"><a class="gallery-item" href="./architecture-family-house-board-20261029.jpg" aria-label="戸建住宅設計｜計画・プレゼンテーションを拡大"><img style="scroll-margin-top:90px" id="arch-family-house-board" src="./architecture-family-house-board-20261029.jpg" alt="戸建住宅設計｜計画・プレゼンテーション" loading="lazy" decoding="async" width="1467" height="1072"></a><figcaption>計画・プレゼンテーション｜スキップフロアと吹き抜けで、家族の居場所を立体的につなぐ。</figcaption></figure>
 <figure class="arch-figure"><a class="gallery-item" href="./architecture-family-house-exterior-20261029.jpg" aria-label="戸建住宅設計｜外観イメージを拡大"><img style="scroll-margin-top:90px" id="arch-family-house-exterior" src="./architecture-family-house-exterior-20261029.jpg" alt="戸建住宅設計｜外観イメージ" loading="lazy" decoding="async" width="1536" height="1024"></a><figcaption>外観イメージ｜白い外壁と大きな開口が、木々の緑と柔らかな光を引き立てる。</figcaption></figure>
@@ -235,11 +241,10 @@ body.architecture-page .image-viewer.is-fullscreen-gallery {
 <article class="arch-project" id="venustas-gallery" aria-labelledby="arch-project-venustas">
 <header class="arch-project-heading"><span class="arch-project-number" aria-hidden="true">05</span><h3 id="arch-project-venustas">美術館設計</h3><p lang="en">VENUSTAS Gallery</p></header>
 <div class="arch-project-body">
-<section class="arch-project-description" aria-labelledby="arch-venustas-concept">
-<h4 id="arch-venustas-concept"><span lang="en">CONCEPT</span><small>コンセプト</small></h4>
-<p>三角形のシャープな構成を軸に、光・素材・緑・人が交差する、開かれた美術館を提案しました。</p>
-<p>大きく切り取ったガラスの開口から自然光を取り込み、階段と吹き抜け、テラスが展示空間を立体的につなぎます。内外が連続する空間に鑑賞・滞在・交流の場を重ね、訪れる人がそれぞれの視点から「美」に出会える場所を目指しました。</p>
-</section>
+<div class="arch-project-description">
+<p class="xen-description">三角形のシャープな構成を軸に、光・素材・緑・人が交差する、開かれた美術館を提案しました。</p>
+<p class="xen-description">大きく切り取ったガラスの開口から自然光を取り込み、階段と吹き抜け、テラスが展示空間を立体的につなぎます。内外が連続する空間に鑑賞・滞在・交流の場を重ね、訪れる人がそれぞれの視点から「美」に出会える場所を目指しました。</p>
+</div>
 <div class="image-gallery arch-project-gallery">
 <figure class="arch-figure"><a class="gallery-item" href="./architecture-venustas-gallery-board.jpg" aria-label="VENUSTAS Gallery 美術館設計 プレゼンテーションシートを拡大"><img id="discovery-work-venustas-board" style="scroll-margin-top:90px" src="./architecture-venustas-gallery-board.jpg" alt="VENUSTAS Gallery 美術館設計のプレゼンテーションシート。三角形の建築、平面図、断面図、コンセプトを掲載" loading="lazy" decoding="async" width="1448" height="1086"></a></figure>
 <figure class="arch-figure"><a class="gallery-item" href="./architecture-venustas-gallery-exterior.jpg" aria-label="VENUSTAS Gallery 美術館設計 外観CGパースを拡大"><img id="discovery-work-venustas-exterior" style="scroll-margin-top:90px" src="./architecture-venustas-gallery-exterior.jpg" alt="VENUSTAS Gallery 美術館設計の外観CGパース。三角形の金属外装とガラス面から、光と緑に包まれた展示空間が広がる" loading="lazy" decoding="async" width="1536" height="1024"></a></figure>
