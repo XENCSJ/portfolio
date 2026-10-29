@@ -1,0 +1,36 @@
+/* Shared only by the two explicitly selected three-image projects. */
+body.design-page #neon-sign-design .xen-three-image-grid,
+body.architecture-page #residential-renovation .xen-three-image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+body.design-page #neon-sign-design .xen-three-image-grid > *,
+body.architecture-page #residential-renovation .xen-three-image-grid > * {
+  grid-column: auto;
+  min-width: 0;
+}
+body.design-page #neon-sign-design .xen-three-image-grid img,
+body.architecture-page #residential-renovation .xen-three-image-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--xen-three-image-ratio, 1 / 1);
+  object-fit: contain;
+  object-position: center;
+}
+body.architecture-page #residential-renovation .xen-three-image-grid {
+  --xen-three-image-ratio: 2 / 3;
+}
+@media (max-width: 650px) {
+  body.design-page #neon-sign-design .xen-three-image-grid,
+  body.architecture-page #residential-renovation .xen-three-image-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.architecture-page #residential-renovation .xen-three-image-grid img {
+    aspect-ratio: auto;
+  }
+}
