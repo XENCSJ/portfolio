@@ -165,58 +165,81 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
 <link rel="stylesheet" href="./xen-footer-symbol.css?v=20261027-vertical1">
 <script src="./xen-footer-symbol.js?v=20261027-vertical1" defer></script>
 <style id="xen-creative-evolution-style">
-
-/* CREATIVE EVOLUTION: isolated to BACKGROUND. Static, complete content is the fallback. */
-#background .ce-evolution{--ce-gold:var(--ql-gold,#c6a15b);--ce-pinned:0;color:#fff;background:#000;margin-top:30px}
-#background .ce-sticky{position:relative;padding:0 0 12px}
-#background .ce-title{margin:0 0 28px;text-align:center;font-size:12px;font-weight:400;line-height:1.65;letter-spacing:.16em;color:var(--ce-gold)}
-#background .ce-title span{display:block;margin-top:5px;color:#b8b8be;font-size:11px;letter-spacing:.13em}
-#background .ce-graph{position:relative;isolation:isolate;max-width:940px;margin-inline:auto;padding:10px 12px 0}
-#background .ce-paths{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:-1}
-#background .ce-paths path{fill:none;stroke:var(--ce-gold);stroke-width:1;stroke-opacity:.72;vector-effect:non-scaling-stroke}
-#background .ce-stages{list-style:none;padding:0;margin:0;display:grid;gap:37px}
-#background .ce-stage{list-style:none;text-align:center;margin:0;padding:0;min-width:0;opacity:var(--ce-opacity,1)}
-#background .ce-stage h4{display:table;position:relative;margin:0 auto;color:#b8b8be;background:#000;padding:0 12px;font-size:10px;line-height:1.5;font-weight:400;letter-spacing:.14em;max-width:100%;overflow-wrap:normal}
-#background .ce-nodes{display:flex;justify-content:center;gap:12px;list-style:none;margin:0;padding:22px 0 0}
-#background .ce-node{flex:1;list-style:none;min-width:0;max-width:190px;margin:0;padding:0;font-size:14px;font-weight:400;line-height:1.6;letter-spacing:.025em}
-#background .ce-node span{display:inline-block;background:#000;padding:0 8px;text-wrap:balance}
-#background .ce-stage.ce-single .ce-nodes{padding-top:7px}
-#background .ce-finale{text-align:center;margin:47px 0 0;padding:0;opacity:var(--ce-opacity,1)}
-#background .ce-finale span{display:inline-block;padding:0 18px;background:#000;color:#fff;font-size:clamp(34px,4.2vw,52px);line-height:1.2;font-weight:400;letter-spacing:.16em;text-indent:.16em}
-#background .ce-context{max-width:760px;margin:38px auto 0;color:#b8b8be}
+/* CREATIVE EVOLUTION v2 — isolated; source works and all other sections are unchanged. */
+#background .ce-evolution{--ce2-gold:#cbb88f;--ce2-ease:cubic-bezier(.22,.68,.2,1);color:#eee;background:#000;margin:34px auto 0;max-width:940px}
+#background .ce2-intro{text-align:center;margin:0 0 42px}
+#background .ce2-intro h3{margin:0;font-family:inherit;font-size:12px;font-weight:400;line-height:1.65;letter-spacing:.16em;color:var(--ce2-gold)}
+#background .ce2-intro h3 span{display:block;margin-top:6px;font-size:11px;letter-spacing:.13em;color:#aaa}
+#background .ce2-toggle{display:block;margin:14px auto 0;padding:8px 12px;min-height:36px;border:0;border-bottom:1px solid #cbb88f45;background:none;color:#aaa;font-family:inherit;font-size:10px;letter-spacing:.04em;cursor:pointer}
+#background .ce2-toggle[hidden]{display:none}
+#background .ce2-toggle:hover,#background .ce2-toggle:focus-visible{color:#fff}
+#background .ce2-stages{padding:0;margin:0;list-style:none}
+#background .ce2-stage{position:relative;margin:0;padding:0;list-style:none;min-width:0}
+#background .ce2-heading{text-align:center;position:relative;margin:0 auto 0;max-width:100%}
+#background .ce2-number{display:block;font-size:10px;line-height:1.5;color:var(--ce2-gold);letter-spacing:.22em;margin-bottom:9px}
+#background .ce2-heading h4{margin:0;color:#eee;font-size:clamp(12px,1.2vw,15px);font-weight:400;line-height:1.65;letter-spacing:.14em;text-wrap:balance;overflow-wrap:anywhere}
+#background .ce2-heading p{margin:6px 0 0;font-size:12px;line-height:1.7;color:#aaa;letter-spacing:.06em}
+#background .ce2-branch{position:relative;padding-top:34px}
+#background .ce2-wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#background .ce2-wires path{fill:none;stroke:var(--ce2-gold);stroke-width:.7;stroke-opacity:.55;vector-effect:non-scaling-stroke}
+#background .ce2-cards{display:grid;grid-template-columns:repeat(var(--ce2-columns),minmax(0,1fr));gap:18px;position:relative}
+#background .ce2-stage:nth-child(-n+2) .ce2-cards{max-width:510px;margin:auto}
+#background .ce2-card{display:block;position:relative;min-width:0;color:inherit;background:#000;text-decoration:none;touch-action:pan-y;outline-offset:5px}
+#background .ce2-card:focus-visible{outline:1px solid var(--ce2-gold)}
+#background .ce2-image{position:relative;display:block;width:100%;aspect-ratio:4/3;overflow:hidden;background:#080808;isolation:isolate;contain:layout paint}
+#background .ce2-stage:nth-child(-n+2) .ce2-image{aspect-ratio:16/9}
+#background .ce2-image img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:contain;object-position:center;display:block;margin:0;pointer-events:none}
+#background .ce2-caption{display:block;position:relative;padding:13px 12px 0 0;line-height:1.5;min-height:62px;text-align:left}
+#background .ce2-caption>span[lang=en]{display:block;font-size:9px;letter-spacing:.1em;color:var(--ce2-gold);overflow-wrap:anywhere}
+#background .ce2-caption>span[lang=ja]{display:block;font-size:12px;line-height:1.7;margin-top:4px;color:#ccc;overflow-wrap:anywhere}
+#background .ce2-arrow{position:absolute;right:0;top:14px;font-size:11px;color:#888}
+#background .ce2-card:hover .ce2-arrow{color:var(--ce2-gold)}
+#background .ce2-stage:nth-child(-n+2) .ce2-caption{display:none}
+#background .ce2-stem{height:58px;position:relative;margin:18px 0 0}
+#background .ce2-stem:before{content:'';position:absolute;top:0;left:50%;width:.7px;height:38px;background:#cbb88f70;transform-origin:top}
+#background .ce2-stage:last-child .ce2-stem{display:none}
+#background .ce2-brand .ce2-image img{width:42px;height:44px;left:calc(50% - 21px);top:calc(50% - 40px);filter:brightness(0) invert(.92)}
+#background .ce2-web-label{position:absolute;top:calc(50% + 18px);left:0;width:100%;text-align:center;font-size:11px;letter-spacing:.15em;line-height:1.6;color:#ddd}
+#background .ce2-web-label small{display:block;font-size:7px;letter-spacing:.13em;color:#888;margin-top:4px}
+#background .ce2-finale{position:relative;margin:15px auto 0;padding:60px 0 20px;text-align:center}
+#background .ce2-converge{position:absolute;top:0;left:0;width:100%;height:60px;pointer-events:none;fill:none;stroke:#cbb88f90;stroke-width:.7;overflow:visible}
+#background .ce2-finale>img{display:block;width:44px;height:46px;object-fit:contain;margin:18px auto 13px;filter:brightness(0) invert(.92)}
+#background .ce2-finale>p{margin:0;color:#dedede;font-size:12px;line-height:1.5;font-weight:400;letter-spacing:.2em;text-indent:.2em}
+#background .ce-context{max-width:760px;margin:44px auto 0;color:#b8b8be}
 #background .ce-context p{font-size:14px;line-height:2;margin:0 0 10px}
 #background .ce-context .cp-related-link{margin-top:18px}
 #background .ce-context a{display:inline-block;min-height:44px;padding:9px 0;color:#fff}
 #background #career-entertainment{scroll-margin-top:100px}
-@media(min-width:701px) and (min-height:760px){
- #background .ce-evolution{--ce-pinned:1}
- #background .ce-evolution.ce-enhanced::after{content:"";display:block;height:720px}
- #background .ce-enhanced .ce-sticky{position:sticky;top:82px}
-}
-@media(max-width:700px){
- #background .ce-title{font-size:11px;margin-bottom:23px;letter-spacing:.12em}
- #background .ce-graph{padding:8px 0 0}
- #background .ce-stages{gap:31px}
- #background .ce-stage h4{font-size:9px;letter-spacing:.09em;padding-inline:7px}
- #background .ce-nodes{gap:12px 2px;padding-top:21px;flex-wrap:wrap}
- #background .ce-node{font-size:12px;flex:0 0 calc(50% - 2px);max-width:none}
- #background .ce-node span{padding-inline:4px}
- #background .ce-expansion .ce-node:nth-child(n+3){flex-basis:calc(33.333% - 2px)}
- #background .ce-single .ce-node{flex-basis:100%}
- #background .ce-finale{margin-top:37px}
- #background .ce-context{margin-top:30px}
-}
-@media(max-width:700px) and (min-height:800px){
- #background .ce-evolution{--ce-pinned:1}
- #background .ce-evolution.ce-enhanced::after{content:"";display:block;height:650px}
- #background .ce-enhanced .ce-sticky{position:sticky;top:75px}
-}
-@media(prefers-reduced-motion:reduce){
- #background .ce-evolution.ce-enhanced::after{display:none}
- #background .ce-enhanced .ce-sticky{position:relative;top:auto}
- #background .ce-stage,#background .ce-finale{opacity:1!important}
- #background .ce-paths path{stroke-dashoffset:0!important}
-}
+#background .ce2-ready .ce2-stage:not(.is-revealed) .ce2-heading,#background .ce2-ready .ce2-stage:not(.is-revealed) .ce2-card,#background .ce2-ready .ce2-stage:not(.is-revealed) .ce2-wires,#background .ce2-ready .ce2-stage:not(.is-revealed) .ce2-stem,#background .ce2-ready .ce2-finale:not(.is-revealed){opacity:0}
+#background .ce2-ready .is-revealed .ce2-heading{animation:ce2-heading .45s var(--ce2-ease) both}
+#background .ce2-ready .is-revealed .ce2-wires path{stroke-dasharray:1;animation:ce2-draw .45s var(--ce2-ease) both}
+#background .ce2-ready .is-revealed .ce2-card{animation:ce2-arrive .5s var(--ce2-ease) both;animation-delay:calc(.16s + var(--ce2-order)*25ms)}
+#background .ce2-ready .is-revealed[data-motion=reveal] .ce2-card{animation-name:ce2-reveal}
+#background .ce2-ready .is-revealed[data-motion=depth] .ce2-card{animation-name:ce2-depth}
+#background .ce2-ready .is-revealed[data-motion=expansion] .ce2-card{animation-name:ce2-expand;animation-delay:calc(.16s + var(--ce2-order)*80ms)}
+#background .ce2-ready .is-revealed[data-motion=cut] .ce2-card{animation-name:ce2-cut}
+#background .ce2-ready .is-revealed[data-motion=convergence] .ce2-card{animation-name:ce2-gather;animation-delay:calc(.16s + var(--ce2-order)*100ms)}
+#background .ce2-ready .is-revealed .ce2-stem:before{animation:ce2-stem .45s var(--ce2-ease) .45s both}
+#background .ce2-ready .ce2-finale.is-revealed .ce2-converge path{stroke-dasharray:1;animation:ce2-draw .5s var(--ce2-ease) both}
+#background .ce2-ready .ce2-finale.is-revealed>img,#background .ce2-ready .ce2-finale.is-revealed>p{animation:ce2-heading .5s ease .4s both}
+#background .ce2-incoming{z-index:1;animation-duration:var(--ce2-duration,500ms);animation-timing-function:var(--ce2-ease);animation-fill-mode:both}
+#background [data-motion=reveal] .ce2-incoming{animation-name:ce2-reveal}
+#background [data-motion=depth] .ce2-incoming{animation-name:ce2-depth;animation-timing-function:ease}
+#background [data-motion=expansion] .ce2-incoming{animation-name:ce2-expand}
+#background [data-motion=cut] .ce2-incoming{animation-name:ce2-cut}
+#background [data-motion=convergence] .ce2-incoming{animation-name:ce2-gather}
+@keyframes ce2-heading{from{opacity:0}to{opacity:1}}
+@keyframes ce2-arrive{from{opacity:0}to{opacity:1}}
+@keyframes ce2-reveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes ce2-depth{from{opacity:0;transform:scale(.955)}to{opacity:1;transform:scale(1)}}
+@keyframes ce2-expand{from{opacity:0;transform:translateX(var(--ce2-x,10px))}to{opacity:1;transform:translateX(0)}}
+@keyframes ce2-cut{0%,16%{clip-path:inset(49.7% 0)}42%,100%{clip-path:inset(0)}}
+@keyframes ce2-gather{from{opacity:0;transform:translate(var(--ce2-x,10px),-6px) scale(1.025)}to{opacity:1;transform:translate(0,0) scale(1)}}
+@keyframes ce2-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes ce2-stem{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(max-width:800px){#background .ce2-cards{gap:20px 14px}#background .ce2-stage:nth-child(3) .ce2-cards{grid-template-columns:repeat(3,minmax(0,1fr))}#background .ce2-stage:nth-child(4) .ce2-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){#background .ce-evolution{margin-top:28px}#background .ce2-intro{margin-bottom:32px}#background .ce2-heading h4{font-size:12px;letter-spacing:.1em}#background .ce2-heading p{font-size:12px}#background .ce2-cards,#background .ce2-stage:nth-child(3) .ce2-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px}#background .ce2-stage:nth-child(-n+2) .ce2-cards{grid-template-columns:minmax(0,1fr)}#background .ce2-stage:nth-child(n+3) .ce2-branch{padding-left:16px}#background .ce2-stage:nth-child(3) .ce2-card:first-child{grid-column:1/-1}#background .ce2-stage:nth-child(3) .ce2-card:first-child .ce2-image{aspect-ratio:4/1}#background .ce2-stage:nth-child(5) .ce2-card:last-child{grid-column:1/-1;max-width:230px;width:100%;justify-self:center}#background .ce2-caption{padding-top:10px;min-height:58px}#background .ce2-caption>span[lang=en]{font-size:8px}#background .ce2-caption>span[lang=ja]{font-size:12px}#background .ce2-stem{height:50px;margin-top:12px}#background .ce2-stem:before{height:32px}#background .ce-context{margin-top:32px}}
+@media(prefers-reduced-motion:reduce){#background .ce-evolution *{animation:none!important;transition:none!important}#background .ce2-ready .ce2-stage .ce2-heading,#background .ce2-ready .ce2-stage .ce2-card,#background .ce2-ready .ce2-stage .ce2-wires,#background .ce2-ready .ce2-stage .ce2-stem,#background .ce2-ready .ce2-finale{opacity:1!important}#background .ce2-wires path,#background .ce2-converge path{stroke-dashoffset:0!important}}
 </style>
 </head><body id="top" class="xen-noir detail-page creator-page xen-polished"><a class="skip-link" href="#main-content">本文へ移動</a><header class="xen-header" id="xen-site-header"><a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ"><img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a><a class="xen-header-cart" href="https://xen.official.ec/" target="_blank" rel="noopener noreferrer" aria-label="XEN公式オンラインショップ（新しいタブで開く）"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false"><use href="./xen-shop-icon.svg#cart"></use></svg></a><button class="xen-header-toggle" type="button" aria-label="メニューを開く" aria-controls="xen-menu" aria-expanded="false"><span></span><span></span><span></span></button><nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>
 <a class="xen-menu-link xen-menu-home" href="./index.html"><span class="xen-menu-en" lang="en">INDEX</span><span class="xen-menu-ja" lang="ja">トップページ</span></a>
@@ -273,22 +296,15 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
   </div>
 </section>
 <section class="cp-section" id="background" aria-labelledby="creator-career"><h2 class="cp-section-heading" id="creator-career"><span>BACKGROUND</span><small>経歴</small></h2>
- <div class="ce-evolution" aria-labelledby="creative-evolution-title">
-  <div class="ce-sticky">
-   <h3 class="ce-title" id="creative-evolution-title">CREATIVE EVOLUTION<span lang="ja">創造の軌跡</span></h3>
-   <div class="ce-graph">
-    <svg class="ce-paths" aria-hidden="true" focusable="false"></svg>
-    <ol class="ce-stages" aria-label="活動を開始した順に広がる5つの創作領域">
-     <li class="ce-stage ce-single"><h4 lang="en">ARCHITECTURE</h4><ul class="ce-nodes"><li class="ce-node"><span>建築設計</span></li></ul></li>
-     <li class="ce-stage ce-single"><h4 lang="en">SPACE DESIGN</h4><ul class="ce-nodes"><li class="ce-node"><span>空間デザイン</span></li></ul></li>
-     <li class="ce-stage ce-expansion"><h4 lang="en">CREATIVE EXPANSION</h4><ul class="ce-nodes"><li class="ce-node"><span>エンターテインメント</span></li><li class="ce-node"><span>デザイン</span></li><li class="ce-node"><span>アパレル</span></li><li class="ce-node"><span>アート作品</span></li><li class="ce-node"><span>SNS運用</span></li></ul></li>
-     <li class="ce-stage"><h4 lang="en">VISUAL STORYTELLING</h4><ul class="ce-nodes"><li class="ce-node"><span>写真</span></li><li class="ce-node"><span>映像</span></li><li class="ce-node"><span>絵本</span></li><li class="ce-node"><span>アニメーション</span></li></ul></li>
-     <li class="ce-stage"><h4 lang="en">MULTIDISCIPLINARY CREATION</h4><ul class="ce-nodes"><li class="ce-node"><span>音楽</span></li><li class="ce-node"><span>サイトデザイン</span></li><li class="ce-node"><span>キャラクターデザイン</span></li></ul></li>
-    </ol>
-    <p class="ce-finale"><span>XEN CSJ</span></p>
-   </div>
-  </div>
- </div>
+ <div class="ce-evolution" data-ce-version="20261030" aria-labelledby="creative-evolution-title">
+<div class="ce2-intro"><h3 id="creative-evolution-title">CREATIVE EVOLUTION<span lang="ja">創造の軌跡</span></h3><button class="ce2-toggle" type="button" aria-pressed="false" hidden>スライドショーを一時停止</button></div>
+<ol class="ce2-stages" aria-label="活動を開始した順に広がる5つの創作領域">
+<li class="ce2-stage" data-motion="reveal"><div class="ce2-heading"><span class="ce2-number">01</span><h4 lang="en">ARCHITECTURE</h4><p lang="ja">建築設計</p></div><div class="ce2-branch"><svg class="ce2-wires" aria-hidden="true" focusable="false"></svg><div class="ce2-cards" style="--ce2-columns:1"><a class="ce2-card" href="./architecture.html" style="--ce2-order:0;--ce2-x:10px" data-ce-card="0-0"><span class="ce2-image"><img src="./architecture-family-house-exterior-20261029.jpg?v=20261029-yakisugi1" alt="戸建住宅設計｜外観イメージ" width="1536" height="1024" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">ARCHITECTURE</span><span lang="ja">建築設計</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a></div></div><div class="ce2-stem" aria-hidden="true"></div></li>
+<li class="ce2-stage" data-motion="depth"><div class="ce2-heading"><span class="ce2-number">02</span><h4 lang="en">SPACE DESIGN</h4><p lang="ja">空間デザイン</p></div><div class="ce2-branch"><svg class="ce2-wires" aria-hidden="true" focusable="false"></svg><div class="ce2-cards" style="--ce2-columns:1"><a class="ce2-card" href="./space.html" style="--ce2-order:0;--ce2-x:10px" data-ce-card="1-0"><span class="ce2-image"><img src="./BD895E9F-42C3-4527-BC17-FC8D9E07DECE.jpeg" alt="SPACE (1)" width="1536" height="864" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">SPACE</span><span lang="ja">空間デザイン</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a></div></div><div class="ce2-stem" aria-hidden="true"></div></li>
+<li class="ce2-stage" data-motion="expansion"><div class="ce2-heading"><span class="ce2-number">03</span><h4 lang="en">CREATIVE EXPANSION</h4><p lang="ja">創作領域の拡張</p></div><div class="ce2-branch"><svg class="ce2-wires" aria-hidden="true" focusable="false"></svg><div class="ce2-cards" style="--ce2-columns:5"><a class="ce2-card" href="./creator.html#youtube-channels" style="--ce2-order:3;--ce2-x:-10px" data-ce-card="2-0"><span class="ce2-image"><img src="./xen-channel-main-banner.jpg" alt="XEN公式チャンネル：VLOG / TALK / FILM" width="1138" height="188" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">ENTERTAINMENT</span><span lang="ja">エンターテインメント</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./design.html" style="--ce2-order:1;--ce2-x:-10px" data-ce-card="2-1"><span class="ce2-image"><img src="./xen-preview-91cbd7e935cb37bd.webp?v=20261029-design-refresh" alt="ワインラベルデザイン — 白ワインと赤ワイン" width="1536" height="864" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">DESIGN</span><span lang="ja">デザイン</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./apparel.html" style="--ce2-order:0;--ce2-x:10px" data-ce-card="2-2"><span class="ce2-image"><img src="./xen-apparel-hoodie-back.jpeg" alt="背面に白いXENロゴを配した黒いパーカー" width="896" height="1200" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">APPAREL</span><span lang="ja">アパレル</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./artworks.html" style="--ce2-order:2;--ce2-x:10px" data-ce-card="2-3"><span class="ce2-image"><img src="./xen-artwork-20261023-07-thumb.webp" alt="緑の猫のイラスト" width="720" height="720" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">ART</span><span lang="ja">アート作品</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./sns-management.html" style="--ce2-order:4;--ce2-x:10px" data-ce-card="2-4"><span class="ce2-image"><img src="./xen-preview-3824101a316fc1bb.webp" alt="SNS MANAGEMENT 作品 3" width="1376" height="768" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">SNS MANAGEMENT</span><span lang="ja">SNS運用</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a></div></div><div class="ce2-stem" aria-hidden="true"></div></li>
+<li class="ce2-stage" data-motion="cut"><div class="ce2-heading"><span class="ce2-number">04</span><h4 lang="en">VISUAL STORYTELLING</h4><p lang="ja">視覚表現への展開</p></div><div class="ce2-branch"><svg class="ce2-wires" aria-hidden="true" focusable="false"></svg><div class="ce2-cards" style="--ce2-columns:4"><a class="ce2-card" href="./snap.html" style="--ce2-order:0;--ce2-x:-10px" data-ce-card="3-0"><span class="ce2-image"><img src="./SNAP%20%2821%29.JPEG" alt="PHOTOGRAPHY (21)" width="1566" height="1044" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">PHOTOGRAPHY</span><span lang="ja">写真</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./cinematic.html" style="--ce2-order:1;--ce2-x:-10px" data-ce-card="3-1"><span class="ce2-image"><img src="https://i.ytimg.com/vi/kst9sv118HI/mqdefault.jpg" alt="映像の既存作品サムネイル" width="320" height="180" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">CINEMATIC</span><span lang="ja">映像</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./storybooks.html" style="--ce2-order:2;--ce2-x:10px" data-ce-card="3-2"><span class="ce2-image"><img src="https://i.ytimg.com/vi/DslArGmxy7A/maxresdefault.jpg" alt="絵本の既存作品サムネイル" width="320" height="180" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">STORYBOOKS</span><span lang="ja">絵本</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./animation.html" style="--ce2-order:3;--ce2-x:10px" data-ce-card="3-3"><span class="ce2-image"><img src="https://i.ytimg.com/vi/qQzOTZhiruE/maxresdefault.jpg" alt="アニメーションの既存作品サムネイル" width="320" height="180" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">ANIMATION</span><span lang="ja">アニメーション</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a></div></div><div class="ce2-stem" aria-hidden="true"></div></li>
+<li class="ce2-stage" data-motion="convergence"><div class="ce2-heading"><span class="ce2-number">05</span><h4 lang="en">MULTIDISCIPLINARY CREATION</h4><p lang="ja">複合的な創作活動</p></div><div class="ce2-branch"><svg class="ce2-wires" aria-hidden="true" focusable="false"></svg><div class="ce2-cards" style="--ce2-columns:3"><a class="ce2-card" href="./sound.html" style="--ce2-order:0;--ce2-x:-10px" data-ce-card="4-0"><span class="ce2-image"><img src="./xen-tochu-no-mamade-cover.jpg" alt="途中のままで — XEN ジャケット" width="1237" height="1271" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">MUSIC</span><span lang="ja">音楽</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card ce2-brand" href="./index.html" style="--ce2-order:1;--ce2-x:10px" data-ce-card="4-1"><span class="ce2-image"><img src="./XEN_logo_fixed_black.svg" alt="XEN CSJ公式サイトの既存シンボル" width="2232" height="2293" loading="lazy" decoding="async"><span class="ce2-web-label">XEN CSJ<br><small>OFFICIAL WEBSITE</small></span></span><span class="ce2-caption"><span lang="en">WEB DESIGN</span><span lang="ja">サイトデザイン</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a><a class="ce2-card" href="./design.html#character" style="--ce2-order:2;--ce2-x:10px" data-ce-card="4-2"><span class="ce2-image"><img src="./xen-design-shirowashi-views.jpeg" alt="SHIROWASHIの正面・側面・背面とディテール" width="1254" height="1006" loading="lazy" decoding="async"></span><span class="ce2-caption"><span lang="en">CHARACTER</span><span lang="ja">キャラクターデザイン</span><span class="ce2-arrow" aria-hidden="true">↗</span></span></a></div></div><div class="ce2-stem" aria-hidden="true"></div></li>
+</ol><div class="ce2-finale"><svg class="ce2-converge" viewBox="0 0 240 60" aria-hidden="true"><path d="M20 0 V20 H120 V60 M120 0 V60 M220 0 V20 H120" pathLength="1"/></svg><img src="./XEN_logo_fixed_black.svg" alt="XENの既存シンボルロゴ" width="2232" height="2293" loading="lazy" decoding="async"><p>XEN CSJ</p></div></div>
  <div class="ce-context">
   <p>建築設計を通じて、光と影、構造の美しさを理解。</p>
   <p id="career-entertainment">エンターテインメント業界では、多様な人の感情や心地よさを学び、“魅せる表現”の基礎を体得する。</p>
@@ -446,89 +462,132 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
   </div>
 </dialog>
 <script id="xen-creative-evolution-script">
-
-/* Native scroll + sticky; no input interception, scroll locking, timers or dependencies. */
+/* Discovery reference: 800–1500ms start interval, 400–600ms transition,
+   cubic-bezier(.22,.68,.2,1)/ease, reveal threshold .08, active threshold .05.
+   Only this section is controlled. No scroll handlers, pinning or global styles. */
 (() => {
  'use strict';
- const root = document.querySelector('#background .ce-evolution');
- if (!root) return;
- const graph = root.querySelector('.ce-graph');
- const svg = root.querySelector('.ce-paths');
- const panel = root.querySelector('.ce-sticky');
- const stages = Array.from(root.querySelectorAll('.ce-stage'));
- const finale = root.querySelector('.ce-finale');
- const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
- const clamp = v => Math.max(0, Math.min(1, v));
- const ease = v => { v = clamp(v); return v * v * (3 - 2 * v); };
- let paths = [], frame = 0, pinned = false, measuring = false;
- function full() {
-  root.classList.remove('ce-enhanced');
-  [...stages, finale].forEach(el => el.style.removeProperty('--ce-opacity'));
-  paths.forEach(item => item.el.style.strokeDashoffset = '0');
+ const root=document.querySelector('#background .ce-evolution[data-ce-version="20261030"]');
+ if(!root)return;
+ const data=[{"n":"01","en":"ARCHITECTURE","ja":"建築設計","motion":"reveal","cards":[{"label":"建築設計","en":"ARCHITECTURE","href":"./architecture.html","images":[{"alt":"戸建住宅設計｜外観イメージ","h":"1024","src":"./architecture-family-house-exterior-20261029.jpg?v=20261029-yakisugi1","w":"1536"},{"alt":"VENUSTAS Gallery 美術館設計の外観CGパース。三角形の金属外装とガラス面から、光と緑に包まれた展示空間が広がる","h":"1024","src":"./architecture-venustas-gallery-exterior.jpg","w":"1536"},{"alt":"集合住宅設計｜外観イメージ","h":"1024","src":"./architecture-shared-housing-exterior-20261029.jpg","w":"1536"},{"alt":"集合住宅設計｜シェアハウス 杉板張りの外観CGパース","h":"1055","src":"./xen-preview-47fd91971437be69.webp?v=20261029-sharehouse3","w":"1491"}]}]},{"n":"02","en":"SPACE DESIGN","ja":"空間デザイン","motion":"depth","cards":[{"label":"空間デザイン","en":"SPACE","href":"./space.html","images":[{"alt":"SPACE (1)","h":"864","section":"discovery-work-1b1ba281a1a9","src":"./BD895E9F-42C3-4527-BC17-FC8D9E07DECE.jpeg","w":"1536"},{"alt":"SPACE (5)","h":"864","section":"discovery-work-b5bdfa57a965","src":"./6894EB44-6B54-4849-BBD5-D9D81F313373.jpeg","w":"1536"},{"alt":"SPACE (2)","h":"864","section":"discovery-work-6bfab598b660","src":"./CBDC78B5-3D5A-4BD3-B9A4-4BDD1ABB95B9.jpeg","w":"1536"},{"alt":"映画館書店の白背景の建築パース。段床式シアター席、木製ルーバー、書棚と壁面の書籍紹介ディスプレイ","h":"1055","section":"main-content","src":"./space-cinema-bookstore-concept.jpg","w":"1491"}]}]},{"n":"03","en":"CREATIVE EXPANSION","ja":"創作領域の拡張","motion":"expansion","cards":[{"label":"エンターテインメント","en":"ENTERTAINMENT","href":"./creator.html#youtube-channels","images":[{"src":"./xen-channel-main-banner.jpg","alt":"XEN公式チャンネル：VLOG / TALK / FILM","w":"1138","h":"188"}]},{"label":"デザイン","en":"DESIGN","href":"./design.html","images":[{"alt":"ワインラベルデザイン — 白ワインと赤ワイン","h":"864","section":"branding","src":"./xen-preview-91cbd7e935cb37bd.webp?v=20261029-design-refresh","w":"1536"},{"alt":"EACH ONE — 店舗外観とゴールドロゴ","h":"858","section":"each-one","src":"./xen-preview-69d0b35ff09d1244.webp?v=20261029-branding-images","w":"1536"},{"alt":"グリーンの幾何学的ネオンサイン","h":"1254","section":"neon-sign-design","src":"./xen-neon-green-20261029.jpeg","w":"1254"}]},{"label":"アパレル","en":"APPAREL","href":"./apparel.html","images":[{"alt":"背面に白いXENロゴを配した黒いパーカー","h":"1200","section":"discovery-work-e5442beef419","src":"./xen-apparel-hoodie-back.jpeg","w":"896"},{"alt":"黒いXENロゴTシャツ","h":"1200","section":"discovery-work-bff9d975c1af","src":"./APPAREL%20%2810%29.PNG","w":"896"},{"alt":"黒いXENロゴパーカーの前面","h":"1200","section":"discovery-work-4eea912c464d","src":"./APPAREL%20%289%29.PNG","w":"896"}]},{"label":"アート作品","en":"ART","href":"./artworks.html","images":[{"alt":"緑の猫のイラスト","h":"720","section":"artwork-20261023-07","src":"./xen-artwork-20261023-07-thumb.webp","w":"720"},{"alt":"オレンジ色の金魚のモザイクアート","h":"720","section":"artwork-20261023-32","src":"./xen-artwork-20261023-32-thumb.webp","w":"500"},{"alt":"ハスキーのイラスト","h":"720","section":"artwork-20261023-01","src":"./xen-artwork-20261023-01-thumb.webp","w":"561"}]},{"label":"SNS運用","en":"SNS MANAGEMENT","href":"./sns-management.html","images":[{"alt":"SNS MANAGEMENT 作品 3","h":"768","section":"discovery-work-fc42da1828c4","src":"./xen-preview-3824101a316fc1bb.webp","w":"1376"},{"alt":"SNS MANAGEMENT 作品 5","h":"768","section":"discovery-work-9575ef1c72ff","src":"./xen-preview-cff749439f519701.webp","w":"1376"},{"alt":"SNS MANAGEMENT 作品 4","h":"768","section":"discovery-work-748a7d93b265","src":"./xen-preview-a7a48836d84bf668.webp","w":"1376"}]}]},{"n":"04","en":"VISUAL STORYTELLING","ja":"視覚表現への展開","motion":"cut","cards":[{"label":"写真","en":"PHOTOGRAPHY","href":"./snap.html","images":[{"alt":"PHOTOGRAPHY (21)","h":"1044","section":"discovery-work-68e192feb242","src":"./SNAP%20%2821%29.JPEG","w":"1566"},{"alt":"夜の階段に腰掛けたポートレート","h":"2048","section":"discovery-work-b7cfab61756e","src":"./DSC00518.jpg","w":"1536"},{"alt":"写真作品 90","h":"1365","section":"discovery-work-1e7db1009ca0","src":"./SNAP%20%2890%29.JPEG","w":"2048"}]},{"label":"映像","en":"CINEMATIC","href":"./cinematic.html","images":[{"alt":"","h":null,"section":"discovery-work-0c94b4284e0b","src":"https://i.ytimg.com/vi/kst9sv118HI/mqdefault.jpg","w":null},{"alt":"","h":null,"section":"discovery-work-0bd47819dd7c","src":"https://i.ytimg.com/vi/-rXKvIhFDkw/mqdefault.jpg","w":null},{"alt":"","h":null,"section":"discovery-work-cc84fe1498be","src":"https://i.ytimg.com/vi/CIFs1lkQzx0/mqdefault.jpg","w":null}],"fallback":{"src":"./xen-channel-main-banner.jpg","alt":"XEN公式チャンネルバナー"}},{"label":"絵本","en":"STORYBOOKS","href":"./storybooks.html","images":[{"alt":"よつばのしー","h":"720","section":"discovery-work-3cc02d342ccf","src":"https://i.ytimg.com/vi/DslArGmxy7A/maxresdefault.jpg","w":"1280"},{"alt":"ちいさなミラとひろいうみ","h":"720","section":"discovery-work-034241c37215","src":"https://i.ytimg.com/vi/jRWWBQFSa2w/maxresdefault.jpg","w":"1280"},{"alt":"ちいさくひかるぼく","h":"720","section":"discovery-work-e2535eb14479","src":"https://i.ytimg.com/vi/i4rhhybpecs/maxresdefault.jpg","w":"1280"}],"fallback":{"src":"./xen-channel-amber-banner.jpg","alt":"XEN AMBER TALES公式チャンネルバナー"}},{"label":"アニメーション","en":"ANIMATION","href":"./animation.html","images":[{"alt":"ムーボ｜MOO-BO-CHU","h":"720","section":"discovery-work-acebe25cff35","src":"https://i.ytimg.com/vi/qQzOTZhiruE/maxresdefault.jpg","w":"1280"},{"alt":"BROKEN CYCLE","h":"720","section":"discovery-work-0e15a8cd6fba","src":"https://i.ytimg.com/vi/-aHdK3AyMd0/maxresdefault.jpg","w":"1280"},{"alt":"SILENT REBELLION","h":"720","section":"discovery-work-1101814aa31b","src":"https://i.ytimg.com/vi/N4FiRqQciWE/maxresdefault.jpg","w":"1280"}],"fallback":{"src":"./xen-channel-amber-banner.jpg","alt":"XEN AMBER TALES公式チャンネルバナー"}}]},{"n":"05","en":"MULTIDISCIPLINARY CREATION","ja":"複合的な創作活動","motion":"convergence","cards":[{"label":"音楽","en":"MUSIC","href":"./sound.html","images":[{"alt":"途中のままで — XEN ジャケット","h":"1271","section":"main-content","src":"./xen-tochu-no-mamade-cover.jpg","w":"1237"},{"alt":"ひかりのありか — XEN ジャケット","h":"1271","section":"main-content","src":"./xen-hikari-no-arika-cover.jpg","w":"1237"},{"alt":"新しい輪郭 — XEN ジャケット","h":"3000","section":"main-content","src":"./xen-atarashii-rinkaku-cover-20261024.jpg","w":"3000"},{"alt":"空に溶ける — XEN ジャケット","h":"2293","section":"main-content","src":"./xen-sora-ni-tokeru-cover.jpg","w":"2232"}]},{"label":"サイトデザイン","en":"WEB DESIGN","href":"./index.html","brand":true,"images":[{"src":"./XEN_logo_fixed_black.svg","alt":"XEN CSJ公式サイトの既存シンボル","w":"2232","h":"2293"}]},{"label":"キャラクターデザイン","en":"CHARACTER","href":"./design.html#character","images":[{"alt":"SHIROWASHIの正面・側面・背面とディテール","h":"1006","section":"shirowashi","src":"./xen-design-shirowashi-views.jpeg","w":"1254"},{"alt":"KURO USAGIの正面・側面・背面とディテール","h":"1254","section":"kuro-usagi","src":"./xen-design-kuro-usagi-views.jpeg","w":"1254"},{"alt":"TAKOLEOの正面・側面・背面とディテール","h":"1021","section":"takoleo","src":"./xen-design-takoleo-views.jpeg","w":"1240"},{"alt":"スイスイカモノハシ — キャラクターとロゴ","h":"1290","section":"character","src":"./xen-preview-e3ee204249c03827.webp","w":"1290"}]}]}];
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const toggle=root.querySelector('.ce2-toggle');
+ const stages=Array.from(root.querySelectorAll('.ce2-stage'));
+ const finale=root.querySelector('.ce2-finale');
+ const records=data.flatMap((stage,si)=>stage.cards.map((card,ci)=>({
+  node:root.querySelector('[data-ce-card="'+si+'-'+ci+'"]'),images:card.images,
+  label:card.label,fallback:card.fallback,index:0,visible:false,locked:false,ready:null,pending:false,failed:new Set()
+ })));
+ let timer=0,active=null,paused=false,last=null,alive=true;
+ const rand=(a,b)=>Math.round(a+Math.random()*(b-a));
+ const allowed=()=>alive&&!paused&&!reduced.matches&&!document.hidden;
+ function settle(){
+  if(!active)return;const a=active;active=null;clearTimeout(a.timeout);
+  a.image.removeEventListener('animationend',a.finish);
+  a.box.querySelectorAll('img').forEach(img=>{if(img!==a.image)img.remove();});
+  a.image.className='';a.image.removeAttribute('aria-hidden');
+  a.record.index=a.index;a.record.ready=null;
  }
- function draw(d, phase) {
-  const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  el.setAttribute('d', d); el.setAttribute('pathLength', '1');
-  el.style.strokeDasharray = '1';
-  svg.appendChild(el); paths.push({el, phase});
+ function stop(){clearTimeout(timer);timer=0;settle();}
+ function prepare(r){
+  if(!r.visible||r.ready||r.pending||r.images.length<2||!allowed())return;
+  let index=(r.index+1)%r.images.length;
+  for(let n=0;n<r.images.length&&r.failed.has(index);n++)index=(index+1)%r.images.length;
+  if(index===r.index||r.failed.has(index))return;
+  const item=r.images[index],image=new Image();r.pending=true;
+  image.alt=item.alt||r.label+'の既存作品サムネイル';image.decoding='async';
+  image.width=Number(item.w)||320;image.height=Number(item.h)||180;
+  image.src=item.src;
+  image.decode().then(()=>{r.ready={image,index};}).catch(()=>{r.failed.add(index);}).finally(()=>{r.pending=false;});
  }
- function measure() {
-  if (measuring) return;
-  measuring = true;
-  try {
-   const g = graph.getBoundingClientRect(), center = g.width / 2;
-   const rect = el => { const r = el.getBoundingClientRect(); return {x:r.left-g.left+r.width/2,top:r.top-g.top,bottom:r.bottom-g.top}; };
-   svg.replaceChildren(); paths = [];
-   svg.setAttribute('viewBox', `0 0 ${g.width} ${g.height}`);
-   let previous = [];
-   stages.forEach((stage, i) => {
-    const head = rect(stage.querySelector('h4'));
-    const nodes = Array.from(stage.querySelectorAll('.ce-node span')).map(rect);
-    if (previous.length) {
-     const target = head.top - 7;
-     previous.forEach(p => draw(`M ${p.x} ${p.bottom+5} C ${p.x} ${target-12} ${center} ${target-12} ${center} ${target}`, i));
-    }
-    if (nodes.length > 1) {
-     const start = head.bottom + 5;
-     nodes.forEach(p => draw(`M ${center} ${start} C ${center} ${start+8} ${p.x} ${p.top-13} ${p.x} ${p.top-5}`, i));
-    }
-    previous = nodes;
-   });
-   const end = rect(finale.querySelector('span'));
-   previous.forEach(p => draw(`M ${p.x} ${p.bottom+5} C ${p.x} ${end.top-17} ${center} ${end.top-17} ${center} ${end.top-6}`, 5));
-   pinned = getComputedStyle(root).getPropertyValue('--ce-pinned').trim() === '1';
-   if (motion.matches) full(); else { root.classList.add('ce-enhanced'); update(); }
-  } catch (error) { full(); }
-  measuring = false;
+ function schedule(delay=rand(800,1500)){
+  if(timer||active||!allowed()||!records.some(r=>r.visible&&r.images.length>1))return;
+  timer=setTimeout(next,delay);
  }
- function update() {
-  frame = 0;
-  if (motion.matches) return;
-  try {
-   let values;
-   if (pinned) {
-    const top = parseFloat(getComputedStyle(panel).top) || 0;
-    const distance = Math.max(1, root.offsetHeight - panel.offsetHeight);
-    const progress = clamp((top - root.getBoundingClientRect().top) / distance);
-    values = stages.map((_, i) => ease((progress - i * .16 + .055) / .11));
-    values.push(ease((progress - .84) / .12));
-    paths.forEach(({el, phase}) => { el.style.strokeDashoffset = String(1 - ease((progress - phase * .16 + .10) / .13)); });
-   } else {
-    const threshold = innerHeight * .86;
-    values = [...stages, finale].map(el => ease((threshold - el.getBoundingClientRect().top) / Math.min(150, innerHeight * .2)));
-    paths.forEach(({el, phase}) => { el.style.strokeDashoffset = String(1 - values[phase]); });
+ function next(){
+  timer=0;if(!allowed())return;
+  const offset=(records.indexOf(last)+1)%records.length;
+  const ordered=records.slice(offset).concat(records.slice(0,offset));
+  const r=ordered.find(r=>r.visible&&!r.locked&&r.ready);
+  if(!r){records.forEach(prepare);schedule();return;}
+  last=r;
+  const duration=rand(400,600),interval=rand(800,1500);
+  const {image,index}=r.ready,box=r.node.querySelector('.ce2-image');
+  const finish=()=>{if(active?.image!==image)return;settle();prepare(r);schedule(Math.max(20,interval-duration));};
+  active={record:r,image,index,box,finish,timeout:0};
+  image.className='ce2-incoming';image.setAttribute('aria-hidden','true');
+  image.style.setProperty('--ce2-duration',duration+'ms');box.appendChild(image);
+  image.addEventListener('animationend',finish,{once:true});
+  active.timeout=setTimeout(finish,duration+45);
+ }
+ function measure(){
+  stages.forEach(stage=>{
+   const branch=stage.querySelector('.ce2-branch'),svg=branch.querySelector('svg'),g=branch.getBoundingClientRect();
+   if(!g.width)return;
+   const grid=branch.querySelector('.ce2-cards');
+   const cards=Array.from(grid.children).map(el=>({x:grid.offsetLeft+el.offsetLeft+el.offsetWidth/2,y:grid.offsetTop+el.offsetTop,bottom:grid.offsetTop+el.offsetTop+el.offsetHeight}));
+   const rows=[];cards.forEach(p=>{let row=rows.find(r=>Math.abs(r[0].y-p.y)<3);if(!row){row=[];rows.push(row);}row.push(p);});
+   const center=g.width/2,segments=[];
+   if(rows.length===1){const row=rows[0],y=Math.max(10,row[0].y-16);segments.push('M '+center+' 0 V '+y+' M '+row[0].x+' '+y+' H '+row[row.length-1].x);row.forEach(p=>segments.push('M '+p.x+' '+y+' V '+(p.y-5)));}
+   else {const rail=5;segments.push('M '+center+' 0 V 12 H '+rail+' V '+(rows[rows.length-1][0].y-12));rows.forEach(row=>{const y=row[0].y-12;segments.push('M '+rail+' '+y+' H '+row[row.length-1].x);row.forEach(p=>segments.push('M '+p.x+' '+y+' V '+(p.y-5)));});}
+   svg.setAttribute('viewBox','0 0 '+g.width+' '+g.height);svg.replaceChildren();
+   segments.forEach(d=>{const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',d);p.setAttribute('pathLength','1');svg.appendChild(p);});
+   if(stage===stages[4]){
+    const gather=finale.querySelector('svg'),delta=finale.getBoundingClientRect().top-g.top;
+    const floor=Math.max(...cards.map(p=>p.bottom))+28;
+    gather.style.top=-delta+'px';gather.style.height=(delta+60)+'px';
+    gather.setAttribute('viewBox','0 0 '+g.width+' '+(delta+60));gather.replaceChildren();
+    cards.forEach(p=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+     const route=p.bottom<floor-33?' V '+(p.bottom+10)+' H 5 V '+floor:' V '+floor;
+     path.setAttribute('d','M '+p.x+' '+(p.bottom+5)+route+' H '+center+' V '+(delta+60));
+     path.setAttribute('pathLength','1');gather.appendChild(path);
+    });
    }
-   [...stages, finale].forEach((el, i) => el.style.setProperty('--ce-opacity', String(values[i])));
-  } catch (error) { full(); }
+
+  });
  }
- function queue() { if (!frame && !motion.matches) frame = requestAnimationFrame(update); }
- window.addEventListener('scroll', queue, {passive:true});
- window.addEventListener('resize', measure, {passive:true});
- window.addEventListener('pageshow', measure);
- motion.addEventListener('change', measure);
- if ('ResizeObserver' in window) new ResizeObserver(measure).observe(graph);
- if (document.fonts) document.fonts.ready.then(measure);
- measure();
+ const reveal=element=>element.classList.add('is-revealed');
+ if('IntersectionObserver' in window){
+  root.classList.add('ce2-ready');
+  const entrance=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){reveal(e.target);entrance.unobserve(e.target);}}),{threshold:.08});
+  [...stages,finale].forEach(el=>entrance.observe(el));
+  const visibility=new IntersectionObserver(entries=>{
+   entries.forEach(e=>{const r=records.find(r=>r.node===e.target);r.visible=e.isIntersecting;if(r.visible)prepare(r);if(!r.visible&&active?.record===r)settle();});
+   if(!records.some(r=>r.visible))stop();else schedule();
+  },{threshold:.05});
+  records.forEach(r=>visibility.observe(r.node));
+ }else{[...stages,finale].forEach(reveal);}
+ records.forEach(r=>{
+  const first=r.node.querySelector('.ce2-image img');
+  if(r.fallback){
+   const fallback=()=>{first.removeEventListener('error',fallback);first.src=r.fallback.src;first.alt=r.fallback.alt;r.node.dataset.ceFallback='true';};
+   first.addEventListener('error',fallback,{once:true});
+   if(first.complete&&!first.naturalWidth)fallback();
+  }
+  const lock=()=>{r.locked=true;if(active?.record===r)settle();};
+  const unlock=()=>{r.locked=r.node.matches(':hover,:focus-within');prepare(r);schedule();};
+  r.node.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')lock();});
+  r.node.addEventListener('pointerleave',unlock);
+  r.node.addEventListener('pointerdown',lock);
+  r.node.addEventListener('pointerup',()=>{r.locked=false;prepare(r);schedule();});
+  r.node.addEventListener('pointercancel',()=>{r.locked=false;prepare(r);schedule();});
+  r.node.addEventListener('focusin',lock);r.node.addEventListener('focusout',unlock);
+ });
+ function state(){
+  stop();toggle.hidden=reduced.matches;
+  toggle.setAttribute('aria-pressed',String(paused));toggle.textContent=paused?'スライドショーを再開':'スライドショーを一時停止';
+  if(reduced.matches)[...stages,finale].forEach(reveal);
+  if(allowed()){records.forEach(prepare);schedule();}
+ }
+ toggle.addEventListener('click',()=>{paused=!paused;state();});
+ document.addEventListener('visibilitychange',state);
+ reduced.addEventListener('change',state);
+ window.addEventListener('pagehide',()=>{alive=false;stop();});
+ window.addEventListener('pageshow',()=>{alive=true;state();measure();});
+ if('ResizeObserver' in window)new ResizeObserver(measure).observe(root);
+ else window.addEventListener('resize',measure,{passive:true});
+ document.fonts?.ready.then(measure);
+ measure();state();
 })();
 </script>
 </body></html>
