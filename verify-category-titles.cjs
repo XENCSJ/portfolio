@@ -73,7 +73,7 @@ module.exports = async function verifyCategoryTitles() {
     assert.equal(await page.locator('.sound-release-card').count(),8);
     assert.equal(await page.locator('.sound-release-card .music-service-icon').count(),40);
     for (const card of await page.locator('.sound-release-card').all()) assert.equal(await card.locator('.music-service-icon').count(),5);
-    assert.equal(await page.locator('.music-player-drawer').count(),6);
+    assert.equal(await page.locator('.music-player-drawer').count(),7);
     assert.equal(await page.locator('#blue-sleep .video-container').count(),2);
     assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
     assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(0, 0, 0)');

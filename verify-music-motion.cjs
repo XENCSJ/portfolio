@@ -7,7 +7,7 @@ const results=[];
 const hash=s=>createHash('sha256').update(s).digest('hex');
 // Entire authored main at the start of this change: text, URLs, images and data.
 const main=fs.readFileSync('sound.html','utf8').match(/<main[\s\S]*?<\/main>/)[0].replace(/ data-soft-reveal/g,'');
-assert.equal(hash(main),'d95874b2a6875141bec17216dd00b7cb402f6be3ccd78b68344bf1def9cea1fd');
+assert.equal(hash(main),'bafd123ec3fadd5be7d5320565908b0658dee8312b0b4e053795eb14841ce00d');
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp'};
 const server=http.createServer((req,res)=>{
  const file=path.resolve('.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));

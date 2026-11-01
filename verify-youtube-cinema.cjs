@@ -9,7 +9,7 @@ if(!baseline){
   execFileSync('git',['fetch','--depth','1','origin',process.env.GITHUB_BASE_REF||'main']);
   baseline='FETCH_HEAD';
 }
-const pages={storybooks:3,animation:4,sound:4,cinematic:4,apparel:3,creator:4};
+const pages={storybooks:3,animation:5,sound:5,cinematic:4,apparel:3,creator:4};
 const old=new Map();
 for(const file of [...Object.keys(pages).map(n=>n+'.html'),'xen-latest-videos.js'])
   old.set(file,execFileSync('git',['show',baseline+':'+file]));
@@ -26,7 +26,7 @@ const server=http.createServer((req,res)=>{
 // Footer dimensions are intentionally verified by verify-footer-symbol.cjs.
 // Keep this comparison focused on unchanged header/main content and media.
 const layout=()=>({width:document.documentElement.scrollWidth,
-  nodes:[...document.querySelectorAll('header,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].map(e=>{
+  nodes:[...document.querySelectorAll('header,main,main section,main .grid,main .work,main h1,main h2,main h3,main p,.video-container,.xen-latest-play,.xen-latest-title')].filter(e=>!e.closest('#tochu-no-mamade-mv[hidden]')).map(e=>{
     const r=e.getBoundingClientRect(),viewportCoordinates=getComputedStyle(e).position==='fixed'||!e.getClientRects().length;
     // A navigation-only ID on the existing heading does not change its layout.
     const id=e.matches('h3#breathing-architecture')?'':e.id;
@@ -61,7 +61,15 @@ const layout=()=>({width:document.documentElement.scrollWidth,
         // Remove only that addition here to keep the original-page comparison strict.
         if(name==='creator')await page.locator('#youtube-channels, .xen-discovery-entry').evaluateAll(es=>es.forEach(e=>e.remove()));
         await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(150);
-        shots[mode]=await page.evaluate(layout);assert.equal(shots[mode].width<=width,true,name+' overflow');
+        const newMV = page.locator('#tochu-no-mamade-mv');
+        if(name==='animation' && await newMV.count()){
+          await newMV.evaluate(el => { el.hidden = true; el.style.display = 'none'; });
+        }
+        shots[mode]=await page.evaluate(layout);
+        if(name==='animation' && await newMV.count()){
+          await newMV.evaluate(el => { el.hidden = false; el.style.removeProperty('display'); });
+        }
+        assert.equal(shots[mode].width<=width,true,name+' overflow');
         assert.deepEqual(errors,[],name+' script errors');
         if(mode==='after')target=page;else await page.close();
       }
@@ -71,6 +79,10 @@ const layout=()=>({width:document.documentElement.scrollWidth,
       assert.equal(await target.locator('iframe[src*="youtube"]').count(),0);
       if(name==='sound'){
         await target.locator('.music-player-drawer[data-service="youtube"] > summary').first().click();
+        shots.after=await target.evaluate(layout);
+      }
+      if(name==='animation'){
+        assert.equal(await target.locator('main .work').first().getAttribute('id'),'tochu-no-mamade-mv');
         shots.after=await target.evaluate(layout);
       }
       const bounds=await covers.first().boundingBox();

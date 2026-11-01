@@ -83,7 +83,7 @@ async function fixedPanel(page, selector, wheelSupported=true) {
     assert.equal(originals.length,8);assert.equal(await page.locator('.sound-slide').count(),8);assert.equal(await page.locator('.sound-category-drawer').count(),3);
     const rows=await page.locator('.sound-release-card > .music-services').evaluateAll(rows=>rows.map(row=>[...row.children].map(li=>({key:li.firstElementChild.dataset.service,name:li.querySelector('.music-service-name').textContent,href:li.firstElementChild.getAttribute('href'),status:li.querySelector('.music-service-status').textContent}))));
     for(const row of rows){assert.deepEqual(row.map(x=>x.name),['Spotify','Apple Music','YouTube','LINE MUSIC','YouTube Music']);for(const x of row)assert.equal(x.status,x.href?'配信中 ↗':'準備中');}
-    assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[0,0,0,0,4,5,1,4]);
+    assert.deepEqual(rows.map(r=>r.filter(x=>x.href).length),[1,0,0,0,4,5,1,4]);
     await page.locator('.sound-song-cover,.sound-slide img,.sound-service-logo img').evaluateAll(imgs=>Promise.all(imgs.map(img=>{img.loading='eager';return Promise.race([img.decode(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('Image decode timeout: '+img.src)),15000))]);})));
     await squares(page.locator('.sound-release-card .sound-cover-frame'));
     await squares(page.locator('.sound-release-card .sound-song-cover'));
@@ -102,11 +102,14 @@ async function fixedPanel(page, selector, wheelSupported=true) {
      await page.locator('.sound-platform-group').last().scrollIntoViewIfNeeded();await shot(page,label+'-download');
     }
 
-    assert.equal(await page.locator('.sound-media-accordion').count(),0);assert.equal(await page.locator('.music-playback').count(),4);
+    assert.equal(await page.locator('.sound-media-accordion').count(),0);assert.equal(await page.locator('.music-playback').count(),5);
     assert.equal(await page.locator('.music-playback iframe[data-music-src*="spotify"]').count(),3);
-    assert.equal(await page.locator('.music-player-drawer').count(),6);
+    assert.equal(await page.locator('.music-player-drawer').count(),7);
     assert.equal(await page.locator('.music-player-drawer[open]').count(),0);
-    assert.equal(await page.locator('.music-playback .video-container').count(),4);
+    assert.equal(await page.locator('.music-playback .video-container').count(),5);
+    const mvCard = page.locator('#tochu-no-mamade');
+    assert.equal(await mvCard.locator('.video-source').getAttribute('href'), 'https://youtu.be/VkJ_Zfj7FVg');
+    assert.equal(await mvCard.locator('.music-services [data-service="youtube"]').getAttribute('href'), await mvCard.locator('.video-source').getAttribute('href'));
     assert.equal(await page.locator('.music-genre-videos .video-container').count(),0);
     assert.equal(await page.locator('#blue-sleep .video-container').count(),2);
     assert.equal(await page.locator('.music-reader-open').count(),4);
@@ -135,6 +138,7 @@ async function fixedPanel(page, selector, wheelSupported=true) {
      await page.locator('#music-lyrics-tab').click();assert.equal(await page.locator('#music-lyrics-panel .sound-song-lyrics').innerHTML(),original.lyrics);
      assert(await page.locator('#music-lyrics-panel .sound-lyric-section p').evaluateAll(es=>es.every(e=>getComputedStyle(e).textAlign==='center')));
      if(width>=1280){const firstVerse=await page.locator('#music-lyrics-panel .sound-lyric-section p').first().evaluate(p=>({height:p.getBoundingClientRect().height,line:parseFloat(getComputedStyle(p).lineHeight),lines:p.querySelectorAll('br').length+1}));assert(Math.abs(firstVerse.height-firstVerse.line*firstVerse.lines)<2,'authored lyric breaks must render once');}
+     if(original.id==='tochu-no-mamade') assert.match(await page.locator('#music-lyrics-panel').innerText(), /未来も何も知らなくて/);
      await fixedPanel(page,'#music-lyrics-panel',engineName!=='webkit'||width>=701);
      assert.deepEqual(await page.locator('.music-reader-cover').boundingBox(),before);
      const extent=await page.locator('#music-lyrics-panel').evaluate(el=>({end:el.scrollTop+el.clientHeight,total:el.scrollHeight,overflow:el.scrollWidth>el.clientWidth+1}));assert(!extent.overflow);assert(extent.end>=extent.total-2);

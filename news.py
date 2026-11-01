@@ -61,6 +61,10 @@ def groups(events, today=None):
         noun, unit = nouns.get(g['category'], ('作品', '点'))
         if len(entries) == 1 and entries[0].get('title'):
             g['title'] = entries[0]['title']; g['body'] = entries[0].get('body', '')
+            if 'secondaryCategory' in entries[0]:
+                secondary = entries[0]['secondaryCategory']
+                if secondary not in CATEGORIES: raise ValueError('Invalid secondary NEWS category')
+                g['secondaryCategory'] = secondary
         else:
             amount = f"を{g['count']}{unit}" if g['count'] is not None else 'を'
             g['title'] = f'新しい{noun}{amount}追加しました。'; g['body'] = ''
@@ -154,8 +158,11 @@ def markup(items):
     for e in items:
         esc = lambda v: html.escape(str(v), quote=True)
         pin = PIN_SVG if e.get('pinned') else ''
-        body = '<span class="xen-news-body">' + esc(e['body']) + '</span>' if e.get('body') else ''
-        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(CATEGORY_TITLES.get(e["category"].lower(), {}).get("en", e["category"]))}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
+        categories = [e['category']] + ([e['secondaryCategory']] if e.get('secondaryCategory') else [])
+        label = ' / '.join(CATEGORY_TITLES.get(c.lower(), {}).get('en', c) for c in categories)
+        body = ''.join('<span class="xen-news-body">' + esc(p) + '</span>'
+                       for p in e.get('body', '').split('\n\n') if p)
+        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(label)}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
     return '\n'.join(rows)
 
 def generate(check=False):
