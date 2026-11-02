@@ -1,5 +1,19 @@
 [
   {
+    "id": "news-2026-11-02-youtube",
+    "date": "2026-11-02",
+    "category": "YOUTUBE",
+    "publishedAt": "",
+    "url": "https://youtu.be/t2yCr8lV_vM",
+    "contentIds": [
+      "youtube:t2yCr8lV_vM"
+    ],
+    "countKnown": true,
+    "count": 1,
+    "title": "【渋谷ハロウィン2026】100人と交流するまで帰れません",
+    "body": ""
+  },
+  {
     "id": "news-2026-11-01-sound",
     "date": "2026-11-01",
     "category": "SOUND",
