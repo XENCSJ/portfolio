@@ -1,6 +1,8 @@
 # NEWS management
 
-INDEX is generated from `news-events.json`. Show the newest four date/category groups, then `news-pinned.json`. The fixed article is exactly the approved 2026-10-20 announcement; the generator never writes its file and validation rejects accidental changes. Historical NEWS remains in `news-events.json`, `news-archive.json`, and the untouched migration copy `news-legacy.json`.
+The homepage links to `news.html`. The archive shows up to 50 articles in descending publication order, with ten per page. The generator produces only the required static pages, so numbered links and previous/next work without JavaScript. The full grouped history is retained in `news-archive.json`, while `news-events.json` remains the editorial source. The verified renewal record continues to come from the protected `news-pinned.json` file and appears in date order.
+
+To add an independent article, append an entry to `news-events.json` with a unique `id`, `article: true`, verified ISO `date`, `category`, short `title`, `thumbnail`, `url`, stable `contentIds` and `evidence`. Use MUSIC, VIDEO, ANIMATION, DESIGN, ARCHITECTURE, EVENT or NEWS. Keep thumbnails in `news-images/` when possible. An empty URL creates a non-interactive card. The generator uses a matching video thumbnail, gallery image or the site wordmark when no thumbnail is provided. Run `python news.py` to preview the change locally. The main workflow also regenerates from registry updates.
 
 ## Publication and automation
 
@@ -8,7 +10,7 @@ INDEX is generated from `news-events.json`. Show the newest four date/category g
 
 SNAP and ARTWORKS: add image files and gallery links normally. Pure additions are detected automatically. An uploaded but unlinked image does not count. Stable paths and Git blob identities prevent reorders, re-adding known assets and identical copies from creating new NEWS. Changes to existing image paths do not count. Additions accompanied by removals are held in `news-state.json` → `pending`; confirm new works via the managed registration below. The initial state conservatively recognizes all existing image paths and hashes, so previously uploaded but never displayed old files also require registration.
 
-The workflow groups same-day/category additions, preserves earlier content identities, regenerates only the marked NEWS block in INDEX, commits only NEWS files, and explicitly requests a Pages build. A NEWS-only deployment has no content delta and stops without another commit. Conflicts with concurrent main changes fail safely; rerun the workflow after resolving them. No force push is used.
+The workflow groups same-day/category additions, preserves earlier content identities, regenerates the archive and its numbered pages, commits only NEWS files, and explicitly requests a Pages build. A NEWS-only deployment has no content delta and stops without another commit. Conflicts with concurrent main changes fail safely; rerun the workflow after resolving them. No force push is used.
 
 ## Managed registration for other categories
 
@@ -36,7 +38,7 @@ Independent important announcements require an editor-verified event in `news-ev
 
 ## Requested YouTube article replacement (2026-10-20 JST)
 
-The homepage slot previously occupied by `legacy-2` now displays `legacy-4`, using `replacesEventId: "legacy-2"` on the replacement event. Its actual YouTube publication date was confirmed in the expanded video description as **2026-09-03**, and its link is `https://youtu.be/Df4ekWvuGng`. This explicit substitution preserves the other three visible articles and the fifth renewal article even though the replacement's release date is older than another archived video. It is not a second pinned article: future NEWS still displaces the oldest selected slot normally. The original notice remains only in the historical registry/archive. The generator applies the substitution on every run and deduplicates the already registered replacement video. Dates and other historical notices are unchanged.
+The September 24 article `legacy-2` was explicitly replaced by the September 3 article `legacy-4`. The latter uses the verified publication date and links to `https://youtu.be/Df4ekWvuGng`. The old entry is retained with `listed: false` in the archive.
 
 ## Verification and recovery
 
@@ -45,7 +47,7 @@ The homepage slot previously occupied by `legacy-2` now displays `legacy-4`, usi
 - `node --check xen-news.js`
 - `Update verified NEWS` → Run workflow reconciles successful deployments after an interrupted run. It uses the same evidence and deduplication rules.
 
-Generated HTML works without JavaScript; `xen-news.js` only adds a scroll reveal. CSS is scoped to NEWS, has visible keyboard focus, touch-sized links and reduced-motion support. No third-party NEWS API or browser-side credentials are used.
+Generated HTML works without JavaScript. The shared motion engine handles the entrance animation, and `xen-news.js` provides image fallback. CSS is scoped to NEWS, has visible keyboard focus, touch-sized links and reduced-motion support. No third-party NEWS API or browser-side credentials are used.
 
 ## Initial audit (2026-10-20 JST)
 

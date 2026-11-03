@@ -51,10 +51,20 @@ SOFTWARE. */
   const button = header.querySelector('.xen-header-toggle');
   const menu = header.querySelector('#xen-menu');
   if (!button || !menu) return;
+  const aboutLinks = menu.querySelector('.xen-menu-items');
+  if (aboutLinks && !menu.querySelector('a[href="./news.html"]')) {
+    const item = document.createElement('li');
+    item.innerHTML = '<a class="xen-menu-link" href="./news.html"><span class="xen-menu-en" lang="en">NEWS</span><span class="xen-menu-ja" lang="ja">お知らせ・最新情報</span></a>';
+    aboutLinks.append(item);
+  }
+  if (document.body.classList.contains('news-page')) {
+    menu.querySelector('a[href="./news.html"]')?.setAttribute('aria-current', 'page');
+  }
   // Reuse the INDEX line-art vocabulary; decorate only labels already in this menu.
   // UI policy: no decorative emoji in navigation. Use existing gold SVG icons only;
   // CONTACT keeps its left icon and plain label, with no trailing symbol or replacement.
   const menuIcons = {
+    "NEWS": '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h5v5H6zM14 8h4m-4 4h4M6 16h12"/>',
     "ABOUT XEN": "<circle cx=\"12\" cy=\"12\" r=\"10\" /><path d=\"M12 16v-4\" /><path d=\"M12 8h.01\" />",
     "STUDIO": "<path d=\"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z\" /><path d=\"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12\" /><path d=\"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17\" />",
     "CREATOR": "<circle cx=\"12\" cy=\"8\" r=\"5\" /><path d=\"M20 21a8 8 0 0 0-16 0\" />",

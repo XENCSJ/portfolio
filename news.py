@@ -4,14 +4,19 @@ import argparse, copy, hashlib, html, json, os, re, subprocess, urllib.request
 from datetime import datetime, timezone, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 JST = timezone(timedelta(hours=9))
 # Keep historical category IDs and URLs stable; translate labels only at render time.
-CATEGORY_TITLES = json.loads((ROOT / 'category-titles.json').read_text())
-CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE', 'WEBSITE')
-RELEASE_CATEGORIES = ('SOUND', 'CINEMATIC', 'ANIMATION', 'YOUTUBE')
+DISPLAY_CATEGORIES = {'SNAP': 'NEWS', 'ARTWORKS': 'NEWS', 'APPAREL': 'DESIGN', 'SPACE': 'ARCHITECTURE',
+                      'SOUND': 'MUSIC', 'CINEMATIC': 'VIDEO', 'STORYBOOKS': 'NEWS', 'YOUTUBE': 'VIDEO',
+                      'WEBSITE': 'NEWS'}
+PAGE_SIZE = 10
+MAX_ARTICLES = 50
+LOGO = './xen-header-logo.png'
+CATEGORIES = ('SNAP', 'ARTWORKS', 'DESIGN', 'APPAREL', 'ARCHITECTURE', 'SPACE', 'SOUND', 'CINEMATIC', 'ANIMATION', 'STORYBOOKS', 'YOUTUBE', 'WEBSITE', 'VIDEO', 'MUSIC', 'EVENT', 'NEWS')
+RELEASE_CATEGORIES = ('SOUND', 'CINEMATIC', 'ANIMATION', 'YOUTUBE', 'MUSIC', 'VIDEO')
 AUTO = ('SNAP', 'ARTWORKS')
 PIN_ID = 'website-renewal-20261020'
 PIN = {'id': PIN_ID, 'date': '2026-10-20', 'category': 'WEBSITE', 'title': 'ホームページリニューアル', 'body': 'XEN CSJ公式サイトをリニューアルしました。各クリエイティブ領域の作品やサービスをより見やすく整理し、デザインやアニメーション、操作性を刷新しました。', 'url': 'https://xencsj.github.io/portfolio/'}
@@ -29,6 +34,11 @@ def safe_url(value):
 def validate_pin(pin):
     if pin != PIN: raise ValueError('Fixed renewal article changed; restore news-pinned.json')
 
+def group_id(event):
+    if event.get('article'):
+        return event['id']
+    return f"news-{event['date']}-{event['category'].lower()}"
+
 def groups(events, today=None):
     today = today or datetime.now(JST).date().isoformat()
     grouped, seen = {}, set()
@@ -37,7 +47,10 @@ def groups(events, today=None):
         if e['id'] == PIN_ID or e.get('pinned'): raise ValueError('Fixed article belongs only in news-pinned.json')
         date = e['date']
         if datetime.strptime(date, '%Y-%m-%d').date().isoformat() != date: raise ValueError('Invalid date')
-        if e['category'] not in CATEGORIES or not safe_url(e['url']) or not e.get('evidence'): raise ValueError('Invalid NEWS record')
+        url = e.get('url', '')
+        external = e.get('article') and re.fullmatch(r'https://[^\s]+', url) and urlsplit(url).hostname
+        if e['category'] not in CATEGORIES or (url and not (safe_url(url) or external)) or not e.get('evidence'):
+            raise ValueError('Invalid NEWS record')
         if e.get('publishedAt') and jst_date(e['publishedAt']) != date: raise ValueError('Date must be JST')
         if date > today: continue
         ids = set(e.get('contentIds', []))
@@ -45,13 +58,18 @@ def groups(events, today=None):
         fresh = {i for i in ids if (e['category'], i) not in seen}
         seen.update((e['category'], i) for i in ids)
         if not fresh: continue
-        key = (date, e['category'])
-        g = grouped.setdefault(key, {'id': 'news-' + date + '-' + e['category'].lower(), 'date': date, 'category': e['category'], 'publishedAt': '', 'url': e['url'], 'contentIds': set(), 'events': [], 'countKnown': True})
+        key = group_id(e)
+        g = grouped.setdefault(key, {'id': key, 'date': date, 'category': e['category'], 'publishedAt': '', 'url': url, 'contentIds': set(), 'events': [], 'countKnown': True})
         g['contentIds'].update(fresh)
         g['events'].append(e)
+        if e.get('thumbnail') and not g.get('thumbnail'):
+            g['thumbnail'] = e['thumbnail']
         g['countKnown'] = g['countKnown'] and e.get('countKnown', True)
         g['publishedAt'] = max(g['publishedAt'], e.get('publishedAt', ''))
-        if len(g['events']) > 1: g['url'] = './creator.html#latest-videos' if e['category'] == 'YOUTUBE' else './' + e['category'].lower() + '.html'
+        if len(g['events']) > 1:
+            if e['category'] == 'YOUTUBE': g['url'] = './creator.html#latest-videos'
+            elif (ROOT / (e['category'].lower() + '.html')).is_file(): g['url'] = './' + e['category'].lower() + '.html'
+            elif g['url'] != url: g['url'] = ''
     result = []
     nouns = {'SNAP': ('写真', '枚'), 'ARTWORKS': ('アートワーク', '作品'), 'CINEMATIC': ('映像作品', '本'), 'SOUND': ('音楽作品', '作品'), 'YOUTUBE': ('動画', '本'), 'DESIGN': ('デザイン作品', '点')}
     for g in grouped.values():
@@ -71,34 +89,42 @@ def groups(events, today=None):
         result.append(g)
     return sorted(result, key=lambda g: (g['date'], g['publishedAt'], g['id']), reverse=True)
 
-def select(events, pin, today=None):
+def articles(events, pin, today=None):
+    """Keep all groups in the archive, including explicitly withdrawn notices."""
     validate_pin(pin)
-    grouped = groups(events, today)
+    today = today or datetime.now(JST).date().isoformat()
+    available = groups(events, today)
     by_event = {e['id']: e for e in events}
-    by_key = {(g['date'], g['category']): g for g in grouped}
-    replacements = {}
-    for e in events:
-        if not e.get('replacesEventId'): continue
-        source = by_event.get(e['replacesEventId'])
-        if source is None or source is e or source.get('replacesEventId'):
-            raise ValueError('Replacement needs an existing, unreplaced event')
-        old = by_key.get((source['date'], source['category']))
-        new = by_key.get((e['date'], e['category']))
+    by_group = {g['id']: g for g in available}
+    withdrawn = set()
+    for event in events:
+        if not event.get('replacesEventId') or event['date'] > today: continue
+        source = by_event.get(event['replacesEventId'])
+        if source is None or source is event or source.get('replacesEventId'):
+            raise ValueError('Replacement needs an earlier, unreplaced event')
+        old, new = by_group.get(group_id(source)), by_group.get(group_id(event))
         if old is None or new is None: continue
-        if old['contentIds'] != sorted(source['contentIds']) or new['contentIds'] != sorted(e['contentIds']):
+        if (old['id'] == new['id'] or old['id'] in withdrawn or
+                old['contentIds'] != sorted(source['contentIds']) or
+                new['contentIds'] != sorted(event['contentIds'])):
             raise ValueError('Replacement must identify a single article')
-        if old['id'] in replacements or old['id'] == new['id']:
-            raise ValueError('Ambiguous article replacement')
-        replacements[old['id']] = new
-    # Keep the replaced article's selection slot; show the replacement's actual date.
-    # History stays intact, and future additions still evict the oldest selected slot.
-    selected, seen = [], set()
-    for group in grouped:
-        item = replacements.get(group['id'], group)
-        if item['id'] in seen: continue
-        selected.append(item); seen.add(item['id'])
-        if len(selected) == 4: break
-    return selected + [dict(pin, pinned=True)]
+        withdrawn.add(old['id'])
+    if pin['date'] <= today:
+        available.append(dict(pin))
+    for item in available:
+        item['listed'] = item['id'] not in withdrawn
+        item['displayCategory'] = DISPLAY_CATEGORIES.get(item['category'], item['category'])
+        if not item.get('thumbnail'):
+            ids = item.get('contentIds', [])
+            video = next((c[8:] for c in ids if re.fullmatch(r'youtube:[A-Za-z0-9_-]{11}', c)), None)
+            image = next((c[6:] for c in ids if c.startswith('image:')), None)
+            item['thumbnail'] = ('https://i.ytimg.com/vi/' + video + '/hqdefault.jpg' if video else
+                                 './' + quote(image) if image else LOGO)
+    return sorted(available, key=lambda g: (g['date'], g.get('publishedAt', ''), g['id']), reverse=True)
+
+def paginate(archive):
+    visible = [item for item in archive if item['listed']][:MAX_ARTICLES]
+    return [visible[i:i + PAGE_SIZE] for i in range(0, len(visible), PAGE_SIZE)] or [[]]
 
 class Gallery(HTMLParser):
     def __init__(self): super().__init__(); self.paths = set()
@@ -152,32 +178,70 @@ def scan(state, current, publication):
     state['lastPublication'] = publication
     return state, events
 
-PIN_SVG = '<svg class="xen-news-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m9 3 6 0-1 6 4 4v2H6v-2l4-4-1-6ZM12 15v6"/></svg><span class="xen-news-sr">固定記事</span>'
-def markup(items):
-    rows = []
-    for e in items:
-        esc = lambda v: html.escape(str(v), quote=True)
-        pin = PIN_SVG if e.get('pinned') else ''
-        categories = [e['category']] + ([e['secondaryCategory']] if e.get('secondaryCategory') else [])
-        label = ' / '.join(CATEGORY_TITLES.get(c.lower(), {}).get('en', c) for c in categories)
-        body = ''.join('<span class="xen-news-body">' + esc(p) + '</span>'
-                       for p in e.get('body', '').split('\n\n') if p)
-        rows.append(f'<li class="xen-news-item" data-news-id="{esc(e["id"])}"><a class="xen-news-link" href="{esc(e["url"])}"><span class="xen-news-meta"><time class="xen-news-date" datetime="{e["date"]}">{e["date"].replace("-", ".")}</time><span class="xen-news-category" lang="en">{pin}{esc(label)}</span></span><span class="xen-news-copy"><span class="xen-news-title">{esc(e["title"])}</span>{body}</span><span class="xen-news-arrow" aria-hidden="true"></span></a></li>')
-    return '\n'.join(rows)
+def card(item):
+    esc = html.escape
+    date = item['date']
+    thumb = item['thumbnail']
+    logo = ' is-logo' if thumb == LOGO else ''
+    url = item.get('url')
+    if url and url.startswith('./'):
+        target = urlsplit(url)
+        path = ROOT / unquote(target.path)
+        if not path.is_file() or (target.fragment and not re.search(
+                r"""\bid=["']""" + re.escape(target.fragment) + r"""["']""", path.read_text())):
+            url = None
+    title = item['title'].removesuffix('を公開しました。').removesuffix('を掲載しました。')
+    title = re.sub(r'^新しい(.+?)を(\d+)(枚|作品|本|点)追加しました。$', r'\1を\2\3追加', title)
+    tag = 'a' if url else 'div'
+    href = f' href="{esc(url)}"' if url else ''
+    return (f'<li data-news-id="{esc(item["id"])}"><{tag} class="news-card"{href}>'
+            f'<span class="news-thumb{logo}"><img src="{esc(thumb)}" alt="" width="480" height="270" '
+            'loading="lazy" decoding="async"></span><span class="news-copy">'
+            f'<span class="news-meta"><time datetime="{date}">{date.replace("-", ".")}</time>'
+            f'<span class="news-tag" lang="en">{esc(item["displayCategory"])}</span></span>'
+            f'<span class="news-title">{esc(title)}</span></span></{tag}></li>')
+
+def page_name(number):
+    return 'news.html' if number == 1 else f'news-{number}.html'
+
+def pager(number, count):
+    def control(target, text, name, rel):
+        if not 1 <= target <= count:
+            return f'<span class="disabled" aria-disabled="true" aria-label="{name}">{text}</span>'
+        return f'<a href="./{page_name(target)}#news-list" aria-label="{name}"{rel}>{text}</a>'
+    links = [control(number - 1, '〈', '前のページ', ' rel="prev"')]
+    for n in range(1, count + 1):
+        links.append(f'<span aria-current="page" aria-label="{n}ページ目">{n}</span>' if n == number
+                     else control(n, str(n), f'{n}ページ目', ''))
+    links.append(control(number + 1, '〉', '次のページ', ' rel="next"'))
+    return '<nav class="news-pages" aria-label="お知らせのページ切り替え">' + ''.join(links) + '</nav>'
 
 def generate(check=False):
-    pin = read('news-pinned.json'); events = read('news-events.json')
-    items = select(events, pin)
-    index = (ROOT / 'index.html').read_text()
-    output, n = re.subn(r'<!-- NEWS:GENERATED:START -->.*?<!-- NEWS:GENERATED:END -->', '<!-- NEWS:GENERATED:START -->\n' + markup(items) + '\n<!-- NEWS:GENERATED:END -->', index, flags=re.S)
-    if n != 1: raise ValueError('Exactly one NEWS output block required')
-    archive = json.dumps(groups(events), ensure_ascii=False, indent=2) + '\n'
-    if check:
-        if output != index or archive != (ROOT / 'news-archive.json').read_text(): raise ValueError('Run python news.py to refresh generated output')
-    else:
-        (ROOT / 'index.html').write_text(output)
-        (ROOT / 'news-archive.json').write_text(archive)
-    return items
+    archive = articles(read('news-events.json'), read('news-pinned.json'))
+    pages = paginate(archive)
+    template = (ROOT / 'news.html').read_text()
+    files = {'news-archive.json': json.dumps(archive, ensure_ascii=False, indent=2) + '\n'}
+    for number, items in enumerate(pages, 1):
+        listing = '<ul class="news-list">' + '\n'.join(card(e) for e in items) + '</ul>' if items else '<p>現在、お知らせはありません。</p>'
+        block = '<!-- NEWS:GENERATED:START -->\n' + listing + '\n' + pager(number, len(pages)) + '\n<!-- NEWS:GENERATED:END -->'
+        result, n = re.subn(r'<!-- NEWS:GENERATED:START -->.*?<!-- NEWS:GENERATED:END -->', lambda _: block, template, flags=re.S)
+        if n != 1: raise ValueError('Exactly one NEWS output block required')
+        if number > 1:
+            result = result.replace('<title>NEWS', f'<title>NEWS（{number}ページ目）')
+        files[page_name(number)] = result
+    obsolete = [ROOT / page_name(n) for n in range(len(pages) + 1, MAX_ARTICLES // PAGE_SIZE + 1)
+                if (ROOT / page_name(n)).exists()]
+    for path in obsolete:
+        if '<!-- NEWS:GENERATED:START -->' not in path.read_text():
+            raise ValueError(f'Refusing to remove unrelated file {path.name}')
+    for name, value in files.items():
+        path = ROOT / name
+        if path.exists() and value == path.read_text(): continue
+        if check: raise ValueError(f'Run python news.py to refresh {name}')
+        path.write_text(value)
+    if check and obsolete: raise ValueError('Obsolete NEWS pages remain')
+    for path in obsolete: path.unlink()
+    return pages
 
 def api(path, method='GET'):
     req = urllib.request.Request('https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY'] + '/' + path, method=method, headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
@@ -199,7 +263,8 @@ def registered_event(r, publication):
               'sitePublishedAt': publication['publishedAt'], 'url': './'+r['page']+r.get('anchor',''),
               'contentIds': r['contentIds'], 'countKnown': r.get('countKnown',True), 'evidence': evidence}
     if not release: result['publishedAt'] = publication['publishedAt']
-    if r.get('title'): result['title'] = r['title']
+    for field in ('title', 'thumbnail', 'article'):
+        if field in r: result[field] = r[field]
     return result
 
 def refresh():
@@ -246,7 +311,7 @@ def refresh():
             events.append(registered_event(r, p))
             known.add(r['id'])
     # Validate first; errors must not partially update files.
-    select(events, read('news-pinned.json'))
+    articles(events, read('news-pinned.json'))
     write('news-state.json', state); write('news-events.json', events)
     generate()
 
