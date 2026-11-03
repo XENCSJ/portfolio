@@ -11,7 +11,7 @@ JST = timezone(timedelta(hours=9))
 # Keep historical category IDs and URLs stable; translate labels only at render time.
 CATEGORY_TITLES = json.loads((ROOT / 'category-titles.json').read_text())
 DISPLAY_CATEGORIES = {'SNAP': 'NEWS', 'ARTWORKS': 'NEWS', 'APPAREL': 'DESIGN', 'SPACE': 'ARCHITECTURE',
-                      'SOUND': 'MUSIC', 'CINEMATIC': 'VIDEO', 'STORYBOOKS': 'NEWS', 'YOUTUBE': 'VIDEO',
+                      'SOUND': 'MUSIC', 'CINEMATIC': 'VIDEO', 'STORYBOOKS': 'NEWS', 'YOUTUBE': 'YouTube',
                       'WEBSITE': 'NEWS'}
 PAGE_SIZE = 10
 MAX_ARTICLES = 50

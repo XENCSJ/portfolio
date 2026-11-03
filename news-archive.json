@@ -15,7 +15,7 @@
     "body": "",
     "indexTitle": "【渋谷ハロウィン2026】100人と交流するまで帰れません",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "news-2026-11-01-sound",
@@ -437,24 +437,24 @@
     "title": "『【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www』を公開しました。",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "video-JJFrPKjZK8M",
     "date": "2026-10-05",
-    "category": "VIDEO",
+    "category": "YOUTUBE",
     "publishedAt": "",
     "url": "https://youtu.be/JJFrPKjZK8M",
     "contentIds": [
       "youtube:JJFrPKjZK8M"
     ],
     "countKnown": true,
-    "thumbnail": "https://i.ytimg.com/vi/JJFrPKjZK8M/hqdefault.jpg",
+    "thumbnail": "./news-images/video-JJFrPKjZK8M.webp",
     "count": 1,
     "title": "【スシロー】人気TOP10を当てるまで帰れま10！予想外の結果に大苦戦www",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "news-2026-09-24-youtube",
@@ -470,25 +470,25 @@
     "title": "『朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me』を公開しました。",
     "body": "",
     "listed": false,
-    "displayCategory": "VIDEO",
+    "displayCategory": "YouTube",
     "thumbnail": "https://i.ytimg.com/vi/X3DrK_IgSzg/hqdefault.jpg"
   },
   {
     "id": "video-olea-dUJQVY",
     "date": "2026-09-17",
-    "category": "VIDEO",
+    "category": "YOUTUBE",
     "publishedAt": "",
     "url": "https://youtu.be/olea-dUJQVY",
     "contentIds": [
       "youtube:olea-dUJQVY"
     ],
     "countKnown": true,
-    "thumbnail": "https://i.ytimg.com/vi/olea-dUJQVY/hqdefault.jpg",
+    "thumbnail": "./news-images/video-olea-dUJQVY.webp",
     "count": 1,
     "title": "「性格が一番」は綺麗事？結局、恋愛は見た目と体の相性で決まるのか",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "news-2026-09-04-youtube",
@@ -505,7 +505,7 @@
     "title": "『女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場』を公開しました。",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "news-2026-09-03-youtube",
@@ -522,75 +522,75 @@
     "title": "『ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった』を公開しました。",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "video-LGXJYua1h5k",
     "date": "2026-08-25",
-    "category": "VIDEO",
+    "category": "YOUTUBE",
     "publishedAt": "",
     "url": "https://youtu.be/LGXJYua1h5k",
     "contentIds": [
       "youtube:LGXJYua1h5k"
     ],
     "countKnown": true,
-    "thumbnail": "https://i.ytimg.com/vi/LGXJYua1h5k/hqdefault.jpg",
+    "thumbnail": "./news-images/video-LGXJYua1h5k.webp",
     "count": 1,
     "title": "【賛否】男は奢るべき？年収5000万は高望み？男2人で恋愛の本音を全部話した",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "video-JPXQ3pF18jk",
     "date": "2026-08-17",
-    "category": "VIDEO",
+    "category": "YOUTUBE",
     "publishedAt": "",
     "url": "https://youtu.be/JPXQ3pF18jk",
     "contentIds": [
       "youtube:JPXQ3pF18jk"
     ],
     "countKnown": true,
-    "thumbnail": "https://i.ytimg.com/vi/JPXQ3pF18jk/hqdefault.jpg",
+    "thumbnail": "./news-images/video-JPXQ3pF18jk.webp",
     "count": 1,
     "title": "情緒が安定してる女は、人を本気で好きにならない？男2人で恋愛の本音を語った",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "video-ft-aq7ndwNM",
     "date": "2026-08-11",
-    "category": "VIDEO",
+    "category": "YOUTUBE",
     "publishedAt": "",
     "url": "https://youtu.be/ft-aq7ndwNM",
     "contentIds": [
       "youtube:ft-aq7ndwNM"
     ],
     "countKnown": true,
-    "thumbnail": "https://i.ytimg.com/vi/ft-aq7ndwNM/hqdefault.jpg",
+    "thumbnail": "./news-images/video-ft-aq7ndwNM.webp",
     "count": 1,
     "title": "歌舞伎町では逮捕者の4人に1人が大学生…元スカウトが語る“バイト感覚”の実態",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "video-U_oZV5Rs0gQ",
     "date": "2026-08-11",
-    "category": "VIDEO",
+    "category": "YOUTUBE",
     "publishedAt": "",
     "url": "https://youtu.be/U_oZV5Rs0gQ",
     "contentIds": [
       "youtube:U_oZV5Rs0gQ"
     ],
     "countKnown": true,
-    "thumbnail": "https://i.ytimg.com/vi/U_oZV5Rs0gQ/hqdefault.jpg",
+    "thumbnail": "./news-images/video-U_oZV5Rs0gQ.webp",
     "count": 1,
     "title": "男は結局、何をすれば垢抜ける？美容に300万円以上使った2人の結論とは",
     "body": "",
     "listed": true,
-    "displayCategory": "VIDEO"
+    "displayCategory": "YouTube"
   },
   {
     "id": "news-2026-02-02-sound",
