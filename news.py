@@ -4,7 +4,7 @@ import argparse, copy, hashlib, html, json, os, re, subprocess, urllib.request
 from datetime import datetime, timezone, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import quote, unquote, urlsplit
+from urllib.parse import quote, unquote, urljoin, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 JST = timezone(timedelta(hours=9))
@@ -245,6 +245,39 @@ def card(item):
 def page_name(number):
     return 'news.html' if number == 1 else f'news-{number}.html'
 
+SITE_URL = 'https://xencsj.github.io/portfolio/'
+
+def news_metadata(number, items):
+    title = 'NEWS | XEN CSJ' if number == 1 else f'NEWS（{number}ページ目） | XEN CSJ'
+    description = 'XEN CSJの作品公開、音楽、映像、イベントの最新情報を掲載。'
+    if number > 1:
+        description = f'XEN CSJのお知らせ一覧、{number}ページ目。過去の作品公開や活動の記録を掲載。'
+    if items:
+        description += f'収録期間は{items[-1]["date"]}〜{items[0]["date"]}。'
+    url = SITE_URL + page_name(number)
+    image = urljoin(SITE_URL, items[0]['thumbnail'] if items else LOGO)
+    return '\n'.join([
+        '<!-- NEWS:META:START -->',
+        f'<title>{title}</title>',
+        f'<meta name="description" content="{description}">',
+        f'<link rel="canonical" href="{url}">',
+        '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="XEN CSJ">',
+        f'<meta property="og:title" content="{title}">',
+        f'<meta property="og:description" content="{description}">',
+        f'<meta property="og:url" content="{url}">',
+        f'<meta property="og:image" content="{html.escape(image, quote=True)}">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        '<!-- NEWS:META:END -->',
+    ])
+
+def sitemap(page_count):
+    paths = ['', 'what-is-xen.html', *(slug + '.html' for slug in CATEGORY_TITLES),
+             *(page_name(n) for n in range(1, page_count + 1))]
+    urls = ''.join(f'  <url><loc>{SITE_URL}{path}</loc></url>\n' for path in paths)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n')
+
 def pager(number, count):
     def control(target, text, name, rel):
         if not 1 <= target <= count:
@@ -266,9 +299,12 @@ def generate(check=False):
     for number, items in enumerate(pages, 1):
         listing = '<ul class="news-list">' + '\n'.join(card(e) for e in items) + '</ul>' if items else '<p>現在、お知らせはありません。</p>'
         result = replace_news_block(template, listing + '\n' + pager(number, len(pages)))
-        if number > 1:
-            result = result.replace('<title>NEWS', f'<title>NEWS（{number}ページ目）')
+        result, count = re.subn(r'<!-- NEWS:META:START -->.*?<!-- NEWS:META:END -->',
+                                lambda _: news_metadata(number, items), result, flags=re.S)
+        if count != 1:
+            raise ValueError('Expected one NEWS metadata block')
         files[page_name(number)] = result
+    files['sitemap.xml'] = sitemap(len(pages))
     obsolete = [ROOT / page_name(n) for n in range(len(pages) + 1, MAX_ARTICLES // PAGE_SIZE + 1)
                 if (ROOT / page_name(n)).exists()]
     for path in obsolete:
