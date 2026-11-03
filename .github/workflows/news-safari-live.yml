@@ -1,0 +1,72 @@
+name: Verify published NEWS in Safari
+on:
+  push:
+    branches: [news-archive-20261103]
+    paths: ['.github/workflows/news-safari-live.yml']
+  workflow_dispatch:
+permissions: {}
+jobs:
+  safari:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - name: Enable the installed Safari driver
+        run: |
+          sudo /usr/bin/safaridriver --enable
+          /usr/bin/safaridriver --version
+          python3 -m venv "$RUNNER_TEMP/news-safari"
+          "$RUNNER_TEMP/news-safari/bin/python" -m pip install -q selenium
+      - name: Check the public NEWS pages in native Safari
+        run: |
+          "$RUNNER_TEMP/news-safari/bin/python" - <<'PY'
+          from pathlib import Path
+          from selenium import webdriver
+          from selenium.webdriver.common.by import By
+          from selenium.webdriver.safari.service import Service
+          from selenium.webdriver.support.ui import WebDriverWait
+
+          base = "https://xencsj.github.io/portfolio/"
+          with webdriver.Safari(service=Service(executable_path="/usr/bin/safaridriver")) as browser:
+              print("Browser", browser.capabilities["browserName"], browser.capabilities["browserVersion"], flush=True)
+              browser.set_window_size(1280, 900)
+              wait = WebDriverWait(browser, 25)
+              browser.get(base + "news.html")
+              first_titles = ["渋谷ハロウィン2026｜100人と交流するまで帰れません", "『途中のままで』Music Video公開"]
+              assert browser.find_element(By.TAG_NAME, "h1").is_displayed()
+              dates = []
+              for page, count in enumerate([10, 10, 1], start=1):
+                  wait.until(lambda b: b.find_element(By.CSS_SELECTOR, ".news-pages [aria-current]").text == str(page))
+                  rows = browser.find_elements(By.CSS_SELECTOR, "#news-list li")
+                  assert len(rows) == count
+                  for index, row in enumerate(rows):
+                      card = row.find_element(By.CSS_SELECTOR, "a.news-card")
+                      title = card.find_element(By.CSS_SELECTOR, ".news-title")
+                      assert title.is_displayed() and title.text.strip()
+                      if page == 1 and index < len(first_titles):
+                          assert title.text.strip() == first_titles[index], title.text
+                      dates.append(card.find_element(By.TAG_NAME, "time").get_attribute("datetime"))
+                      img = card.find_element(By.TAG_NAME, "img")
+                      browser.execute_script("arguments[0].scrollIntoView({block:'center'})", img)
+                      wait.until(lambda b: b.execute_script("return arguments[0].complete && arguments[0].naturalWidth > 0", img))
+                      assert browser.execute_script("""
+                          const thumb = arguments[0].parentElement.getBoundingClientRect();
+                          const copy = arguments[1].getBoundingClientRect();
+                          return Math.abs(thumb.width / thumb.height - 16/9) < .01 &&
+                                 copy.left > thumb.right && copy.right <= innerWidth &&
+                                 document.documentElement.scrollWidth <= innerWidth;
+                      """, img, title)
+                  assert len(browser.find_elements(By.CSS_SELECTOR, "footer .xen-footer-actions a")) == 2
+                  print(f"PASS Safari page {page}: {count} cards, artwork, text, layout, footer", flush=True)
+                  if page < 3:
+                      browser.find_element(By.CSS_SELECTOR, ".news-pages [rel=next]").click()
+              assert dates == sorted(dates, reverse=True)
+              browser.find_element(By.CSS_SELECTOR, ".news-pages [rel=prev]").click()
+              wait.until(lambda b: b.current_url.endswith("news-2.html#news-list"))
+              browser.get(base + "news.html")
+              wait.until(lambda b: b.find_element(By.CSS_SELECTOR, ".news-card img").get_property("naturalWidth") > 0)
+              browser.save_screenshot("published-news-safari.png")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: published-news-native-safari
+          path: published-news-safari.png
