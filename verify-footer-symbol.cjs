@@ -3,8 +3,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const assert = require('node:assert/strict');
-const pages = fs.readdirSync('.').filter(f => f.endsWith('.html') && fs.readFileSync(f, 'utf8').includes('class="xen-footer-symbol"'));
-assert.equal(pages.length, 17);
+const htmlFiles = fs.readdirSync('.').filter(file => file.endsWith('.html'));
+const isNewsPage = file => /^news(?:-\d+)?\.html$/.test(file);
+const pages = htmlFiles.filter(file => fs.readFileSync(file, 'utf8').includes('class="xen-footer-symbol"'));
+assert.equal(pages.filter(file => !isNewsPage(file)).length, 17);
+assert.deepEqual(pages.filter(isNewsPage), htmlFiles.filter(isNewsPage), 'Every generated NEWS page has the shared footer');
 const out = 'footer-symbol-evidence';
 fs.mkdirSync(out, {recursive: true});
 const mime = {'.html':'text/html', '.css':'text/css', '.js':'text/javascript', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp'};
@@ -118,6 +121,6 @@ async function run(browser,engine,base,width,mode='normal',chosen=pages) {
   }
   const passed=results.filter(r=>r.pass).length;
   fs.writeFileSync(`${out}/report.json`,JSON.stringify({base,passed,total:results.length,results},null,2));
-  if(process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,`\nFooter: **${passed}/${results.length}** checks passed.\n17 pages; Chromium/WebKit; 1440/390px; 320/375/430px examples; centered two-line credits, original logo, specified gaps, no lines, no overflow, hover, Back to Top, once-only reveal, no-JS and reduced-motion.\n`);
+  if(process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,`\nFooter: **${passed}/${results.length}** checks passed.\n${pages.length} pages; Chromium/WebKit; 1440/390px; 320/375/430px examples; centered two-line credits, original logo, specified gaps, no lines, no overflow, hover, Back to Top, once-only reveal, no-JS and reduced-motion.\n`);
   if(passed!==results.length) process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1;}).finally(()=>server.close());
