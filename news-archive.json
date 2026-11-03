@@ -9,9 +9,12 @@
       "youtube:t2yCr8lV_vM"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-11-02-youtube.webp",
     "count": 1,
-    "title": "【渋谷ハロウィン2026】100人と交流するまで帰れません",
-    "body": ""
+    "title": "渋谷ハロウィン2026｜100人と交流するまで帰れません",
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   },
   {
     "id": "news-2026-11-01-sound",
@@ -23,10 +26,13 @@
       "youtube:VkJ_Zfj7FVg"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-11-01-sound.webp",
     "count": 1,
-    "title": "『途中のままで』MV公開",
+    "title": "『途中のままで』Music Video公開",
     "body": "",
-    "secondaryCategory": "ANIMATION"
+    "secondaryCategory": "ANIMATION",
+    "listed": true,
+    "displayCategory": "MUSIC"
   },
   {
     "id": "news-2026-10-26-snap",
@@ -54,9 +60,12 @@
       "image:IMG_5039-2.jpg"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-26-snap.webp",
     "count": 17,
     "title": "新しい写真を17枚追加しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "NEWS"
   },
   {
     "id": "news-2026-10-24-design",
@@ -71,9 +80,12 @@
       "design:graphic-zenin-zenka"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-24-design.webp",
     "count": 4,
     "title": "『脚下照顧』『日日是好日』『善因善果』『STATE OF MIND』を掲載しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "DESIGN"
   },
   {
     "id": "news-2026-10-24-sound",
@@ -86,9 +98,12 @@
       "sound:sora-ni-tokeru"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-24-sound.webp",
     "count": 2,
     "title": "楽曲『新しい輪郭』『空に溶ける』を掲載しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "MUSIC"
   },
   {
     "id": "news-2026-10-23-sound",
@@ -100,9 +115,12 @@
       "sound:hikari-no-arika"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-23-sound.webp",
     "count": 1,
     "title": "楽曲『ひかりのありか』を掲載しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "MUSIC"
   },
   {
     "id": "news-2026-10-23-design",
@@ -115,9 +133,12 @@
       "design:lapis-lazuli-ring"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-23-design.webp",
     "count": 2,
     "title": "K18シグネットリング2作品を掲載しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "DESIGN"
   },
   {
     "id": "news-2026-10-23-artworks",
@@ -171,9 +192,12 @@
       "image:xen-artwork-20261023-sketch-10.jpg"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-23-artworks.webp",
     "count": 43,
     "title": "新しいアートワークを43作品追加しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "NEWS"
   },
   {
     "id": "news-2026-10-22-sound",
@@ -185,9 +209,23 @@
       "sound:tochu-no-mamade"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-22-sound.webp",
     "count": 1,
     "title": "楽曲『途中のままで』を掲載しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "MUSIC"
+  },
+  {
+    "id": "website-renewal-20261020",
+    "date": "2026-10-20",
+    "category": "WEBSITE",
+    "title": "ホームページリニューアル",
+    "body": "XEN CSJ公式サイトをリニューアルしました。各クリエイティブ領域の作品やサービスをより見やすく整理し、デザインやアニメーション、操作性を刷新しました。",
+    "url": "https://xencsj.github.io/portfolio/",
+    "listed": true,
+    "displayCategory": "NEWS",
+    "thumbnail": "./xen-header-logo.png"
   },
   {
     "id": "news-2026-10-19-artworks",
@@ -205,9 +243,12 @@
       "image:xen-artwork-20261019-07.jpg"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-19-artworks.webp",
     "count": 7,
     "title": "新しいアートワークを7作品追加しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "NEWS"
   },
   {
     "id": "news-2026-10-16-snap",
@@ -372,9 +413,12 @@
       "image:SNAP (99).JPEG"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-16-snap.webp",
     "count": 154,
     "title": "新しい写真を154枚追加しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "NEWS"
   },
   {
     "id": "news-2026-10-10-youtube",
@@ -386,9 +430,12 @@
       "youtube:5AQmdt1HvXI"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-10-10-youtube.webp",
     "count": 1,
     "title": "『【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ結果www』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   },
   {
     "id": "news-2026-09-24-youtube",
@@ -402,21 +449,27 @@
     "countKnown": true,
     "count": 1,
     "title": "『朝5時、まだ誰も起きていない時間に。デザイナーと1時間集中｜Study With Me』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": false,
+    "displayCategory": "VIDEO",
+    "thumbnail": "https://i.ytimg.com/vi/X3DrK_IgSzg/hqdefault.jpg"
   },
   {
     "id": "news-2026-09-04-youtube",
     "date": "2026-09-04",
     "category": "YOUTUBE",
     "publishedAt": "",
-    "url": "./creator.html#latest-videos",
+    "url": "https://youtu.be/IykFCu-sYKk",
     "contentIds": [
       "youtube:IykFCu-sYKk"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-09-04-youtube.webp",
     "count": 1,
     "title": "『女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   },
   {
     "id": "news-2026-09-03-youtube",
@@ -428,9 +481,12 @@
       "youtube:Df4ekWvuGng"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-09-03-youtube.webp",
     "count": 1,
     "title": "『ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   },
   {
     "id": "news-2026-02-02-sound",
@@ -442,9 +498,12 @@
       "work:BLUE SLEEP"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-02-02-sound.webp",
     "count": 1,
     "title": "『BLUE SLEEP』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "MUSIC"
   },
   {
     "id": "news-2026-01-02-sound",
@@ -456,9 +515,12 @@
       "work:Celestial Lake"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2026-01-02-sound.webp",
     "count": 1,
     "title": "『Celestial Lake』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "MUSIC"
   },
   {
     "id": "news-2025-12-19-sound",
@@ -470,23 +532,29 @@
       "work:NIGHT'S AWAKENING"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2025-12-19-sound.webp",
     "count": 1,
     "title": "『NIGHT'S AWAKENING』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "MUSIC"
   },
   {
     "id": "news-2025-11-05-cinematic",
     "date": "2025-11-05",
     "category": "CINEMATIC",
     "publishedAt": "2025-11-05T06:21:03-08:00",
-    "url": "./cinematic.html",
+    "url": "https://youtu.be/nTRTE7KVGFY",
     "contentIds": [
       "youtube:nTRTE7KVGFY"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2025-11-05-cinematic.webp",
     "count": 1,
     "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 60秒ver.』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   },
   {
     "id": "news-2025-11-04-cinematic",
@@ -499,22 +567,28 @@
       "youtube:kst9sv118HI"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2025-11-04-cinematic.webp",
     "count": 2,
     "title": "新しい映像作品を2本追加しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   },
   {
     "id": "news-2025-07-16-cinematic",
     "date": "2025-07-16",
     "category": "CINEMATIC",
     "publishedAt": "2025-07-16T02:43:03-07:00",
-    "url": "./cinematic.html",
+    "url": "https://youtu.be/CIFs1lkQzx0",
     "contentIds": [
       "youtube:CIFs1lkQzx0"
     ],
     "countKnown": true,
+    "thumbnail": "./news-images/2025-07-16-cinematic.webp",
     "count": 1,
     "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 90秒ver.』を公開しました。",
-    "body": ""
+    "body": "",
+    "listed": true,
+    "displayCategory": "VIDEO"
   }
 ]

@@ -8,7 +8,8 @@
     "contentIds": [
       "youtube:5AQmdt1HvXI"
     ],
-    "evidence": "https://www.youtube.com/watch?v=5AQmdt1HvXI"
+    "evidence": "https://www.youtube.com/watch?v=5AQmdt1HvXI",
+    "thumbnail": "./news-images/2026-10-10-youtube.webp"
   },
   {
     "id": "legacy-2",
@@ -26,11 +27,12 @@
     "date": "2026-09-04",
     "category": "YOUTUBE",
     "title": "『女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場』を公開しました。",
-    "url": "./creator.html#latest-videos",
+    "url": "https://youtu.be/IykFCu-sYKk",
     "contentIds": [
       "youtube:IykFCu-sYKk"
     ],
-    "evidence": "https://www.youtube.com/watch?v=IykFCu-sYKk"
+    "evidence": "https://www.youtube.com/watch?v=IykFCu-sYKk",
+    "thumbnail": "./news-images/2026-09-04-youtube.webp"
   },
   {
     "id": "legacy-4",
@@ -42,7 +44,8 @@
     "contentIds": [
       "youtube:Df4ekWvuGng"
     ],
-    "evidence": "https://www.youtube.com/watch?v=Df4ekWvuGng"
+    "evidence": "https://www.youtube.com/watch?v=Df4ekWvuGng",
+    "thumbnail": "./news-images/2026-09-03-youtube.webp"
   },
   {
     "id": "legacy-5",
@@ -53,7 +56,8 @@
     "contentIds": [
       "work:BLUE SLEEP"
     ],
-    "evidence": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D"
+    "evidence": "https://open.spotify.com/album/3Q44x33F8fkmWPARoD9x1D",
+    "thumbnail": "./news-images/2026-02-02-sound.webp"
   },
   {
     "id": "legacy-6",
@@ -64,7 +68,8 @@
     "contentIds": [
       "work:Celestial Lake"
     ],
-    "evidence": "https://www.youtube.com/watch?v=t2sB0oOTOAA"
+    "evidence": "https://www.youtube.com/watch?v=t2sB0oOTOAA",
+    "thumbnail": "./news-images/2026-01-02-sound.webp"
   },
   {
     "id": "legacy-7",
@@ -75,7 +80,8 @@
     "contentIds": [
       "work:NIGHT'S AWAKENING"
     ],
-    "evidence": "https://www.youtube.com/watch?v=uqQI6369VYg"
+    "evidence": "https://www.youtube.com/watch?v=uqQI6369VYg",
+    "thumbnail": "./news-images/2025-12-19-sound.webp"
   },
   {
     "id": "historical-f5795f9-snap",
@@ -101,7 +107,8 @@
       "deployment": "https://github.com/XENCSJ/portfolio/deployments",
       "status": "Deployed (completed)",
       "publishedAt": "2026-10-15T21:38:56.000Z"
-    }
+    },
+    "thumbnail": "./news-images/2026-10-16-snap.webp"
   },
   {
     "id": "historical-9b71d7d-snap",
@@ -296,7 +303,8 @@
       "deployment": "https://github.com/XENCSJ/portfolio/deployments",
       "status": "Deployed (completed)",
       "publishedAt": "2026-10-18T21:32:02.000Z"
-    }
+    },
+    "thumbnail": "./news-images/2026-10-19-artworks.webp"
   },
   {
     "id": "historical-release--rXKvIhFDkw",
@@ -317,7 +325,8 @@
         "status": "Deployed (completed)",
         "publishedAt": "2026-10-15T18:41:03.000Z"
       }
-    }
+    },
+    "thumbnail": "./news-images/2025-11-04-cinematic.webp"
   },
   {
     "id": "historical-release-CIFs1lkQzx0",
@@ -325,7 +334,7 @@
     "publishedAt": "2025-07-16T02:43:03-07:00",
     "sitePublishedAt": "2026-10-15T18:41:03.000Z",
     "category": "CINEMATIC",
-    "url": "./cinematic.html",
+    "url": "https://youtu.be/CIFs1lkQzx0",
     "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 90秒ver.』を公開しました。",
     "contentIds": [
       "youtube:CIFs1lkQzx0"
@@ -338,7 +347,8 @@
         "status": "Deployed (completed)",
         "publishedAt": "2026-10-15T18:41:03.000Z"
       }
-    }
+    },
+    "thumbnail": "./news-images/2025-07-16-cinematic.webp"
   },
   {
     "id": "historical-release-kst9sv118HI",
@@ -367,7 +377,7 @@
     "publishedAt": "2025-11-05T06:21:03-08:00",
     "sitePublishedAt": "2026-10-15T18:41:03.000Z",
     "category": "CINEMATIC",
-    "url": "./cinematic.html",
+    "url": "https://youtu.be/nTRTE7KVGFY",
     "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 60秒ver.』を公開しました。",
     "contentIds": [
       "youtube:nTRTE7KVGFY"
@@ -380,7 +390,8 @@
         "status": "Deployed (completed)",
         "publishedAt": "2026-10-15T18:41:03.000Z"
       }
-    }
+    },
+    "thumbnail": "./news-images/2025-11-05-cinematic.webp"
   },
   {
     "id": "sound-tochu-no-mamade-announcement",
@@ -395,7 +406,8 @@
     "evidence": {
       "page": "https://xencsj.github.io/portfolio/sound.html#tochu-no-mamade",
       "announcement": "Owner-requested NEWS announcement dated 2026-10-22 JST. The date identifies this announcement, not a music distribution release date. The song jacket, credits, commentary and lyrics were verified on the public page."
-    }
+    },
+    "thumbnail": "./news-images/2026-10-22-sound.webp"
   },
   {
     "id": "pages-c01680bd2b3f000291ff600f998ebaf85a460825-artworks",
@@ -438,7 +450,8 @@
       "image:xen-artwork-20261023-32.jpg",
       "image:xen-artwork-20261023-33.jpg"
     ],
-    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39853872175/job/120087952545"
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/39853872175/job/120087952545",
+    "thumbnail": "./news-images/2026-10-23-artworks.webp"
   },
   {
     "id": "pages-6e082e890e8654dcc421c0e1327158be4ed1853f-artworks",
@@ -485,7 +498,8 @@
         }
       ],
       "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
-    }
+    },
+    "thumbnail": "./news-images/2026-10-24-design.webp"
   },
   {
     "id": "sound-atarashii-rinkaku-sora-ni-tokeru-first-publication",
@@ -510,7 +524,8 @@
         }
       ],
       "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
-    }
+    },
+    "thumbnail": "./news-images/2026-10-24-sound.webp"
   },
   {
     "id": "sound-hikari-no-arika-first-publication",
@@ -534,7 +549,8 @@
         }
       ],
       "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
-    }
+    },
+    "thumbnail": "./news-images/2026-10-23-sound.webp"
   },
   {
     "id": "design-k18-signet-rings-first-publication",
@@ -565,7 +581,8 @@
         }
       ],
       "note": "First successful GitHub Pages publication of the named works on this page, verified against the deployed Git tree. Music dates identify the jacket, lyrics and commentary publication, not a streaming/distribution release. Existing work revisions are excluded."
-    }
+    },
+    "thumbnail": "./news-images/2026-10-23-design.webp"
   },
   {
     "id": "pages-04fe59442b62ba375c3009104396e5f29ca48ee4-snap",
@@ -592,29 +609,32 @@
       "image:DSC09621-2.jpg",
       "image:IMG_5039-2.jpg"
     ],
-    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/40205581116/job/121205873547"
+    "evidence": "https://github.com/XENCSJ/portfolio/actions/runs/40205581116/job/121205873547",
+    "thumbnail": "./news-images/2026-10-26-snap.webp"
   },
   {
     "id": "tochu-no-mamade-mv",
     "date": "2026-11-01",
     "category": "SOUND",
     "secondaryCategory": "ANIMATION",
-    "title": "『途中のままで』MV公開",
+    "title": "『途中のままで』Music Video公開",
     "url": "https://youtu.be/VkJ_Zfj7FVg",
     "contentIds": [
       "youtube:VkJ_Zfj7FVg"
     ],
-    "evidence": "https://youtu.be/VkJ_Zfj7FVg"
+    "evidence": "https://youtu.be/VkJ_Zfj7FVg",
+    "thumbnail": "./news-images/2026-11-01-sound.webp"
   },
   {
     "id": "shibuya-halloween-2026-100-people",
     "date": "2026-11-02",
     "category": "YOUTUBE",
-    "title": "【渋谷ハロウィン2026】100人と交流するまで帰れません",
+    "title": "渋谷ハロウィン2026｜100人と交流するまで帰れません",
     "url": "https://youtu.be/t2yCr8lV_vM",
     "contentIds": [
       "youtube:t2yCr8lV_vM"
     ],
-    "evidence": "https://youtu.be/t2yCr8lV_vM"
+    "evidence": "https://youtu.be/t2yCr8lV_vM",
+    "thumbnail": "./news-images/2026-11-02-youtube.webp"
   }
 ]

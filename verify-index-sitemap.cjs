@@ -35,13 +35,19 @@ async function measure(p){return p.evaluate(()=>{
      for(const key of ['width','height','stroke'])assert.equal(row.itype[key],old.itype[key],row.name+' icon '+key);
      assert.equal(row.type.color,old.type.color,row.name+' color');
      assert.equal(row.padding,old.padding,row.name+' confirmed vertical space');
-     assert.deepEqual(row.rect,old.rect,row.name+' confirmed row geometry');
-     assert.deepEqual(row.svg,old.svg,row.name+' confirmed icon alignment');
+     // The compact NEWS entry intentionally moves the entire directory upward.
+     const yShift=after.rows[0].rect.y-before.rows[0].rect.y;
+     for(const key of ['rect','svg']){
+       for(const prop of ['x','w','h'])assert.equal(row[key][prop],old[key][prop],row.name+' '+key+' '+prop);
+       assert(Math.abs(row[key].y-old[key].y-yShift)<1,row.name+' relative vertical position');
+     }
     }
     if(i>0)assert(row.rect.y>=after.rows[i-1].rect.b-.1,'no overlapping tap targets');
    }
    assert.equal(after.rows[0].current,'page');assert.equal(after.rows[0].type.color,'rgb(201, 170, 120)');
-   for(const key of ['hero','logo','news','entry','orbit','header','newsHTML','footer'])assert.deepEqual(after[key],before[key],'unchanged '+key);
+   for(const key of ['hero','logo','entry','orbit','header','footer'])assert.deepEqual(after[key],before[key],'unchanged '+key);
+   assert.equal(await page.locator('#xen-news a').getAttribute('href'),'./news.html');
+   assert.equal(await page.locator('#xen-news li').count(),0);
    // Group headings do not navigate or gain link feedback.
    const url=page.url();await page.locator('#index-about-heading').click();assert.equal(page.url(),url);await page.locator('#index-works-heading').click();assert.equal(page.url(),url);
    const headingColor=await page.locator('#index-works-heading .index-en').evaluate(e=>getComputedStyle(e).color);assert.equal(headingColor,'rgb(201, 170, 120)');
