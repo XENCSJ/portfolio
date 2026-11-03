@@ -51,11 +51,14 @@ SOFTWARE. */
   const button = header.querySelector('.xen-header-toggle');
   const menu = header.querySelector('#xen-menu');
   if (!button || !menu) return;
-  const aboutLinks = menu.querySelector('.xen-menu-items');
-  if (aboutLinks && !menu.querySelector('a[href="./news.html"]')) {
-    const item = document.createElement('li');
-    item.innerHTML = '<a class="xen-menu-link" href="./news.html"><span class="xen-menu-en" lang="en">NEWS</span><span class="xen-menu-ja" lang="ja">お知らせ・最新情報</span></a>';
-    aboutLinks.append(item);
+  // Older static headers can still contain NEWS under ABOUT, or omit it entirely.
+  const newsLink = menu.querySelector('a[href="./news.html"]');
+  if (!newsLink?.classList.contains('xen-menu-category-link')) {
+    const section = document.createElement('section');
+    section.className = 'xen-menu-category';
+    section.innerHTML = '<h2 class="xen-menu-heading"><a class="xen-menu-link xen-menu-category-link" href="./news.html"><span class="xen-menu-en" lang="en">NEWS</span><span class="xen-menu-ja" lang="ja">お知らせ・最新情報</span></a></h2>';
+    newsLink?.closest('li')?.remove();
+    menu.querySelector('.xen-menu-home').after(section);
   }
   if (document.body.classList.contains('news-page')) {
     menu.querySelector('a[href="./news.html"]')?.setAttribute('aria-current', 'page');

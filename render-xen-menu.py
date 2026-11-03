@@ -15,8 +15,8 @@ def category(slug):
     return (TITLES[slug]["en"], TITLES[slug].get("navigationJa", TITLES[slug].get("navigationJa", TITLES[slug].get("navigationJa", TITLES[slug]["ja"]))), "./" + slug + ".html")
 ABOUT = [("DISCOVER XEN", "XENを知る", "./what-is-xen.html")] + [category(slug) for slug in ("studio", "creator")]
 WORKS = [category(slug) for slug in TITLES if slug not in ("studio", "creator", "price-list")]
-ABOUT.append(("NEWS", "お知らせ・最新情報", "./news.html"))
-GROUPS = [("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", WORKS),
+NEWS = ("NEWS", "お知らせ・最新情報", "./news.html")
+GROUPS = [NEWS, ("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", WORKS),
           ("PRICING", "料金案内", "./price-list.html"),
           ("CONTACT", "制作相談", "./studio.html#contact")]
 
@@ -24,6 +24,19 @@ GROUPS = [("ABOUT XEN", "XENについて", ABOUT), ("WORKS", "制作・作品", 
 def label(en, ja, prefix):
     en_text = escape(en) + ('<span aria-hidden="true"> ↗</span>' if en == "CONTACT" and prefix == "xen-menu" else "")
     return f'<span class="{prefix}-en" lang="en">{en_text}</span><span class="{prefix}-ja" lang="ja">{escape(ja)}</span>'
+
+
+def directory_news_link():
+    en, ja, href = NEWS
+    ja = ja.replace("・", "・<wbr>")
+    icon = ('<svg class="index-icon" data-icon="newspaper" xmlns="http://www.w3.org/2000/svg" '
+            'width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            'stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'
+            '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h5v5H6zM14 8h4m-4 4h4M6 16h12"/></svg>')
+    return (f'<a class="index-link index-category-link" href="{href}"><span class="index-category-label">'
+            f'<span class="index-en" lang="en">{icon}{en}</span><span class="index-ja" lang="ja">{ja}</span></span>'
+            '<span class="index-single-label"><span class="index-destination-en" lang="en">VIEW NEWS</span>'
+            '<span class="index-destination-ja" lang="ja">お知らせを見る</span></span><span class="arrow" aria-hidden="true">↗</span></a>')
 
 
 def navigation(page, directory=False):
@@ -36,11 +49,10 @@ def navigation(page, directory=False):
     parts = [link(HOME, prefix + "-home")]
     for en, ja, entries in GROUPS:
         if isinstance(entries, str):
-            title = link((en, ja, entries), prefix + "-category-link")
+            title = directory_news_link() if directory and en == NEWS[0] else link((en, ja, entries), prefix + "-category-link")
             items = ""
         else:
             title = label(en, ja, prefix)
-            entries = [item for item in entries if not (directory and item[0] in ("DISCOVER XEN", "NEWS"))]
             items = '<ul class="' + prefix + '-items">' + "".join('<li>' + link(item) + '</li>' for item in entries) + '</ul>'
         parts.append(f'<section class="{prefix}-category"><h2 class="{prefix}-heading">{title}</h2>{items}</section>')
     return "\n".join(parts)

@@ -136,3 +136,12 @@ body#top.home-page #creative-index .index-directory .index-link:is(:hover,:focus
 @media(prefers-reduced-motion:reduce) {
   body#top.home-page #creative-index .index-single-label { transition: none; }
 }
+
+/* Match group headings and allow the longer NEWS label to wrap at its separator. */
+body#top.home-page #creative-index .index-directory .index-category-link[href="./news.html"] .index-en {
+  font-weight: 700;
+}
+body#top.home-page #creative-index .index-directory .index-category-link[href="./news.html"] .index-ja {
+  white-space: normal;
+  word-break: keep-all;
+}
