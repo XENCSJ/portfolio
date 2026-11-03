@@ -535,14 +535,30 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
  const records=data.flatMap((stage,si)=>stage.cards.map((card,ci)=>({
   node:root.querySelector('[data-ce-card="'+si+'-'+ci+'"]'),images:card.images,label:card.label,
   stage:stages[si],entranceReady:si<2?0:Infinity,
-  index:0,visible:false,locked:false,paused:false,ready:null,pending:false,failed:new Set()
+  index:-1,order:[],loaded:false,visible:false,locked:false,paused:false,ready:null,pending:false,failed:new Set()
  })));
  const byNode=new Map(records.map(r=>[r.node,r]));
  let timer=0,active=null,last=null,alive=true,layoutFrame=0;
  const rand=(a,b)=>Math.round(a+Math.random()*(b-a));
  const allowed=()=>alive&&!reduced.matches&&!document.hidden;
  const candidates=r=>r.images.some((_,i)=>i!==r.index&&!r.failed.has(i));
- const eligible=r=>r.visible&&Number.isFinite(r.entranceReady)&&!r.locked&&!r.paused&&candidates(r);
+ const eligible=r=>r.loaded&&r.visible&&Number.isFinite(r.entranceReady)&&!r.locked&&!r.paused&&candidates(r);
+ function takeSlide(r){
+  if(!r.order.length){
+   const order=r.images.map((_,i)=>i).filter(i=>!r.failed.has(i));
+   for(let i=order.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [order[i],order[j]]=[order[j],order[i]];
+   }
+   // The first draw of a new cycle must differ from the last displayed slide.
+   if(order.length>1&&order[0]===r.index){
+    const j=1+Math.floor(Math.random()*(order.length-1));
+    [order[0],order[j]]=[order[j],order[0]];
+   }
+   r.order=order;
+  }
+  return r.order.shift();
+ }
  function settle(){
   if(!active)return;
   const a=active;active=null;clearTimeout(a.timeout);
@@ -555,9 +571,7 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
  function stop(){clearTimeout(timer);timer=0;settle();}
  function prepare(r){
   if(!eligible(r)||r.ready||r.pending||!allowed())return;
-  let index=(r.index+1)%r.images.length;
-  for(let n=0;n<r.images.length&&r.failed.has(index);n++)index=(index+1)%r.images.length;
-  if(index===r.index||r.failed.has(index))return;
+  const index=takeSlide(r);
   const item=r.images[index],image=new Image();r.pending=true;
   image.alt=item.alt||r.label+'の既存作品サムネイル';image.decoding='async';
   image.width=Number(item.w)||640;image.height=Number(item.h)||360;image.src=item.src;
@@ -590,6 +604,13 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
   const text=document.createElement('span');text.className='ce2-empty';text.textContent='作品ページへ';
   box.appendChild(text);r.node.dataset.ceUnavailable='true';
  }
+ function showInitial(r,img,index){
+  const item=r.images[index];
+  r.index=index;r.node.dataset.ceSlide=String(index);
+  img.alt=item.alt||r.label;img.width=Number(item.w)||640;img.height=Number(item.h)||360;
+  if(img.getAttribute('src')!==item.src)img.src=item.src;
+  r.loaded=img.complete&&img.naturalWidth>0;
+ }
  function repair(r,img){
   // Never display broken-image icons or substitute another creative domain.
   img.hidden=true;img.style.visibility='hidden';
@@ -597,11 +618,11 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
   if(!box.querySelector('.ce2-empty')){
    const text=document.createElement('span');text.className='ce2-empty';text.textContent='作品ページへ';box.appendChild(text);
   }
-  r.failed.add(r.index);
+  r.loaded=false;r.failed.add(r.index);
   if(!r.visible||document.hidden)return;
-  const index=r.images.findIndex((_,i)=>!r.failed.has(i));
-  if(index<0){missing(r);return;}
-  r.index=index;img.src=r.images[index].src;img.alt=r.images[index].alt||r.label;
+  const index=takeSlide(r);
+  if(index===undefined){missing(r);return;}
+  showInitial(r,img,index);
  }
  function path(svg,d,phase='stem'){
   const p=document.createElementNS('http://www.w3.org/2000/svg','path');
@@ -662,7 +683,12 @@ body.creator-page #latest-videos .xen-latest-play > .xen-cinema-icon {
   const img=r.node.querySelector('.ce2-image img');
   if(img){
    img.addEventListener('error',()=>repair(r,img));
-   img.addEventListener('load',()=>{img.hidden=false;img.style.visibility='';r.node.querySelectorAll('.ce2-empty').forEach(x=>x.remove());delete r.node.dataset.ceUnavailable;});
+   img.addEventListener('load',()=>{
+    r.loaded=true;img.hidden=false;img.style.visibility='';
+    r.node.querySelectorAll('.ce2-empty').forEach(x=>x.remove());delete r.node.dataset.ceUnavailable;
+    prepare(r);schedule();
+   });
+   showInitial(r,img,r.images.length===1?0:takeSlide(r));
   }
   const lock=()=>{r.locked=true;if(active?.record===r)settle();if(!records.some(eligible))stop();};
   const unlock=()=>{r.locked=r.node.matches(':focus-within')||(matchMedia('(hover:hover)').matches&&r.node.matches(':hover'));prepare(r);schedule();};
