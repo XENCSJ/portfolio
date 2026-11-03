@@ -7,7 +7,7 @@ on:
 permissions: {}
 jobs:
   safari:
-    runs-on: macos-15
+    runs-on: macos-26-intel
     timeout-minutes: 10
     steps:
       - name: Enable the installed Safari driver
