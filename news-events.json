@@ -638,5 +638,83 @@
     "evidence": "https://youtu.be/t2yCr8lV_vM",
     "thumbnail": "./news-images/2026-11-02-youtube.webp?v=94662cbc0a",
     "indexTitle": "【渋谷ハロウィン2026】100人と交流するまで帰れません"
+  },
+  {
+    "id": "video-JJFrPKjZK8M",
+    "article": true,
+    "date": "2026-10-05",
+    "category": "VIDEO",
+    "title": "【スシロー】人気TOP10を当てるまで帰れま10！予想外の結果に大苦戦www",
+    "url": "https://youtu.be/JJFrPKjZK8M",
+    "thumbnail": "https://i.ytimg.com/vi/JJFrPKjZK8M/hqdefault.jpg",
+    "contentIds": [
+      "youtube:JJFrPKjZK8M"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=JJFrPKjZK8M"
+  },
+  {
+    "id": "video-olea-dUJQVY",
+    "article": true,
+    "date": "2026-09-17",
+    "category": "VIDEO",
+    "title": "「性格が一番」は綺麗事？結局、恋愛は見た目と体の相性で決まるのか",
+    "url": "https://youtu.be/olea-dUJQVY",
+    "thumbnail": "https://i.ytimg.com/vi/olea-dUJQVY/hqdefault.jpg",
+    "contentIds": [
+      "youtube:olea-dUJQVY"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=olea-dUJQVY"
+  },
+  {
+    "id": "video-LGXJYua1h5k",
+    "article": true,
+    "date": "2026-08-25",
+    "category": "VIDEO",
+    "title": "【賛否】男は奢るべき？年収5000万は高望み？男2人で恋愛の本音を全部話した",
+    "url": "https://youtu.be/LGXJYua1h5k",
+    "thumbnail": "https://i.ytimg.com/vi/LGXJYua1h5k/hqdefault.jpg",
+    "contentIds": [
+      "youtube:LGXJYua1h5k"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=LGXJYua1h5k"
+  },
+  {
+    "id": "video-JPXQ3pF18jk",
+    "article": true,
+    "date": "2026-08-17",
+    "category": "VIDEO",
+    "title": "情緒が安定してる女は、人を本気で好きにならない？男2人で恋愛の本音を語った",
+    "url": "https://youtu.be/JPXQ3pF18jk",
+    "thumbnail": "https://i.ytimg.com/vi/JPXQ3pF18jk/hqdefault.jpg",
+    "contentIds": [
+      "youtube:JPXQ3pF18jk"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=JPXQ3pF18jk"
+  },
+  {
+    "id": "video-ft-aq7ndwNM",
+    "article": true,
+    "date": "2026-08-11",
+    "category": "VIDEO",
+    "title": "歌舞伎町では逮捕者の4人に1人が大学生…元スカウトが語る“バイト感覚”の実態",
+    "url": "https://youtu.be/ft-aq7ndwNM",
+    "thumbnail": "https://i.ytimg.com/vi/ft-aq7ndwNM/hqdefault.jpg",
+    "contentIds": [
+      "youtube:ft-aq7ndwNM"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=ft-aq7ndwNM"
+  },
+  {
+    "id": "video-U_oZV5Rs0gQ",
+    "article": true,
+    "date": "2026-08-11",
+    "category": "VIDEO",
+    "title": "男は結局、何をすれば垢抜ける？美容に300万円以上使った2人の結論とは",
+    "url": "https://youtu.be/U_oZV5Rs0gQ",
+    "thumbnail": "https://i.ytimg.com/vi/U_oZV5Rs0gQ/hqdefault.jpg",
+    "contentIds": [
+      "youtube:U_oZV5Rs0gQ"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=U_oZV5Rs0gQ"
   }
 ]
