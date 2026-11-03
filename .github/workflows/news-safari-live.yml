@@ -14,9 +14,12 @@ jobs:
         run: |
           sudo /usr/bin/safaridriver --enable
           /usr/bin/safaridriver --version
+          open -a Safari https://xencsj.github.io/portfolio/news.html || true
           python3 -m venv "$RUNNER_TEMP/news-safari"
           "$RUNNER_TEMP/news-safari/bin/python" -m pip install -q selenium
       - name: Check the public NEWS pages in native Safari
+        id: desktop
+        continue-on-error: true
         run: |
           "$RUNNER_TEMP/news-safari/bin/python" - <<'PY'
           from pathlib import Path
@@ -66,7 +69,45 @@ jobs:
               wait.until(lambda b: b.find_element(By.CSS_SELECTOR, ".news-card img").get_property("naturalWidth") > 0)
               browser.save_screenshot("published-news-safari.png")
           PY
+      - name: Check the published pages in iPhone Simulator Safari if desktop automation is unavailable
+        if: steps.desktop.outcome == 'failure'
+        run: |
+          set -euo pipefail
+          SIM_ID=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; print(next(v["udid"] for k in sorted(d,reverse=True) if "iOS-" in k for v in d[k] if "iPhone" in v["name"]))')
+          xcrun simctl boot "$SIM_ID"
+          xcrun simctl bootstatus "$SIM_ID" -b
+          cat > "$RUNNER_TEMP/read-screen.swift" <<'SWIFT'
+          import Foundation
+          import Vision
+          let request = VNRecognizeTextRequest()
+          request.recognitionLevel = .accurate
+          request.recognitionLanguages = ["ja-JP","en-US"]
+          let handler = VNImageRequestHandler(url: URL(fileURLWithPath: CommandLine.arguments[1]))
+          try handler.perform([request])
+          for block in request.results ?? [] {
+              print(block.topCandidates(1).first?.string ?? "")
+          }
+          SWIFT
+          swiftc "$RUNNER_TEMP/read-screen.swift" -o "$RUNNER_TEMP/read-screen"
+          for n in 1 2 3; do
+            case "$n" in
+              1) file=news.html; label='2026.11.0[12]|渋谷ハロウィン|途中のままで' ;;
+              2) file=news-2.html; label='2026.10.19|2026.10.16|アートワーク|サンリオ' ;;
+              3) file=news-3.html; label='2025.07.16|ストリート|ラグジュアリー' ;;
+            esac
+            xcrun simctl openurl "$SIM_ID" "https://xencsj.github.io/portfolio/$file"
+            for attempt in 1 2 3 4 5; do
+              sleep 4
+              xcrun simctl io "$SIM_ID" screenshot "published-news-iphone-$n.png"
+              "$RUNNER_TEMP/read-screen" "published-news-iphone-$n.png" > "$RUNNER_TEMP/visible.txt"
+              if grep -Eq "$label" "$RUNNER_TEMP/visible.txt"; then break; fi
+            done
+            cat "$RUNNER_TEMP/visible.txt"
+            grep -Eq "$label" "$RUNNER_TEMP/visible.txt"
+            echo "PASS iPhone Safari displayed the actual article on published NEWS page $n"
+          done
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: published-news-native-safari
-          path: published-news-safari.png
+          path: published-news-*.png
