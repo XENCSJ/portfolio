@@ -79,7 +79,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          git add -A -- news-state.json news-events.json news-archive.json 'news*.html'
+          git add -A -- index.html news-state.json news-events.json news-archive.json 'news*.html'
           if git diff --cached --quiet; then
             echo 'No new published content. Fixed article unchanged.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
