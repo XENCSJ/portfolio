@@ -76,10 +76,21 @@ a.news-card::after {
   .news-pages a:hover, .news-entry a:hover { color: #ead4ad; }
 }
 @media (max-width: 600px) {
-  .news-card { grid-template-columns: clamp(84px, 31%, 148px) minmax(0, 1fr); }
-  .news-meta { gap: 2px 7px; font-size: 11px; }
-  .news-tag { font-size: 9px; }
-  .news-title { margin-top: 4px; }
+  .news-page .news-card {
+    grid-template-columns: 46% minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    padding-block: 9px;
+  }
+  .news-page .news-meta { gap: 2px 7px; font-size: 11px; }
+  .news-page .news-tag { font-size: 10px; }
+  .news-page .news-title {
+    margin-block-start: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    word-break: normal;
+    text-wrap: wrap;
+  }
 }
 @media (max-width: 360px) {
   .news-pages { margin-inline: -12px; gap: 0; }
