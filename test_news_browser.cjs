@@ -17,8 +17,10 @@ async function verify(name, engine, width, height) {
       javaScriptEnabled: name !== 'no-js' });
     await page.route('**/*', route => route.request().url().startsWith(base) ? route.continue() : route.abort());
     await page.goto(base);
-    assert.equal(await page.locator('#xen-news li').count(), 0);
-    await page.locator('#xen-news a').click();
+    const pinned = require('./news-pinned.json').id;
+    const homeIds = expected.filter(record => record.id !== pinned).slice(0, 4).map(record => record.id);
+    assert.deepEqual(await page.locator('#xen-news li').evaluateAll(rows => rows.map(row => row.dataset.newsId)), [...homeIds, pinned]);
+    await page.goto(base + 'news.html');
     for (let start = 0; start < Math.max(1, expected.length); start += 10) {
       const number = start / 10 + 1;
       if (start) await page.getByRole('link', { name: '次のページ' }).click();

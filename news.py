@@ -9,6 +9,7 @@ from urllib.parse import quote, unquote, urlsplit
 ROOT = Path(__file__).resolve().parent
 JST = timezone(timedelta(hours=9))
 # Keep historical category IDs and URLs stable; translate labels only at render time.
+CATEGORY_TITLES = json.loads((ROOT / 'category-titles.json').read_text())
 DISPLAY_CATEGORIES = {'SNAP': 'NEWS', 'ARTWORKS': 'NEWS', 'APPAREL': 'DESIGN', 'SPACE': 'ARCHITECTURE',
                       'SOUND': 'MUSIC', 'CINEMATIC': 'VIDEO', 'STORYBOOKS': 'NEWS', 'YOUTUBE': 'VIDEO',
                       'WEBSITE': 'NEWS'}
@@ -79,6 +80,8 @@ def groups(events, today=None):
         noun, unit = nouns.get(g['category'], ('作品', '点'))
         if len(entries) == 1 and entries[0].get('title'):
             g['title'] = entries[0]['title']; g['body'] = entries[0].get('body', '')
+            if entries[0].get('indexTitle'):
+                g['indexTitle'] = entries[0]['indexTitle']
             if 'secondaryCategory' in entries[0]:
                 secondary = entries[0]['secondaryCategory']
                 if secondary not in CATEGORIES: raise ValueError('Invalid secondary NEWS category')
@@ -178,11 +181,7 @@ def scan(state, current, publication):
     state['lastPublication'] = publication
     return state, events
 
-def card(item):
-    esc = html.escape
-    date = item['date']
-    thumb = item['thumbnail']
-    logo = ' is-logo' if thumb == LOGO else ''
+def article_url(item):
     url = item.get('url')
     if url and url.startswith('./'):
         target = urlsplit(url)
@@ -190,6 +189,48 @@ def card(item):
         if not path.is_file() or (target.fragment and not re.search(
                 r"""\bid=["']""" + re.escape(target.fragment) + r"""["']""", path.read_text())):
             url = None
+    return url
+
+PIN_SVG = '<svg class="xen-news-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m9 3 6 0-1 6 4 4v2H6v-2l4-4-1-6ZM12 15v6"/></svg><span class="xen-news-sr">固定記事</span>'
+
+def index_news_rows(archive):
+    recent = [item for item in archive if item['listed'] and item['id'] != PIN_ID][:4]
+    pinned = [item for item in archive if item['listed'] and item['id'] == PIN_ID]
+    rows = []
+    for item in recent + pinned:
+        date = item['date']
+        categories = [item['category']]
+        if item.get('secondaryCategory'):
+            categories.append(item['secondaryCategory'])
+        label = ' / '.join(CATEGORY_TITLES.get(c.lower(), {}).get('en', c) for c in categories)
+        pin = PIN_SVG if item['id'] == PIN_ID else ''
+        body = ''.join(f'<span class="xen-news-body">{html.escape(part)}</span>'
+                       for part in item.get('body', '').split('\n\n') if part)
+        title = item.get('indexTitle', item['title'])
+        url = article_url(item)
+        tag = 'a' if url else 'div'
+        href = f' href="{html.escape(url)}"' if url else ''
+        arrow = '<span class="xen-news-arrow" aria-hidden="true"></span>' if url else ''
+        rows.append(f'<li class="xen-news-item" data-news-id="{html.escape(item["id"])}">'
+                    f'<{tag} class="xen-news-link"{href}><span class="xen-news-meta">'
+                    f'<time class="xen-news-date" datetime="{date}">{date.replace("-", ".")}</time>'
+                    f'<span class="xen-news-category" lang="en">{pin}{html.escape(label)}</span></span>'
+                    f'<span class="xen-news-copy"><span class="xen-news-title">{html.escape(title)}</span>'
+                    f'{body}</span>{arrow}</{tag}></li>')
+    return '\n'.join(rows)
+
+def replace_news_block(template, contents):
+    block = '<!-- NEWS:GENERATED:START -->\n' + contents + '\n<!-- NEWS:GENERATED:END -->'
+    result, count = re.subn(r'<!-- NEWS:GENERATED:START -->.*?<!-- NEWS:GENERATED:END -->', lambda _: block, template, flags=re.S)
+    if count != 1: raise ValueError('Exactly one NEWS output block required')
+    return result
+
+def card(item):
+    esc = html.escape
+    date = item['date']
+    thumb = item['thumbnail']
+    logo = ' is-logo' if thumb == LOGO else ''
+    url = article_url(item)
     title = item['title'].removesuffix('を公開しました。').removesuffix('を掲載しました。')
     title = re.sub(r'^新しい(.+?)を(\d+)(枚|作品|本|点)追加しました。$', r'\1を\2\3追加', title)
     tag = 'a' if url else 'div'
@@ -221,11 +262,10 @@ def generate(check=False):
     pages = paginate(archive)
     template = (ROOT / 'news.html').read_text()
     files = {'news-archive.json': json.dumps(archive, ensure_ascii=False, indent=2) + '\n'}
+    files['index.html'] = replace_news_block((ROOT / 'index.html').read_text(), index_news_rows(archive))
     for number, items in enumerate(pages, 1):
         listing = '<ul class="news-list">' + '\n'.join(card(e) for e in items) + '</ul>' if items else '<p>現在、お知らせはありません。</p>'
-        block = '<!-- NEWS:GENERATED:START -->\n' + listing + '\n' + pager(number, len(pages)) + '\n<!-- NEWS:GENERATED:END -->'
-        result, n = re.subn(r'<!-- NEWS:GENERATED:START -->.*?<!-- NEWS:GENERATED:END -->', lambda _: block, template, flags=re.S)
-        if n != 1: raise ValueError('Exactly one NEWS output block required')
+        result = replace_news_block(template, listing + '\n' + pager(number, len(pages)))
         if number > 1:
             result = result.replace('<title>NEWS', f'<title>NEWS（{number}ページ目）')
         files[page_name(number)] = result

@@ -33,6 +33,7 @@ class NewsTests(unittest.TestCase):
     def test_generated_files_at_limit_and_after_removal(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            (root / 'index.html').write_text((news.ROOT / 'index.html').read_text())
             (root / 'news.html').write_text((news.ROOT / 'news.html').read_text())
             (root / 'news-pinned.json').write_text(json.dumps(news.PIN))
             events = []
@@ -46,6 +47,10 @@ class NewsTests(unittest.TestCase):
                     pages = news.generate()
                     self.assertEqual([len(page) for page in pages], [10]*5)
                     self.assertEqual(len(news.read('news-archive.json')), len(events)+1)
+                    index = (root / 'index.html').read_text().split('<!-- NEWS:GENERATED:START -->')[1].split('<!-- NEWS:GENERATED:END -->')[0]
+                    self.assertEqual(index.count('data-news-id='), 5)
+                    self.assertLess(index.index(f'post-{i:02}'), index.index('website-renewal-20261020'))
+                    self.assertNotIn('href=""', index)
                     html = (root / 'news-5.html').read_text()
                     self.assertEqual(html.count('data-news-id='), 10)
                     self.assertNotIn('rel="next"', html)

@@ -623,7 +623,8 @@
       "youtube:VkJ_Zfj7FVg"
     ],
     "evidence": "https://youtu.be/VkJ_Zfj7FVg",
-    "thumbnail": "./news-images/2026-11-01-sound.webp"
+    "thumbnail": "./news-images/2026-11-01-sound.webp",
+    "indexTitle": "『途中のままで』MV公開"
   },
   {
     "id": "shibuya-halloween-2026-100-people",
@@ -635,6 +636,7 @@
       "youtube:t2yCr8lV_vM"
     ],
     "evidence": "https://youtu.be/t2yCr8lV_vM",
-    "thumbnail": "./news-images/2026-11-02-youtube.webp"
+    "thumbnail": "./news-images/2026-11-02-youtube.webp",
+    "indexTitle": "【渋谷ハロウィン2026】100人と交流するまで帰れません"
   }
 ]

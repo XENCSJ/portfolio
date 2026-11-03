@@ -1,6 +1,6 @@
 # NEWS management
 
-The homepage links to `news.html`. The archive shows up to 50 articles in descending publication order, with ten per page. The generator produces only the required static pages, so numbered links and previous/next work without JavaScript. The full grouped history is retained in `news-archive.json`, while `news-events.json` remains the editorial source. The verified renewal record continues to come from the protected `news-pinned.json` file and appears in date order.
+The homepage displays the four newest notices and the fixed renewal announcement. The site menu links to the full archive at `news.html`. The archive shows up to 50 articles in descending publication order, with ten per page. The generator produces only the required static pages, so numbered links and previous/next work without JavaScript. The full grouped history is retained in `news-archive.json`, while `news-events.json` remains the editorial source. The verified renewal record continues to come from the protected `news-pinned.json` file and appears in date order.
 
 To add an independent article, append an entry to `news-events.json` with a unique `id`, `article: true`, verified ISO `date`, `category`, short `title`, `thumbnail`, `url`, stable `contentIds` and `evidence`. Use MUSIC, VIDEO, ANIMATION, DESIGN, ARCHITECTURE, EVENT or NEWS. Keep thumbnails in `news-images/` when possible. An empty URL creates a non-interactive card. The generator uses a matching video thumbnail, gallery image or the site wordmark when no thumbnail is provided. Run `python news.py` to preview the change locally. The main workflow also regenerates from registry updates.
 
@@ -10,7 +10,7 @@ To add an independent article, append an entry to `news-events.json` with a uniq
 
 SNAP and ARTWORKS: add image files and gallery links normally. Pure additions are detected automatically. An uploaded but unlinked image does not count. Stable paths and Git blob identities prevent reorders, re-adding known assets and identical copies from creating new NEWS. Changes to existing image paths do not count. Additions accompanied by removals are held in `news-state.json` → `pending`; confirm new works via the managed registration below. The initial state conservatively recognizes all existing image paths and hashes, so previously uploaded but never displayed old files also require registration.
 
-The workflow groups same-day/category additions, preserves earlier content identities, regenerates the archive and its numbered pages, commits only NEWS files, and explicitly requests a Pages build. A NEWS-only deployment has no content delta and stops without another commit. Conflicts with concurrent main changes fail safely; rerun the workflow after resolving them. No force push is used.
+The workflow groups same-day/category additions, preserves earlier content identities, regenerates the homepage NEWS list, the archive and its numbered pages, commits only NEWS files, and explicitly requests a Pages build. A NEWS-only deployment has no content delta and stops without another commit. Conflicts with concurrent main changes fail safely; rerun the workflow after resolving them. No force push is used.
 
 ## Managed registration for other categories
 
