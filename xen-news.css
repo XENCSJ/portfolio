@@ -98,3 +98,14 @@ a.news-card::after {
 @media (prefers-reduced-motion: reduce) {
   .news-card::after, .news-thumb img { transition: none; }
 }
+
+/* NEWS listing only: fixed frames and two composited layers, with no controls. */
+.news-page .news-thumb { position: relative; }
+.news-page .news-thumb .news-slide-next {
+  position: absolute; inset: 0; opacity: 0;
+  transition: opacity 800ms ease, transform var(--ql-hover, 280ms) var(--ql-ease, ease);
+}
+.news-page .news-thumb .news-slide-next.is-visible { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .news-page .news-thumb .news-slide-next { transition: none; }
+}

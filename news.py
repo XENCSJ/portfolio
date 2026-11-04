@@ -225,7 +225,7 @@ def replace_news_block(template, contents):
     if count != 1: raise ValueError('Exactly one NEWS output block required')
     return result
 
-def card(item):
+def card(item, eager=False):
     esc = html.escape
     date = item['date']
     thumb = item['thumbnail']
@@ -239,7 +239,8 @@ def card(item):
     href = f' href="{esc(url)}"' if url else ''
     return (f'<li data-news-id="{esc(item["id"])}"><{tag} class="news-card"{href}>'
             f'<span class="news-thumb{logo}"><img src="{esc(thumb)}" alt="" width="480" height="270" '
-            'loading="lazy" decoding="async"></span><span class="news-copy">'
+            f'loading="{"eager" if eager else "lazy"}" decoding="async"'
+            + (' fetchpriority="high"' if eager else '') + '></span><span class="news-copy">'
             f'<span class="news-meta"><time datetime="{date}">{date.replace("-", ".")}</time>'
             f'<span class="news-tag" lang="en">{esc(item["displayCategory"])}</span></span>'
             f'<span class="news-title">{esc(title)}</span></span></{tag}></li>')
@@ -299,7 +300,7 @@ def generate(check=False):
     files = {'news-archive.json': json.dumps(archive, ensure_ascii=False, indent=2) + '\n'}
     files['index.html'] = replace_news_block((ROOT / 'index.html').read_text(), index_news_rows(archive))
     for number, items in enumerate(pages, 1):
-        listing = '<ul class="news-list">' + '\n'.join(card(e) for e in items) + '</ul>' if items else '<p>現在、お知らせはありません。</p>'
+        listing = '<ul class="news-list">' + '\n'.join(card(e, eager=i == 0) for i, e in enumerate(items)) + '</ul>' if items else '<p>現在、お知らせはありません。</p>'
         result = replace_news_block(template, listing + '\n' + pager(number, len(pages)))
         result, count = re.subn(r'<!-- NEWS:META:START -->.*?<!-- NEWS:META:END -->',
                                 lambda _: news_metadata(number, items), result, flags=re.S)
