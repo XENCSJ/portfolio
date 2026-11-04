@@ -250,10 +250,10 @@ def page_name(number):
 SITE_URL = 'https://xencsj.github.io/portfolio/'
 
 def news_metadata(number, items):
-    title = 'NEWS | XEN CSJ' if number == 1 else f'NEWS（{number}ページ目） | XEN CSJ'
-    description = 'XEN CSJの作品公開、音楽、映像、イベントの最新情報を掲載。'
+    title = 'NEWS | XEN Official Website' if number == 1 else f'NEWS（{number}ページ目） | XEN Official Website'
+    description = 'XEN（ゼン）の作品公開、音楽、映像、イベントの最新情報を掲載。'
     if number > 1:
-        description = f'XEN CSJのお知らせ一覧、{number}ページ目。過去の作品公開や活動の記録を掲載。'
+        description = f'XEN（ゼン）のお知らせ一覧、{number}ページ目。過去の作品公開や活動の記録を掲載。'
     if items:
         description += f'収録期間は{items[-1]["date"]}〜{items[0]["date"]}。'
     url = SITE_URL + page_name(number)
