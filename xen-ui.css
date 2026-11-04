@@ -84,6 +84,12 @@ body#top :is(a, button, input, textarea, select, summary, [role="button"], [tabi
   outline: 2px solid #777;
   outline-offset: 4px;
 }
+/* Fragment destinations are reading regions, not selectable cards.
+   Keep their focus/Tab continuation and the visible focus on child controls. */
+body#top.news-page #news-list[tabindex="-1"]:focus,
+body#top.design-page .design-project[tabindex="-1"]:focus {
+  outline: none;
+}
 body#top .image-viewer:focus-visible { outline-offset: -5px; }
 body#top .image-viewer.is-fullscreen-gallery :is(a,button):focus-visible { outline-color: #ddd; }
 body#top .xen-contact {
