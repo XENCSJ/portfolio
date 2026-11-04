@@ -232,6 +232,8 @@ def card(item):
     logo = ' is-logo' if thumb == LOGO else ''
     url = article_url(item)
     title = item['title'].removesuffix('を公開しました。').removesuffix('を掲載しました。')
+    if item['category'] == 'YOUTUBE':
+        title = re.sub(r'^『(.+)』$', r'\1', title)
     title = re.sub(r'^新しい(.+?)を(\d+)(枚|作品|本|点)追加しました。$', r'\1を\2\3追加', title)
     tag = 'a' if url else 'div'
     href = f' href="{esc(url)}"' if url else ''
