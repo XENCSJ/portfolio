@@ -642,57 +642,5 @@
     "body": "",
     "listed": true,
     "displayCategory": "MUSIC"
-  },
-  {
-    "id": "news-2025-11-05-cinematic",
-    "date": "2025-11-05",
-    "category": "CINEMATIC",
-    "publishedAt": "2025-11-05T06:21:03-08:00",
-    "url": "https://youtu.be/nTRTE7KVGFY",
-    "contentIds": [
-      "youtube:nTRTE7KVGFY"
-    ],
-    "countKnown": true,
-    "thumbnail": "./news-images/2025-11-05-cinematic.webp",
-    "count": 1,
-    "title": "『ラグジュアリー/キレイ系（高級感/華やかさ） 60秒ver.』を公開しました。",
-    "body": "",
-    "listed": true,
-    "displayCategory": "VIDEO"
-  },
-  {
-    "id": "news-2025-11-04-cinematic",
-    "date": "2025-11-04",
-    "category": "CINEMATIC",
-    "publishedAt": "2025-11-04T02:47:43-08:00",
-    "url": "./cinematic.html",
-    "contentIds": [
-      "youtube:-rXKvIhFDkw",
-      "youtube:kst9sv118HI"
-    ],
-    "countKnown": true,
-    "thumbnail": "./news-images/2025-11-04-cinematic.webp",
-    "count": 2,
-    "title": "新しい映像作品を2本追加しました。",
-    "body": "",
-    "listed": true,
-    "displayCategory": "VIDEO"
-  },
-  {
-    "id": "news-2025-07-16-cinematic",
-    "date": "2025-07-16",
-    "category": "CINEMATIC",
-    "publishedAt": "2025-07-16T02:43:03-07:00",
-    "url": "https://youtu.be/CIFs1lkQzx0",
-    "contentIds": [
-      "youtube:CIFs1lkQzx0"
-    ],
-    "countKnown": true,
-    "thumbnail": "./news-images/2025-07-16-cinematic.webp",
-    "count": 1,
-    "title": "『ラグジュアリー/ストリート系（高級感/華やかさ） 90秒ver.』を公開しました。",
-    "body": "",
-    "listed": true,
-    "displayCategory": "VIDEO"
   }
 ]
