@@ -1,4 +1,4 @@
-import copy, json, tempfile, unittest
+import copy, json, re, tempfile, unittest
 from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
@@ -56,6 +56,16 @@ class NewsTests(unittest.TestCase):
                     self.assertNotIn('rel="next"', html)
                     self.assertEqual('data-news-id="post-00"' in html, i == 48)
                     self.assertEqual(news.read('news-events.json'), events)
+                    # Each generated page must describe itself, not inherit page one's URL.
+                    for number in range(1, 6):
+                        source = (root / news.page_name(number)).read_text()
+                        raw = re.search(r'<script type="application/ld\+json">(.*?)</script>', source, re.S).group(1)
+                        schema = json.loads(raw)
+                        expected = news.SITE_URL + news.page_name(number)
+                        self.assertEqual(schema['url'], expected)
+                        self.assertEqual(schema['@id'], expected + '#webpage')
+                        self.assertEqual(schema['breadcrumb']['itemListElement'][-1]['item'], expected)
+                        self.assertIn('<title>' + schema['name'] + '</title>', source)
                 (root / 'news-events.json').write_text(json.dumps(events[:9]))
                 news.generate()
                 self.assertFalse((root / 'news-2.html').exists())

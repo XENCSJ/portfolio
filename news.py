@@ -252,13 +252,33 @@ SITE_URL = 'https://xencsj.github.io/portfolio/'
 
 def news_metadata(number, items):
     title = 'NEWS | XEN Official Website' if number == 1 else f'NEWS（{number}ページ目） | XEN Official Website'
-    description = 'XEN（ゼン）の作品公開、音楽、映像、イベントの最新情報を掲載。'
+    description = 'XENの作品公開、音楽、映像、イベントの最新情報を掲載。'
     if number > 1:
-        description = f'XEN（ゼン）のお知らせ一覧、{number}ページ目。過去の作品公開や活動の記録を掲載。'
+        description = f'XENのお知らせ一覧、{number}ページ目。過去の作品公開や活動の記録を掲載。'
     if items:
         description += f'収録期間は{items[-1]["date"]}〜{items[0]["date"]}。'
     url = SITE_URL + page_name(number)
     image = urljoin(SITE_URL, items[0]['thumbnail'] if items else LOGO)
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        '@id': url + '#webpage',
+        'url': url,
+        'name': title,
+        'description': description,
+        'inLanguage': 'ja',
+        'isPartOf': {'@id': SITE_URL + '#website'},
+        'about': {'@id': SITE_URL + 'creator.html#xen'},
+        'breadcrumb': {
+            '@type': 'BreadcrumbList',
+            'itemListElement': [
+                {'@type': 'ListItem', 'position': 1, 'name': 'INDEX', 'item': SITE_URL},
+                {'@type': 'ListItem', 'position': 2,
+                 'name': 'NEWS' if number == 1 else f'NEWS（{number}ページ目）', 'item': url},
+            ],
+        },
+    }
+    structured_data = json.dumps(schema, ensure_ascii=False, indent=2).replace('<', '\\u003c')
     return '\n'.join([
         '<!-- NEWS:META:START -->',
         f'<title>{title}</title>',
@@ -271,6 +291,7 @@ def news_metadata(number, items):
         f'<meta property="og:url" content="{url}">',
         f'<meta property="og:image" content="{html.escape(image, quote=True)}">',
         '<meta name="twitter:card" content="summary_large_image">',
+        '<script type="application/ld+json">' + structured_data + '</script>',
         '<!-- NEWS:META:END -->',
     ])
 
