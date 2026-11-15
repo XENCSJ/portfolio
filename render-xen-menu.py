@@ -8,7 +8,7 @@ import json
 
 ROOT = Path(__file__).resolve().parent
 VERSION = "20261017-unified5"
-HOME = ("INDEX", "トップページ", "./index.html")
+HOME = ("INDEX", "トップページ", "./")
 # Stable URL stems are separate from the canonical display labels.
 TITLES = json.loads((ROOT / "category-titles.json").read_text())
 def category(slug):
@@ -43,7 +43,8 @@ def navigation(page, directory=False):
     prefix = "index" if directory else "xen-menu"
     def link(item, extra=""):
         en, ja, href = item
-        current = ' aria-current="page"' if href == "./" + page else ""
+        current_url = "./" if page == "index.html" else "./" + page
+        current = ' aria-current="page"' if href == current_url else ""
         arrow = '<span class="arrow" aria-hidden="true">↗</span>' if directory else ""
         return f'<a class="{prefix}-link {extra}" href="{href}"{current}>{label(en, ja, prefix)}{arrow}</a>'
     parts = [link(HOME, prefix + "-home")]
@@ -62,7 +63,7 @@ def render(path):
     source = path.read_text()
     menu = '<nav class="xen-menu" id="xen-menu" aria-label="サイトメニュー" tabindex="-1" hidden>\n' + navigation(path.name) + '\n</nav>'
     header = ('<header class="xen-header" id="xen-site-header">'
-              '<a class="xen-header-home" href="./index.html" aria-label="XEN INDEXへ">'
+              '<a class="xen-header-home" href="./" aria-label="XEN INDEXへ">'
               '<img class="xen-header-logo" src="./xen-header-logo.png" alt="XEN" width="6731" height="1520" fetchpriority="high" decoding="async"></a>'
               '<a class="xen-header-cart" href="https://xen.official.ec/" target="_blank" rel="noopener noreferrer" aria-label="XEN公式オンラインショップ（新しいタブで開く）">'
               '<img src="./xen-header-cart.png" alt="" width="56" height="51"></a>'

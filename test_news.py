@@ -1,8 +1,9 @@
 import copy, json, re, tempfile, unittest
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 import news
+import xml.etree.ElementTree as ET
 
 NOW = '2026-10-20'
 def event(i, category='SNAP', date='2026-10-20', ids=None):
@@ -13,6 +14,44 @@ def publication():
     return {'sha':'published','publishedAt':'2026-10-19T15:01:00Z','evidence':'successful-pages-deployment'}
 
 class NewsTests(unittest.TestCase):
+    def test_sitemap_rebuild_does_not_refresh_unchanged_dates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'index.html').write_text('home')
+            (root / 'creator.html').write_text('profile')
+            with patch.object(news, 'ROOT', root), patch.object(news, 'datetime', wraps=datetime) as clock:
+                clock.now.return_value = datetime(2026, 11, 15, tzinfo=news.JST)
+                original = news.sitemap(1)
+                (root / 'sitemap.xml').write_text(original)
+                clock.now.return_value = datetime(2026, 11, 22, tzinfo=news.JST)
+                self.assertEqual(news.sitemap(1), original)
+                (root / 'creator.html').write_text('updated profile')
+                modified = news.sitemap(1)
+                dates = {e.findtext('{*}loc'): e.findtext('{*}lastmod') for e in ET.fromstring(modified)}
+                self.assertEqual(dates[news.SITE_URL], '2026-11-15')
+                self.assertEqual(dates[news.SITE_URL + 'creator.html'], '2026-11-22')
+                # No fabricated update date for a page whose source is unavailable.
+                self.assertIsNone(dates[news.SITE_URL + 'sound.html'])
+
+    def test_sitemap_uses_pending_news_and_removes_obsolete_pages(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'news.html').write_text('old news')
+            with patch.object(news, 'ROOT', root), patch.object(news, 'datetime', wraps=datetime) as clock:
+                clock.now.return_value = datetime(2026, 11, 15, tzinfo=news.JST)
+                (root / 'sitemap.xml').write_text(news.sitemap(3))
+                clock.now.return_value = datetime(2026, 11, 16, tzinfo=news.JST)
+                pending = {'news.html': 'new news', 'news-2.html': 'older news'}
+                updated = news.sitemap(2, pending)
+                entries = {e.findtext('{*}loc'): e.findtext('{*}lastmod') for e in ET.fromstring(updated)}
+                self.assertEqual(entries[news.SITE_URL + 'news.html'], '2026-11-16')
+                self.assertEqual(entries[news.SITE_URL + 'news-2.html'], '2026-11-16')
+                self.assertNotIn(news.SITE_URL + 'news-3.html', entries)
+                (root / 'sitemap.xml').write_text(updated)
+                for name, source in pending.items(): (root / name).write_text(source)
+                clock.now.return_value = datetime(2026, 11, 23, tzinfo=news.JST)
+                self.assertEqual(news.sitemap(2), updated)
+
     def test_archive_labels_and_safe_markup(self):
         records = [dict(event('design'), title='<script>x</script>'), event('art','ARTWORKS')]
         archive = news.articles(records, news.PIN, NOW)

@@ -1,6 +1,7 @@
 """NEWS generator. Publication dates come from successful Pages deployments, never commits."""
 from __future__ import annotations
 import argparse, copy, hashlib, html, json, os, re, subprocess, urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
@@ -295,12 +296,46 @@ def news_metadata(number, items):
         '<!-- NEWS:META:END -->',
     ])
 
-def sitemap(page_count):
+def sitemap(page_count, generated=None):
+    """Keep lastmod stable until page content changes, including generated NEWS.
+
+    XML comments retain content hashes without publishing a second state file.
+    This avoids resetting every URL's date on each scheduled rebuild.
+    """
+    generated = generated or {}
+    previous = {}
+    sitemap_path = ROOT / 'sitemap.xml'
+    if sitemap_path.exists():
+        parser = ET.XMLParser(target=ET.TreeBuilder(insert_comments=True))
+        for entry in ET.fromstring(sitemap_path.read_text(), parser=parser):
+            location = entry.findtext('{*}loc')
+            modified = entry.findtext('{*}lastmod')
+            fingerprint = next((node.text.strip().removeprefix('content-sha256: ')
+                                for node in entry if node.tag is ET.Comment
+                                and node.text.strip().startswith('content-sha256: ')), None)
+            if location and modified and fingerprint:
+                datetime.strptime(modified, '%Y-%m-%d')
+                previous[location] = (fingerprint, modified)
+    today = datetime.now(JST).date().isoformat()
     paths = ['', 'what-is-xen.html', *(slug + '.html' for slug in CATEGORY_TITLES),
              *(page_name(n) for n in range(1, page_count + 1))]
-    urls = ''.join(f'  <url><loc>{SITE_URL}{path}</loc></url>\n' for path in paths)
+    urls = []
+    for path in paths:
+        url = SITE_URL + path
+        name = path or 'index.html'
+        source = generated.get(name)
+        if source is None and (ROOT / name).exists():
+            source = (ROOT / name).read_text()
+        metadata = ''
+        if source is not None:
+            fingerprint = hashlib.sha256(source.encode('utf-8')).hexdigest()
+            old_fingerprint, old_date = previous.get(url, (None, None))
+            modified = old_date if fingerprint == old_fingerprint else today
+            metadata = (f'<lastmod>{modified}</lastmod>'
+                        f'<!-- content-sha256: {fingerprint} -->')
+        urls.append(f'  <url><loc>{html.escape(url)}</loc>{metadata}</url>\n')
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n')
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(urls) + '</urlset>\n')
 
 def pager(number, count):
     def control(target, text, name, rel):
@@ -328,7 +363,7 @@ def generate(check=False):
         if count != 1:
             raise ValueError('Expected one NEWS metadata block')
         files[page_name(number)] = result
-    files['sitemap.xml'] = sitemap(len(pages))
+    files['sitemap.xml'] = sitemap(len(pages), files)
     obsolete = [ROOT / page_name(n) for n in range(len(pages) + 1, MAX_ARTICLES // PAGE_SIZE + 1)
                 if (ROOT / page_name(n)).exists()]
     for path in obsolete:
