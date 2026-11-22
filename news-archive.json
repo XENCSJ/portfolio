@@ -1,5 +1,22 @@
 [
   {
+    "id": "video-3560Kj1jJ-U",
+    "date": "2026-11-22",
+    "category": "YOUTUBE",
+    "publishedAt": "2026-11-22T03:00:39Z",
+    "url": "https://youtu.be/3560Kj1jJ-U",
+    "contentIds": [
+      "youtube:3560Kj1jJ-U"
+    ],
+    "countKnown": true,
+    "thumbnail": "https://i.ytimg.com/vi/3560Kj1jJ-U/maxresdefault.jpg?v=20261122",
+    "count": 1,
+    "title": "ガチャ嫌いのミニマリストを日本最大級のガチャガチャ店に連れて行った結果…【池袋】",
+    "body": "",
+    "listed": true,
+    "displayCategory": "YouTube"
+  },
+  {
     "id": "news-2026-11-02-youtube",
     "date": "2026-11-02",
     "category": "YOUTUBE",
@@ -9,7 +26,7 @@
       "youtube:t2yCr8lV_vM"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/2026-11-02-youtube.webp?v=94662cbc0a",
+    "thumbnail": "https://i.ytimg.com/vi/t2yCr8lV_vM/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "【渋谷ハロウィン2026】仮装した人に片っ端から声をかけた結果",
     "body": "",
@@ -27,7 +44,7 @@
       "youtube:VkJ_Zfj7FVg"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/2026-11-01-sound-20261115.jpg",
+    "thumbnail": "https://i.ytimg.com/vi/VkJ_Zfj7FVg/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "『途中のままで』Music Video公開",
     "body": "",
@@ -432,7 +449,7 @@
       "youtube:5AQmdt1HvXI"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/2026-10-10-youtube.webp",
+    "thumbnail": "https://i.ytimg.com/vi/5AQmdt1HvXI/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "『【異物混入】サンリオ知識ゼロでピューロランドに乗り込んだ』を公開しました。",
     "body": "",
@@ -449,7 +466,7 @@
       "youtube:JJFrPKjZK8M"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/video-JJFrPKjZK8M.webp",
+    "thumbnail": "https://i.ytimg.com/vi/JJFrPKjZK8M/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "【スシロー】人気TOP10を当てるまで帰れま10！予想外の結果に大苦戦www",
     "body": "",
@@ -483,7 +500,7 @@
       "youtube:olea-dUJQVY"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/video-olea-dUJQVY.webp",
+    "thumbnail": "https://i.ytimg.com/vi/olea-dUJQVY/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "「性格が一番」は綺麗事？結局、恋愛は見た目と体の相性で決まるのか",
     "body": "",
@@ -500,7 +517,7 @@
       "youtube:IykFCu-sYKk"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/2026-09-04-youtube.webp",
+    "thumbnail": "https://i.ytimg.com/vi/IykFCu-sYKk/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "『女性が言う「普通の男」が全然普通じゃない理由｜令和の恋愛市場』を公開しました。",
     "body": "",
@@ -517,7 +534,7 @@
       "youtube:Df4ekWvuGng"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/2026-09-03-youtube.webp",
+    "thumbnail": "https://i.ytimg.com/vi/Df4ekWvuGng/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "『ちいかわって結局なに？知識0で「ちいかわパーク」に行ったら、まんまとハマった』を公開しました。",
     "body": "",
@@ -534,7 +551,7 @@
       "youtube:LGXJYua1h5k"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/video-LGXJYua1h5k.webp",
+    "thumbnail": "https://i.ytimg.com/vi/LGXJYua1h5k/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "【賛否】男は奢るべき？年収5000万は高望み？男2人で恋愛の本音を全部話した",
     "body": "",
@@ -551,7 +568,7 @@
       "youtube:JPXQ3pF18jk"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/video-JPXQ3pF18jk.webp",
+    "thumbnail": "https://i.ytimg.com/vi/JPXQ3pF18jk/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "情緒が安定してる女は、人を本気で好きにならない？男2人で恋愛の本音を語った",
     "body": "",
@@ -568,7 +585,7 @@
       "youtube:ft-aq7ndwNM"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/video-ft-aq7ndwNM.webp",
+    "thumbnail": "https://i.ytimg.com/vi/ft-aq7ndwNM/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "歌舞伎町では逮捕者の4人に1人が大学生…元スカウトが語る“バイト感覚”の実態",
     "body": "",
@@ -585,7 +602,7 @@
       "youtube:U_oZV5Rs0gQ"
     ],
     "countKnown": true,
-    "thumbnail": "./news-images/video-U_oZV5Rs0gQ.webp",
+    "thumbnail": "https://i.ytimg.com/vi/U_oZV5Rs0gQ/maxresdefault.jpg?v=20261122",
     "count": 1,
     "title": "男は結局、何をすれば垢抜ける？美容に300万円以上使った2人の結論とは",
     "body": "",
