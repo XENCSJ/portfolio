@@ -9,7 +9,7 @@
       "youtube:5AQmdt1HvXI"
     ],
     "evidence": "https://www.youtube.com/watch?v=5AQmdt1HvXI",
-    "thumbnail": "./news-images/2026-10-10-youtube.webp"
+    "thumbnail": "https://i.ytimg.com/vi/5AQmdt1HvXI/maxresdefault.jpg?v=20261122"
   },
   {
     "id": "legacy-2",
@@ -32,7 +32,7 @@
       "youtube:IykFCu-sYKk"
     ],
     "evidence": "https://www.youtube.com/watch?v=IykFCu-sYKk",
-    "thumbnail": "./news-images/2026-09-04-youtube.webp"
+    "thumbnail": "https://i.ytimg.com/vi/IykFCu-sYKk/maxresdefault.jpg?v=20261122"
   },
   {
     "id": "legacy-4",
@@ -45,7 +45,7 @@
       "youtube:Df4ekWvuGng"
     ],
     "evidence": "https://www.youtube.com/watch?v=Df4ekWvuGng",
-    "thumbnail": "./news-images/2026-09-03-youtube.webp"
+    "thumbnail": "https://i.ytimg.com/vi/Df4ekWvuGng/maxresdefault.jpg?v=20261122"
   },
   {
     "id": "legacy-5",
@@ -536,7 +536,7 @@
       "youtube:VkJ_Zfj7FVg"
     ],
     "evidence": "https://youtu.be/VkJ_Zfj7FVg",
-    "thumbnail": "./news-images/2026-11-01-sound-20261115.jpg",
+    "thumbnail": "https://i.ytimg.com/vi/VkJ_Zfj7FVg/maxresdefault.jpg?v=20261122",
     "indexTitle": "『途中のままで』MV公開"
   },
   {
@@ -549,7 +549,7 @@
       "youtube:t2yCr8lV_vM"
     ],
     "evidence": "https://youtu.be/t2yCr8lV_vM",
-    "thumbnail": "./news-images/2026-11-02-youtube.webp?v=94662cbc0a",
+    "thumbnail": "https://i.ytimg.com/vi/t2yCr8lV_vM/maxresdefault.jpg?v=20261122",
     "indexTitle": "【渋谷ハロウィン2026】仮装した人に片っ端から声をかけた結果"
   },
   {
@@ -559,7 +559,7 @@
     "category": "YOUTUBE",
     "title": "【スシロー】人気TOP10を当てるまで帰れま10！予想外の結果に大苦戦www",
     "url": "https://youtu.be/JJFrPKjZK8M",
-    "thumbnail": "./news-images/video-JJFrPKjZK8M.webp",
+    "thumbnail": "https://i.ytimg.com/vi/JJFrPKjZK8M/maxresdefault.jpg?v=20261122",
     "contentIds": [
       "youtube:JJFrPKjZK8M"
     ],
@@ -572,7 +572,7 @@
     "category": "YOUTUBE",
     "title": "「性格が一番」は綺麗事？結局、恋愛は見た目と体の相性で決まるのか",
     "url": "https://youtu.be/olea-dUJQVY",
-    "thumbnail": "./news-images/video-olea-dUJQVY.webp",
+    "thumbnail": "https://i.ytimg.com/vi/olea-dUJQVY/maxresdefault.jpg?v=20261122",
     "contentIds": [
       "youtube:olea-dUJQVY"
     ],
@@ -585,7 +585,7 @@
     "category": "YOUTUBE",
     "title": "【賛否】男は奢るべき？年収5000万は高望み？男2人で恋愛の本音を全部話した",
     "url": "https://youtu.be/LGXJYua1h5k",
-    "thumbnail": "./news-images/video-LGXJYua1h5k.webp",
+    "thumbnail": "https://i.ytimg.com/vi/LGXJYua1h5k/maxresdefault.jpg?v=20261122",
     "contentIds": [
       "youtube:LGXJYua1h5k"
     ],
@@ -598,7 +598,7 @@
     "category": "YOUTUBE",
     "title": "情緒が安定してる女は、人を本気で好きにならない？男2人で恋愛の本音を語った",
     "url": "https://youtu.be/JPXQ3pF18jk",
-    "thumbnail": "./news-images/video-JPXQ3pF18jk.webp",
+    "thumbnail": "https://i.ytimg.com/vi/JPXQ3pF18jk/maxresdefault.jpg?v=20261122",
     "contentIds": [
       "youtube:JPXQ3pF18jk"
     ],
@@ -611,7 +611,7 @@
     "category": "YOUTUBE",
     "title": "歌舞伎町では逮捕者の4人に1人が大学生…元スカウトが語る“バイト感覚”の実態",
     "url": "https://youtu.be/ft-aq7ndwNM",
-    "thumbnail": "./news-images/video-ft-aq7ndwNM.webp",
+    "thumbnail": "https://i.ytimg.com/vi/ft-aq7ndwNM/maxresdefault.jpg?v=20261122",
     "contentIds": [
       "youtube:ft-aq7ndwNM"
     ],
@@ -624,10 +624,24 @@
     "category": "YOUTUBE",
     "title": "男は結局、何をすれば垢抜ける？美容に300万円以上使った2人の結論とは",
     "url": "https://youtu.be/U_oZV5Rs0gQ",
-    "thumbnail": "./news-images/video-U_oZV5Rs0gQ.webp",
+    "thumbnail": "https://i.ytimg.com/vi/U_oZV5Rs0gQ/maxresdefault.jpg?v=20261122",
     "contentIds": [
       "youtube:U_oZV5Rs0gQ"
     ],
     "evidence": "https://www.youtube.com/watch?v=U_oZV5Rs0gQ"
+  },
+  {
+    "id": "video-3560Kj1jJ-U",
+    "article": true,
+    "date": "2026-11-22",
+    "publishedAt": "2026-11-22T03:00:39Z",
+    "category": "YOUTUBE",
+    "title": "ガチャ嫌いのミニマリストを日本最大級のガチャガチャ店に連れて行った結果…【池袋】",
+    "url": "https://youtu.be/3560Kj1jJ-U",
+    "thumbnail": "https://i.ytimg.com/vi/3560Kj1jJ-U/maxresdefault.jpg?v=20261122",
+    "contentIds": [
+      "youtube:3560Kj1jJ-U"
+    ],
+    "evidence": "https://www.youtube.com/watch?v=3560Kj1jJ-U"
   }
 ]
