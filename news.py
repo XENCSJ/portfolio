@@ -252,7 +252,7 @@ def page_name(number):
 SITE_URL = 'https://xencsj.github.io/portfolio/'
 
 def news_metadata(number, items):
-    title = 'NEWS | XEN Official Website' if number == 1 else f'NEWS（{number}ページ目） | XEN Official Website'
+    title = 'NEWS｜XEN CREATIVE INDEX' if number == 1 else f'NEWS（{number}ページ目）｜XEN CREATIVE INDEX'
     description = 'XENの作品公開、音楽、映像、イベントの最新情報を掲載。'
     if number > 1:
         description = f'XENのお知らせ一覧、{number}ページ目。過去の作品公開や活動の記録を掲載。'
@@ -286,12 +286,14 @@ def news_metadata(number, items):
         f'<meta name="description" content="{description}">',
         f'<link rel="canonical" href="{url}">',
         '<meta property="og:type" content="website">',
-        '<meta property="og:site_name" content="XEN CSJ">',
+        '<meta property="og:site_name" content="XEN CREATIVE INDEX">',
         f'<meta property="og:title" content="{title}">',
         f'<meta property="og:description" content="{description}">',
         f'<meta property="og:url" content="{url}">',
         f'<meta property="og:image" content="{html.escape(image, quote=True)}">',
         '<meta name="twitter:card" content="summary_large_image">',
+        f'<meta name="twitter:title" content="{title}">',
+        f'<meta name="twitter:description" content="{description}">',
         '<script type="application/ld+json">' + structured_data + '</script>',
         '<!-- NEWS:META:END -->',
     ])
